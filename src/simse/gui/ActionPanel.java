@@ -13,11 +13,14 @@ import java.awt.*;
 import java.awt.Dimension;
 import javax.swing.*;
 import javax.swing.text.*;
+
+import javafx.scene.layout.Pane;
+
 import javax.swing.event.*;
 import java.awt.Color;
 import java.io.*;
 
-public class ActionPanel extends JPanel implements MouseListener,
+public class ActionPanel extends Pane implements MouseListener,
 		ActionListener {
 	private State state;
 	private Logic logic;

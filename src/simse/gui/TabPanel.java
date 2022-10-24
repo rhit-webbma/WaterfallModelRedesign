@@ -17,7 +17,9 @@ import javax.swing.event.*;
 import java.awt.Color;
 import java.io.*;
 
-public class TabPanel extends JPanel implements ActionListener, MouseListener {
+import javafx.scene.layout.Pane;
+
+public class TabPanel extends Pane implements ActionListener, MouseListener {
 	public static final int ARTIFACT = 0;
 	public static final int CUSTOMER = 1;
 	public static final int EMPLOYEE = 2;

@@ -12,11 +12,14 @@ import java.awt.*;
 import java.awt.Dimension;
 import javax.swing.*;
 import javax.swing.text.*;
+
+import javafx.scene.layout.Pane;
+
 import javax.swing.event.*;
 import java.awt.Color;
 import java.io.*;
 
-public class AttributePanel extends JPanel {
+public class AttributePanel extends Pane {
 	private final int ATTRIBUTE_LIST_CAPACITY = 5; // number of attributes that
 													// can be displayed in a
 													// list without making the

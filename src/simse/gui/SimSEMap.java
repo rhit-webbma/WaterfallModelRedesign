@@ -10,9 +10,12 @@ import java.awt.event.*;
 import java.awt.Image;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import javafx.scene.layout.Pane;
+
 import java.io.*;
 
-public class SimSEMap extends JPanel implements MouseListener, ActionListener {
+public class SimSEMap extends Pane implements MouseListener, ActionListener {
 	protected State state;
 	protected Logic logic;
 	protected String sopFile; // location of sop file if loaded
