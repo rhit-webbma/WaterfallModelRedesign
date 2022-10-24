@@ -7,19 +7,22 @@ import simse.logic.*;
 import simse.engine.*;
 
 import java.util.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.awt.Dimension;
-import javax.swing.border.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
-import java.awt.Color;
+//import java.awt.event.*;
+//import java.awt.*;
+//import java.awt.Dimension;
+//import javax.swing.border.*;
+//import javax.swing.*;
+//import javax.swing.text.*;
+//import javax.swing.event.*;
+//import java.awt.Color;
 import java.io.*;
 
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
-public class TabPanel extends Pane implements ActionListener, MouseListener {
+public class TabPanel extends Pane implements EventHandler<Event> {
 	public static final int ARTIFACT = 0;
 	public static final int CUSTOMER = 1;
 	public static final int EMPLOYEE = 2;
@@ -40,11 +43,11 @@ public class TabPanel extends Pane implements ActionListener, MouseListener {
 	private boolean guiChanged;
 
 	// the 5 different tabs:
-	private JButton[] artifactButton;
-	private JButton[] customerButton;
-	private JButton[] employeeButton;
-	private JButton[] projectButton;
-	private JButton[] toolButton;
+	private Button[] artifactButton;
+	private Button[] customerButton;
+	private Button[] employeeButton;
+	private Button[] projectButton;
+	private Button[] toolButton;
 	private Employee rightClickedEmployee;
 
 	private State state;

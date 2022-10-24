@@ -25,7 +25,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
-public class SimSEGUI extends Application implements EventHandler<Event> {
+public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private TabPanel tabPanel;
 	private AttributePanel attribPanel;
 	private ActionPanel actionPanel;
@@ -42,16 +42,12 @@ public class SimSEGUI extends Application implements EventHandler<Event> {
 	private ExplanatoryTool expTool;
 	private static MultipleTimelinesBrowser timelinesBrowser;
 	private Branch branch; // branch associated with this particular game
-	private Stage stage;
-
-	public SimSEGUI() {
-	}
 	
 	public SimSEGUI(Engine e, State s, Logic l, Branch branch,
 			MultipleTimelinesBrowser browser) {
 		this.branch = branch;
 		timelinesBrowser = browser;
-//		reset(e, s, l);
+		reset(e, s, l);
 	}
 
 	public void reset(Engine e, State s, Logic l) {
@@ -59,19 +55,19 @@ public class SimSEGUI extends Application implements EventHandler<Event> {
 		logic = l;
 		engine = e;
 
-		expTool = new ExplanatoryTool(stage, state.getLogger().getLog(), branch,
+		expTool = new ExplanatoryTool(this, state.getLogger().getLog(), branch,
 				timelinesBrowser);
 
-		attribPanel = new AttributePanel(this, state, engine);
-		tabPanel = new TabPanel(this, state, logic, attribPanel);
-		actionPanel = new ActionPanel(this, state, logic);
+//		attribPanel = new AttributePanel(this, state, engine);
+//		tabPanel = new TabPanel(this, state, logic, attribPanel);
+//		actionPanel = new ActionPanel(this, state, logic);
 
 		// Set window title:
 		String title = "SimSE";
 		if (branch.getName() != null) {
 			title = title.concat(" - " + branch.getName());
 		}
-		stage.setTitle(title);
+		this.setTitle(title);
 
 		menuBar = new MenuBar();
 		// Analyze menu:
@@ -86,13 +82,13 @@ public class SimSEGUI extends Application implements EventHandler<Event> {
         Scene sc = new Scene(menuBar, 500, 300);
   
         // set the scene
-        stage.setScene(sc);
+        this.setScene(sc);
 
 		// Create main panel:
         BorderPane bPane = new BorderPane();
 		bPane.setTop(tabPanel);
 		bPane.setBottom(attribPanel);
-		world = new World(state, logic, this);
+//		world = new World(state, logic, this);
 		bPane.setCenter(world);
 		bPane.setRight(actionPanel);
 		
@@ -101,14 +97,14 @@ public class SimSEGUI extends Application implements EventHandler<Event> {
 
 		// Set main window frame properties:
 		mainPane.setFill(Color.WHITE);
-		stage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this);
-		stage.setScene(mainPane);
+		this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this);
+		this.setScene(mainPane);
 //		setVisible(true);
 //		this.setSize(bPane.getLayout().preferredLayoutSize(this));
 		// Make it show up in the center of the screen:
 //		setLocationRelativeTo(null);
 		
-		stage.show();
+//		this.show();
 //		validate();
 //		repaint();
 	}
@@ -173,19 +169,4 @@ public class SimSEGUI extends Application implements EventHandler<Event> {
 		}
 		
 	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		this.stage = primaryStage;
-		State s = new State();
-		Logic l = new Logic(s);
-		Engine e = new Engine(l, s);
-		this.branch = new Branch("New Branch", 0, 50, null, null);
-		timelinesBrowser = new MultipleTimelinesBrowser();
-		reset(e, s, l);
-	}
-	
-	public static void main(String args[]){ 
-	      launch(args); 
-	} 
 }
