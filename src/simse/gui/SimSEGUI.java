@@ -23,6 +23,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class SimSEGUI extends Stage implements EventHandler<Event> {
@@ -42,6 +44,19 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private ExplanatoryTool expTool;
 	private static MultipleTimelinesBrowser timelinesBrowser;
 	private Branch branch; // branch associated with this particular game
+	
+	private EventHandler<ActionEvent> menuEvent = new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent event)
+        {
+        	Object source = event.getSource(); // get which component the action came from
+			if (source == analyzeSimItem) {
+				if (expTool.isIconified()) {
+					expTool.setIconified(false);
+				}
+			expTool.show();
+			}
+        }
+    };
 	
 	public SimSEGUI(Engine e, State s, Logic l, Branch branch,
 			MultipleTimelinesBrowser browser) {
@@ -74,15 +89,8 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		analyzeMenu = new Menu("Analyze"); // "Analyze" menu
 		analyzeSimItem = new MenuItem("Analyze Simulation");
 		analyzeMenu.getItems().add(analyzeSimItem);
-//		analyzeSimItem.setOnAction((EventHandler<ActionEvent>) this);
+		analyzeSimItem.setOnAction(menuEvent);
 		menuBar.getMenus().add(analyzeMenu);
-
-		// Add menu bar to this frame:
-		// create a scene
-        Scene sc = new Scene(menuBar, 500, 300);
-  
-        // set the scene
-        this.setScene(sc);
 
 		// Create main panel:
         BorderPane bPane = new BorderPane();
@@ -93,7 +101,9 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		bPane.setRight(actionPanel);
 		
 		bPane.setPrefSize(1024, 710);
-		Scene mainPane = new Scene(bPane);
+		VBox panes = new VBox();
+		panes.getChildren().addAll(menuBar, bPane);
+		Scene mainPane = new Scene(panes);
 
 		// Set main window frame properties:
 		mainPane.setFill(Color.WHITE);
@@ -157,6 +167,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 			close();
 		} else if (event.getEventType() ==  ActionEvent.ACTION) {
 			Object source = event.getSource(); // get which component the action came from
+			System.out.println("Got action event from " + source.toString());
 			if (source == analyzeSimItem) {
 				if (expTool.isIconified()) {
 					expTool.setIconified(false);

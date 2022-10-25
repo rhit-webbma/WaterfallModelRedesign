@@ -5,6 +5,7 @@ import simse.adts.objects.*;
 import simse.state.*;
 import simse.logic.*;
 import simse.engine.*;
+import simse.gui.util.JavaFXHelpers;
 
 import java.util.*;
 import java.io.*;
@@ -26,6 +27,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -70,7 +76,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 															// (values)
 	private Hashtable<Button, SSObject> buttonsToObjs; // maps JButtons (keys)
 														// to Objects (values)
-	private StackPane buttonsPane;
+	private FlowPane buttonsPane;
 	private SSObject objInFocus = null;
 
 	// for the blue line around the icons:
@@ -79,6 +85,20 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private Color btnBlue = Color.rgb(180, 180, 255, 1.0);
 	private Image border;
 	private Image allIcon;
+	
+	private EventHandler<ActionEvent> menuItemEvent = new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent event)
+        {
+        	guiChanged = true;
+			Object source = event.getSource();
+			if (source instanceof MenuItem) {
+				MenuItem jm = (MenuItem) source;
+				logic.getMenuInputManager().menuItemSelected(rightClickedEmployee,
+						jm.getText(), gui);
+				gui.getWorld().update();
+			}
+        }
+    };
 
 	public TabPanel(SimSEGUI g, State s, Logic l, AttributePanel a) {
 		logic = l;
@@ -103,12 +123,14 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		// get the Border styles:
 		defaultBorder = new Button().getBorder();
-//		selectedBorder = new BevelBorder(BevelBorder.RAISED, new Color(80, 80,
+		selectedBorder = new Border(new BorderStroke(Color.BLACK, 
+	            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+//				new BevelBorder(BevelBorder.RAISED, new Color(80, 80,
 //				225, 255), new Color(0, 0, 115, 255));
 
 		// Create main panel:
 		gridPane = new GridPane();
-		gridPane.setBackground(createBackgroundColor(Color.rgb(102, 102, 102, 1.0)));
+		gridPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1.0)));
 
 //		logoPane = new LogoPanel(gui);
 //		logoPane.setMinSize(340, 90);
@@ -116,8 +138,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //		logoPane.setTabPanel(this);
 
 		// Create buttons pane:
-		buttonsPane = new StackPane();
-		buttonsPane.setBackground(createBackgroundColor(Color.rgb(69, 135, 156, 1.0))); // dark green color
+		buttonsPane = new FlowPane();
+		buttonsPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(69, 135, 156, 1.0))); // dark green color
 		ScrollPane buttonsScrollPane = new ScrollPane(buttonsPane);
 		buttonsScrollPane.setPrefSize(292, 75);
 
@@ -178,8 +200,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			ContextMenu popup = new ContextMenu();
 			PopupListener popupListener = new PopupListener(popup, gui);
 			popupListener.setEnabled(false);
-			employeeButton[i].addEventHandler(MouseEvent.MOUSE_RELEASED, popupListener);
-//			employeeButton[i].addEventHandler(MouseEvent.MOUSE_PRESSED, popupListener);
+			employeeButton[i].addEventHandler(MouseEvent.ANY, popupListener);
 			employeeButton[i].addEventHandler(MouseEvent.MOUSE_RELEASED, this);
 		}
 
@@ -208,7 +229,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 					e.printStackTrace();
 				}
 				button[index].setPrefSize(35, 35);
-				button[index].setBackground(createBackgroundColor(Color.LIGHTGRAY));
+				button[index].setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 				button[index].setBorder(defaultBorder);
 				button[index].disarm();
 				GridPane.setConstraints(button[index], i, j, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, 
@@ -216,10 +237,6 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				pane.getChildren().add(button[index]);
 			}
 		}
-	}
-	
-	private Background createBackgroundColor(Color color) {
-		return new Background(new BackgroundFill(color, null, null));
 	}
 	
 	@Override
@@ -235,12 +252,6 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		} else if (event.getEventType() ==  ActionEvent.ACTION) {
 			guiChanged = true;
 			Object source = event.getSource();
-			if (source instanceof MenuItem) {
-				MenuItem jm = (MenuItem) source;
-				logic.getMenuInputManager().menuItemSelected(rightClickedEmployee,
-						jm.getText(), gui);
-				gui.getWorld().update();
-			}
 			if (source instanceof Button) {
 				Button button = (Button) source;
 				if (buttonsToObjs.get(button) != null) {
@@ -256,11 +267,11 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 					Enumeration<Button> buttons = buttonsToObjs.keys();
 					for (int i = 0; i < buttonsToObjs.size(); i++) {
 						Button key = buttons.nextElement();
-						key.setBackground(createBackgroundColor(Color.WHITE));
+						key.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
 						key.setBorder(defaultBorder);
 					}
 
-					button.setBackground(createBackgroundColor(btnBlue));
+					button.setBackground(JavaFXHelpers.createBackgroundColor(btnBlue));
 					button.setBorder(selectedBorder);
 				} else if (((ImageView) button.getGraphic()).getImage().equals(allIcon)) {
 					switch (logoPane.getSelectedTabIndex()) {
@@ -393,7 +404,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 					Vector<String> v = e.getMenu();
 					for (int k = 0; k < v.size(); k++) {
 						MenuItem tempItem = new MenuItem(v.elementAt(k));
-						tempItem.setOnMenuValidation(this);
+						tempItem.setOnAction(menuItemEvent);
 						p.getItems().add(tempItem);
 					}
 				}
@@ -401,10 +412,10 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				button.setGraphic(objsToImages.get(obj));
 
 				if (obj.equals(objInFocus)) {
-					button.setBackground(createBackgroundColor(btnBlue));
+					button.setBackground(JavaFXHelpers.createBackgroundColor(btnBlue));
 					button.setBorder(selectedBorder);
 				} else {
-					button.setBackground(createBackgroundColor(Color.WHITE));
+					button.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
 					button.setBorder(defaultBorder);
 				}
 				buttonsToObjs.put(button, obj);
