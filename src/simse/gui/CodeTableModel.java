@@ -9,290 +9,206 @@ import java.text.*;
 import simse.adts.objects.*;
 import simse.state.*;
 
-public class CodeTableModel extends TableModel<Code>{
+public class DesignDocumentTableModel extends TableModel<DesignDocument> {
 
-	public CodeTableModel(State s) {
+	
+	
+	
+	public DesignDocumentTableModel(State s) {
 		super(s);
 	}
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		Code model = data.elementAt(col);
+		DesignDocument model = data.elementAt(col);
 		Object returnValue = null;
 		switch(row) {
 		case 0: returnValue = model.getName();
 		break;
 		case 1: returnValue = model.getSize();
 		break;
-		case 2: returnValue = model.getPercentComplete();
+		case 2: returnValue = model.getNumKnownErrors();
 		break;
-		case 3: returnValue = model.getAmountIntegrated();
+		case 3: returnValue = model.getNumUnknownErrors();
 		break;
-		case 4: returnValue = model.getPercentIntegrated();
+		case 4: returnValue = model.getPercentErroneous();
 		break;
-		case 5: returnValue = model.getNumAuthors();
+		case 5: returnValue = model.getPercentComplete();
 		break;
-		case 6: returnValue = model.getNumKnownErrors();
+		case 6: returnValue = model.getNumUnknownTemp();
 		break;
-		case 7: returnValue = model.getNumUnknownErrors();
-		break;
-		case 8: returnValue = model.getPercentErroneous();
-		break;
-		case 9: returnValue = model.getNumUnknownTemp();
-		break;
-		case 10: returnValue = model.getCompletenessDiffReqDoc();
-		break;
-		case 11: returnValue = model.getCompletenessDiffDesDoc();
-		break;
-		case 12: returnValue = model.getCompletenessDiffTestPlan();
-		break;
-		case 13: returnValue = model.getPcntIntegratedDiffDesDoc();
-		break;
+		case 7: returnValue = model.getCompletenessDiffReqDoc();
 		}
 		return returnValue;
 	}
 
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		Code model = data.elementAt(col);
+		DesignDocument model = data.elementAt(col);
 		switch(row) {
 		case 0: model.setName((String) value);
 		break;
 		case 1: model.setSize((double) value);
 		break;
-		case 2: model.setPercentComplete((double) value);
+		case 2: model.setNumKnownErrors((double) value);
 		break;
-		case 3: model.setAmountIntegrated((double) value);
+		case 3: model.setNumUnknownErrors((double) value);
 		break;
-		case 4: model.setPercentIntegrated((double) value);
+		case 4: model.setPercentErroneous((double) value);
 		break;
-		case 5: model.setNumAuthors((int) value);
+		case 5: model.setPercentComplete((double) value);
 		break;
-		case 6: model.setNumKnownErrors((double) value);
+		case 6: model.setNumUnknownTemp((double) value);
 		break;
-		case 7: model.setNumUnknownErrors((double) value);
-		break;
-		case 8: model.setPercentErroneous((double) value);
-		break;
-		case 9: model.setNumUnknownTemp((double) value);
-		break;
-		case 10: model.setCompletenessDiffReqDoc((int) value);
-		break;
-		case 11: model.setCompletenessDiffDesDoc((int) value);
-		break;
-		case 12: model.setCompletenessDiffTestPlan((int) value);
-		break;
-		case 13: model.setPcntIntegratedDiffDesDoc((int) value);
-		break;
+		case 7: model.setCompletenessDiffReqDoc((int) value);
 		}
 		fireTableCellUpdated(row, col);
 	}
-
+	
 	@Override
 	void initColNames() {
 		columnNames.add("Name");
-		columnNames.add("PercentComplete");
-		columnNames.add("PercentIntegrated");
 		columnNames.add("NumKnownErrors");
+		columnNames.add("PercentComplete");
 	}
 
 //	@Override
 //	public void update() {
 //
 //		if (!state.getClock().isStopped()) {
-//			Vector<Code> codes = state.getArtifactStateRepository()
-//					.getCodeStateRepository().getAll();
+//			Vector<DesignDocument> designdocuments = state
+//					.getArtifactStateRepository()
+//					.getDesignDocumentStateRepository().getAll();
+//			Vector<Object> temp = new Vector<Object>();
 //			// Initialize Name:
-//			Vector<String> names = new Vector<String>();
-//			for (int i = 0; i < codes.size(); i++) {
-//				names.add(codes.elementAt(i).getName());
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < designdocuments.size(); i++) {
+//				temp.add(designdocuments.elementAt(i).getName());
 //			}
-////			if (data.size() < 1) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 0);
-////			}
-//
-//			// Initialize PercentComplete:
-//			Vector<Double> percentagesComplete = new Vector<Double>();
-//			for (int i = 0; i < codes.size(); i++) {
-//				numFormat.setMinimumFractionDigits(0);
-//				numFormat.setMaximumFractionDigits(0);
-//				percentagesComplete.add(codes.elementAt(i)
-//						.getPercentComplete());
-//
+//			if (data.size() < 1) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 0);
 //			}
-////			if (data.size() < 2) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 1);
-////			}
-//
-//			// Initialize PercentIntegrated:
-//			Vector<Double> percentagesIntegrated = new Vector<Double>();
-//			for (int i = 0; i < codes.size(); i++) {
-//				numFormat.setMinimumFractionDigits(0);
-//				numFormat.setMaximumFractionDigits(0);
-//				percentagesIntegrated.add(codes.elementAt(i)
-//						.getPercentIntegrated());
-//
-//			}
-////			if (data.size() < 3) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 2);
-////			}
 //
 //			// Initialize NumKnownErrors:
-//			Vector<Double> knownErrors = new Vector<Double>();
-//			for (int i = 0; i < codes.size(); i++) {
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < designdocuments.size(); i++) {
 //				numFormat.setMinimumFractionDigits(0);
 //				numFormat.setMaximumFractionDigits(0);
-//				knownErrors.add(codes.elementAt(i)
-//						.getNumKnownErrors());
+//				temp.add(numFormat.format(designdocuments.elementAt(i)
+//						.getNumKnownErrors()));
 //
 //			}
-////			if (data.size() < 4) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 3);
-////			}
-//			
-//			for(int i = 0; i < codes.size(); i++) {
-//				Code newModel = new Code(
-//						names.get(i),
-//						0.0,
-//						percentagesComplete.get(i),
-//						0.0,
-//						percentagesIntegrated.get(i),
-//						0,
-//						knownErrors.get(i),
-//						0.0,
-//						0.0,
-//						0.0,
-//						0,0,0,0);
-//				data.add(newModel);
+//			if (data.size() < 2) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 1);
+//			}
+//
+//			// Initialize PercentComplete:
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < designdocuments.size(); i++) {
+//				numFormat.setMinimumFractionDigits(0);
+//				numFormat.setMaximumFractionDigits(0);
+//				temp.add(numFormat.format(designdocuments.elementAt(i)
+//						.getPercentComplete()));
+//
+//			}
+//			if (data.size() < 3) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 2);
 //			}
 //
 //		} else // game over
 //		{
 //			data.clear();
 //			columnNames.clear();
-//			Vector<Code> codes = state.getArtifactStateRepository()
-//					.getCodeStateRepository().getAll();
-//			Vector<String> names = new Vector<String>();
+//			Vector<DesignDocument> designdocuments = state
+//					.getArtifactStateRepository()
+//					.getDesignDocumentStateRepository().getAll();
+//			Vector<Object> temp = new Vector<Object>();
 //			// Initialize Name:
 //			if (columnNames.contains("Name") == false) {
 //				columnNames.add("Name");
 //			}
-//			for (int i = 0; i < codes.size(); i++) {
-//				names.add(codes.elementAt(i).getName());
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < designdocuments.size(); i++) {
+//				temp.add(designdocuments.elementAt(i).getName());
 //			}
-////			if (data.size() < 1) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 0);
-////			}
-//
-//			// Initialize PercentComplete:
-//			if (columnNames.contains("PercentComplete") == false) {
-//				columnNames.add("PercentComplete");
+//			if (data.size() < 1) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 0);
 //			}
-//			Vector<Double> percentagesComplete = new Vector<Double>();
-//			for (int i = 0; i < codes.size(); i++) {
-//				numFormat.setMinimumFractionDigits(0);
-//				numFormat.setMaximumFractionDigits(0);
-//				percentagesComplete.add(codes.elementAt(i)
-//						.getPercentComplete());
-//			}
-////			if (data.size() < 2) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 1);
-////			}
-//
-//			// Initialize PercentIntegrated:
-//			if (columnNames.contains("PercentIntegrated") == false) {
-//				columnNames.add("PercentIntegrated");
-//			}
-//			Vector<Double> percentagesIntegrated = new Vector<Double>();
-//			for (int i = 0; i < codes.size(); i++) {
-//				numFormat.setMinimumFractionDigits(0);
-//				numFormat.setMaximumFractionDigits(0);
-//				percentagesIntegrated.add(codes.elementAt(i)
-//						.getPercentIntegrated());
-//			}
-////			if (data.size() < 3) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 2);
-////			}
 //
 //			// Initialize NumKnownErrors:
 //			if (columnNames.contains("NumKnownErrors") == false) {
 //				columnNames.add("NumKnownErrors");
 //			}
-//			Vector<Double> knownErrors = new Vector<Double>();
-//			for (int i = 0; i < codes.size(); i++) {
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < designdocuments.size(); i++) {
 //				numFormat.setMinimumFractionDigits(0);
 //				numFormat.setMaximumFractionDigits(0);
-//				knownErrors.add(codes.elementAt(i)
-//						.getNumKnownErrors());
+//				temp.add(numFormat.format(designdocuments.elementAt(i)
+//						.getNumKnownErrors()));
 //			}
-////			if (data.size() < 4) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 3);
-////			}
+//			if (data.size() < 2) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 1);
+//			}
 //
 //			// Initialize NumUnknownErrors:
 //			if (columnNames.contains("NumUnknownErrors") == false) {
 //				columnNames.add("NumUnknownErrors");
 //			}
-//			Vector<Double> unknownErrors = new Vector<Double>();
-//			for (int i = 0; i < codes.size(); i++) {
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < designdocuments.size(); i++) {
 //				numFormat.setMinimumFractionDigits(0);
 //				numFormat.setMaximumFractionDigits(0);
-//				unknownErrors.add(codes.elementAt(i)
-//						.getNumUnknownErrors());
+//				temp.add(numFormat.format(designdocuments.elementAt(i)
+//						.getNumUnknownErrors()));
 //			}
-////			if (data.size() < 5) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 4);
-////			}
+//			if (data.size() < 3) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 2);
+//			}
 //
 //			// Initialize PercentErroneous:
 //			if (columnNames.contains("PercentErroneous") == false) {
 //				columnNames.add("PercentErroneous");
 //			}
-//			Vector<Double> percentsErroneous = new Vector<Double>();
-//			for (int i = 0; i < codes.size(); i++) {
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < designdocuments.size(); i++) {
 //				numFormat.setMinimumFractionDigits(0);
 //				numFormat.setMaximumFractionDigits(0);
-//				percentsErroneous.add(codes.elementAt(i)
-//						.getPercentErroneous());
+//				temp.add(numFormat.format(designdocuments.elementAt(i)
+//						.getPercentErroneous()));
 //			}
-////			if (data.size() < 6) {
-////				data.add(temp);
-////			} else {
-////				data.setElementAt(temp, 5);
-////			}
-//			
-//			for(int i = 0; i < codes.size(); i++) {
-//				Code newModel = new Code(
-//						names.get(i),
-//						0.0,
-//						percentagesComplete.get(i),
-//						0.0,
-//						percentagesIntegrated.get(i),
-//						0,
-//						knownErrors.get(i),
-//						unknownErrors.get(i),
-//						percentsErroneous.get(i),
-//						0.0,
-//						0,0,0,0);
-//				data.add(newModel);
+//			if (data.size() < 4) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 3);
+//			}
+//
+//			// Initialize PercentComplete:
+//			if (columnNames.contains("PercentComplete") == false) {
+//				columnNames.add("PercentComplete");
+//			}
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < designdocuments.size(); i++) {
+//				numFormat.setMinimumFractionDigits(0);
+//				numFormat.setMaximumFractionDigits(0);
+//				temp.add(numFormat.format(designdocuments.elementAt(i)
+//						.getPercentComplete()));
+//			}
+//			if (data.size() < 5) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 4);
 //			}
 //
 //			fireTableStructureChanged();
@@ -301,10 +217,15 @@ public class CodeTableModel extends TableModel<Code>{
 //		fireTableDataChanged(); // notify listeners that table data has changed
 //	}
 
+	public Class getColumnClass(int c) {
+		return getValueAt(0, c).getClass();
+	}
+
 	@Override
-	Vector<Code> getRepository() {
+	Vector<DesignDocument> getRepository() {
 		// TODO Auto-generated method stub
-		return state.getArtifactStateRepository()
-				.getCodeStateRepository().getAll();
+		return state
+				.getArtifactStateRepository()
+				.getDesignDocumentStateRepository().getAll();
 	}
 }
