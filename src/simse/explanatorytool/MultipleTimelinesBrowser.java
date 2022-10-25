@@ -129,7 +129,7 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 		chart.setBackgroundPaint(Color.white);
 		XYPlot plot = (XYPlot) chart.getPlot();
 		plot.setBackgroundPaint(Color.WHITE);
-		plot.setAxisOffset(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
+		plot.setAxisOffset(new org.jfree.chart.ui.RectangleInsets(5.0, 5.0, 5.0, 5.0));
 		plot.setDomainGridlinesVisible(true);
 		plot.setRangeGridlinesVisible(false);
 		ValueAxis rangeAxis = plot.getRangeAxis();
@@ -139,8 +139,8 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot
 				.getRenderer();
-		renderer.setShapesVisible(false);
-		renderer.setShapesFilled(false);
+		renderer.setDefaultShapesVisible(false);
+		renderer.setDefaultShapesFilled(false);
 		renderer.setDrawSeriesLineAsPath(true);
 
 		// change the auto tick unit selection to integer units only:
@@ -238,7 +238,7 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 			if (str.length() > 0) {
 				XYTextAnnotation annotation = new XYTextAnnotation(str,
 						b.getEndTick(), i * 10 + 1);
-				annotation.setTextAnchor(TextAnchor.HALF_ASCENT_LEFT);
+				annotation.setTextAnchor(org.jfree.chart.ui.TextAnchor.HALF_ASCENT_LEFT);
 				annotation.setFont(font);
 				plot.addAnnotation(annotation);
 			}
@@ -318,7 +318,7 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 							.getChartRenderingInfo();
 					Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 					NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-					RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+					org.jfree.chart.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
 					double chartX = domainAxis.java2DToValue(pt.getX(),
 							dataArea, domainAxisEdge);
 					int intX = (int) Math.rint(chartX);
@@ -408,12 +408,12 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 			ChartRenderingInfo info = this.chartPanel.getChartRenderingInfo();
 			Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 			NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-			RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+			org.jfree.chart.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
 			double dblX = domainAxis.java2DToValue(pt.getX(), dataArea,
 					domainAxisEdge);
 			int intX = (int) Math.rint(dblX);
 			NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-			RectangleEdge rangeAxisEdge = plot.getRangeAxisEdge();
+			org.jfree.chart.ui.RectangleEdge rangeAxisEdge = plot.getRangeAxisEdge();
 			double dblY = rangeAxis.java2DToValue(pt.getY(), dataArea,
 					rangeAxisEdge);
 			int intY = (int) Math.rint(dblY);

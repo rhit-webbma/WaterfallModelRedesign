@@ -3,32 +3,39 @@ package simse.gui;
 
 import simse.state.*;
 
-import java.awt.event.*;
-import java.awt.*;
-import java.awt.Dimension;
-import javax.swing.*;
-import javax.swing.text.*;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+
 import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.util.*;
 import java.text.*;
 import java.awt.Color;
+import java.awt.Point;
 
-public class CustomersAtAGlanceFrame extends JFrame implements MouseListener,
-		ActionListener {
+public class CustomersAtAGlanceFrame extends Stage implements EventHandler<MouseEvent> {
 
 	private State state;
 
-	private JPopupMenu popup;
+	private Popup popup;
 	private PopupListener popupListener;
-	private JTable acustomerTable;
+	private TableView acustomerTable;
 	private ACustomerTableModel acustomerModel;
-	private JPanel acustomerTitlePane;
-	private JPanel mainPane;
+	private TitledPane acustomerTitlePane;
+	private Pane mainPane;
 
 	private int realColumnIndex; // index of selected column
-	private JTable selectedTable; // selected table
+	private TableView selectedTable; // selected table
 
 	public CustomersAtAGlanceFrame(State s, SimSEGUI gui) {
 		state = s;
@@ -39,7 +46,7 @@ public class CustomersAtAGlanceFrame extends JFrame implements MouseListener,
 		int numCols;
 
 		acustomerModel = new ACustomerTableModel(s);
-		acustomerTable = new JTable(acustomerModel);
+		acustomerTable = new TableView(acustomerModel);
 		acustomerTable.setColumnSelectionAllowed(false);
 		acustomerTable.setRowSelectionAllowed(false);
 		acustomerTable.addMouseListener(this);
@@ -51,30 +58,29 @@ public class CustomersAtAGlanceFrame extends JFrame implements MouseListener,
 		}
 
 		// right click menu:
-		popup = new JPopupMenu();
+		popup = new Popup();
 		popupListener = new PopupListener(popup, gui);
 
 		// Create panes:
-		JScrollPane acustomerPane = new JScrollPane(acustomerTable);
+		ScrollPane acustomerPane = new ScrollPane(acustomerTable);
 
 		// Table headers:
-		acustomerTitlePane = new JPanel();
-		acustomerTitlePane.add(new JLabel("ACustomers:"));
+		acustomerTitlePane = new TitledPane("ACustomers:", acustomerPane);
 
 		// Create main pane:
-		mainPane = new JPanel();
-		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+		mainPane = new VBox();
 
 		// Add panes to main pane:
-		mainPane.add(acustomerTitlePane);
-		mainPane.add(acustomerPane);
+		mainPane.getChildren().add(acustomerTitlePane);
+		Scene scene = new Scene(mainPane);
+		this.setScene(scene);
 
 		// Set main window frame properties:
-		setBackground(Color.white);
-		setContentPane(mainPane);
-		setVisible(false);
-		pack();
-		validate();
+//		setBackground(Color.white);
+//		setContentPane(mainPane);
+//		setVisible(false);
+//		pack();
+//		validate();
 
 		resetHeight();
 	}
@@ -138,7 +144,7 @@ public class CustomersAtAGlanceFrame extends JFrame implements MouseListener,
 		}
 	}
 
-	public void createPopupMenu(JTable table, Point p) {
+	public void createPopupMenu(TableView table, Point p) {
 		popup.removeAll();
 
 		int colIndex = table.columnAtPoint(p);

@@ -5,13 +5,15 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
+import javafx.stage.Popup;
+
 public class PopupListener extends MouseAdapter {
-	JPopupMenu popup;
+	Popup popup;
 	boolean enabled;
 	SimSEGUI gui;
 
-	public PopupListener(JPopupMenu popupMenu, SimSEGUI g) {
-		popup = popupMenu;
+	public PopupListener(Popup popup2, SimSEGUI g) {
+		popup = popup2;
 		enabled = true;
 		gui = g;
 	}
@@ -32,7 +34,7 @@ public class PopupListener extends MouseAdapter {
 		maybeShowPopup(e);
 	}
 
-	public JPopupMenu getPopupMenu() {
+	public Popup getPopupMenu() {
 		return popup;
 	}
 

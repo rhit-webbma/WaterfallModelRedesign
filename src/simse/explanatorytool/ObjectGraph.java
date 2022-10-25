@@ -11,6 +11,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.fx.ChartViewer;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -18,14 +19,20 @@ import org.jfree.data.Range;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
 
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -39,17 +46,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 
-public class ObjectGraph extends JFrame implements MouseListener,
-		ActionListener {
+public class ObjectGraph extends Stage implements EventHandler<MouseEvent> {
 	private ArrayList<State> log;
 	private String objTypeType;
 	private String objType;
 	private String keyAttVal;
 	private String[] attributes;
 	private JFreeChart chart; // chart object
-	private ChartPanel chartPanel;
-	private JMenuItem newBranchItem;
-	private JSeparator separator;
+	private ChartViewer chartViewer;
+	private MenuItem newBranchItem;
+	private SeparatorMenuItem separator;
 	private int lastRightClickedX; // last x-val that was right-clicked on
 	private XYSeries[] series;
 	private Branch branch; // branch from which this graph is generated
@@ -71,16 +77,21 @@ public class ObjectGraph extends JFrame implements MouseListener,
 		lastRightClickedX = 0;
 		XYDataset dataset = createDataset();
 		chart = createChart(dataset);
-		chartPanel = new ChartPanel(chart);
-		chartPanel.addMouseListener(this);
-		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-		setContentPane(chartPanel);
-		newBranchItem = new JMenuItem("Start new game from here");
-		newBranchItem.addActionListener(this);
-		separator = new JSeparator();
-		pack();
-		RefineryUtilities.centerFrameOnScreen(this);
-		setVisible(showChart);
+		chartViewer = new ChartViewer(chart);
+		chartViewer.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+//		chartViewer.setPreferredSize(new java.awt.Dimension(500, 270));
+		chartViewer.setPrefSize(500, 270);
+		setScene(new Scene(chartViewer));
+//		setContentPane(chartPanel);
+		newBranchItem = new MenuItem("Start new game from here");
+		newBranchItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		separator = new SeparatorMenuItem();
+		
+		if (showChart) show();
+		
+//		pack();
+//		RefineryUtilities.centerFrameOnScreen(this);
+//		setVisible(showChart);
 	}
 
 	// Creates the dataset for this graph
@@ -370,8 +381,8 @@ public class ObjectGraph extends JFrame implements MouseListener,
 		plot.setRangeGridlinePaint(Color.white);
 		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot
 				.getRenderer();
-		renderer.setShapesVisible(true);
-		renderer.setShapesFilled(true);
+		renderer.setDefaultShapesVisible(true);
+		renderer.setDefaultShapesFilled(true);
 
 		// change the auto tick unit selection to integer units only:
 		NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
@@ -668,80 +679,79 @@ public class ObjectGraph extends JFrame implements MouseListener,
 	}
 
 	// responds to RIGHT-clicks on the chart
-	public void mouseReleased(MouseEvent me) {
-		if (me.getButton() != MouseEvent.BUTTON1) { // not left-click
-			XYPlot plot = chart.getXYPlot();
-			Range domainRange = plot.getDataRange(plot.getDomainAxis());
-			if (domainRange != null) { // chart is not blank
-				Point2D pt = chartPanel.translateScreenToJava2D(new Point(me
-						.getX(), me.getY()));
-				ChartRenderingInfo info = this.chartPanel
-						.getChartRenderingInfo();
-				Rectangle2D dataArea = info.getPlotInfo().getDataArea();
-				NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-				RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
-				double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
-						domainAxisEdge);
-				lastRightClickedX = (int) Math.rint(chartX);
-				if (domainRange != null
-						&& lastRightClickedX >= domainRange.getLowerBound()
-						&& lastRightClickedX <= (domainRange.getUpperBound() - 1)
-						&& lastRightClickedX >= 0) { // clicked within domain
-														// range
-					if (chartPanel.getPopupMenu().getComponentIndex(
-							newBranchItem) == -1) { // no new branch item on
-													// menu currently
-						chartPanel.getPopupMenu().add(separator);
-						chartPanel.getPopupMenu().add(newBranchItem);
-						chartPanel.getPopupMenu().pack();
-						chartPanel.getPopupMenu().repaint();
-					}
-				} else { // clicked outside of domain range
-					if (chartPanel.getPopupMenu().getComponentIndex(
-							newBranchItem) >= 0) { // new branch item currently
-													// on menu
-						chartPanel.getPopupMenu().remove(newBranchItem);
-						if (chartPanel.getPopupMenu().getComponentIndex(
-								separator) >= 0) { // has separator
-							chartPanel.getPopupMenu().remove(separator);
-						}
-						chartPanel.getPopupMenu().pack();
-						chartPanel.getPopupMenu().repaint();
-					}
-				}
-			}
-		}
-	}
+//	public void mouseReleased(MouseEvent me) {
+//		if (me.getButton() != MouseButton.PRIMARY) { // not left-click
+//			XYPlot plot = chart.getXYPlot();
+//			Range domainRange = plot.getDataRange(plot.getDomainAxis());
+//			if (domainRange != null) { // chart is not blank
+//				javafx.geometry.Point2D pt = chartViewer.localToScreen(me.getScreenX(), me.getScreenY());
+//				ChartRenderingInfo info = this.chartViewer
+//						.getRenderingInfo();
+//				Rectangle2D dataArea = info.getPlotInfo().getDataArea();
+//				NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
+//				RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+//				double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
+//						domainAxisEdge);
+//				lastRightClickedX = (int) Math.rint(chartX);
+//				if (domainRange != null
+//						&& lastRightClickedX >= domainRange.getLowerBound()
+//						&& lastRightClickedX <= (domainRange.getUpperBound() - 1)
+//						&& lastRightClickedX >= 0) { // clicked within domain
+//														// range
+//					if (chartViewer.getContextMenu().getItems().indexOf(
+//							newBranchItem) == -1) { // no new branch item on
+//													// menu currently
+//						chartViewer.getContextMenu().getItems().add(separator);
+//						chartViewer.getContextMenu().getItems().add(newBranchItem);
+////						chartViewer.getPopupMenu().pack();
+////						chartViewer.getPopupMenu().repaint();
+//					}
+//				} else { // clicked outside of domain range
+//					if (chartViewer.getContextMenu().getItems().indexOf(
+//							newBranchItem) >= 0) { // new branch item currently
+//													// on menu
+//						chartViewer.getContextMenu().getItems().remove(newBranchItem);
+//						if (chartViewer.getContextMenu().getItems().indexOf(
+//								separator) >= 0) { // has separator
+//							chartViewer.getContextMenu().getItems().remove(separator);
+//						}
+////						chartPanel.getPopupMenu().pack();
+////						chartPanel.getPopupMenu().repaint();
+//					}
+//				}
+//			}
+//		}
+//	}
 
-	public void mousePressed(MouseEvent me) {
-	}
+//	public void mousePressed(MouseEvent me) {
+//	}
+//
+//	public void mouseClicked(MouseEvent me) {
+//	}
+//
+//	public void mouseEntered(MouseEvent me) {
+//	}
+//
+//	public void mouseExited(MouseEvent me) {
+//	}
 
-	public void mouseClicked(MouseEvent me) {
-	}
-
-	public void mouseEntered(MouseEvent me) {
-	}
-
-	public void mouseExited(MouseEvent me) {
-	}
-
-	public void actionPerformed(ActionEvent evt) {
-		if (evt.getSource() == newBranchItem) {
-			String newBranchName = JOptionPane.showInputDialog(null,
-					"Please name this new game:", "Name New Game",
-					JOptionPane.QUESTION_MESSAGE);
-			if (newBranchName != null) {
-				State tempState = (State) log.get(lastRightClickedX).clone();
-				Logger tempLogger = new Logger(tempState, new ArrayList<State>(
-						log.subList(0, lastRightClickedX)));
-				Clock tempClock = new Clock(tempLogger, lastRightClickedX);
-				tempState.setClock(tempClock);
-				tempState.setLogger(tempLogger);
-				SimSE.startNewBranch(tempState, new Branch(newBranchName,
-						lastRightClickedX, tempClock.getTime(), branch, null));
-			}
-		}
-	}
+//	public void actionPerformed(ActionEvent evt) {
+//		if (evt.getSource() == newBranchItem) {
+//			String newBranchName = JOptionPane.showInputDialog(null,
+//					"Please name this new game:", "Name New Game",
+//					JOptionPane.QUESTION_MESSAGE);
+//			if (newBranchName != null) {
+//				State tempState = (State) log.get(lastRightClickedX).clone();
+//				Logger tempLogger = new Logger(tempState, new ArrayList<State>(
+//						log.subList(0, lastRightClickedX)));
+//				Clock tempClock = new Clock(tempLogger, lastRightClickedX);
+//				tempState.setClock(tempClock);
+//				tempState.setLogger(tempLogger);
+//				SimSE.startNewBranch(tempState, new Branch(newBranchName,
+//						lastRightClickedX, tempClock.getTime(), branch, null));
+//			}
+//		}
+//	}
 
 	public XYPlot getXYPlot() {
 		return chart.getXYPlot();
@@ -755,10 +765,76 @@ public class ObjectGraph extends JFrame implements MouseListener,
 		return log;
 	}
 
-	public class ExitListener extends WindowAdapter {
-		public void windowClosing(WindowEvent event) {
-			setVisible(false);
-			dispose();
+	@Override
+	public void handle(MouseEvent me) {
+		if (me.getSource() == this.newBranchItem) {
+			Dialog<String> dialog = new Dialog<>();
+			dialog.setTitle("Name New Game");
+			dialog.setContentText("Please name this new game:");
+			dialog.showAndWait();
+			String newBranchName = dialog.getResult();
+//			String newBranchName = JOptionPane.showInputDialog(null,
+//					"Please name this new game:", "Name New Game",
+//					JOptionPane.QUESTION_MESSAGE);
+			if (newBranchName != null) {
+				State tempState = (State) log.get(lastRightClickedX).clone();
+				Logger tempLogger = new Logger(tempState, new ArrayList<State>(
+						log.subList(0, lastRightClickedX)));
+				Clock tempClock = new Clock(tempLogger, lastRightClickedX);
+				tempState.setClock(tempClock);
+				tempState.setLogger(tempLogger);
+				SimSE.startNewBranch(tempState, new Branch(newBranchName,
+						lastRightClickedX, tempClock.getTime(), branch, null));
+			}
+		} else {
+			if (me.getButton() != MouseButton.PRIMARY) { // not left-click
+				XYPlot plot = chart.getXYPlot();
+				Range domainRange = plot.getDataRange(plot.getDomainAxis());
+				if (domainRange != null) { // chart is not blank
+					javafx.geometry.Point2D pt = chartViewer.localToScreen(me.getScreenX(), me.getScreenY());
+					ChartRenderingInfo info = this.chartViewer
+							.getRenderingInfo();
+					Rectangle2D dataArea = info.getPlotInfo().getDataArea();
+					NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
+					RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+					double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
+							domainAxisEdge);
+					lastRightClickedX = (int) Math.rint(chartX);
+					if (domainRange != null
+							&& lastRightClickedX >= domainRange.getLowerBound()
+							&& lastRightClickedX <= (domainRange.getUpperBound() - 1)
+							&& lastRightClickedX >= 0) { // clicked within domain
+															// range
+						if (chartViewer.getContextMenu().getItems().indexOf(
+								newBranchItem) == -1) { // no new branch item on
+														// menu currently
+							chartViewer.getContextMenu().getItems().add(separator);
+							chartViewer.getContextMenu().getItems().add(newBranchItem);
+//							chartViewer.getPopupMenu().pack();
+//							chartViewer.getPopupMenu().repaint();
+						}
+					} else { // clicked outside of domain range
+						if (chartViewer.getContextMenu().getItems().indexOf(
+								newBranchItem) >= 0) { // new branch item currently
+														// on menu
+							chartViewer.getContextMenu().getItems().remove(newBranchItem);
+							if (chartViewer.getContextMenu().getItems().indexOf(
+									separator) >= 0) { // has separator
+								chartViewer.getContextMenu().getItems().remove(separator);
+							}
+//							chartPanel.getPopupMenu().pack();
+//							chartPanel.getPopupMenu().repaint();
+						}
+					}
+				}
+			}
 		}
 	}
+
+//	public class ExitListener extends WindowAdapter {
+//		public void windowClosing(WindowEvent event) {
+//			setVisible(false);
+//			dispose();
+//		}
+//	}
 }

@@ -3,32 +3,42 @@ package simse.gui;
 
 import simse.state.*;
 
-import java.awt.event.*;
-import java.awt.*;
+
 import java.awt.Dimension;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.border.*;
+
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+
 import java.util.*;
 import java.text.*;
 import java.awt.Color;
 
-public class EmployeesAtAGlanceFrame extends JFrame implements MouseListener,
-		ActionListener {
+public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<MouseEvent> {
 
 	private State state;
 
-	private JPopupMenu popup;
+	private ContextMenu popup;
 	private PopupListener popupListener;
-	private JTable softwareengineerTable;
+	private TableView softwareengineerTable;
 	private SoftwareEngineerTableModel softwareengineerModel;
-	private JPanel softwareengineerTitlePane;
-	private JPanel mainPane;
+	private TitledPane softwareengineerTitlePane;
+	private Pane mainPane;
 
 	private int realColumnIndex; // index of selected column
-	private JTable selectedTable; // selected table
+	private TableView selectedTable; // selected table
 
 	public EmployeesAtAGlanceFrame(State s, SimSEGUI gui) {
 		state = s;
@@ -39,7 +49,7 @@ public class EmployeesAtAGlanceFrame extends JFrame implements MouseListener,
 		int numCols;
 
 		softwareengineerModel = new SoftwareEngineerTableModel(s);
-		softwareengineerTable = new JTable(softwareengineerModel);
+		softwareengineerTable = new TableView(softwareengineerModel);
 		softwareengineerTable.setColumnSelectionAllowed(false);
 		softwareengineerTable.setRowSelectionAllowed(false);
 		softwareengineerTable.addMouseListener(this);
@@ -51,31 +61,30 @@ public class EmployeesAtAGlanceFrame extends JFrame implements MouseListener,
 		}
 
 		// right click menu:
-		popup = new JPopupMenu();
+		popup = new ContextMenu();
 		popupListener = new PopupListener(popup, gui);
 
 		// Create panes:
-		JScrollPane softwareengineerPane = new JScrollPane(
+		Pane softwareengineerPane = new Pane(
 				softwareengineerTable);
 
 		// Table headers:
-		softwareengineerTitlePane = new JPanel();
-		softwareengineerTitlePane.add(new JLabel("SoftwareEngineers:"));
+		softwareengineerTitlePane = new TitledPane("SoftwareEngineers:", softwareengineerPane);
 
 		// Create main pane:
-		mainPane = new JPanel();
-		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+		mainPane = new VBox(softwareengineerTitlePane);
 
 		// Add panes to main pane:
-		mainPane.add(softwareengineerTitlePane);
-		mainPane.add(softwareengineerPane);
+//		mainPane.add(softwareengineerTitlePane);
+//		mainPane.add(softwareengineerPane);
 
 		// Set main window frame properties:
-		setBackground(Color.white);
-		setContentPane(mainPane);
-		setVisible(false);
-		pack();
-		validate();
+		setScene(new Scene(mainPane));
+//		setBackground(Color.white);
+//		setContentPane(mainPane);
+//		setVisible(false);
+//		pack();
+//		validate();
 
 		resetHeight();
 	}
@@ -96,7 +105,7 @@ public class EmployeesAtAGlanceFrame extends JFrame implements MouseListener,
 		Point p = me.getPoint();
 
 		if (me.isPopupTrigger()) {
-			if (me.getComponent().equals(softwareengineerTable)) // correct
+			if (me.getSource().equals(softwareengineerTable)) // correct
 																	// table
 			{
 				createPopupMenu(softwareengineerTable, p);
@@ -108,8 +117,8 @@ public class EmployeesAtAGlanceFrame extends JFrame implements MouseListener,
 												// by popup menus
 	{
 		Object source = e.getSource();
-		if (source instanceof JMenuItem) {
-			String itemText = ((JMenuItem) source).getText();
+		if (source instanceof MenuItem) {
+			String itemText = ((MenuItem) source).getText();
 			if (itemText.equals("Hide")) {
 				if (selectedTable != null) {
 					selectedTable.getColumnModel().getColumn(realColumnIndex)
@@ -138,8 +147,8 @@ public class EmployeesAtAGlanceFrame extends JFrame implements MouseListener,
 		}
 	}
 
-	public void createPopupMenu(JTable table, Point p) {
-		popup.removeAll();
+	public void createPopupMenu(TableView table, Point p) {
+		popup.getItems().removeAll();
 
 		int colIndex = table.columnAtPoint(p);
 		realColumnIndex = table.convertColumnIndexToModel(colIndex);
@@ -154,39 +163,39 @@ public class EmployeesAtAGlanceFrame extends JFrame implements MouseListener,
 																// column
 		{
 			if (realColumnIndex >= 0) {
-				JMenuItem hideItem = new JMenuItem("Hide");
+				MenuItem hideItem = new MenuItem("Hide");
 				hideItem.addActionListener(this);
-				popup.add(hideItem);
+				popup.getItems().add(hideItem);
 			}
 
 			if (hiddenCols.size() > 0) // there is at least one hidden column
 			{
-				JMenu unhideMenu = new JMenu("Unhide");
+				Menu unhideMenu = new Menu("Unhide");
 				for (int i = 0; i < hiddenCols.size(); i++) {
 					int index = hiddenCols.elementAt(i).intValue();
-					JMenuItem tempItem = new JMenuItem(
+					MenuItem tempItem = new MenuItem(
 							table.getColumnName(index));
 					tempItem.addActionListener(this);
-					unhideMenu.add(tempItem);
+					unhideMenu.getItems().add(tempItem);
 				}
-				if (popup.getComponents().length > 0) // already has the hide
+				if (popup.getItems().length > 0) // already has the hide
 														// menu item
 				{
-					popup.addSeparator();
+					popup.getItems().add(new SeparatorMenuItem());
 				}
-				popup.add(unhideMenu);
+				popup.getItems().add(unhideMenu);
 			}
 
 			addMouseListener(popupListener);
 			popup.show(table, (int) p.getX(), (int) p.getY());
 			selectedTable = table;
-			repaint();
+//			repaint();
 		}
 	}
 
 	public void update() {
 		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
-		rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
+		rightAlignRenderer.setHorizontalAlignment(Label.RIGHT);
 		softwareengineerModel.update();
 		if (!state.getClock().isStopped()) { // game not over
 			softwareengineerTable.getColumnModel()
@@ -227,7 +236,7 @@ public class EmployeesAtAGlanceFrame extends JFrame implements MouseListener,
 		repaint();
 	}
 
-	private Vector<Integer> getAllHiddenColumnIndices(JTable table) {
+	private Vector<Integer> getAllHiddenColumnIndices(TableView table) {
 		Vector<Integer> hiddenCols = new Vector<Integer>();
 		int numCols = table.getColumnModel().getColumnCount();
 		for (int i = 0; i < numCols; i++) {

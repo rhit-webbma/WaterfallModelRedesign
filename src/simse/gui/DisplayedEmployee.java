@@ -7,6 +7,8 @@ import java.awt.event.*;
 import java.awt.Image;
 import javax.swing.JMenuItem;
 
+import javafx.scene.control.MenuItem;
+
 public class DisplayedEmployee {
 	private Employee userObject;
 	private String userIconLocation;
@@ -21,7 +23,7 @@ public class DisplayedEmployee {
 	private int xLocation;
 	private int yLocation;
 
-	private JMenuItem userMenu;
+	private MenuItem userMenu;
 
 	public DisplayedEmployee(Employee emp, String il, ActionListener a,
 			boolean d, boolean ra, int x, int y) {
