@@ -59,7 +59,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 				timelinesBrowser);
 
 //		attribPanel = new AttributePanel(this, state, engine);
-//		tabPanel = new TabPanel(this, state, logic, attribPanel);
+		tabPanel = new TabPanel(this, state, logic, attribPanel);
 //		actionPanel = new ActionPanel(this, state, logic);
 
 		// Set window title:
@@ -99,14 +99,11 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		mainPane.setFill(Color.WHITE);
 		this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this);
 		this.setScene(mainPane);
-//		setVisible(true);
 //		this.setSize(bPane.getLayout().preferredLayoutSize(this));
 		// Make it show up in the center of the screen:
 //		setLocationRelativeTo(null);
 		
 //		this.show();
-//		validate();
-//		repaint();
 	}
 
 	public Engine getEngine() {
@@ -165,7 +162,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 					expTool.setIconified(false);
 				}
 			expTool.show();
-}
+			}
 		}
 		
 	}

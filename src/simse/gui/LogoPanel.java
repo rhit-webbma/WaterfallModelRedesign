@@ -5,6 +5,9 @@ import java.awt.event.*;
 import java.awt.*;
 import java.awt.Dimension;
 import javax.swing.*;
+
+import javafx.scene.layout.Pane;
+
 import java.awt.Color;
 
 import simse.SimSE;
@@ -12,7 +15,7 @@ import simse.engine.*;
 import simse.state.*;
 import simse.logic.*;
 
-public class LogoPanel extends JPanel implements MouseListener {
+public class LogoPanel extends Pane implements MouseListener {
 	private String path = "/simse/gui/images/layout/";
 
 	private TabPanel tabPane;

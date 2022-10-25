@@ -8,6 +8,10 @@ import java.awt.*;
 import java.awt.Dimension;
 import javax.swing.*;
 import javax.swing.text.*;
+
+import javafx.scene.control.ContextMenu;
+import javafx.stage.Stage;
+
 import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
@@ -15,12 +19,12 @@ import java.util.*;
 import java.text.*;
 import java.awt.Color;
 
-public class ArtifactsAtAGlanceFrame extends JFrame implements MouseListener,
+public class ArtifactsAtAGlanceFrame extends Stage implements MouseListener,
 		ActionListener {
 
 	private State state;
 
-	private JPopupMenu popup;
+	private ContextMenu popup;
 	private PopupListener popupListener;
 	private JTable requirementsdocumentTable;
 	private RequirementsDocumentTableModel requirementsdocumentModel;
@@ -94,7 +98,7 @@ public class ArtifactsAtAGlanceFrame extends JFrame implements MouseListener,
 		}
 
 		// right click menu:
-		popup = new JPopupMenu();
+		popup = new ContextMenu();
 		popupListener = new PopupListener(popup, gui);
 
 		// Create panes:
@@ -129,13 +133,13 @@ public class ArtifactsAtAGlanceFrame extends JFrame implements MouseListener,
 		mainPane.add(systemtestplanPane);
 
 		// Set main window frame properties:
-		setBackground(Color.white);
-		setContentPane(mainPane);
-		setVisible(false);
-		pack();
-		validate();
+//		setBackground(Color.white);
+//		setContentPane(mainPane);
+//		setVisible(false);
+//		pack();
+//		validate();
 
-		resetHeight();
+//		resetHeight();
 	}
 
 	public void mousePressed(MouseEvent me) {

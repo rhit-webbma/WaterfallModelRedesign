@@ -7,7 +7,8 @@ import simse.adts.objects.*;
 import simse.adts.actions.*;
 import simse.logic.dialogs.*;
 import java.util.*;
-import javax.swing.*;
+
+import javafx.stage.Stage;
 
 public class MenuInputManager {
 	private State state;
@@ -23,7 +24,7 @@ public class MenuInputManager {
 		ruleExec = r;
 	}
 
-	public void menuItemSelected(Employee e, String s, JFrame parent) {
+	public void menuItemSelected(Employee e, String s, Stage parent) {
 		boolean hasStr = false;
 		Vector<String> menu = e.getMenu();
 		for (int i = 0; i < menu.size(); i++) {

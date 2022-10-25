@@ -7,16 +7,10 @@ import simse.adts.objects.*;
 
 import java.text.*;
 import java.util.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.awt.Dimension;
-import javax.swing.*;
-import javax.swing.text.*;
 
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
-import javax.swing.event.*;
-import java.awt.Color;
 import java.io.*;
 
 public class AttributePanel extends Pane {
@@ -127,7 +121,7 @@ public class AttributePanel extends Pane {
 		g.drawImage(iconBorder, 05, 11, this);
 	}
 
-	public void setObjectInFocus(SSObject obj, Icon img) {
+	public void setObjectInFocus(SSObject obj, Image img) {
 		objInFocus = obj;
 		if (img != null) {
 			setIcon(img);

@@ -1,5 +1,8 @@
 package simse;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import javafx.application.Application;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -14,6 +17,12 @@ public class JavaFXTesting extends Application {
 
 	public static void main(String args[]) {
 		launch(args);
+//		try {
+//			new FileInputStream("src/simse/gui/images/layout/border.gif");
+//		} catch (FileNotFoundException e) {
+//			System.out.println("File not found");
+//			System.out.println(System.getProperty("user.dir"));
+//		}
 	}
 
 	@Override
