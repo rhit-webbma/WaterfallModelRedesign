@@ -9,14 +9,14 @@ import java.text.*;
 import simse.adts.objects.*;
 import simse.state.*;
 
-public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
-
-	public DesignEnvironmentTableModel(State s) {
+public class IDETableModel extends TableModel<IDE> {
+	
+	public IDETableModel(State s) {
 		super(s);
 	}
 
 	public Object getValueAt(int row, int col) {
-		DesignEnvironment model = data.elementAt(col);
+		IDE model = data.elementAt(col);
 		Object returnValue = null;
 		switch(row) {
 		case 0: returnValue = model.getName();
@@ -34,7 +34,7 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 	}
 
 	public void setValueAt(Object value, int row, int col) {
-		DesignEnvironment model = data.elementAt(col);
+		IDE model = data.elementAt(col);
 		switch(row) {
 		case 0: model.setName((String) value);
 		break;
@@ -57,17 +57,23 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 		columnNames.add("Purchased");
 	}
 
+	@Override
+	Vector<IDE> getRepository() {
+		// TODO Auto-generated method stub
+		return state.getToolStateRepository()
+				.getIDEStateRepository().getAll();
+	}
+
 //	public void update() {
 //
 //		if (!state.getClock().isStopped()) {
-//			Vector<DesignEnvironment> designenvironments = state
-//					.getToolStateRepository()
-//					.getDesignEnvironmentStateRepository().getAll();
+//			Vector<IDE> ides = state.getToolStateRepository()
+//					.getIDEStateRepository().getAll();
 //			Vector<Object> temp = new Vector<Object>();
 //			// Initialize Name:
 //			temp = new Vector<Object>();
-//			for (int i = 0; i < designenvironments.size(); i++) {
-//				temp.add(designenvironments.elementAt(i).getName());
+//			for (int i = 0; i < ides.size(); i++) {
+//				temp.add(ides.elementAt(i).getName());
 //			}
 //			if (data.size() < 1) {
 //				data.add(temp);
@@ -77,11 +83,10 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 //
 //			// Initialize Cost:
 //			temp = new Vector<Object>();
-//			for (int i = 0; i < designenvironments.size(); i++) {
+//			for (int i = 0; i < ides.size(); i++) {
 //				numFormat.setMinimumFractionDigits(2);
 //				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(designenvironments.elementAt(i)
-//						.getCost()));
+//				temp.add(numFormat.format(ides.elementAt(i).getCost()));
 //
 //			}
 //			if (data.size() < 2) {
@@ -92,9 +97,8 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 //
 //			// Initialize Purchased:
 //			temp = new Vector<Object>();
-//			for (int i = 0; i < designenvironments.size(); i++) {
-//				temp.add(new Boolean(designenvironments.elementAt(i)
-//						.getPurchased()));
+//			for (int i = 0; i < ides.size(); i++) {
+//				temp.add(new Boolean(ides.elementAt(i).getPurchased()));
 //			}
 //			if (data.size() < 3) {
 //				data.add(temp);
@@ -106,17 +110,16 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 //		{
 //			data.clear();
 //			columnNames.clear();
-//			Vector<DesignEnvironment> designenvironments = state
-//					.getToolStateRepository()
-//					.getDesignEnvironmentStateRepository().getAll();
+//			Vector<IDE> ides = state.getToolStateRepository()
+//					.getIDEStateRepository().getAll();
 //			Vector<Object> temp = new Vector<Object>();
 //			// Initialize Name:
 //			if (columnNames.contains("Name") == false) {
 //				columnNames.add("Name");
 //			}
 //			temp = new Vector<Object>();
-//			for (int i = 0; i < designenvironments.size(); i++) {
-//				temp.add(designenvironments.elementAt(i).getName());
+//			for (int i = 0; i < ides.size(); i++) {
+//				temp.add(ides.elementAt(i).getName());
 //			}
 //			if (data.size() < 1) {
 //				data.add(temp);
@@ -129,11 +132,10 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 //				columnNames.add("Cost");
 //			}
 //			temp = new Vector<Object>();
-//			for (int i = 0; i < designenvironments.size(); i++) {
+//			for (int i = 0; i < ides.size(); i++) {
 //				numFormat.setMinimumFractionDigits(2);
 //				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(designenvironments.elementAt(i)
-//						.getCost()));
+//				temp.add(numFormat.format(ides.elementAt(i).getCost()));
 //			}
 //			if (data.size() < 2) {
 //				data.add(temp);
@@ -146,10 +148,10 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 //				columnNames.add("ProductivityIncreaseFactor");
 //			}
 //			temp = new Vector<Object>();
-//			for (int i = 0; i < designenvironments.size(); i++) {
+//			for (int i = 0; i < ides.size(); i++) {
 //				numFormat.setMinimumFractionDigits(2);
 //				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(designenvironments.elementAt(i)
+//				temp.add(numFormat.format(ides.elementAt(i)
 //						.getProductivityIncreaseFactor()));
 //			}
 //			if (data.size() < 3) {
@@ -163,10 +165,10 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 //				columnNames.add("ErrorRateDecreaseFactor");
 //			}
 //			temp = new Vector<Object>();
-//			for (int i = 0; i < designenvironments.size(); i++) {
+//			for (int i = 0; i < ides.size(); i++) {
 //				numFormat.setMinimumFractionDigits(2);
 //				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(designenvironments.elementAt(i)
+//				temp.add(numFormat.format(ides.elementAt(i)
 //						.getErrorRateDecreaseFactor()));
 //			}
 //			if (data.size() < 4) {
@@ -180,9 +182,8 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 //				columnNames.add("Purchased");
 //			}
 //			temp = new Vector<Object>();
-//			for (int i = 0; i < designenvironments.size(); i++) {
-//				temp.add(new Boolean(designenvironments.elementAt(i)
-//						.getPurchased()));
+//			for (int i = 0; i < ides.size(); i++) {
+//				temp.add(new Boolean(ides.elementAt(i).getPurchased()));
 //			}
 //			if (data.size() < 5) {
 //				data.add(temp);
@@ -195,11 +196,4 @@ public class DesignEnvironmentTableModel extends TableModel<DesignEnvironment> {
 //
 //		fireTableDataChanged(); // notify listeners that table data has changed
 //	}
-	@Override
-	Vector<DesignEnvironment> getRepository() {
-		// TODO Auto-generated method stub
-		return state
-				.getToolStateRepository()
-				.getDesignEnvironmentStateRepository().getAll();
-	}
-	}
+}
