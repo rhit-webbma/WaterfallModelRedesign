@@ -16,6 +16,7 @@ import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.fx.ChartViewer;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -24,39 +25,40 @@ import org.jfree.data.xy.XYDataItem;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
-import org.jfree.ui.TextAnchor;
+import org.jfree.chart.ui.TextAnchor;
+
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Separator;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JSeparator;
 
-public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
-		ActionListener, ChartMouseListener {
+public class MultipleTimelinesBrowser extends Stage implements EventHandler<MouseEvent>{
 	private static final String ROOT_GAME_NAME = "ROOT GAME";
 	private JFreeChart chart; // chart object
-	private ChartPanel chartPanel;
-	private JMenuItem newBranchItem;
-	private JSeparator separator;
+	private ChartViewer chartViewer;
+	private MenuItem newBranchItem;
+	private SeparatorMenuItem separator;
 	private Branch lastRightClickedBranch; // last branch that was right-clicked
 											// on
 	private int lastRightClickedX; // last x-val that was right-clicked on
@@ -72,20 +74,18 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 		chart = createChart(xydataset);
 		resetAnnotations();
 		setSeriesStrokes();
-		chartPanel = new ChartPanel(chart);
-		chartPanel.addChartMouseListener(this);
-		chartPanel.addMouseListener(this);
-		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-		setContentPane(chartPanel);
-		newBranchItem = new JMenuItem("Start new game from here");
-		newBranchItem.addActionListener(this);
-		separator = new JSeparator();
+		chartViewer = new ChartViewer(chart);
+		chartViewer.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		chartViewer.setPrefSize(500, 270);
+		setScene(new Scene(chartViewer));
+		newBranchItem = new MenuItem("Start new game from here");
+		newBranchItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		separator = new SeparatorMenuItem();
 		lastRightClickedBranch = null;
 		lastRightClickedX = -1;
-		pack();
-		RefineryUtilities.centerFrameOnScreen(this);
-		addWindowListener(new ExitListener());
-
+//		pack();
+//		RefineryUtilities.centerFrameOnScreen(this);
+//		addWindowListener(new ExitListener());
 		unnamedBranchesIndex = 0;
 	}
 
@@ -139,8 +139,10 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot
 				.getRenderer();
-		renderer.setShapesVisible(false);
-		renderer.setShapesFilled(false);
+		// had to change these to setting the default, should still update just might 
+		// have some different functionality, keep an eye out
+		renderer.setDefaultShapesVisible(false); 
+		renderer.setDefaultShapesFilled(false);
 		renderer.setDrawSeriesLineAsPath(true);
 
 		// change the auto tick unit selection to integer units only:
@@ -259,113 +261,87 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 			}
 		}
 	}
-
-	// responds to LEFT mouse clicks on the chart
-	public void chartMouseClicked(ChartMouseEvent event) {
-		if (event.getTrigger().getButton() == MouseEvent.BUTTON1) { // left-click
-			Branch b = getBranchClickedOn(event.getTrigger());
-			if (b != null) {
-				// find branch index:
-				for (int i = 0; i < SimSE.getBranches().size(); i++) {
-					Branch tempBranch = SimSE.getBranches().get(i);
-					if (b == tempBranch) {
-						// bring up branch (if not closed):
-						SimSEGUI g = SimSE.getGUIs().get(i);
-						if (!b.isClosed()) {
-							if (g.getState() == Frame.ICONIFIED) {
-								g.setState(Frame.NORMAL);
+	
+	@Override
+	public void handle(MouseEvent e) {
+//		TODO: Put this functionality in the stop function of the application that runs this
+//		if (SimSE.getNumOpenBranches() == 0) {
+//			System.exit(0);
+//		}
+//		close();
+		if (e.getSource() == chartViewer) {
+			if (e.getButton() == MouseButton.PRIMARY) { // left-click
+				Branch b = getBranchClickedOn(e);
+				if (b != null) {
+					// find branch index:
+					for (int i = 0; i < SimSE.getBranches().size(); i++) {
+						Branch tempBranch = SimSE.getBranches().get(i);
+						if (b == tempBranch) {
+							// bring up branch (if not closed):
+							SimSEGUI g = SimSE.getGUIs().get(i);
+							if (!b.isClosed()) {
+								if (g.getState() == Frame.ICONIFIED) {
+									g.setState(Frame.NORMAL);
+								}
+								g.setVisible(true);
 							}
-							g.setVisible(true);
 						}
 					}
 				}
-			}
-		}
-	}
-
-	public void chartMouseMoved(ChartMouseEvent event) {
-	}
-
-	// responds to RIGHT-clicks on the chart
-	public void mouseReleased(MouseEvent me) {
-		if (me.getButton() != MouseEvent.BUTTON1) { // not left-click
-			Branch b = getBranchClickedOn(me);
-			boolean valid = true;
-			if ((b != null) && (!b.isClosed())
-					&& (b.getEndTick() != b.getStartTick())) { // clicked on a
-																// valid branch
-				lastRightClickedBranch = b;
-				if (chartPanel.getPopupMenu().getComponentIndex(newBranchItem) == -1) { // no
-																						// new
-																						// branch
-																						// item
-																						// on
-																						// menu
-																						// currently
-					chartPanel.getPopupMenu().add(separator);
-					chartPanel.getPopupMenu().add(newBranchItem);
-					chartPanel.getPopupMenu().pack();
-					chartPanel.getPopupMenu().repaint();
+			} else if (e.getButton() != MouseButton.PRIMARY) { // not left-click
+				Branch b = getBranchClickedOn(e);
+				boolean valid = true;
+				if ((b != null) && (!b.isClosed())
+						&& (b.getEndTick() != b.getStartTick())) { // clicked on a
+																	// valid branch
+					lastRightClickedBranch = b;
+					if (chartViewer.getContextMenu().getItems().indexOf(newBranchItem) == -1) { // no new branch item on menu currently
+						chartViewer.getContextMenu().getItems().add(separator);
+						chartViewer.getContextMenu().getItems().add(newBranchItem);
+	//					chartViewer.getPopupMenu().pack();
+	//					chartViewer.getPopupMenu().repaint();
+					}
+	
+					// set last right clicked X:
+					XYPlot plot = chart.getXYPlot();
+					Range domainRange = plot.getDataRange(plot.getDomainAxis());
+					if (domainRange != null) { // chart is not blank
+	//					Point2D pt = chartViewer.translateScreenToJava2D(new Point((int) e.getX(), (int) e.getY())); ignored this step because  can just get X later
+						ChartRenderingInfo info = this.chartViewer.getRenderingInfo();
+						Rectangle2D dataArea = info.getPlotInfo().getDataArea();
+						NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
+						RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+						double chartX = domainAxis.java2DToValue(e.getX(), dataArea, domainAxisEdge);
+						int intX = (int) Math.rint(chartX);
+						if (intX < lastRightClickedBranch.getEndTick()) { // not end tick
+							lastRightClickedX = intX;
+						} else {
+							valid = false;
+						}
+					}
+				} else { // did not click on a valid branch segment
+					valid = false;
 				}
-
-				// set last right clicked X:
-				XYPlot plot = chart.getXYPlot();
-				Range domainRange = plot.getDataRange(plot.getDomainAxis());
-				if (domainRange != null) { // chart is not blank
-					Point2D pt = chartPanel.translateScreenToJava2D(new Point(
-							me.getX(), me.getY()));
-					ChartRenderingInfo info = this.chartPanel
-							.getChartRenderingInfo();
-					Rectangle2D dataArea = info.getPlotInfo().getDataArea();
-					NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-					RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
-					double chartX = domainAxis.java2DToValue(pt.getX(),
-							dataArea, domainAxisEdge);
-					int intX = (int) Math.rint(chartX);
-					if (intX < lastRightClickedBranch.getEndTick()) { // not end
-																		// tick
-						lastRightClickedX = intX;
-					} else {
-						valid = false;
+				if (!valid) {
+					lastRightClickedBranch = null;
+					lastRightClickedX = -1;
+					if (chartViewer.getContextMenu().getItems().indexOf(newBranchItem) >= 0) {
+						// new branch item currently on menu
+						chartViewer.getContextMenu().getItems().remove(newBranchItem);
+						if (chartViewer.getContextMenu().getItems().indexOf(separator) >= 0) {
+							// has separator
+							chartViewer.getContextMenu().getItems().remove(separator);
+						}
+	//					chartViewer.getPopupMenu().pack();
+	//					chartViewer.getPopupMenu().repaint();
 					}
 				}
-			} else { // did not click on a valid branch segment
-				valid = false;
 			}
-			if (!valid) {
-				lastRightClickedBranch = null;
-				lastRightClickedX = -1;
-				if (chartPanel.getPopupMenu().getComponentIndex(newBranchItem) >= 0) {
-					// new branch item currently on menu
-					chartPanel.getPopupMenu().remove(newBranchItem);
-					if (chartPanel.getPopupMenu().getComponentIndex(separator) >= 0) {
-						// has separator
-						chartPanel.getPopupMenu().remove(separator);
-					}
-					chartPanel.getPopupMenu().pack();
-					chartPanel.getPopupMenu().repaint();
-				}
-			}
-		}
-	}
-
-	public void mousePressed(MouseEvent me) {
-	}
-
-	public void mouseClicked(MouseEvent me) {
-	}
-
-	public void mouseEntered(MouseEvent me) {
-	}
-
-	public void mouseExited(MouseEvent me) {
-	}
-
-	public void actionPerformed(ActionEvent evt) {
-		if (evt.getSource() == newBranchItem) {
-			String newBranchName = JOptionPane.showInputDialog(null,
-					"Please name this new game:", "Name New Game",
-					JOptionPane.QUESTION_MESSAGE);
+		} else if (e.getSource() == newBranchItem) {
+			TextInputDialog td = new TextInputDialog("Name New Game");
+			td.setHeaderText("Please name this new game:");
+			td.showAndWait();
+			String newBranchName = td.getEditor().getText();
 			if (newBranchName != null) {
 				if ((lastRightClickedBranch != null)
 						&& (lastRightClickedX >= 0)) {
@@ -403,19 +379,17 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 		XYPlot plot = chart.getXYPlot();
 		Range domainRange = plot.getDataRange(plot.getDomainAxis());
 		if (domainRange != null) { // chart is not blank
-			Point2D pt = chartPanel.translateScreenToJava2D(new Point(
-					me.getX(), me.getY()));
-			ChartRenderingInfo info = this.chartPanel.getChartRenderingInfo();
+//			Point2D pt = chartViewer.translateScreenToJava2D(new Point(me.getX(), me.getY()));
+			ChartRenderingInfo info = this.chartViewer.getRenderingInfo();
 			Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 			NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
 			RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
-			double dblX = domainAxis.java2DToValue(pt.getX(), dataArea,
+			double dblX = domainAxis.java2DToValue(me.getX(), dataArea,
 					domainAxisEdge);
 			int intX = (int) Math.rint(dblX);
 			NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
 			RectangleEdge rangeAxisEdge = plot.getRangeAxisEdge();
-			double dblY = rangeAxis.java2DToValue(pt.getY(), dataArea,
-					rangeAxisEdge);
+			double dblY = rangeAxis.java2DToValue(me.getY(), dataArea,rangeAxisEdge);
 			int intY = (int) Math.rint(dblY);
 
 			// first check if it was a vertical branch segment that was clicked
@@ -473,15 +447,5 @@ public class MultipleTimelinesBrowser extends JFrame implements MouseListener,
 
 	public String getChartTitle() {
 		return this.getTitle();
-	}
-
-	public class ExitListener extends WindowAdapter {
-		public void windowClosing(WindowEvent event) {
-			if (SimSE.getNumOpenBranches() == 0) {
-				System.exit(0);
-			}
-			setVisible(false);
-			dispose();
-		}
 	}
 }

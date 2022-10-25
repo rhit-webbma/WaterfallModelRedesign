@@ -11,6 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -37,12 +39,8 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>,
-		ListSelectionListener {
+public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 	private ArrayList<State> log; // log for current simulation
 	private ArrayList<Stage> visibleGraphs; // holds all of the currently
 												// visible graphs
@@ -325,10 +323,10 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>,
 		if (source == objectList) { // user has chosen an object
 			refreshAttributeList();
 		} else if (source == multipleTimelinesButton) {
-			if (timelinesBrowser.getState() == Frame.ICONIFIED) {
-				timelinesBrowser.setState(Frame.NORMAL);
+			if (timelinesBrowser.isIconified()) {
+				timelinesBrowser.setIconified(false);
 			}
-			timelinesBrowser.setVisible(true);
+			timelinesBrowser.show();
 		} else if (source == generateObjGraphButton) { // generateObjGraphButton
 														// has been pressed
 			String selectedObj = (String) objectList.getSelectionModel().getSelectedItem();
@@ -351,9 +349,8 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>,
 						objType, keyAttVal, attributes, true, branch);
 				visibleGraphs.add(graph);
 			} else {
-				JOptionPane.showMessageDialog(null,
-						("Please select at least one attribute"), "Warning",
-						JOptionPane.WARNING_MESSAGE);
+				Alert alert = new Alert(AlertType.WARNING, "Please select at least one attribute");					alert.show();
+
 			}
 		} else if (source == generateActGraphButton) { // generateActGraphButton
 														// has been pressed
@@ -366,9 +363,8 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>,
 				ActionGraph graph = new ActionGraph(log, actions, true, branch);
 				visibleGraphs.add(graph);
 			} else {
-				JOptionPane.showMessageDialog(null,
-						("Please select at least one action"), "Warning",
-						JOptionPane.WARNING_MESSAGE);
+				Alert alert = new Alert(AlertType.WARNING, "Please select at least one action");					alert.show();
+
 			}
 		} else if (source == generateCompGraphButton) { // generateCompGraphButton
 														// has been pressed
@@ -405,43 +401,36 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>,
 							actGraph, branch);
 					visibleGraphs.add(compGraph);
 				} else {
-					JOptionPane.showMessageDialog(null,
-							("Please select at least one action"), "Warning",
-							JOptionPane.WARNING_MESSAGE);
+					Alert alert = new Alert(AlertType.WARNING, "Please select at least one action");
+					alert.show();
 				}
 			} else {
-				JOptionPane.showMessageDialog(null,
-						("Please select at least one attribute"), "Warning",
-						JOptionPane.WARNING_MESSAGE);
+				Alert alert = new Alert(AlertType.WARNING, "Please select at least one attribute");
+				alert.show();
 			}
 		} else if (source == actionComboBox) {
 			if (actionComboBox.getItems().size() > 0) {
 				refreshRuleLists((String) actionComboBox.getSelectionModel().getSelectedItem());
 				descriptionArea.setText("");
 			}
-		} else if (source == closeButton) {
-//			setVisible(false);
-//			dispose();
-			close();
-		}
-	}
-	
-
-	public void valueChanged(ListSelectionEvent e) {
-		if ((e.getSource() == attributeList) || (e.getSource() == actionList)) {
+		} else if ((source == attributeList) || (source == actionList)) {
 			refreshButtons();
-		} else if ((e.getSource() == triggerRuleList && !triggerRuleList.getSelectionModel().isEmpty())) {
+		} else if ((source == triggerRuleList && !triggerRuleList.getSelectionModel().isEmpty())) {
 			destroyerRuleList.getSelectionModel().clearSelection();
 			intermediateRuleList.getSelectionModel().clearSelection();
 			refreshDescriptionArea((String) triggerRuleList.getSelectionModel().getSelectedItem());
-		} else if (e.getSource() == destroyerRuleList && !destroyerRuleList.getSelectionModel().isEmpty()) {
+		} else if (source == destroyerRuleList && !destroyerRuleList.getSelectionModel().isEmpty()) {
 			triggerRuleList.getSelectionModel().clearSelection();
 			intermediateRuleList.getSelectionModel().clearSelection();
 			refreshDescriptionArea((String) destroyerRuleList.getSelectionModel().getSelectedItem());
-		} else if (e.getSource() == intermediateRuleList && !intermediateRuleList.getSelectionModel().isEmpty()) {
+		} else if (source == intermediateRuleList && !intermediateRuleList.getSelectionModel().isEmpty()) {
 			triggerRuleList.getSelectionModel().clearSelection();
 			destroyerRuleList.getSelectionModel().clearSelection();
 			refreshDescriptionArea((String) intermediateRuleList.getSelectionModel().getSelectedItem());
+		}  else if (source == closeButton) {
+//			setVisible(false);
+//			dispose();
+			close();
 		}
 	}
 
