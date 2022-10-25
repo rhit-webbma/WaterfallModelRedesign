@@ -15,6 +15,7 @@ import org.jfree.data.Range;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RefineryUtilities;
 
+import javafx.stage.Stage;
 import simse.SimSE;
 import simse.state.Clock;
 import simse.state.State;
@@ -38,7 +39,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 
-public class CompositeGraph extends JFrame implements ChartMouseListener,
+public class CompositeGraph extends Stage implements ChartMouseListener,
 		MouseListener, ActionListener {
 	private ActionGraph actGraph;
 	private ObjectGraph objGraph;

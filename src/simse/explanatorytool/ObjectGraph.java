@@ -22,6 +22,8 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
 
+import javafx.stage.Stage;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,7 +41,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 
-public class ObjectGraph extends JFrame implements MouseListener,
+public class ObjectGraph extends Stage implements MouseListener,
 		ActionListener {
 	private ArrayList<State> log;
 	private String objTypeType;
