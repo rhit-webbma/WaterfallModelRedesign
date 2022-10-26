@@ -73,7 +73,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		expTool = new ExplanatoryTool(this, state.getLogger().getLog(), branch,
 				timelinesBrowser);
 
-//		attribPanel = new AttributePanel(this, state, engine);
+		attribPanel = new AttributePanel(this, state, engine);
 		tabPanel = new TabPanel(this, state, logic, attribPanel);
 //		actionPanel = new ActionPanel(this, state, logic);
 
