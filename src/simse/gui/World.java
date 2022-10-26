@@ -4,14 +4,15 @@ package simse.gui;
 import simse.adts.objects.*;
 import simse.state.*;
 import simse.logic.*;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
-import java.awt.event.*;
-import java.awt.*;
-import javax.swing.*;
 import java.util.*;
 
-public class World extends SimSEMap implements KeyListener, MouseListener,
-		ActionListener {
+public class World extends SimSEMap implements EventHandler<Event> {
 	private int clickedHeightModifier = 5;
 	private int clickedX;
 	private int clickedY;
@@ -30,7 +31,7 @@ public class World extends SimSEMap implements KeyListener, MouseListener,
 	private boolean overheadTextDisplayed; // whether or not there is overhead
 											// text to display
 
-	private JPopupMenu popup;
+	private ContextMenu popup;
 	private PopupListener popupListener;
 
 	private DisplayedEmployee selectedUser;
@@ -48,7 +49,6 @@ public class World extends SimSEMap implements KeyListener, MouseListener,
 		overheadTextDisplayed = false;
 		loadDefaultSettings();
 		update();
-		validate();
 		repaint();
 	}
 

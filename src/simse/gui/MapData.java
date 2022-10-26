@@ -3,8 +3,9 @@
 // the Image associated with that key. Currently some keys are not in use i.e. have no image associated with them
 package simse.gui;
 
-import java.awt.Image;
-import java.awt.Toolkit;
+import com.sun.javafx.tk.Toolkit;
+
+import javafx.scene.image.Image;
 
 public class MapData {
 	static final int TILE_SIZE = 50; // size of 1 tile

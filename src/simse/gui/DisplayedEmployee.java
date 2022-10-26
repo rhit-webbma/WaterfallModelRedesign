@@ -23,7 +23,7 @@ public class DisplayedEmployee {
 
 	private JMenuItem userMenu;
 
-	public DisplayedEmployee(Employee emp, String il, ActionListener a,
+	public DisplayedEmployee(Employee emp, String il,
 			boolean d, boolean ra, int x, int y) {
 		userObject = emp;
 		userIconLocation = il;
