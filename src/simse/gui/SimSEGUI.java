@@ -75,7 +75,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 
 		attribPanel = new AttributePanel(this, state, engine);
 		tabPanel = new TabPanel(this, state, logic, attribPanel);
-//		actionPanel = new ActionPanel(this, state, logic);
+		actionPanel = new ActionPanel(this, state, logic);
 
 		// Set window title:
 		String title = "SimSE";
