@@ -7,6 +7,7 @@ import simse.state.*;
 import java.awt.Dimension;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -49,16 +50,16 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 		int numCols;
 
 		softwareengineerModel = new SoftwareEngineerTableModel(s);
-		softwareengineerTable = new TableView(softwareengineerModel);
-		softwareengineerTable.setColumnSelectionAllowed(false);
-		softwareengineerTable.setRowSelectionAllowed(false);
-		softwareengineerTable.addMouseListener(this);
-		softwareengineerTable.getTableHeader().setReorderingAllowed(false);
+		softwareengineerTable = softwareengineerModel.createTable();
+//		softwareengineerTable.setColumnSelectionAllowed(false);
+//		softwareengineerTable.setRowSelectionAllowed(false);
+		softwareengineerTable.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+//		softwareengineerTable.getTableHeader().setReorderingAllowed(false);
 		// make it so that the user can make each column disappear if they want:
-		numCols = softwareengineerTable.getColumnCount();
-		for (int i = 0; i < numCols; i++) {
-			softwareengineerTable.getColumnModel().getColumn(i).setMinWidth(0);
-		}
+//		numCols = softwareengineerModel.getColumnCount();
+//		for (int i = 0; i < numCols; i++) {
+//			softwareengineerModel.getColumn(i).setMinWidth(0);
+//		}
 
 		// right click menu:
 		popup = new ContextMenu();
@@ -86,37 +87,70 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 //		pack();
 //		validate();
 
-		resetHeight();
+//		resetHeight();
 	}
 
-	public void mousePressed(MouseEvent me) {
-	}
-
-	public void mouseClicked(MouseEvent me) {
-	}
-
-	public void mouseEntered(MouseEvent me) {
-	}
-
-	public void mouseExited(MouseEvent me) {
-	}
-
-	public void mouseReleased(MouseEvent me) {
-		Point p = me.getPoint();
-
-		if (me.isPopupTrigger()) {
-			if (me.getSource().equals(softwareengineerTable)) // correct
-																	// table
-			{
-				createPopupMenu(softwareengineerTable, p);
-			}
-		}
-	}
-
-	public void actionPerformed(ActionEvent e) // dealing with actions generated
-												// by popup menus
-	{
-		Object source = e.getSource();
+//	public void mousePressed(MouseEvent me) {
+//	}
+//
+//	public void mouseClicked(MouseEvent me) {
+//	}
+//
+//	public void mouseEntered(MouseEvent me) {
+//	}
+//
+//	public void mouseExited(MouseEvent me) {
+//	}
+//
+//	public void mouseReleased(MouseEvent me) {
+//		Point p = me.getPoint();
+//
+//		if (me.isPopupTrigger()) {
+//			if (me.getSource().equals(softwareengineerTable)) // correct
+//																	// table
+//			{
+//				createPopupMenu(softwareengineerTable, p);
+//			}
+//		}
+//	}
+//
+//	public void actionPerformed(ActionEvent e) // dealing with actions generated
+//												// by popup menus
+//	{
+//		Object source = e.getSource();
+//		if (source instanceof MenuItem) {
+//			String itemText = ((MenuItem) source).getText();
+//			if (itemText.equals("Hide")) {
+//				if (selectedTable != null) {
+//					selectedTable.getColumnModel().getColumn(realColumnIndex)
+//							.setMaxWidth(0);
+//				}
+//			} else // an item on the "Unhide" menu
+//			{
+//				if (selectedTable != null) {
+//					TableModel model = selectedTable.getModel();
+//					TableColumn column = null;
+//					if (model instanceof SoftwareEngineerTableModel) {
+//						column = selectedTable.getColumnModel().getColumn(
+//								((SoftwareEngineerTableModel) selectedTable
+//										.getModel()).getColumnIndex(itemText));
+//					}
+//					if (column != null) {
+//						column.setMinWidth(0);
+//						column.setMaxWidth(2147483647);
+//						column.setPreferredWidth(selectedTable.getWidth()
+//								/ (selectedTable.getColumnCount()
+//										- getAllHiddenColumnIndices(
+//												selectedTable).size() + 1));
+//					}
+//				}
+//			}
+//		}
+//	}
+	
+	@Override
+	public void handle(MouseEvent me) {
+		Object source = me.getSource();
 		if (source instanceof MenuItem) {
 			String itemText = ((MenuItem) source).getText();
 			if (itemText.equals("Hide")) {
@@ -144,10 +178,20 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 					}
 				}
 			}
+		} else {
+			Point2D p = new Point2D(me.getScreenX(), me.getScreenY());
+
+			if (me.isPopupTrigger()) {
+				if (me.getSource().equals(softwareengineerTable)) // correct
+																		// table
+				{
+					createPopupMenu(softwareengineerTable, p);
+				}
+			}
 		}
 	}
 
-	public void createPopupMenu(TableView table, Point p) {
+	public void createPopupMenu(TableView table, Point2D p) {
 		popup.getItems().removeAll();
 
 		int colIndex = table.columnAtPoint(p);
@@ -164,7 +208,7 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 		{
 			if (realColumnIndex >= 0) {
 				MenuItem hideItem = new MenuItem("Hide");
-				hideItem.addActionListener(this);
+				hideItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 				popup.getItems().add(hideItem);
 			}
 
@@ -174,11 +218,11 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 				for (int i = 0; i < hiddenCols.size(); i++) {
 					int index = hiddenCols.elementAt(i).intValue();
 					MenuItem tempItem = new MenuItem(
-							table.getColumnName(index));
-					tempItem.addActionListener(this);
+							softwareengineerModel.getColumnName(index));
+					tempItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 					unhideMenu.getItems().add(tempItem);
 				}
-				if (popup.getItems().length > 0) // already has the hide
+				if (popup.getItems().size() > 0) // already has the hide
 														// menu item
 				{
 					popup.getItems().add(new SeparatorMenuItem());
@@ -186,7 +230,7 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 				popup.getItems().add(unhideMenu);
 			}
 
-			addMouseListener(popupListener);
+			addEventHandler(MouseEvent.MOUSE_CLICKED, popupListener);
 			popup.show(table, (int) p.getX(), (int) p.getY());
 			selectedTable = table;
 //			repaint();
@@ -194,47 +238,49 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 	}
 
 	public void update() {
-		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
-		rightAlignRenderer.setHorizontalAlignment(Label.RIGHT);
+//		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
+//		rightAlignRenderer.setHorizontalAlignment(Label.RIGHT);
+//		softwareengineerModel.update();
+//		if (!state.getClock().isStopped()) { // game not over
+//			softwareengineerTable.getColumnModel()
+//					.getColumn(softwareengineerModel.getColumnIndex("Energy"))
+//					.setCellRenderer(rightAlignRenderer);
+//			softwareengineerTable.getColumnModel()
+//					.getColumn(softwareengineerModel.getColumnIndex("Mood"))
+//					.setCellRenderer(rightAlignRenderer);
+//			softwareengineerTable.getColumnModel()
+//					.getColumn(softwareengineerModel.getColumnIndex("PayRate"))
+//					.setCellRenderer(rightAlignRenderer);
+//		} else { // game over
+//			softwareengineerTable.getColumnModel()
+//					.getColumn(softwareengineerModel.getColumnIndex("Energy"))
+//					.setCellRenderer(rightAlignRenderer);
+//			softwareengineerTable.getColumnModel()
+//					.getColumn(softwareengineerModel.getColumnIndex("Mood"))
+//					.setCellRenderer(rightAlignRenderer);
+//			softwareengineerTable.getColumnModel()
+//					.getColumn(softwareengineerModel.getColumnIndex("PayRate"))
+//					.setCellRenderer(rightAlignRenderer);
+//		}
+//		softwareengineerTable.update(softwareengineerTable.getGraphics());
+//		resetHeight();
 		softwareengineerModel.update();
-		if (!state.getClock().isStopped()) { // game not over
-			softwareengineerTable.getColumnModel()
-					.getColumn(softwareengineerModel.getColumnIndex("Energy"))
-					.setCellRenderer(rightAlignRenderer);
-			softwareengineerTable.getColumnModel()
-					.getColumn(softwareengineerModel.getColumnIndex("Mood"))
-					.setCellRenderer(rightAlignRenderer);
-			softwareengineerTable.getColumnModel()
-					.getColumn(softwareengineerModel.getColumnIndex("PayRate"))
-					.setCellRenderer(rightAlignRenderer);
-		} else { // game over
-			softwareengineerTable.getColumnModel()
-					.getColumn(softwareengineerModel.getColumnIndex("Energy"))
-					.setCellRenderer(rightAlignRenderer);
-			softwareengineerTable.getColumnModel()
-					.getColumn(softwareengineerModel.getColumnIndex("Mood"))
-					.setCellRenderer(rightAlignRenderer);
-			softwareengineerTable.getColumnModel()
-					.getColumn(softwareengineerModel.getColumnIndex("PayRate"))
-					.setCellRenderer(rightAlignRenderer);
-		}
-		softwareengineerTable.update(softwareengineerTable.getGraphics());
-		resetHeight();
+		softwareengineerTable = softwareengineerModel.createTable();
 	}
 
-	private void resetHeight() {
-		// Set appropriate height:
-		double height = 0;
-		height += ((softwareengineerTable.getRowHeight() + (softwareengineerTable
-				.getRowMargin() * 2)) * (softwareengineerTable.getRowCount() + 1));
-		height += softwareengineerTitlePane.getSize().getHeight();
-
-		mainPane.setPreferredSize(new Dimension((int) (mainPane.getSize()
-				.getWidth()), (int) height));
-		pack();
-		validate();
-		repaint();
-	}
+//	private void resetHeight() {
+//		// Set appropriate height:
+//		double height = 0;
+//		height += ((softwareengineerTable.getRowHeight() + (softwareengineerTable
+//				.getRowMargin() * 2)) * (softwareengineerTable.getRowCount() + 1));
+//		height += softwareengineerTitlePane.getSize().getHeight();
+//
+//		mainPane.setPreferredSize(new Dimension((int) (mainPane.getSize()
+//				.getWidth()), (int) height));
+//		pack();
+//		validate();
+//		repaint();
+//	}
 
 	private Vector<Integer> getAllHiddenColumnIndices(TableView table) {
 		Vector<Integer> hiddenCols = new Vector<Integer>();

@@ -4,30 +4,33 @@ package simse.gui;
 import simse.state.*;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.border.*;
 import java.util.*;
 import java.text.*;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 
 public class CustomersAtAGlanceFrame extends Stage implements EventHandler<MouseEvent> {
 
 	private State state;
 
-	private Popup popup;
+	private ContextMenu popup;
 	private PopupListener popupListener;
 	private TableView acustomerTable;
 	private ACustomerTableModel acustomerModel;
@@ -46,19 +49,20 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 		int numCols;
 
 		acustomerModel = new ACustomerTableModel(s);
-		acustomerTable = new TableView(acustomerModel);
-		acustomerTable.setColumnSelectionAllowed(false);
-		acustomerTable.setRowSelectionAllowed(false);
-		acustomerTable.addMouseListener(this);
-		acustomerTable.getTableHeader().setReorderingAllowed(false);
+		acustomerTable = acustomerModel.createTable();
+//		acustomerTable.setColumnSelectionAllowed(false);
+//		acustomerTable.setRowSelectionAllowed(false);
+//		acustomerTable.addMouseListener(this);
+		acustomerTable.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+//		acustomerTable.getTableHeader().setReorderingAllowed(false);
 		// make it so that the user can make each column disappear if they want:
-		numCols = acustomerTable.getColumnCount();
-		for (int i = 0; i < numCols; i++) {
-			acustomerTable.getColumnModel().getColumn(i).setMinWidth(0);
-		}
+//		numCols = acustomerTable.getColumns().size();
+//		for (int i = 0; i < numCols; i++) {
+//			acustomerTable.getColumnModel().getColumn(i).setMinWidth(0);
+//		}
 
 		// right click menu:
-		popup = new Popup();
+		popup = new ContextMenu();
 		popupListener = new PopupListener(popup, gui);
 
 		// Create panes:
@@ -82,38 +86,73 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 //		pack();
 //		validate();
 
-		resetHeight();
+//		resetHeight();
 	}
 
-	public void mousePressed(MouseEvent me) {
-	}
-
-	public void mouseClicked(MouseEvent me) {
-	}
-
-	public void mouseEntered(MouseEvent me) {
-	}
-
-	public void mouseExited(MouseEvent me) {
-	}
-
-	public void mouseReleased(MouseEvent me) {
-		Point p = me.getPoint();
-
-		if (me.isPopupTrigger()) {
-			if (me.getComponent().equals(acustomerTable)) // correct table
-			{
-				createPopupMenu(acustomerTable, p);
-			}
-		}
-	}
-
-	public void actionPerformed(ActionEvent e) // dealing with actions generated
-												// by popup menus
-	{
-		Object source = e.getSource();
-		if (source instanceof JMenuItem) {
-			String itemText = ((JMenuItem) source).getText();
+//	public void mousePressed(MouseEvent me) {
+//	}
+//
+//	public void mouseClicked(MouseEvent me) {
+//	}
+//
+//	public void mouseEntered(MouseEvent me) {
+//	}
+//
+//	public void mouseExited(MouseEvent me) {
+//	}
+//
+//	public void mouseReleased(MouseEvent me) {
+//		Point p = me.getPoint();
+//
+//		if (me.isPopupTrigger()) {
+//			if (me.getComponent().equals(acustomerTable)) // correct table
+//			{
+//				createPopupMenu(acustomerTable, p);
+//			}
+//		}
+//	}
+//
+//	public void actionPerformed(ActionEvent e) // dealing with actions generated
+//												// by popup menus
+//	{
+//		Object source = e.getSource();
+//		if (source instanceof MenuItem) {
+//			String itemText = ((MenuItem) source).getText();
+//			if (itemText.equals("Hide")) {
+//				if (selectedTable != null) {
+//					selectedTable.getColumnModel().getColumn(realColumnIndex)
+//							.setMaxWidth(0);
+//				}
+//			} else // an item on the "Unhide" menu
+//			{
+//				if (selectedTable != null) {
+//					TableModel model = selectedTable.getModel();
+//					TableColumn column = null;
+//					if (model instanceof ACustomerTableModel) {
+//						column = selectedTable.getColumnModel()
+//								.getColumn(
+//										((ACustomerTableModel) selectedTable
+//												.getModel())
+//												.getColumnIndex(itemText));
+//					}
+//					if (column != null) {
+//						column.setMinWidth(0);
+//						column.setMaxWidth(2147483647);
+//						column.setPreferredWidth(selectedTable.getWidth()
+//								/ (selectedTable.getColumnCount()
+//										- getAllHiddenColumnIndices(
+//												selectedTable).size() + 1));
+//					}
+//				}
+//			}
+//		}
+//	}
+	
+	@Override
+	public void handle(MouseEvent me) {
+		Object source = me.getSource();
+		if (source instanceof MenuItem) {
+			String itemText = ((MenuItem) source).getText();
 			if (itemText.equals("Hide")) {
 				if (selectedTable != null) {
 					selectedTable.getColumnModel().getColumn(realColumnIndex)
@@ -141,11 +180,20 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 					}
 				}
 			}
+		} else {
+			Point2D p = new Point2D(me.getScreenX(), me.getScreenY());
+
+			if (me.isPopupTrigger()) {
+				if (me.getSource().equals(acustomerTable)) // correct table
+				{
+					createPopupMenu(acustomerTable, p);
+				}
+			}
 		}
 	}
 
-	public void createPopupMenu(TableView table, Point p) {
-		popup.removeAll();
+	public void createPopupMenu(TableView table, Point2D p) {
+		popup.getItems().removeAll();
 
 		int colIndex = table.columnAtPoint(p);
 		realColumnIndex = table.convertColumnIndexToModel(colIndex);
@@ -160,66 +208,68 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 																// column
 		{
 			if (realColumnIndex >= 0) {
-				JMenuItem hideItem = new JMenuItem("Hide");
-				hideItem.addActionListener(this);
-				popup.add(hideItem);
+				MenuItem hideItem = new MenuItem("Hide");
+				hideItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+				popup.getItems().add(hideItem);
 			}
 
 			if (hiddenCols.size() > 0) // there is at least one hidden column
 			{
-				JMenu unhideMenu = new JMenu("Unhide");
+				Menu unhideMenu = new Menu("Unhide");
 				for (int i = 0; i < hiddenCols.size(); i++) {
 					int index = hiddenCols.elementAt(i).intValue();
-					JMenuItem tempItem = new JMenuItem(
-							table.getColumnName(index));
-					tempItem.addActionListener(this);
-					unhideMenu.add(tempItem);
+					MenuItem tempItem = new MenuItem(
+							acustomerModel.getColumnName(index));
+					tempItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+					unhideMenu.getItems().add(tempItem);
 				}
-				if (popup.getComponents().length > 0) // already has the hide
+				if (popup.getItems().size() > 0) // already has the hide
 														// menu item
 				{
-					popup.addSeparator();
+					popup.getItems().add(new SeparatorMenuItem());
 				}
-				popup.add(unhideMenu);
+				popup.getItems().add(unhideMenu);
 			}
 
-			addMouseListener(popupListener);
+//			addMouseListener(popupListener);
+			addEventHandler(MouseEvent.MOUSE_CLICKED, popupListener);
 			popup.show(table, (int) p.getX(), (int) p.getY());
 			selectedTable = table;
-			repaint();
+//			repaint();
 		}
 	}
 
 	public void update() {
-		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
-		rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
+//		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
+//		rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
+//		acustomerModel.update();
+//		if (!state.getClock().isStopped()) { // game not over
+//		} else { // game over
+//		}
+//		acustomerTable.update(acustomerTable.getGraphics());
 		acustomerModel.update();
-		if (!state.getClock().isStopped()) { // game not over
-		} else { // game over
-		}
-		acustomerTable.update(acustomerTable.getGraphics());
-		resetHeight();
+		acustomerTable = acustomerModel.createTable();
+//		resetHeight();
 	}
 
-	private void resetHeight() {
-		// Set appropriate height:
-		double height = 0;
-		height += ((acustomerTable.getRowHeight() + (acustomerTable
-				.getRowMargin() * 2)) * (acustomerTable.getRowCount() + 1));
-		height += acustomerTitlePane.getSize().getHeight();
+//	private void resetHeight() {
+//		// Set appropriate height:
+//		double height = 0;
+//		height += ((acustomerTable.getRowHeight() + (acustomerTable
+//				.getRowMargin() * 2)) * (acustomerTable.getRowCount() + 1));
+//		height += acustomerTitlePane.getSize().getHeight();
+//
+//		mainPane.setPrefSize(mainPane.getPrefWidth(), height);
+////		pack();
+////		validate();
+////		repaint();
+//	}
 
-		mainPane.setPreferredSize(new Dimension((int) (mainPane.getSize()
-				.getWidth()), (int) height));
-		pack();
-		validate();
-		repaint();
-	}
-
-	private Vector<Integer> getAllHiddenColumnIndices(JTable table) {
+	private Vector<Integer> getAllHiddenColumnIndices(TableView table) {
 		Vector<Integer> hiddenCols = new Vector<Integer>();
-		int numCols = table.getColumnModel().getColumnCount();
+		int numCols = acustomerModel.getColumnCount();
 		for (int i = 0; i < numCols; i++) {
-			TableColumn col = table.getColumnModel().getColumn(i);
+			TableColumn col = acustomerModel.getColumn(i);
 			if (col.getWidth() == 0) // hidden
 			{
 				hiddenCols.add(new Integer(i));
@@ -227,4 +277,5 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 		}
 		return hiddenCols;
 	}
+
 }

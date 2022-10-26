@@ -5,14 +5,15 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
+import javafx.scene.control.ContextMenu;
 import javafx.stage.Popup;
 
 public class PopupListener extends MouseAdapter {
-	Popup popup;
+	ContextMenu popup;
 	boolean enabled;
 	SimSEGUI gui;
 
-	public PopupListener(Popup popup2, SimSEGUI g) {
+	public PopupListener(ContextMenu popup2, SimSEGUI g) {
 		popup = popup2;
 		enabled = true;
 		gui = g;
