@@ -49,7 +49,7 @@ public class AttributePanel extends Pane {
 	private Vector<String> attributes;
 	private SSObject objInFocus = null;
 	private Label selectedIcon;
-	private GridPane iconPanel;
+	private HBox iconPanel;
 
 	private Image border;
 	private Image iconBorder;
@@ -57,9 +57,13 @@ public class AttributePanel extends Pane {
 	public AttributePanel(SimSEGUI g, State s, Engine e) {
 		gridPane = new GridPane();
 		this.getChildren().add(gridPane);
+		this.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
+		gridPane.setHgap(10);
+		gridPane.setPadding(new Insets(10, 10, 10, 10));
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
 		iconBorder = JavaFXHelpers.createImage("src/simse/gui/images/layout/iconBorder.gif");
+		this.setBorder(new Border(new BorderImage(border, null, null, null, true, null, null)));
 
 		state = s;
 		clockPane = new ClockPanel(g, s, e);
@@ -84,17 +88,18 @@ public class AttributePanel extends Pane {
 		attributePane.getChildren().add(attributePaneRight);
 		attributePane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 
-		iconPanel = new GridPane();
+		iconPanel = new HBox();
 		iconPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(0, 0, 0, 0)));
-		iconPanel.setPrefSize(90, 90);
+		iconPanel.setPrefSize(100, 100);
 		selectedIcon = new Label("", JavaFXHelpers.createImageView("src/simse/gui/images/grid.gif"));
 		selectedIcon.setOpacity(1);
 		selectedIcon.setPrefSize(50, 50);
 		selectedIcon.setMinSize(50, 50);
 
-		GridPane.setConstraints(selectedIcon, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.NEVER,
+		GridPane.setConstraints(iconPanel, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER,
 				new Insets(-3, 5, 0, 0));
 		iconPanel.getChildren().add(selectedIcon);
+		selectedIcon.setBorder(new Border(new BorderImage(iconBorder, null, null, null, true, null, null)));
 		gridPane.getChildren().add(iconPanel);
 
 		GridPane.setConstraints(attributePane, 2, 0, 1, 1, HPos.CENTER, VPos.BOTTOM, Priority.NEVER, Priority.NEVER,
@@ -104,25 +109,6 @@ public class AttributePanel extends Pane {
 		GridPane.setConstraints(clockPane, 3, 0, 1, 1, HPos.RIGHT, VPos.BOTTOM, Priority.NEVER, Priority.NEVER,
 				new Insets(10, 0, 0, 0));
 		gridPane.getChildren().add(clockPane);
-	}
-
-	public void repaint() {
-		final Canvas canvas = new Canvas(250, 250);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-
-//		gridPane.getChildren().add(canvas);
-
-		int width = (int) this.getWidth();
-		gc.setFill(new Color(102, 102, 102, 1));
-		gc.fillRect(0, 0, width, 110);
-
-		// repeat the border across the width of screen:
-//		for (int i = 0; i < width; i += 100) {
-//			gc.drawImage(border, i, 0);
-//		}
-		this.setBorder(new Border(new BorderImage(border, null, null, null, true, null, null)));
-		// draw the design for the selectedIcon
-		selectedIcon.setBorder(new Border(new BorderImage(iconBorder, null, null, null, true, null, null)));
 	}
 
 	public void setObjectInFocus(SSObject obj, Image img) {
@@ -742,7 +728,6 @@ public class AttributePanel extends Pane {
 			}
 			attributeListRight.setUserData(rightHandAtts);
 			attributeListLeft.setUserData(attributes);
-			repaint();
 
 //				if (attributePaneLeft.) // need to move one more over to account
 //																			// for extra space that scrollbar takes up
@@ -752,7 +737,6 @@ public class AttributePanel extends Pane {
 //					attributeListLeft.setUserData(attributes);
 //				}
 		}
-		repaint();
 	}
 
 	public ClockPanel getClockPanel() {
