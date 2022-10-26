@@ -8,6 +8,8 @@ import simse.adts.actions.*;
 import java.util.*;
 import javax.swing.*;
 
+import javafx.stage.Stage;
+
 public class RuleExecutor {
 	public static final int UPDATE_ALL_CONTINUOUS = 0;
 	public static final int UPDATE_ONE = 1;
@@ -30,7 +32,7 @@ public class RuleExecutor {
 		destroyerChecker = d;
 	}
 
-	public void update(JFrame gui, int updateInstructions, String ruleName,
+	public void update(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		updateProjAttsEffectRuleA(gui, updateInstructions, ruleName, action);
 		quitDestroyObjectsRuleA(gui, updateInstructions, ruleName, action);

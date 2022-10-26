@@ -349,8 +349,8 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 						objType, keyAttVal, attributes, true, branch);
 				visibleGraphs.add(graph);
 			} else {
-				Alert alert = new Alert(AlertType.WARNING, "Please select at least one attribute");					alert.show();
-
+				Alert alert = new Alert(AlertType.WARNING, "Please select at least one attribute");
+				alert.show();
 			}
 		} else if (source == generateActGraphButton) { // generateActGraphButton
 														// has been pressed
@@ -363,8 +363,8 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 				ActionGraph graph = new ActionGraph(log, actions, true, branch);
 				visibleGraphs.add(graph);
 			} else {
-				Alert alert = new Alert(AlertType.WARNING, "Please select at least one action");					alert.show();
-
+				Alert alert = new Alert(AlertType.WARNING, "Please select at least one action");
+				alert.show();
 			}
 		} else if (source == generateCompGraphButton) { // generateCompGraphButton
 														// has been pressed

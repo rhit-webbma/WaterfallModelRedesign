@@ -18,7 +18,9 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-public class SimSEGUI extends JFrame implements ActionListener {
+import javafx.stage.Stage;
+
+public class SimSEGUI extends Stage implements ActionListener {
 	private TabPanel tabPanel;
 	private AttributePanel attribPanel;
 	private ActionPanel actionPanel;

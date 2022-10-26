@@ -7,7 +7,11 @@ import simse.adts.actions.*;
 import simse.logic.*;
 import simse.gui.*;
 import java.util.*;
-import javax.swing.*;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Dialog;
+import javafx.stage.Stage;
 
 public class ParticipantSelectionDialogsDriver {
 	private Vector<String> partNames;
@@ -19,7 +23,7 @@ public class ParticipantSelectionDialogsDriver {
 	private DestroyerChecker destChecker;
 	private String menuText;
 
-	public ParticipantSelectionDialogsDriver(JFrame gui, Vector<String> pNames,
+	public ParticipantSelectionDialogsDriver(Stage gui, Vector<String> pNames,
 			Vector<Vector<? extends SSObject>> parts,
 			simse.adts.actions.Action act, State s, RuleExecutor re,
 			DestroyerChecker dc, Employee emp, String mText) {
@@ -417,9 +421,10 @@ public class ParticipantSelectionDialogsDriver {
 							state.getClock().stop();
 							state.setScore(v);
 							((SimSEGUI) gui).update();
-							JOptionPane.showMessageDialog(null,
-									("Your score is " + v), "Game over!",
-									JOptionPane.INFORMATION_MESSAGE);
+							Dialog d = new Dialog();
+							d.setContentText(("Your score is " + v));
+							d.setTitle("Game over!");
+							d.show();
 						}
 					}
 				}
