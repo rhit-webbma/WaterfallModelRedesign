@@ -128,10 +128,10 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		gridPane = new GridPane();
 		gridPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1.0)));
 
-//		logoPane = new LogoPanel(gui);
-//		logoPane.setMinSize(340, 90);
-//		logoPane.setPrefSize(340, 90);
-//		logoPane.setTabPanel(this);
+		logoPane = new LogoPanel(gui);
+		logoPane.setMinSize(340, 90);
+		logoPane.setPrefSize(340, 90);
+		logoPane.setTabPanel(this);
 
 		// Create buttons pane:
 		buttonsPane = new FlowPane();
@@ -148,14 +148,14 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	    gridPane.setPadding(new Insets(0, 0, 0, 0));
 		
 		// Add Logo Pane:
-//		GridPane.setConstraints(logoPane, 0, 0, 2, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, 
-//				Priority.NEVER, new Insets(0, 0, 0, 0));
-//		this.getChildren().add(logoPane);
+		GridPane.setConstraints(logoPane, 0, 0, 2, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, 
+				Priority.NEVER, new Insets(0, 0, 0, 0));
+		gridPane.getChildren().add(logoPane);
 
 		// Add panes and labels to main pane
-		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
-				Priority.NEVER, new Insets(0, 0, 10, 0));
-		gridPane.getChildren().add(buttonsScrollPane);
+//		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
+//				Priority.NEVER, new Insets(0, 0, 10, 0));
+//		gridPane.getChildren().add(buttonsScrollPane);
 
 		setPrefSize(800, 100);
 		updateImages(EMPLOYEE);
@@ -314,12 +314,12 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	}
 
 	public void update(int index) {
-		attributePane.update();
-		employeeFrame.update();
-		artifactFrame.update();
-		toolFrame.update();
-		projectFrame.update();
-		customerFrame.update();
+//		attributePane.update();
+//		employeeFrame.update();
+//		artifactFrame.update();
+//		toolFrame.update();
+//		projectFrame.update();
+//		customerFrame.update();
 		if (!guiChanged) {
 			return;
 		}
