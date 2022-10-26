@@ -7,12 +7,8 @@ import simse.logic.*;
 
 import java.util.*;
 
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-
-import java.io.*;
 
 public class SimSEMap extends Pane {
 	protected State state;

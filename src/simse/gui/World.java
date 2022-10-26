@@ -2,12 +2,18 @@
 package simse.gui;
 
 import simse.adts.objects.*;
+import simse.gui.util.JavaFXHelpers;
 import simse.state.*;
 import simse.logic.*;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.util.*;
@@ -43,6 +49,16 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	private Image dbImage;
 	private Graphics dbGraphics;
 
+	private EventHandler<ActionEvent> menuItemEvent = new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent event)
+        {
+        	Object source = event.getSource();
+    		if (source instanceof MenuItem) {
+    			popupMenuActions((MenuItem) source);
+    		}
+        }
+    };
+	
 	public World(State s, Logic l, SimSEGUI parent) {
 		super(s, l);
 		mainGUIFrame = parent;
@@ -54,13 +70,13 @@ public class World extends SimSEMap implements EventHandler<Event> {
 
 	private void loadDefaultSettings() {
 		selectedUser = null;
-		setBackground(Color.blue);
-		addKeyListener(this);
-		addMouseListener(this);
+		setBackground(JavaFXHelpers.createBackgroundColor(Color.BLUE));
+		addEventHandler(KeyEvent.ANY, this);
+		addEventHandler(MouseEvent.ANY, this);
 		setVisible(true);
 
 		// right click menu:
-		popup = new JPopupMenu();
+		popup = new ContextMenu();
 		popupListener = new PopupListener(popup, mainGUIFrame);
 		popupListener.setEnabled(false);
 		createPopupMenu();
@@ -73,18 +89,18 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	}
 
 	public void createPopupMenu() {
-		popup.removeAll();
+		popup.getItems().removeAll();
 
 		if (selectedUser != null) {
 			Vector<String> menuItems = selectedUser.getEmployee().getMenu();
 			for (int i = 0; i < menuItems.size(); i++) {
 				String item = menuItems.elementAt(i);
-				JMenuItem tempItem = new JMenuItem(item);
-				tempItem.addActionListener(this);
-				popup.add(tempItem);
+				MenuItem tempItem = new MenuItem(item);
+				tempItem.setOnAction(menuItemEvent);
+				popup.getItems().add(tempItem);
 			}
 		}
-		addMouseListener(popupListener);
+		addEventHandler(MouseEvent.ANY, popupListener);
 	}
 
 	// double buffering to prevent flickering
@@ -573,20 +589,11 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		}
 	}
 
-	public void popupMenuActions(JMenuItem source) {
-		JMenuItem item = (JMenuItem) source;
+	public void popupMenuActions(MenuItem source) {
+		MenuItem item = (MenuItem) source;
 		logic.getMenuInputManager().menuItemSelected(
 				selectedUser.getEmployee(), item.getText(), mainGUIFrame);
 		update();
-	}
-
-	public void actionPerformed(ActionEvent e) // dealing with actions generated
-												// by popup menus
-	{
-		Object source = e.getSource();
-		if (source instanceof JMenuItem) {
-			popupMenuActions((JMenuItem) source);
-		}
 	}
 
 	public void update() {
