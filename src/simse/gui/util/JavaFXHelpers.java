@@ -3,10 +3,16 @@ package simse.gui.util;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 
 public final class JavaFXHelpers {
@@ -33,5 +39,11 @@ public final class JavaFXHelpers {
 			System.out.println("Image not found at " + path);
 		}
 		return img;
+	}
+	
+	public static void gPaneConstraints(Node child, int columnIndex, int rowIndex, int columnspan, 
+			int rowspan, HPos hAlignment, VPos vAlignment, Priority hGrow, Priority vGrow, Insets margin) {
+		GridPane.setConstraints(child, columnIndex, rowIndex, columnspan, rowspan, hAlignment, vAlignment, 
+				hGrow, vGrow, margin);
 	}
 }

@@ -2,8 +2,6 @@
 package simse.gui;
 
 import java.awt.Point;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Optional;
 
 import javafx.event.EventHandler;
@@ -83,7 +81,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		Image logo = JavaFXHelpers.createImage(path + "simselogo.gif");
 		final Canvas canvas = new Canvas(250,250);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.setFill(Color.rgb(102, 102, 102, 1));
+		gc.setFill(Color.rgb(102, 102, 102, 0));
 		gc.fillRect(0, 0, 340, 100);
 		gc.drawImage(logo, 0, 0);
 		
@@ -130,7 +128,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		infoButton.setBorder(null);
 		infoButton.addEventHandler(MouseEvent.ANY, this);
 		GridPane.setConstraints(infoButton, 0, 0, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 5, 0));
-		buttonGPane.getChildren().add(infoButton);
+		this.getChildren().add(infoButton);
 		resetButton = new Button();
 		resetButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
 		resetButton.setOpacity(0);
@@ -139,7 +137,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		resetButton.setBorder(null);
 		resetButton.addEventHandler(MouseEvent.ANY, this);
 		GridPane.setConstraints(resetButton, 0, 1, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, Priority.NEVER, new Insets(5, 0, 0, 0));
-		buttonGPane.getChildren().add(resetButton);
+		this.getChildren().add(resetButton);
 		aboutButton = new Button();
 		aboutButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
 		aboutButton.setOpacity(0);

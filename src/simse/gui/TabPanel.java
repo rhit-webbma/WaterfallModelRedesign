@@ -4,11 +4,9 @@ package simse.gui;
 import simse.adts.objects.*;
 import simse.state.*;
 import simse.logic.*;
-import simse.engine.*;
 import simse.gui.util.JavaFXHelpers;
 
 import java.util.*;
-import java.io.*;
 
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -16,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -24,8 +21,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -35,10 +30,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Popup;
-import javafx.stage.WindowEvent;
 
 public class TabPanel extends Pane implements EventHandler<Event> {
 	public static final int ARTIFACT = 0;
@@ -106,8 +98,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		state = s;
 		guiChanged = true;
 		attributePane = a;
-		objsToImages = new Hashtable();
-		buttonsToObjs = new Hashtable();
+		objsToImages = new Hashtable<SSObject, ImageView>();
+		buttonsToObjs = new Hashtable<Button, SSObject>();
 		employeeFrame = new EmployeesAtAGlanceFrame(state, gui);
 		artifactFrame = new ArtifactsAtAGlanceFrame(state, gui);
 		toolFrame = new ToolsAtAGlanceFrame(state, gui);
@@ -156,9 +148,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
 //				Priority.NEVER, new Insets(0, 0, 10, 0));
 //		gridPane.getChildren().add(buttonsScrollPane);
-
-		setPrefSize(800, 100);
-		updateImages(EMPLOYEE);
+//
+//		setPrefSize(800, 100);
+//		updateImages(EMPLOYEE);
 		
 		this.getChildren().add(gridPane);
 	}
