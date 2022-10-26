@@ -114,12 +114,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
 		customerFrame = new CustomersAtAGlanceFrame(state, gui);
 
-		try {
-			border = new Image(new FileInputStream("src/simse/gui/images/layout/border.gif"));
-			allIcon = new Image(new FileInputStream("src/simse/gui/images/all.GIF"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
+		allIcon = JavaFXHelpers.createImage("src/simse/gui/images/all.GIF");
 
 		// get the Border styles:
 		defaultBorder = new Button().getBorder();
@@ -223,11 +219,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //					pListener.setEnabled(false);
 					button[index].disarm();
 				}
-				try {
-					button[index].setGraphic(new ImageView(new Image(new FileInputStream("src/simse/gui/images/error.GIF"))));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
+				button[index].setGraphic(JavaFXHelpers.createImageView("src/simse/gui/images/error.GIF"));
 				button[index].setPrefSize(35, 35);
 				button[index].setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 				button[index].setBorder(defaultBorder);
@@ -258,11 +250,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 					attributePane.setGUIChanged();
 					objInFocus = buttonsToObjs.get(button);
 					String filename = getImage(objInFocus);
-					try {
-						attributePane.setObjectInFocus(objInFocus, (new Image(new FileInputStream(filename))));
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
+					attributePane.setObjectInFocus(objInFocus, JavaFXHelpers.createImage(filename));
 
 					Enumeration<Button> buttons = buttonsToObjs.keys();
 					for (int i = 0; i < buttonsToObjs.size(); i++) {
@@ -455,13 +443,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		for (int i = 0; i < objs.size(); i++) {
 			String filename = getImage(objs.elementAt(i));
 
-			Image ico = null;
-			try {
-				ico = new Image(new FileInputStream(filename));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			ImageView scaledImage = new ImageView(ico);
+			ImageView scaledImage = JavaFXHelpers.createImageView(filename);
 			scaledImage.resize(35, 35);
 
 			objsToImages.put(objs.elementAt(i), scaledImage);

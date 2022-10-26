@@ -71,32 +71,22 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		if (tabPane == null)
 			tabPane = tab;
 	}
-
-	public ImageView createImageView(String path) {
-		ImageView img = null;
-		try {
-			img = new ImageView(new Image(new FileInputStream(path)));
-		} catch (FileNotFoundException e) {
-			System.out.println("Image not found at " + path);
-		}
-		return img;
-	}
 	
 	public void createButtonImageSet() {
 		inactiveButton = new ImageView[5];
 		activeButton = new ImageView[5];
 
-		inactiveButton[0] = createImageView(path + "btnArtifact.gif");
-		inactiveButton[1] = createImageView(path + "btnCustomer.gif");
-		inactiveButton[2] = createImageView(path + "btnEmployee.gif");
-		inactiveButton[3] = createImageView(path + "btnProject.gif");
-		inactiveButton[4] = createImageView(path + "btnTool.gif");
+		inactiveButton[0] = JavaFXHelpers.createImageView(path + "btnArtifact.gif");
+		inactiveButton[1] = JavaFXHelpers.createImageView(path + "btnCustomer.gif");
+		inactiveButton[2] = JavaFXHelpers.createImageView(path + "btnEmployee.gif");
+		inactiveButton[3] = JavaFXHelpers.createImageView(path + "btnProject.gif");
+		inactiveButton[4] = JavaFXHelpers.createImageView(path + "btnTool.gif");
 
-		activeButton[0] = createImageView(path + "btnArtifactClicked.gif");
-		activeButton[1] = createImageView(path + "btnCustomerClicked.gif");
-		activeButton[2] = createImageView(path + "btnEmployeeClicked.gif");
-		activeButton[3] = createImageView(path + "btnProjectClicked.gif");
-		activeButton[4] = createImageView(path + "btnToolClicked.gif");
+		activeButton[0] = JavaFXHelpers.createImageView(path + "btnArtifactClicked.gif");
+		activeButton[1] = JavaFXHelpers.createImageView(path + "btnCustomerClicked.gif");
+		activeButton[2] = JavaFXHelpers.createImageView(path + "btnEmployeeClicked.gif");
+		activeButton[3] = JavaFXHelpers.createImageView(path + "btnProjectClicked.gif");
+		activeButton[4] = JavaFXHelpers.createImageView(path + "btnToolClicked.gif");
 	}
 
 	public int getSelectedTabIndex() {
