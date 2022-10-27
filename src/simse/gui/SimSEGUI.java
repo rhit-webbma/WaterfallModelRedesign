@@ -96,7 +96,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
         BorderPane bPane = new BorderPane();
 		bPane.setTop(tabPanel);
 		bPane.setBottom(attribPanel);
-		world = new World(state, logic, this);
+//		world = new World(state, logic, this);
 		bPane.setCenter(world);
 		bPane.setRight(actionPanel);
 		

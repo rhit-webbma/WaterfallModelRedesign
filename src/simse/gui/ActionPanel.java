@@ -90,10 +90,10 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 		selectedEmp = null;
 		popup = new ContextMenu();
 
-		update();
-
 		layout.getChildren().add(titlePanel);
 		layout.getChildren().add(actionPane);
+		
+		update();
 	}
 
 	public void createPopupMenu(Node node, double x, double y) {

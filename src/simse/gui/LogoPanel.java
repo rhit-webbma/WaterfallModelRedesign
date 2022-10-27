@@ -7,10 +7,8 @@ import java.util.Optional;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
@@ -26,11 +24,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import simse.SimSE;
-import simse.adts.objects.Employee;
 import simse.engine.*;
 import simse.gui.util.JavaFXHelpers;
-import simse.state.*;
-import simse.logic.*;
 
 public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 	private String path = "src/simse/gui/images/layout/";
@@ -58,7 +53,6 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		gui = g;
 		gridPane = new GridPane();
 		this.getChildren().add(gridPane);
-//		setLayout(gridPane);
 
 		// loads the tab buttons
 		createButtonImageSet();
@@ -66,14 +60,19 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		// create the buttons
 		artifactButton = new Button("", inactiveButton[0]);
 		artifactButton.setMinSize(120, 16);
+		artifactButton.setPadding(new Insets(0, 0, 0, 0));
 		customerButton = new Button("", inactiveButton[1]);
 		customerButton.setMinSize(120, 16);
+		customerButton.setPadding(new Insets(0, 0, 0, 0));
 		employeeButton = new Button("", inactiveButton[2]);
 		employeeButton.setMinSize(120, 16);
+		employeeButton.setPadding(new Insets(0, 0, 0, 0));
 		projectButton = new Button("", inactiveButton[3]);
 		projectButton.setMinSize(120, 16);
+		projectButton.setPadding(new Insets(0, 0, 0, 0));
 		toolButton = new Button("", inactiveButton[4]);
 		toolButton.setMinSize(120, 16);
+		toolButton.setPadding(new Insets(0, 0, 0, 0));
 
 		// create the layout:
 		createLayout();
@@ -85,7 +84,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		gc.fillRect(0, 0, 340, 100);
 		gc.drawImage(logo, 0, 0);
 		
-//		gridPane.getChildren().add(canvas);
+		gridPane.add(canvas, 0, 0, 1, 5);
 	}
 
 	public void setTabPanel(TabPanel tab) {
@@ -116,31 +115,31 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 
 	public void createLayout() {
 		GridPane buttonGPane = new GridPane();
-		buttonGPane.setOpacity(0);
+		buttonGPane.setOpacity(1);
 		buttonGPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		GridPane.setConstraints(buttonGPane, 0, 0, 5, 1, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+		GridPane.setConstraints(buttonGPane, 1, 0, 3, 5, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
 		
 		infoButton = new Button();
 		infoButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		infoButton.setOpacity(0);
+		infoButton.setOpacity(1);
 		infoButton.setMinSize(24, 40);
 		infoButton.setPrefSize(24, 40);
 		infoButton.setBorder(null);
 		infoButton.addEventHandler(MouseEvent.ANY, this);
 		GridPane.setConstraints(infoButton, 0, 0, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 5, 0));
-		this.getChildren().add(infoButton);
+		buttonGPane.getChildren().add(infoButton);
 		resetButton = new Button();
 		resetButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		resetButton.setOpacity(0);
+		resetButton.setOpacity(1);
 		resetButton.setMinSize(24, 40);
 		resetButton.setPrefSize(24, 40);
 		resetButton.setBorder(null);
 		resetButton.addEventHandler(MouseEvent.ANY, this);
 		GridPane.setConstraints(resetButton, 0, 1, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, Priority.NEVER, new Insets(5, 0, 0, 0));
-		this.getChildren().add(resetButton);
+		buttonGPane.getChildren().add(resetButton);
 		aboutButton = new Button();
 		aboutButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		aboutButton.setOpacity(0);
+		aboutButton.setOpacity(1);
 		aboutButton.setMinSize(170, 88);
 		aboutButton.setPrefSize(170, 88);
 		addButton(aboutButton, 1, 0, 1, 5, 0, 1, buttonGPane);
@@ -178,7 +177,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 			double wx, double wy, GridPane gp) {
 		jb.setBorder(null);
 		jb.addEventHandler(MouseEvent.ANY, this);
-		jb.setOpacity(0);
+		jb.setOpacity(1);
 		GridPane.setConstraints(jb, x, y, colspan, rowspan, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(1, 1, 1, 1));
 		gp.getChildren().add(jb);
 	}
