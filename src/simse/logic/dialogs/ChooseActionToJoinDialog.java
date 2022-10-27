@@ -12,6 +12,8 @@ import java.awt.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
+import javafx.stage.Stage;
+
 public class ChooseActionToJoinDialog extends JDialog implements ActionListener {
 	private JFrame gui;
 	private Vector<? extends simse.adts.actions.Action> actions;
@@ -24,11 +26,11 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 	private String menuText;
 	private RuleExecutor ruleExec;
 
-	public ChooseActionToJoinDialog(JFrame owner,
+	public ChooseActionToJoinDialog(Stage parent,
 			Vector<? extends simse.adts.actions.Action> acts, Employee e,
 			State s, String menText, RuleExecutor re) {
-		super(owner, true);
-		gui = owner;
+		super(parent, true);
+		gui = parent;
 		actions = acts;
 		emp = e;
 		state = s;
@@ -1463,14 +1465,14 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 		pack();
 		repaint();
 		toFront();
-		Point ownerLoc = owner.getLocationOnScreen();
+		Point ownerLoc = parent.getLocationOnScreen();
 		Point thisLoc = new Point();
 		thisLoc.setLocation(
-				(ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
-				(ownerLoc.getY() + (owner.getHeight() / 2) - (this.getHeight() / 2)));
+				(ownerLoc.getX() + (parent.getWidth() / 2) - (this.getWidth() / 2)),
+				(ownerLoc.getY() + (parent.getHeight() / 2) - (this.getHeight() / 2)));
 		setLocation(thisLoc);
 		if (radioButtons.size() == 1) {
-			onlyOneChoice(owner);
+			onlyOneChoice(parent);
 		} else {
 			setVisible(true);
 		}
