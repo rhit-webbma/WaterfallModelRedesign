@@ -6,6 +6,7 @@ package simse.gui;
 import com.sun.javafx.tk.Toolkit;
 
 import javafx.scene.image.Image;
+import simse.gui.util.JavaFXHelpers;
 
 public class MapData {
 	static final int TILE_SIZE = 50; // size of 1 tile
@@ -68,61 +69,52 @@ public class MapData {
 	static final int TILE_DOOR_RC = 616;
 
 	static final String dir = "/simse/gui/images/";
-	static final Image transparent = ImageLoader.getImageFromURL(dir
-			+ "transparent.gif");
-	static final Image grid = ImageLoader.getImageFromURL(dir + "grid.gif");
-	static final Image floor = ImageLoader.getImageFromURL(dir + "floor.gif");
-	static final Image chairT = ImageLoader.getImageFromURL(dir + "chairT.gif");
-	static final Image chairB = ImageLoader.getImageFromURL(dir + "chairB.gif");
-	static final Image chairL = ImageLoader.getImageFromURL(dir + "chairL.gif");
-	static final Image chairR = ImageLoader.getImageFromURL(dir + "chairR.gif");
-	static final Image computer = ImageLoader.getImageFromURL(dir + "computer.gif");
+	static final Image transparent = JavaFXHelpers.createImage(dir + "transparent.gif");
+	static final Image grid = JavaFXHelpers.createImage(dir + "grid.gif");
+	static final Image floor = JavaFXHelpers.createImage(dir + "floor.gif");
+	static final Image chairT = JavaFXHelpers.createImage(dir + "chairT.gif");
+	static final Image chairB = JavaFXHelpers.createImage(dir + "chairB.gif");
+	static final Image chairL = JavaFXHelpers.createImage(dir + "chairL.gif");
+	static final Image chairR = JavaFXHelpers.createImage(dir + "chairR.gif");
+	static final Image computer = JavaFXHelpers.createImage(dir + "computer.gif");
  
-//	static final Image dark = ImageLoader.getImageFromURL(dir + "dark.gif");
-	static final Image trashcanE = ImageLoader
-			.getImageFromURL(dir + "trashcan_e.gif");
-	static final Image trashcanF = ImageLoader
-			.getImageFromURL(dir + "trashcan_f.gif");
-	static final Image papers = ImageLoader.getImageFromURL(dir + "papers.gif");
+//	static final Image dark = JavaFXHelpers.createImage(dir + "dark.gif");
+	static final Image trashcanE = JavaFXHelpers.createImage(dir + "trashcan_e.gif");
+	static final Image trashcanF = JavaFXHelpers.createImage(dir + "trashcan_f.gif");
+	static final Image papers = JavaFXHelpers.createImage(dir + "papers.gif");
 
-	static final Image wallT = ImageLoader.getImageFromURL(dir + "wall/wall_t.gif");
-	static final Image wallB = ImageLoader.getImageFromURL(dir + "wall/wall_b.gif");
-	static final Image wallL = ImageLoader.getImageFromURL(dir + "wall/wall_l.gif");
-	static final Image wallR = ImageLoader.getImageFromURL(dir + "wall/wall_r.gif");
-	static final Image wallTL = ImageLoader.getImageFromURL(dir + "wall/wall_tl.gif");
-	static final Image wallTR = ImageLoader.getImageFromURL(dir + "wall/wall_tr.gif");
-	static final Image wallBL = ImageLoader.getImageFromURL(dir + "wall/wall_bl.gif");
-	static final Image wallBR = ImageLoader.getImageFromURL(dir + "wall/wall_br.gif");
+	static final Image wallT = JavaFXHelpers.createImage(dir + "wall/wall_t.gif");
+	static final Image wallB = JavaFXHelpers.createImage(dir + "wall/wall_b.gif");
+	static final Image wallL = JavaFXHelpers.createImage(dir + "wall/wall_l.gif");
+	static final Image wallR = JavaFXHelpers.createImage(dir + "wall/wall_r.gif");
+	static final Image wallTL = JavaFXHelpers.createImage(dir + "wall/wall_tl.gif");
+	static final Image wallTR = JavaFXHelpers.createImage(dir + "wall/wall_tr.gif");
+	static final Image wallBL = JavaFXHelpers.createImage(dir + "wall/wall_bl.gif");
+	static final Image wallBR = JavaFXHelpers.createImage(dir + "wall/wall_br.gif");
 
-	static final Image doorTO = ImageLoader.getImageFromURL(dir + "wall/door_to.gif");
-	static final Image doorTC = ImageLoader.getImageFromURL(dir + "wall/door_tc.gif");
-	static final Image doorLO = ImageLoader.getImageFromURL(dir + "wall/door_lo.gif");
-	static final Image doorLC = ImageLoader.getImageFromURL(dir + "wall/door_lc.gif");
-	static final Image doorRO = ImageLoader.getImageFromURL(dir + "wall/door_ro.gif");
-	static final Image doorRC = ImageLoader.getImageFromURL(dir + "wall/door_rc.gif");
+	static final Image doorTO = JavaFXHelpers.createImage(dir + "wall/door_to.gif");
+	static final Image doorTC = JavaFXHelpers.createImage(dir + "wall/door_tc.gif");
+	static final Image doorLO = JavaFXHelpers.createImage(dir + "wall/door_lo.gif");
+	static final Image doorLC = JavaFXHelpers.createImage(dir + "wall/door_lc.gif");
+	static final Image doorRO = JavaFXHelpers.createImage(dir + "wall/door_ro.gif");
+	static final Image doorRC = JavaFXHelpers.createImage(dir + "wall/door_rc.gif");
 
-	static final Image sTableTL = ImageLoader.getImageFromURL(dir
-			+ "table/sTable_tl.gif");
-	static final Image sTableTM = ImageLoader.getImageFromURL(dir
-			+ "table/sTable_tm.gif");
-	static final Image sTableTR = ImageLoader.getImageFromURL(dir
-			+ "table/sTable_tr.gif");
-	static final Image sTableBL = ImageLoader.getImageFromURL(dir
-			+ "table/sTable_bl.gif");
-	static final Image sTableBM = ImageLoader.getImageFromURL(dir
-			+ "table/sTable_bm.gif");
-	static final Image sTableBR = ImageLoader.getImageFromURL(dir
-			+ "table/sTable_br.gif");
+	static final Image sTableTL = JavaFXHelpers.createImage(dir + "table/sTable_tl.gif");
+	static final Image sTableTM = JavaFXHelpers.createImage(dir + "table/sTable_tm.gif");
+	static final Image sTableTR = JavaFXHelpers.createImage(dir + "table/sTable_tr.gif");
+	static final Image sTableBL = JavaFXHelpers.createImage(dir + "table/sTable_bl.gif");
+	static final Image sTableBM = JavaFXHelpers.createImage(dir + "table/sTable_bm.gif");
+	static final Image sTableBR = JavaFXHelpers.createImage(dir + "table/sTable_br.gif");
 
-	static final Image speechTL = ImageLoader.getImageFromURL(dir + "speechTL.gif");
-	static final Image speechTR = ImageLoader.getImageFromURL(dir + "speechTR.gif");
-	static final Image speechBL = ImageLoader.getImageFromURL(dir + "speechBL.gif");
-	static final Image speechBR = ImageLoader.getImageFromURL(dir + "speechBR.gif");
+	static final Image speechTL = JavaFXHelpers.createImage(dir + "speechTL.gif");
+	static final Image speechTR = JavaFXHelpers.createImage(dir + "speechTR.gif");
+	static final Image speechBL = JavaFXHelpers.createImage(dir + "speechBL.gif");
+	static final Image speechBR = JavaFXHelpers.createImage(dir + "speechBR.gif");
 
-	static final Image error = ImageLoader.getImageFromURL(dir + "error.gif");
+	static final Image error = JavaFXHelpers.createImage(dir + "error.gif");
 
 	public static Image getImage(String file) {
-		return Toolkit.getDefaultToolkit().getImage(file);
+		return JavaFXHelpers.createImage(file);
 	}
 
 	public static Image getImage(int key) {
