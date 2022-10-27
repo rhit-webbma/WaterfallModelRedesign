@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import simse.adts.objects.*;
 import simse.gui.util.JavaFXHelpers;
 
+import javafx.scene.control.MenuItem;
 
 public class DisplayedEmployee {
 	private Employee userObject;

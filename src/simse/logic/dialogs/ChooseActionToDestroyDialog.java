@@ -10,10 +10,10 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
 
-public class ChooseActionToDestroyDialog extends JDialog implements
+import javafx.stage.Stage;
+
+public class ChooseActionToDestroyDialog extends Dialog implements
 		ActionListener {
 	private Vector<? extends simse.adts.actions.Action> actions;
 	private State state;
@@ -25,14 +25,14 @@ public class ChooseActionToDestroyDialog extends JDialog implements
 	private JButton okButton;
 	private JButton cancelButton;
 
-	public ChooseActionToDestroyDialog(JFrame owner,
+	public ChooseActionToDestroyDialog(Stage parent,
 			Vector<? extends simse.adts.actions.Action> acts, State s,
 			Employee e, RuleExecutor r, String mText) {
-		super(owner, true);
+		super(parent, true);
 		actions = acts;
 		state = s;
 		ruleExec = r;
-		gui = owner;
+		gui = parent;
 		emp = e;
 		menuText = mText;
 		checkBoxes = new Vector<JCheckBox>();
@@ -1242,11 +1242,11 @@ public class ChooseActionToDestroyDialog extends JDialog implements
 		pack();
 		repaint();
 		toFront();
-		Point ownerLoc = owner.getLocationOnScreen();
+		Point ownerLoc = parent.getLocationOnScreen();
 		Point thisLoc = new Point();
 		thisLoc.setLocation(
-				(ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
-				(ownerLoc.getY() + (owner.getHeight() / 2) - (this.getHeight() / 2)));
+				(ownerLoc.getX() + (parent.getWidth() / 2) - (this.getWidth() / 2)),
+				(ownerLoc.getY() + (parent.getHeight() / 2) - (this.getHeight() / 2)));
 		setLocation(thisLoc);
 		setVisible(true);
 	}
