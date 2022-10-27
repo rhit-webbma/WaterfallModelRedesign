@@ -3,7 +3,6 @@ package simse.gui;
 
 import simse.adts.objects.SEProject;
 import simse.state.*;
-
 import java.util.*;
 
 import javafx.collections.ObservableList;
@@ -25,7 +24,6 @@ import java.text.*;
 import java.awt.Color;
 
 public class ProjectsAtAGlanceFrame extends Stage implements EventHandler<MouseEvent>{
-
 	private State state;
 
 	private ContextMenu popup;
@@ -73,6 +71,7 @@ public class ProjectsAtAGlanceFrame extends Stage implements EventHandler<MouseE
 
 		// Add panes to main pane:
 		mainPane.getChildren().addAll(seprojectTitlePane, seprojectPane);
+
 
 		// Set main window frame properties:
 //		setBackground(Color.white);
@@ -237,6 +236,4 @@ public class ProjectsAtAGlanceFrame extends Stage implements EventHandler<MouseE
 		}
 		return hiddenCols;
 	}
-
-
 }

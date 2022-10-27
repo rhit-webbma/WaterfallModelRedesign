@@ -35,13 +35,14 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 	private Button okButton;
 	private Button cancelButton;
 
-	public ChooseActionToDestroyDialog(Stage owner,
+	public ChooseActionToDestroyDialog(Stage parent,
 			Vector<? extends simse.adts.actions.Action> acts, State s,
 			Employee e, RuleExecutor r, String mText) {
+		super(parent, true);
 		actions = acts;
 		state = s;
 		ruleExec = r;
-		gui = owner;
+		gui = parent;
 		emp = e;
 		menuText = mText;
 		checkBoxes = new Vector<CheckBox>();

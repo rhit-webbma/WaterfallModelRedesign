@@ -6,7 +6,8 @@ import simse.gui.*;
 import simse.adts.objects.*;
 import simse.adts.actions.*;
 import java.util.*;
-import javax.swing.*;
+
+import javafx.stage.Stage;
 
 import javafx.stage.Stage;
 

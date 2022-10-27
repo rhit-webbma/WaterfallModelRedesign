@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import simse.adts.objects.AutomatedTestingTool;
 import simse.state.State;
 
 public abstract class TableModel<T> {
@@ -114,5 +115,4 @@ public abstract class TableModel<T> {
 	public Class getColumnClass(int c) {
 		return getValueAt(0, c).getClass();
 	}
-	
 }

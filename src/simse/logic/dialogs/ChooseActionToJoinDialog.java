@@ -35,10 +35,11 @@ public class ChooseActionToJoinDialog extends Dialog implements EventHandler<Mou
 	private String menuText;
 	private RuleExecutor ruleExec;
 
-	public ChooseActionToJoinDialog(Stage owner,
+	public ChooseActionToJoinDialog(Stage parent,
 			Vector<? extends simse.adts.actions.Action> acts, Employee e,
 			State s, String menText, RuleExecutor re) {
-		gui = owner;
+		super(parent, true);
+		gui = parent;
 		actions = acts;
 		emp = e;
 		state = s;
@@ -1459,7 +1460,7 @@ public class ChooseActionToJoinDialog extends Dialog implements EventHandler<Mou
 		this.setX(thisLoc.getX());
 		this.setY(thisLoc.getY());
 		if (radioButtons.size() == 1) {
-			onlyOneChoice(owner);
+			onlyOneChoice(parent);
 		} else {
 			show();
 		}

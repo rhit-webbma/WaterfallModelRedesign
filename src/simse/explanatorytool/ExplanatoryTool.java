@@ -39,7 +39,6 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.Vector;
 
-
 public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 	private ArrayList<State> log; // log for current simulation
 	private ArrayList<Stage> visibleGraphs; // holds all of the currently
@@ -347,7 +346,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 			if (attributes.length > 0) { // at least one attribute is selected
 				ObjectGraph graph = new ObjectGraph(title, log, objTypeType,
 						objType, keyAttVal, attributes, true, branch);
-				visibleGraphs.add(graph);
+//				visibleGraphs.add(graph);
 			} else {
 				Alert alert = new Alert(AlertType.WARNING, "Please select at least one attribute");
 				alert.show();
@@ -361,7 +360,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 			}
 			if (actions.length > 0) { // at least one attribute is selected
 				ActionGraph graph = new ActionGraph(log, actions, true, branch);
-				visibleGraphs.add(graph);
+//				visibleGraphs.add(graph);
 			} else {
 				Alert alert = new Alert(AlertType.WARNING, "Please select at least one action");
 				alert.show();
@@ -399,7 +398,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 					// generate composite graph:
 					CompositeGraph compGraph = new CompositeGraph(objGraph,
 							actGraph, branch);
-					visibleGraphs.add(compGraph);
+//					visibleGraphs.add(compGraph);
 				} else {
 					Alert alert = new Alert(AlertType.WARNING, "Please select at least one action");
 					alert.show();
@@ -441,13 +440,14 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 			// remove graphs whose windows have been closed from visibleGraphs:
 			if (!graph.isShowing()) {
 				visibleGraphs.remove(graph);
-			} else if (graph instanceof ObjectGraph) {
-				((ObjectGraph) graph).update();
-			} else if (graph instanceof ActionGraph) {
-				((ActionGraph) graph).update();
-			} else if (graph instanceof CompositeGraph) {
-				((CompositeGraph) graph).update();
-			}
+			} 
+//				else if (graph instanceof ObjectGraph) {
+//				((ObjectGraph) graph).update();
+//			} else if (graph instanceof ActionGraph) {
+//				((ActionGraph) graph).update();
+//			} else if (graph instanceof CompositeGraph) {
+//				((CompositeGraph) graph).update();
+//			}
 		}
 
 		// update timelines browser:

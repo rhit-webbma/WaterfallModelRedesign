@@ -8,17 +8,33 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TitledPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+
 import java.awt.Dimension;
 import java.util.Vector;
 
-public class ActionInfoPanel extends JPanel implements ListSelectionListener {
+public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	private simse.adts.actions.Action action; // action in focus
 
-	private JList triggerList; // for choosing which trigger show
-	private JList destroyerList; // for choosing which destroyer to show
-	private JTextArea descriptionArea; // for displaying a trigger/destroyer
+	private TableView table;
+	private ListView triggerList; // for choosing which trigger show
+	private ListView destroyerList; // for choosing which destroyer to show
+	private TextArea descriptionArea; // for displaying a trigger/destroyer
 										// description
-	private JTextArea actionDescriptionArea; // for displaying the action
+	private TextArea actionDescriptionArea; // for displaying the action
 												// description
 
 	private final int TRIGGER = 0;
@@ -28,117 +44,156 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 		this.action = action;
 
 		// Create main panel (box):
-		Box mainPane = Box.createVerticalBox();
-		mainPane.setPreferredSize(new Dimension(900, 550));
+		VBox mainPane = new VBox();
+//		mainPane.setPreferredSize(new Dimension(900, 550));
 
 		// Create actionDescription pane and components:
-		Box actionDescriptionPane = Box.createVerticalBox();
-		JPanel actionDescriptionTitlePane = new JPanel();
-		actionDescriptionTitlePane.add(new JLabel("ActionDescription:"));
-		actionDescriptionPane.add(actionDescriptionTitlePane);
-		actionDescriptionArea = new JTextArea(1, 50);
-		actionDescriptionArea.setLineWrap(true);
-		actionDescriptionArea.setWrapStyleWord(true);
+		VBox actionDescriptionPane = new VBox();
+		TitledPane actionDescriptionTitlePane = new TitledPane("ActionDescription: ", actionDescriptionPane);
+//		JPanel actionDescriptionTitlePane = new JPanel();
+//		actionDescriptionTitlePane.add(new JLabel("ActionDescription:"));
+//		actionDescriptionPane.add(actionDescriptionTitlePane);
+		actionDescriptionArea = new TextArea();
+		actionDescriptionArea.setWrapText(true);
+		actionDescriptionArea.setPrefRowCount(1);
+		actionDescriptionArea.setPrefColumnCount(50);
+//		actionDescriptionArea.setWrapStyleWord(true);
 		actionDescriptionArea.setEditable(false);
-		JScrollPane actionDescriptionScrollPane = new JScrollPane(
-				actionDescriptionArea,
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		ScrollPane actionDescriptionScrollPane = new ScrollPane(actionDescriptionArea);
+		actionDescriptionScrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		actionDescriptionScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+//		JScrollPane actionDescriptionScrollPane = new JScrollPane(
+//				actionDescriptionArea,
+//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+//				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		initializeActionDescription();
-		actionDescriptionPane.add(actionDescriptionScrollPane);
-
+//		actionDescriptionPane.add(actionDescriptionScrollPane);
+		actionDescriptionPane.getChildren().add(actionDescriptionScrollPane);
+		
 		// Create participants pane and components:
-		Box participantsPane = Box.createVerticalBox();
-		JPanel participantsTitlePane = new JPanel();
-		participantsTitlePane.add(new JLabel("Participants:"));
-		participantsPane.add(participantsTitlePane);
+		VBox participantsPane = new VBox();
+		TitledPane participantsTitlePane = new TitledPane("Participants:", participantsPane);
+//		participantsTitlePane.add(new JLabel("Participants:"));
+//		participantsPane.add(participantsTitlePane);
 
 		// participants table:
-		JScrollPane participantsTablePane = new JScrollPane(
+		ScrollPane participantsTablePane = new ScrollPane(
 				createParticipantsTable());
 		participantsTablePane
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		participantsTablePane.setPreferredSize(new Dimension(900, 125));
-		participantsPane.add(participantsTablePane);
+				.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		participantsTablePane.setPrefSize(900, 125);
+		participantsPane.getChildren().add(participantsTablePane);
 
 		// Create triggerDestroyer pane and components:
-		JPanel triggerDestroyerPane = new JPanel();
+		Pane triggerDestroyerPane = new Pane();
 
 		// list pane:
-		Box listPane = Box.createVerticalBox();
+		VBox listPane = new VBox();
 
 		// trigger list:
-		JPanel triggerListTitlePane = new JPanel();
-		triggerListTitlePane.add(new JLabel("Triggers:"));
-		listPane.add(triggerListTitlePane);
-		triggerList = new JList();
-		triggerList.setVisibleRowCount(3);
-		triggerList.setFixedCellWidth(400);
-		triggerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		triggerList.addListSelectionListener(this);
+		TitledPane triggerListTitlePane = new TitledPane("Triggers:", listPane);
+//		triggerListTitlePane.add(new JLabel("Triggers:"));
+//		listPane.add(triggerListTitlePane);
+		triggerList = new ListView();
+		triggerList.setFixedCellSize(3);
+//		triggerList.s
+		//TODO: Set Width on Columns
+//		triggerList.setFixedCellWidth(400);
+//		triggerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//		triggerList.addListSelectionListener(this);
+		triggerList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		
+		triggerList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		
 		initializeTriggerList();
-		JScrollPane triggerListPane = new JScrollPane(triggerList);
-		listPane.add(triggerListPane);
+		ScrollPane triggerListPane = new ScrollPane(triggerList);
+//		listPane.add(triggerListPane);
+		listPane.getChildren().add(triggerListPane);
 
 		// destroyer list:
-		JPanel destroyerListTitlePane = new JPanel();
-		destroyerListTitlePane.add(new JLabel("Destroyers:"));
-		listPane.add(destroyerListTitlePane);
-		destroyerList = new JList();
-		destroyerList.setVisibleRowCount(3);
-		destroyerList.setFixedCellWidth(400);
-		destroyerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		destroyerList.addListSelectionListener(this);
+		TitledPane destroyerListTitlePane = new TitledPane("Destroyers: ", listPane);
+//		destroyerListTitlePane.add(new JLabel("Destroyers:"));
+//		listPane.add(destroyerListTitlePane);
+		destroyerList = new ListView();
+		destroyerList.setFixedCellSize(3);
+		destroyerList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		destroyerList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+//		destroyerList.setVisibleRowCount(3);
+//		destroyerList.setFixedCellWidth(400);
+//		destroyerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//		destroyerList.addListSelectionListener(this);
 		initializeDestroyerList();
-		JScrollPane destroyerListPane = new JScrollPane(destroyerList);
-		listPane.add(destroyerListPane);
+		ScrollPane destroyerListPane = new ScrollPane(destroyerList);
+//		listPane.add(destroyerListPane);
+		listPane.getChildren().add(destroyerListPane);
 
-		triggerDestroyerPane.add(listPane);
+//		triggerDestroyerPane.add(listPane);
 
 		// description pane:
-		Box descriptionPane = Box.createVerticalBox();
-		JPanel descriptionTitlePane = new JPanel();
-		descriptionTitlePane.add(new JLabel("Description:"));
-		descriptionPane.add(descriptionTitlePane);
+		VBox descriptionPane = new VBox();
+		TitledPane descriptionTitlePane = new TitledPane("Description: ", descriptionPane);
+//		descriptionTitlePane.add(new JLabel("Description:"));
+//		descriptionPane.add(descriptionTitlePane);
 
 		// description text area:
-		descriptionArea = new JTextArea(9, 30);
-		descriptionArea.setLineWrap(true);
-		descriptionArea.setWrapStyleWord(true);
+		descriptionArea = new TextArea();
+		descriptionArea.setWrapText(true);
+		descriptionArea.setPrefRowCount(9);
+		descriptionArea.setPrefColumnCount(30);
+//		actionDescriptionArea.setWrapStyleWord(true);
 		descriptionArea.setEditable(false);
-		JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea,
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		descriptionPane.add(descriptionScrollPane);
+		
+//		descriptionArea = new TextArea(9, 30);
+//		descriptionArea.setLineWrap(true);
+//		descriptionArea.setWrapStyleWord(true);
+//		descriptionArea.setEditable(false);
+		ScrollPane descriptionScrollPane = new ScrollPane();
+		descriptionScrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		descriptionScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		descriptionScrollPane.setContent(descriptionArea);
+//		JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea,
+//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+//				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+//		descriptionPane.add(descriptionScrollPane);
+		descriptionPane.getChildren().add(descriptionScrollPane);
 
-		triggerDestroyerPane.add(descriptionPane);
+//		triggerDestroyerPane.add(descriptionPane);
+		triggerDestroyerPane.getChildren().add(descriptionPane);
 
 		// Add panes to main pane:
-		mainPane.add(actionDescriptionPane);
-		mainPane.add(participantsPane);
-		mainPane.add(triggerDestroyerPane);
-		add(mainPane);
+//		mainPane.add(actionDescriptionPane);
+//		mainPane.add(participantsPane);
+//		mainPane.add(triggerDestroyerPane);
+		
+		mainPane.getChildren().add(actionDescriptionPane);
+		mainPane.getChildren().add(participantsPane);
+		mainPane.getChildren().add(triggerDestroyerPane);
+		
+//		add(mainPane);
+		
+		this.getChildren().add(mainPane);
+		this.setPrefSize(900, 550);
 
 		// Set main window frame properties:
-		setOpaque(true);
-		validate();
-		repaint();
+//		setOpaque(true);
+//		validate();
+//		repaint();
 	}
 
 	// responds to list selections
 	public void valueChanged(ListSelectionEvent e) {
-		if (e.getSource() == triggerList && triggerList.getSelectedIndex() >= 0) {
+		if (e.getSource() == triggerList && triggerList.getSelectionModel().getSelectedIndex() >= 0) {
 			refreshDescriptionArea(TRIGGER);
 
 			// clear selection for destroyer list:
-			destroyerList.clearSelection();
+			destroyerList.getSelectionModel().clearSelection();
 
 		} else if (e.getSource() == destroyerList
-				&& destroyerList.getSelectedIndex() >= 0) {
+				&& destroyerList.getSelectionModel().getSelectedIndex() >= 0) {
 			refreshDescriptionArea(DESTROYER);
 
 			// clear selection for trigger list:
-			triggerList.clearSelection();
+			triggerList.getSelectionModel().clearSelection();
 		}
 	}
 
@@ -201,92 +256,120 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			text = "Suggested duration of the testing phase.";
 		}
 		actionDescriptionArea.setText(text);
-		actionDescriptionArea.setCaretPosition(0);
+		actionDescriptionArea.positionCaret(0);
+//		actionDescriptionArea.setCaretPosition(0);
 	}
 
 	// initializes the JList of triggers
 	private void initializeTriggerList() {
 		if (action instanceof CreateRequirementsAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+			triggerList.getItems().add(list);
+//			triggerList.setListData(list);
 		} else if (action instanceof ReviewRequirementsAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof CorrectRequirementsAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof CreateDesignAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof ReviewDesignAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof CorrectDesignAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof CreateCodeAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof InspectCodeAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof CorrectCodeAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof IntegrateCodeAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof SystemTestAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof CreateSystemTestPlanAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof ReviewSystemTestPlanAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof CorrectSystemTestPlanAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof DeliverProductAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof BreakAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof GetSickAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof QuitAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof IntroduceNewRequirementsAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof ChangePayRateAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof GiveBonusAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof FireAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof PurchaseToolAction) {
 			String[] list = { "TrigA", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-			triggerList.setListData(list);
+//			triggerList.setListData(list);
+			triggerList.getItems().add(list);
 		}
 	}
 
@@ -294,91 +377,123 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 	private void initializeDestroyerList() {
 		if (action instanceof CreateRequirementsAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof ReviewRequirementsAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof CorrectRequirementsAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof CreateDesignAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof ReviewDesignAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof CorrectDesignAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof CreateCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof InspectCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof CorrectCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof IntegrateCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof SystemTestAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof CreateSystemTestPlanAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof ReviewSystemTestPlanAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof CorrectSystemTestPlanAction) {
 			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof DeliverProductAction) {
 			String[] list = {};
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof BreakAction) {
 			String[] list = { "DestA", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof GetSickAction) {
 			String[] list = { "DestA", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof QuitAction) {
 			String[] list = { "DestO", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof IntroduceNewRequirementsAction) {
 			String[] list = { "DestA", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof ChangePayRateAction) {
 			String[] list = { "DestA", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof GiveBonusAction) {
 			String[] list = { "DestA", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof FireAction) {
 			String[] list = { "DestA", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof PurchaseToolAction) {
 			String[] list = { "DestA", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);/
+			destroyerList.getItems().add(list);
 		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-			destroyerList.setListData(list);
+//			destroyerList.setListData(list);
+			destroyerList.getItems().add(list);
 		}
 	}
 
-	private JTable createParticipantsTable() {
-		String[] columnNames = { "Participant Name", "Participant", "Status" };
-		Object[][] data = new Object[action.getAllParticipants().size()][3];
+	private TableView createParticipantsTable() {
+		TableView newView = new TableView();
+		TableColumn name = new TableColumn("Participant Name");
+		TableColumn participant = new TableColumn("Participant");
+		TableColumn status = new TableColumn("Status");
+//		String[] columnNames = { "Participant Name", "Participant", "Status" };
+//		Object[][] data = new Object[action.getAllParticipants().size()][3];
+		ObservableList<Participant> data = FXCollections.observableArrayList();
 		int index = 0;
 		if (action instanceof CreateRequirementsAction) {
 			CreateRequirementsAction createrequirementsAction = (CreateRequirementsAction) action;
@@ -389,10 +504,12 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+//				TableColumn empColumn = new TableColumn("Emp");
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -407,7 +524,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -417,10 +535,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveReqDocs();
 			for (int i = 0; i < reqdocs.size(); i++) {
 				Artifact reqdoc = reqdocs.get(i);
-				data[index][0] = "ReqDoc";
+				String title = "ReqDoc";
+				String title1 = "";
 				if (reqdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentReqDoc = (RequirementsDocument) reqdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentReqDoc.getName();
 
 					// find out whether it's active or not:
@@ -436,7 +555,9 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("ReqDoc", title1, active ? "Active" : "Inactive"));
+					
 				}
 				index++;
 			}
@@ -446,10 +567,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -464,7 +586,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -475,10 +598,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveRequirementsCaptureTools();
 			for (int i = 0; i < requirementscapturetools.size(); i++) {
 				Tool requirementscapturetool = requirementscapturetools.get(i);
-				data[index][0] = "RequirementsCaptureTool";
+				String title = "RequirementsCaptureTool";
+				String title1 = "";
 				if (requirementscapturetool instanceof RequirementsCaptureTool) {
 					RequirementsCaptureTool requirementscapturetoolRequirementsCaptureTool = (RequirementsCaptureTool) requirementscapturetool;
-					data[index][1] = "RequirementsCaptureTool Tool "
+					title1 = "RequirementsCaptureTool Tool "
 							+ requirementscapturetoolRequirementsCaptureTool
 									.getName();
 
@@ -496,7 +620,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("RequirementsCaptureTool", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -507,10 +632,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveAssociatedCodeDocs();
 			for (int i = 0; i < associatedcodedocs.size(); i++) {
 				Artifact associatedcodedoc = associatedcodedocs.get(i);
-				data[index][0] = "AssociatedCodeDoc";
+				String title = "AssociatedCodeDoc";
+				String title1 = "";
 				if (associatedcodedoc instanceof Code) {
 					Code codeAssociatedCodeDoc = (Code) associatedcodedoc;
-					data[index][1] = "Code Artifact "
+					title1 = "Code Artifact "
 							+ codeAssociatedCodeDoc.getName();
 
 					// find out whether it's active or not:
@@ -526,7 +652,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("AssociatedCodeDoc", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -537,10 +664,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveAssociatedDesignDocs();
 			for (int i = 0; i < associateddesigndocs.size(); i++) {
 				Artifact associateddesigndoc = associateddesigndocs.get(i);
-				data[index][0] = "AssociatedDesignDoc";
+				String title = "AssociatedDesignDoc";
+				String title1 = "";
 				if (associateddesigndoc instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDoc = (DesignDocument) associateddesigndoc;
-					data[index][1] = "DesignDocument Artifact "
+					title1 = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -557,7 +685,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("AssociatedDesignDoc", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -569,10 +698,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedsystemtestplans.size(); i++) {
 				Artifact associatedsystemtestplan = associatedsystemtestplans
 						.get(i);
-				data[index][0] = "AssociatedSystemTestPlan";
+				String title = "AssociatedSystemTestPlan";
+				String title1 = "";
 				if (associatedsystemtestplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanAssociatedSystemTestPlan = (SystemTestPlan) associatedsystemtestplan;
-					data[index][1] = "SystemTestPlan Artifact "
+					title1 = "SystemTestPlan Artifact "
 							+ systemtestplanAssociatedSystemTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -589,7 +719,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("AssociatedSystemTestPlan", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -602,10 +733,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -620,7 +752,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -631,10 +764,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveRequirementsDocs();
 			for (int i = 0; i < requirementsdocs.size(); i++) {
 				Artifact requirementsdoc = requirementsdocs.get(i);
-				data[index][0] = "RequirementsDoc";
+				String title = "RequirementsDoc";
+				String title1 = "";
 				if (requirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentRequirementsDoc = (RequirementsDocument) requirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentRequirementsDoc.getName();
 
 					// find out whether it's active or not:
@@ -651,7 +785,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("RequirementsDoc", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -661,10 +796,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -679,7 +815,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -692,10 +829,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -710,7 +848,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -721,10 +860,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveRequirementsDocs();
 			for (int i = 0; i < requirementsdocs.size(); i++) {
 				Artifact requirementsdoc = requirementsdocs.get(i);
-				data[index][0] = "RequirementsDoc";
+				String title = "RequirementsDoc";
+				String title1 = "";
 				if (requirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentRequirementsDoc = (RequirementsDocument) requirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentRequirementsDoc.getName();
 
 					// find out whether it's active or not:
@@ -741,7 +881,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("RequirementsDoc", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -751,10 +892,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -769,7 +911,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -780,10 +923,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveRequirementsCaptureTools();
 			for (int i = 0; i < requirementscapturetools.size(); i++) {
 				Tool requirementscapturetool = requirementscapturetools.get(i);
-				data[index][0] = "RequirementsCaptureTool";
+				String title = "RequirementsCaptureTool";
+				String title1 = "";
 				if (requirementscapturetool instanceof RequirementsCaptureTool) {
 					RequirementsCaptureTool requirementscapturetoolRequirementsCaptureTool = (RequirementsCaptureTool) requirementscapturetool;
-					data[index][1] = "RequirementsCaptureTool Tool "
+					title1 = "RequirementsCaptureTool Tool "
 							+ requirementscapturetoolRequirementsCaptureTool
 									.getName();
 
@@ -801,7 +945,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant("RequirementsCaptureTool", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -813,10 +958,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Employee> activeEmps = createdesignAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -831,7 +977,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -841,10 +988,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveDesignDocs();
 			for (int i = 0; i < designdocs.size(); i++) {
 				Artifact designdoc = designdocs.get(i);
-				data[index][0] = "DesignDoc";
+				String title = "DesignDoc";
+				String title1 = "";
 				if (designdoc instanceof DesignDocument) {
 					DesignDocument designdocumentDesignDoc = (DesignDocument) designdoc;
-					data[index][1] = "DesignDocument Artifact "
+					title1 = "DesignDocument Artifact "
 							+ designdocumentDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -859,7 +1007,8 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -869,10 +1018,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -887,7 +1037,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -899,10 +1049,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -920,7 +1071,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -931,10 +1082,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveDesignEnvironments();
 			for (int i = 0; i < designenvironments.size(); i++) {
 				Tool designenvironment = designenvironments.get(i);
-				data[index][0] = "DesignEnvironment";
+				String title = "DesignEnvironment";
+				String title1 = "";
 				if (designenvironment instanceof DesignEnvironment) {
 					DesignEnvironment designenvironmentDesignEnvironment = (DesignEnvironment) designenvironment;
-					data[index][1] = "DesignEnvironment Tool "
+					title1 = "DesignEnvironment Tool "
 							+ designenvironmentDesignEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -951,7 +1103,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -962,10 +1114,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveAssociatedCodeDocs();
 			for (int i = 0; i < associatedcodedocs.size(); i++) {
 				Artifact associatedcodedoc = associatedcodedocs.get(i);
-				data[index][0] = "AssociatedCodeDoc";
+				String title = "AssociatedCodeDoc";
+				String title1 = "";
 				if (associatedcodedoc instanceof Code) {
 					Code codeAssociatedCodeDoc = (Code) associatedcodedoc;
-					data[index][1] = "Code Artifact "
+					title1 = "Code Artifact "
 							+ codeAssociatedCodeDoc.getName();
 
 					// find out whether it's active or not:
@@ -981,7 +1134,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -993,10 +1146,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Employee> activeEmps = reviewdesignAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1011,7 +1165,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1021,10 +1175,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveDesignDocs();
 			for (int i = 0; i < designdocs.size(); i++) {
 				Artifact designdoc = designdocs.get(i);
-				data[index][0] = "DesignDoc";
+				String title = "DesignDoc";
+				String title1 = "";
 				if (designdoc instanceof DesignDocument) {
 					DesignDocument designdocumentDesignDoc = (DesignDocument) designdoc;
-					data[index][1] = "DesignDocument Artifact "
+					title1 = "DesignDocument Artifact "
 							+ designdocumentDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1039,7 +1194,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1049,10 +1204,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1067,7 +1223,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1079,10 +1235,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1100,7 +1257,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1113,10 +1270,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1131,7 +1289,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1142,10 +1300,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveDesignDocs();
 			for (int i = 0; i < designdocs.size(); i++) {
 				Artifact designdoc = designdocs.get(i);
-				data[index][0] = "DesignDoc";
+				String title = "DesignDoc";
+				String title1 = "";
 				if (designdoc instanceof DesignDocument) {
 					DesignDocument designdocumentDesignDoc = (DesignDocument) designdoc;
-					data[index][1] = "DesignDocument Artifact "
+					title1 = "DesignDocument Artifact "
 							+ designdocumentDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1160,7 +1319,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1170,10 +1329,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1188,7 +1348,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1200,10 +1360,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1221,7 +1382,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1232,10 +1393,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveDesignEnvironments();
 			for (int i = 0; i < designenvironments.size(); i++) {
 				Tool designenvironment = designenvironments.get(i);
-				data[index][0] = "DesignEnvironment";
+				String title = "DesignEnvironment";
+				String title1 = "";
 				if (designenvironment instanceof DesignEnvironment) {
 					DesignEnvironment designenvironmentDesignEnvironment = (DesignEnvironment) designenvironment;
-					data[index][1] = "DesignEnvironment Tool "
+					title1 = "DesignEnvironment Tool "
 							+ designenvironmentDesignEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -1252,7 +1414,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1264,10 +1426,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Employee> activeEmps = createcodeAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1282,7 +1445,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1292,10 +1455,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				data[index][0] = "CodeDoc";
+				String title = "CodeDoc";
+				String title1 = "";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
+					title1 = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -1308,7 +1472,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1317,10 +1481,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Project> activeProjs = createcodeAction.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1335,7 +1500,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1347,10 +1512,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1368,7 +1534,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1380,10 +1546,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associateddesigndocuments.size(); i++) {
 				Artifact associateddesigndocument = associateddesigndocuments
 						.get(i);
-				data[index][0] = "AssociatedDesignDocument";
+				String title = "AssociatedDesignDocument";
+				String title1 = "";
 				if (associateddesigndocument instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDocument = (DesignDocument) associateddesigndocument;
-					data[index][1] = "DesignDocument Artifact "
+					title1 = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDocument.getName();
 
 					// find out whether it's active or not:
@@ -1400,7 +1567,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1411,10 +1578,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveDevelopmentEnvironments();
 			for (int i = 0; i < developmentenvironments.size(); i++) {
 				Tool developmentenvironment = developmentenvironments.get(i);
-				data[index][0] = "DevelopmentEnvironment";
+				String title = "DevelopmentEnvironment";
+				String title1 = "";
 				if (developmentenvironment instanceof IDE) {
 					IDE ideDevelopmentEnvironment = (IDE) developmentenvironment;
-					data[index][1] = "IDE Tool "
+					title1 = "IDE Tool "
 							+ ideDevelopmentEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -1431,7 +1599,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1443,10 +1611,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedsystemtestplans.size(); i++) {
 				Artifact associatedsystemtestplan = associatedsystemtestplans
 						.get(i);
-				data[index][0] = "AssociatedSystemTestPlan";
+				String title = "AssociatedSystemTestPlan";
+				String title1 = "";
 				if (associatedsystemtestplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanAssociatedSystemTestPlan = (SystemTestPlan) associatedsystemtestplan;
-					data[index][1] = "SystemTestPlan Artifact "
+					title1 = "SystemTestPlan Artifact "
 							+ systemtestplanAssociatedSystemTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -1463,7 +1632,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1475,10 +1644,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Employee> activeEmps = inspectcodeAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1493,7 +1663,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1503,10 +1673,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				data[index][0] = "CodeDoc";
+				String title = "CodeDoc";
+				String title1 = "";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
+					title1 = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -1519,7 +1690,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1528,10 +1699,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Project> activeProjs = inspectcodeAction.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1546,7 +1718,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1558,10 +1730,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1579,7 +1752,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1590,10 +1763,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveAssociatedDesignDocs();
 			for (int i = 0; i < associateddesigndocs.size(); i++) {
 				Artifact associateddesigndoc = associateddesigndocs.get(i);
-				data[index][0] = "AssociatedDesignDoc";
+				String title = "AssociatedDesignDoc";
+				String title1 = "";
 				if (associateddesigndoc instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDoc = (DesignDocument) associateddesigndoc;
-					data[index][1] = "DesignDocument Artifact "
+					title1 = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1610,7 +1784,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1622,10 +1796,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Employee> activeEmps = correctcodeAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1640,7 +1815,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1650,10 +1825,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				data[index][0] = "CodeDoc";
+				String title = "CodeDoc";
+				String title1 = "";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
+					title1 = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -1666,7 +1842,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1675,10 +1851,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Project> activeProjs = correctcodeAction.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1693,7 +1870,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1705,10 +1882,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1726,7 +1904,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1737,10 +1915,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveAssociatedDesignDocs();
 			for (int i = 0; i < associateddesigndocs.size(); i++) {
 				Artifact associateddesigndoc = associateddesigndocs.get(i);
-				data[index][0] = "AssociatedDesignDoc";
+				String title = "AssociatedDesignDoc";
+				String title1 = "";
 				if (associateddesigndoc instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDoc = (DesignDocument) associateddesigndoc;
-					data[index][1] = "DesignDocument Artifact "
+					title1 = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1757,7 +1936,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1768,10 +1947,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveDevelopmentEnvironments();
 			for (int i = 0; i < developmentenvironments.size(); i++) {
 				Tool developmentenvironment = developmentenvironments.get(i);
-				data[index][0] = "DevelopmentEnvironment";
+				String title = "DevelopmentEnvironment";
+				String title1 = "";
 				if (developmentenvironment instanceof IDE) {
 					IDE ideDevelopmentEnvironment = (IDE) developmentenvironment;
-					data[index][1] = "IDE Tool "
+					title1 = "IDE Tool "
 							+ ideDevelopmentEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -1788,7 +1968,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1801,10 +1981,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1819,7 +2000,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1829,10 +2010,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				data[index][0] = "CodeDoc";
+				String title = "CodeDoc";
+				String title1 = "";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
+					title1 = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -1845,7 +2027,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1855,10 +2037,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1873,7 +2056,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1885,10 +2068,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1906,7 +2090,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1917,10 +2101,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveAssociatedDesignDocs();
 			for (int i = 0; i < associateddesigndocs.size(); i++) {
 				Artifact associateddesigndoc = associateddesigndocs.get(i);
-				data[index][0] = "AssociatedDesignDoc";
+				String title = "AssociatedDesignDoc";
+				String title1 = "";
 				if (associateddesigndoc instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDoc = (DesignDocument) associateddesigndoc;
-					data[index][1] = "DesignDocument Artifact "
+					title1 = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1937,7 +2122,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1948,10 +2133,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveDevelopmentEnvironments();
 			for (int i = 0; i < developmentenvironments.size(); i++) {
 				Tool developmentenvironment = developmentenvironments.get(i);
-				data[index][0] = "DevelopmentEnvironment";
+				String title = "DevelopmentEnvironment";
+				String title1 = "";
 				if (developmentenvironment instanceof IDE) {
 					IDE ideDevelopmentEnvironment = (IDE) developmentenvironment;
-					data[index][1] = "IDE Tool "
+					title1 = "IDE Tool "
 							+ ideDevelopmentEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -1968,7 +2154,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -1981,10 +2167,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				data[index][0] = "CodeDoc";
+				String title = "CodeDoc";
+				String title1 = "";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
+					title1 = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -1997,7 +2184,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2006,10 +2193,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Project> activeProjs = systemtestAction.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2024,7 +2212,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2033,10 +2221,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Employee> activeEmps = systemtestAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2051,7 +2240,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2063,10 +2252,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedsystemtestplans.size(); i++) {
 				Artifact associatedsystemtestplan = associatedsystemtestplans
 						.get(i);
-				data[index][0] = "AssociatedSystemTestPlan";
+				String title = "AssociatedSystemTestPlan";
+				String title1 = "";
 				if (associatedsystemtestplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanAssociatedSystemTestPlan = (SystemTestPlan) associatedsystemtestplan;
-					data[index][1] = "SystemTestPlan Artifact "
+					title1 = "SystemTestPlan Artifact "
 							+ systemtestplanAssociatedSystemTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -2083,7 +2273,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2093,10 +2283,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveTestingTools();
 			for (int i = 0; i < testingtools.size(); i++) {
 				Tool testingtool = testingtools.get(i);
-				data[index][0] = "TestingTool";
+				String title = "TestingTool";
+				String title1 = "";
 				if (testingtool instanceof AutomatedTestingTool) {
 					AutomatedTestingTool automatedtestingtoolTestingTool = (AutomatedTestingTool) testingtool;
-					data[index][1] = "AutomatedTestingTool Tool "
+					title1 = "AutomatedTestingTool Tool "
 							+ automatedtestingtoolTestingTool.getName();
 
 					// find out whether it's active or not:
@@ -2112,7 +2303,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2125,10 +2316,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2143,7 +2335,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2154,10 +2346,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveAssociatedCodeDocs();
 			for (int i = 0; i < associatedcodedocs.size(); i++) {
 				Artifact associatedcodedoc = associatedcodedocs.get(i);
-				data[index][0] = "AssociatedCodeDoc";
+				String title = "AssociatedCodeDoc";
+				String title1 = "";
 				if (associatedcodedoc instanceof Code) {
 					Code codeAssociatedCodeDoc = (Code) associatedcodedoc;
-					data[index][1] = "Code Artifact "
+					title1 = "Code Artifact "
 							+ codeAssociatedCodeDoc.getName();
 
 					// find out whether it's active or not:
@@ -2173,7 +2366,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2183,10 +2376,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2201,7 +2395,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2212,10 +2406,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveSystemTestPlanDocs();
 			for (int i = 0; i < systemtestplandocs.size(); i++) {
 				Artifact systemtestplandoc = systemtestplandocs.get(i);
-				data[index][0] = "SystemTestPlanDoc";
+				String title = "SystemTestPlanDoc";
+				String title1 = "";
 				if (systemtestplandoc instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanSystemTestPlanDoc = (SystemTestPlan) systemtestplandoc;
-					data[index][1] = "SystemTestPlan Artifact "
+					title1 = "SystemTestPlan Artifact "
 							+ systemtestplanSystemTestPlanDoc.getName();
 
 					// find out whether it's active or not:
@@ -2232,7 +2427,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2244,10 +2439,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -2265,7 +2461,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2276,10 +2472,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveTestingTools();
 			for (int i = 0; i < testingtools.size(); i++) {
 				Tool testingtool = testingtools.get(i);
-				data[index][0] = "TestingTool";
+				String title = "TestingTool";
+				String title1 = "";
 				if (testingtool instanceof AutomatedTestingTool) {
 					AutomatedTestingTool automatedtestingtoolTestingTool = (AutomatedTestingTool) testingtool;
-					data[index][1] = "AutomatedTestingTool Tool "
+					title1 = "AutomatedTestingTool Tool "
 							+ automatedtestingtoolTestingTool.getName();
 
 					// find out whether it's active or not:
@@ -2295,7 +2492,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2308,10 +2505,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2326,7 +2524,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2337,10 +2535,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveTestPlans();
 			for (int i = 0; i < testplans.size(); i++) {
 				Artifact testplan = testplans.get(i);
-				data[index][0] = "TestPlan";
+				String title = "TestPlan";
+				String title1 = "";
 				if (testplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanTestPlan = (SystemTestPlan) testplan;
-					data[index][1] = "SystemTestPlan Artifact "
+					title1 = "SystemTestPlan Artifact "
 							+ systemtestplanTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -2355,7 +2554,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2367,10 +2566,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -2388,7 +2588,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2398,10 +2598,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2416,7 +2617,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2429,10 +2630,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2447,7 +2649,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2458,10 +2660,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveTestPlans();
 			for (int i = 0; i < testplans.size(); i++) {
 				Artifact testplan = testplans.get(i);
-				data[index][0] = "TestPlan";
+				String title = "TestPlan";
+				String title1 = "";
 				if (testplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanTestPlan = (SystemTestPlan) testplan;
-					data[index][1] = "SystemTestPlan Artifact "
+					title1 = "SystemTestPlan Artifact "
 							+ systemtestplanTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -2476,7 +2679,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2488,10 +2691,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDoc";
+				String title = "AssociatedRequirementsDoc";
+				String title1 = "";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -2509,7 +2713,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2519,10 +2723,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2537,7 +2742,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2548,10 +2753,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveTestingTools();
 			for (int i = 0; i < testingtools.size(); i++) {
 				Tool testingtool = testingtools.get(i);
-				data[index][0] = "TestingTool";
+				String title = "TestingTool";
+				String title1 = "";
 				if (testingtool instanceof AutomatedTestingTool) {
 					AutomatedTestingTool automatedtestingtoolTestingTool = (AutomatedTestingTool) testingtool;
-					data[index][1] = "AutomatedTestingTool Tool "
+					title1 = "AutomatedTestingTool Tool "
 							+ automatedtestingtoolTestingTool.getName();
 
 					// find out whether it's active or not:
@@ -2567,7 +2773,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2580,10 +2786,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2598,7 +2805,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2608,10 +2815,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2626,7 +2834,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2636,10 +2844,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				data[index][0] = "CodeDoc";
+				String title = "CodeDoc";
+				String title1 = "";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
+					title1 = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -2652,7 +2861,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2662,10 +2871,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveCusts();
 			for (int i = 0; i < custs.size(); i++) {
 				Customer cust = custs.get(i);
-				data[index][0] = "Cust";
+				String title = "Cust";
+				String title1 = "";
 				if (cust instanceof ACustomer) {
 					ACustomer acustomerCust = (ACustomer) cust;
-					data[index][1] = "aCustomer Customer "
+					title1 = "aCustomer Customer "
 							+ acustomerCust.getName();
 
 					// find out whether it's active or not:
@@ -2679,7 +2889,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2692,10 +2902,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveBreakers();
 			for (int i = 0; i < breakers.size(); i++) {
 				Employee breaker = breakers.get(i);
-				data[index][0] = "Breaker";
+				String title = "Breaker";
+				String title1 = "";
 				if (breaker instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerBreaker = (SoftwareEngineer) breaker;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerBreaker.getName();
 
 					// find out whether it's active or not:
@@ -2710,7 +2921,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2723,10 +2934,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveSickPersons();
 			for (int i = 0; i < sickpersons.size(); i++) {
 				Employee sickperson = sickpersons.get(i);
-				data[index][0] = "SickPerson";
+				String title = "SickPerson";
+				String title1 = "";
 				if (sickperson instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerSickPerson = (SoftwareEngineer) sickperson;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerSickPerson.getName();
 
 					// find out whether it's active or not:
@@ -2742,7 +2954,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2754,10 +2966,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Employee> activeQuitters = quitAction.getAllActiveQuitters();
 			for (int i = 0; i < quitters.size(); i++) {
 				Employee quitter = quitters.get(i);
-				data[index][0] = "Quitter";
+				String title = "Quitter";
+				String title1 = "";
 				if (quitter instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerQuitter = (SoftwareEngineer) quitter;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerQuitter.getName();
 
 					// find out whether it's active or not:
@@ -2772,7 +2985,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2786,10 +2999,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveCusts();
 			for (int i = 0; i < custs.size(); i++) {
 				Customer cust = custs.get(i);
-				data[index][0] = "Cust";
+				String title = "Cust";
+				String title1 = "";
 				if (cust instanceof ACustomer) {
 					ACustomer acustomerCust = (ACustomer) cust;
-					data[index][1] = "aCustomer Customer "
+					title1 = "aCustomer Customer "
 							+ acustomerCust.getName();
 
 					// find out whether it's active or not:
@@ -2803,7 +3017,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2815,10 +3029,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedrequirementsdocuments.size(); i++) {
 				Artifact associatedrequirementsdocument = associatedrequirementsdocuments
 						.get(i);
-				data[index][0] = "AssociatedRequirementsDocument";
+				String title = "AssociatedRequirementsDocument";
+				String title1 = "";
 				if (associatedrequirementsdocument instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDocument = (RequirementsDocument) associatedrequirementsdocument;
-					data[index][1] = "RequirementsDocument Artifact "
+					title1 = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDocument
 									.getName();
 
@@ -2837,7 +3052,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2848,10 +3063,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2866,7 +3082,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2877,10 +3093,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmpWOverheadTexts();
 			for (int i = 0; i < empwoverheadtexts.size(); i++) {
 				Employee empwoverheadtext = empwoverheadtexts.get(i);
-				data[index][0] = "EmpWOverheadText";
+				String title = "EmpWOverheadText";
+				String title1 = "";
 				if (empwoverheadtext instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmpWOverheadText = (SoftwareEngineer) empwoverheadtext;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmpWOverheadText.getName();
 
 					// find out whether it's active or not:
@@ -2897,7 +3114,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2908,10 +3125,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveAssociatedCodes();
 			for (int i = 0; i < associatedcodes.size(); i++) {
 				Artifact associatedcode = associatedcodes.get(i);
-				data[index][0] = "AssociatedCode";
+				String title = "AssociatedCode";
+				String title1 = "";
 				if (associatedcode instanceof Code) {
 					Code codeAssociatedCode = (Code) associatedcode;
-					data[index][1] = "Code Artifact "
+					title1 = "Code Artifact "
 							+ codeAssociatedCode.getName();
 
 					// find out whether it's active or not:
@@ -2927,7 +3145,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2939,10 +3157,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associateddesigndocuments.size(); i++) {
 				Artifact associateddesigndocument = associateddesigndocuments
 						.get(i);
-				data[index][0] = "AssociatedDesignDocument";
+				String title = "AssociatedDesignDocument";
+				String title1 = "";
 				if (associateddesigndocument instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDocument = (DesignDocument) associateddesigndocument;
-					data[index][1] = "DesignDocument Artifact "
+					title1 = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDocument.getName();
 
 					// find out whether it's active or not:
@@ -2959,7 +3178,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -2971,10 +3190,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			for (int i = 0; i < associatedsystemtestplans.size(); i++) {
 				Artifact associatedsystemtestplan = associatedsystemtestplans
 						.get(i);
-				data[index][0] = "AssociatedSystemTestPlan";
+				String title = "AssociatedSystemTestPlan";
+				String title1 = "";
 				if (associatedsystemtestplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanAssociatedSystemTestPlan = (SystemTestPlan) associatedsystemtestplan;
-					data[index][1] = "SystemTestPlan Artifact "
+					title1 = "SystemTestPlan Artifact "
 							+ systemtestplanAssociatedSystemTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -2991,7 +3211,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3004,10 +3224,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3022,7 +3243,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3034,10 +3255,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 			Vector<Employee> activeEmps = givebonusAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3052,7 +3274,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3063,10 +3285,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjectWithBudgets();
 			for (int i = 0; i < projectwithbudgets.size(); i++) {
 				Project projectwithbudget = projectwithbudgets.get(i);
-				data[index][0] = "ProjectWithBudget";
+				String title = "ProjectWithBudget";
+				String title1 = "";
 				if (projectwithbudget instanceof SEProject) {
 					SEProject seprojectProjectWithBudget = (SEProject) projectwithbudget;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProjectWithBudget.getDescription();
 
 					// find out whether it's active or not:
@@ -3083,7 +3306,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3096,10 +3319,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveFiredPersons();
 			for (int i = 0; i < firedpersons.size(); i++) {
 				Employee firedperson = firedpersons.get(i);
-				data[index][0] = "FiredPerson";
+				String title = "FiredPerson";
+				String title1 = "";
 				if (firedperson instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerFiredPerson = (SoftwareEngineer) firedperson;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerFiredPerson.getName();
 
 					// find out whether it's active or not:
@@ -3115,7 +3339,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3129,10 +3353,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmpWhoseMenuClickedOns();
 			for (int i = 0; i < empwhosemenuclickedons.size(); i++) {
 				Employee empwhosemenuclickedon = empwhosemenuclickedons.get(i);
-				data[index][0] = "EmpWhoseMenuClickedOn";
+				String title = "EmpWhoseMenuClickedOn";
+				String title1 = "";
 				if (empwhosemenuclickedon instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmpWhoseMenuClickedOn = (SoftwareEngineer) empwhosemenuclickedon;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmpWhoseMenuClickedOn.getName();
 
 					// find out whether it's active or not:
@@ -3149,7 +3374,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3159,10 +3384,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveSETools();
 			for (int i = 0; i < setools.size(); i++) {
 				Tool setool = setools.get(i);
-				data[index][0] = "SETool";
+				String title = "SETool";
+				String title1 = "";
 				if (setool instanceof IDE) {
 					IDE ideSETool = (IDE) setool;
-					data[index][1] = "IDE Tool " + ideSETool.getName();
+					title1 = "IDE Tool " + ideSETool.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -3175,11 +3401,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				if (setool instanceof RequirementsCaptureTool) {
 					RequirementsCaptureTool requirementscapturetoolSETool = (RequirementsCaptureTool) setool;
-					data[index][1] = "RequirementsCaptureTool Tool "
+					title1 = "RequirementsCaptureTool Tool "
 							+ requirementscapturetoolSETool.getName();
 
 					// find out whether it's active or not:
@@ -3195,11 +3421,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				if (setool instanceof AutomatedTestingTool) {
 					AutomatedTestingTool automatedtestingtoolSETool = (AutomatedTestingTool) setool;
-					data[index][1] = "AutomatedTestingTool Tool "
+					title1 = "AutomatedTestingTool Tool "
 							+ automatedtestingtoolSETool.getName();
 
 					// find out whether it's active or not:
@@ -3215,11 +3441,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				if (setool instanceof DesignEnvironment) {
 					DesignEnvironment designenvironmentSETool = (DesignEnvironment) setool;
-					data[index][1] = "DesignEnvironment Tool "
+					title1 = "DesignEnvironment Tool "
 							+ designenvironmentSETool.getName();
 
 					// find out whether it's active or not:
@@ -3234,7 +3460,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3244,10 +3470,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3262,7 +3489,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3276,10 +3503,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3294,7 +3522,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3305,10 +3533,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3323,7 +3552,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3337,10 +3566,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3355,7 +3585,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3366,10 +3596,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3384,7 +3615,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3398,10 +3629,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3416,7 +3648,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3427,10 +3659,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3445,7 +3678,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3459,10 +3692,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				data[index][0] = "Proj";
+				String title = "Proj";
+				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					data[index][1] = "SEProject Project "
+					title1 = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3477,7 +3711,7 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
@@ -3488,10 +3722,11 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				data[index][0] = "Emp";
+				String title = "Emp";
+				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					data[index][1] = "SoftwareEngineer Employee "
+					title1 = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3506,18 +3741,22 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 							break;
 						}
 					}
-					data[index][2] = active ? "Active" : "Inactive";
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
 			}
 		}
-		return new JTable(data, columnNames);
+		
+		newView.getColumns().addAll(name, participant, status);
+		newView.setItems(data);
+		return newView;
+//		return new TableView(data, columnNames);
 	}
 
 	// refreshes the description area with the selected trigger/destroyer
 	private void refreshDescriptionArea(int trigOrDest) {
 		String name = trigOrDest == TRIGGER ? (String) triggerList
-				.getSelectedValue() : (String) destroyerList.getSelectedValue();
+				.getSelectionModel().getSelectedItem() : (String) destroyerList.getSelectionModel().getSelectedItem();
 		if (name != null) {
 			String text = "";
 			if (action instanceof CreateRequirementsAction) {
@@ -3763,7 +4002,14 @@ public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 				}
 			}
 			descriptionArea.setText(text);
-			descriptionArea.setCaretPosition(0);
+			descriptionArea.positionCaret(0);
+//			descriptionArea.setCaretPosition(0);
 		}
+	}
+
+	@Override
+	public void handle(MouseEvent event) {
+		// TODO Auto-generated method stub
+		
 	}
 }

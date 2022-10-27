@@ -129,7 +129,7 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 		chart.setBackgroundPaint(Color.white);
 		XYPlot plot = (XYPlot) chart.getPlot();
 		plot.setBackgroundPaint(Color.WHITE);
-		plot.setAxisOffset(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
+		plot.setAxisOffset(new org.jfree.chart.ui.RectangleInsets(5.0, 5.0, 5.0, 5.0));
 		plot.setDomainGridlinesVisible(true);
 		plot.setRangeGridlinesVisible(false);
 		ValueAxis rangeAxis = plot.getRangeAxis();
@@ -240,7 +240,7 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 			if (str.length() > 0) {
 				XYTextAnnotation annotation = new XYTextAnnotation(str,
 						b.getEndTick(), i * 10 + 1);
-				annotation.setTextAnchor(TextAnchor.HALF_ASCENT_LEFT);
+				annotation.setTextAnchor(org.jfree.chart.ui.TextAnchor.HALF_ASCENT_LEFT);
 				annotation.setFont(font);
 				plot.addAnnotation(annotation);
 			}

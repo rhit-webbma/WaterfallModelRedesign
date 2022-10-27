@@ -6,7 +6,9 @@ import simse.gui.*;
 import simse.adts.objects.*;
 import simse.adts.actions.*;
 import java.util.*;
-import javax.swing.*;
+
+import javafx.scene.control.Dialog;
+import javafx.stage.Stage;
 
 import javafx.stage.Stage;
 
@@ -96,7 +98,7 @@ public class RuleExecutor {
 	}
 
 	// UpdateProjAttsEffectRuleA rule (UpdateProjectAttributes Action):
-	private void updateProjAttsEffectRuleA(JFrame gui, int updateInstructions,
+	private void updateProjAttsEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<UpdateProjectAttributesAction> updateprojectattributesActs = state
 				.getActionStateRepository()
@@ -145,7 +147,7 @@ public class RuleExecutor {
 	}
 
 	// QuitDestroyObjectsRuleA rule (Quit Action):
-	private void quitDestroyObjectsRuleA(JFrame gui, int updateInstructions,
+	private void quitDestroyObjectsRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<QuitAction> quitActs = state.getActionStateRepository()
 				.getQuitActionStateRepository().getAllActions();
@@ -177,7 +179,7 @@ public class RuleExecutor {
 	}
 
 	// FireDestroyObjectsRuleA rule (Fire Action):
-	private void fireDestroyObjectsRuleA(JFrame gui, int updateInstructions,
+	private void fireDestroyObjectsRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<FireAction> fireActs = state.getActionStateRepository()
 				.getFireActionStateRepository().getAllActions();
@@ -209,7 +211,7 @@ public class RuleExecutor {
 	}
 
 	// GetSickEffectRuleA rule (GetSick Action):
-	private void getSickEffectRuleA(JFrame gui, int updateInstructions,
+	private void getSickEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<GetSickAction> getsickActs = state.getActionStateRepository()
 				.getGetSickActionStateRepository().getAllActions();
@@ -240,7 +242,7 @@ public class RuleExecutor {
 	}
 
 	// GetSickTrigRule rule (GetSick Action):
-	private void getSickTrigRule(JFrame gui, int updateInstructions,
+	private void getSickTrigRule(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<GetSickAction> getsickActs = state.getActionStateRepository()
 				.getGetSickActionStateRepository().getAllActions();
@@ -360,7 +362,7 @@ public class RuleExecutor {
 	}
 
 	// BreakEffectRuleA rule (Break Action):
-	private void breakEffectRuleA(JFrame gui, int updateInstructions,
+	private void breakEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<BreakAction> breakActs = state.getActionStateRepository()
 				.getBreakActionStateRepository().getAllActions();
@@ -387,7 +389,7 @@ public class RuleExecutor {
 	}
 
 	// BreakTrigRule rule (Break Action):
-	private void breakTrigRule(JFrame gui, int updateInstructions,
+	private void breakTrigRule(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<BreakAction> breakActs = state.getActionStateRepository()
 				.getBreakActionStateRepository().getAllActions();
@@ -643,7 +645,7 @@ public class RuleExecutor {
 	}
 
 	// IntegrateCodeEffectRuleFirst rule (IntegrateCode Action):
-	private void integrateCodeEffectRuleFirst(JFrame gui,
+	private void integrateCodeEffectRuleFirst(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<IntegrateCodeAction> integratecodeActs = state
@@ -731,7 +733,7 @@ public class RuleExecutor {
 	}
 
 	// GiveBonusEffectRuleA rule (GiveBonus Action):
-	private void giveBonusEffectRuleA(JFrame gui, int updateInstructions,
+	private void giveBonusEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<GiveBonusAction> givebonusActs = state
 				.getActionStateRepository().getGiveBonusActionStateRepository()
@@ -748,12 +750,11 @@ public class RuleExecutor {
 						boolean cancel = false;
 						if (!cancel) {
 							while (!gotValidInput0) {
-								String response = JOptionPane
-										.showInputDialog(
-												null,
-												"Please enter bonus amount: (Double > 0.0)",
-												"Input",
-												JOptionPane.QUESTION_MESSAGE);
+								Dialog<String> dialog = new Dialog<>();
+								dialog.setTitle("Input");
+								dialog.setContentText("Please enter bonus amount: (Double > 0.0)");
+								dialog.showAndWait();
+								String response = dialog.getResult();
 								if (response != null) {
 									try {
 										Double temp = new Double(response);
@@ -762,20 +763,16 @@ public class RuleExecutor {
 													.doubleValue());
 											gotValidInput0 = true;
 										} else {
-											JOptionPane
-													.showMessageDialog(
-															null,
-															"Invalid Input -- Please try again!",
-															"Invalid Input",
-															JOptionPane.WARNING_MESSAGE);
+											Dialog<String> d2 = new Dialog<>();
+											d2.setTitle("Invalid Input");
+											d2.setContentText("Invalid Input -- Please try again!");
+											d2.showAndWait();
 										}
 									} catch (NumberFormatException e) {
-										JOptionPane
-												.showMessageDialog(
-														null,
-														"Invalid Input -- Please try again!",
-														"Invalid Input",
-														JOptionPane.WARNING_MESSAGE);
+										Dialog<String> d2 = new Dialog<>();
+										d2.setTitle("Invalid Input");
+										d2.setContentText("Invalid Input -- Please try again!");
+										d2.showAndWait();
 									}
 								} else // action cancelled
 								{
@@ -854,7 +851,7 @@ public class RuleExecutor {
 	}
 
 	// IntegrateCodeEffectRuleA rule (IntegrateCode Action):
-	private void integrateCodeEffectRuleA(JFrame gui, int updateInstructions,
+	private void integrateCodeEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<IntegrateCodeAction> integratecodeActs = state
 				.getActionStateRepository()
@@ -995,7 +992,7 @@ public class RuleExecutor {
 	}
 
 	// CorrectCodeEffectRuleA rule (CorrectCode Action):
-	private void correctCodeEffectRuleA(JFrame gui, int updateInstructions,
+	private void correctCodeEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<CorrectCodeAction> correctcodeActs = state
 				.getActionStateRepository()
@@ -1135,7 +1132,7 @@ public class RuleExecutor {
 	}
 
 	// CreateCodeEffectRuleFirst rule (CreateCode Action):
-	private void createCodeEffectRuleFirst(JFrame gui, int updateInstructions,
+	private void createCodeEffectRuleFirst(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<CreateCodeAction> createcodeActs = state
 				.getActionStateRepository()
@@ -1246,7 +1243,7 @@ public class RuleExecutor {
 	}
 
 	// CreateCodeEffectRuleA rule (CreateCode Action):
-	private void createCodeEffectRuleA(JFrame gui, int updateInstructions,
+	private void createCodeEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<CreateCodeAction> createcodeActs = state
 				.getActionStateRepository()
@@ -1444,7 +1441,7 @@ public class RuleExecutor {
 	}
 
 	// ReviewRequirementsEffectRuleB rule (ReviewRequirements Action):
-	private void reviewRequirementsEffectRuleB(JFrame gui,
+	private void reviewRequirementsEffectRuleB(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<ReviewRequirementsAction> reviewrequirementsActs = state
@@ -1492,7 +1489,7 @@ public class RuleExecutor {
 	}
 
 	// ReviewRequirementsEffectRuleC rule (ReviewRequirements Action):
-	private void reviewRequirementsEffectRuleC(JFrame gui,
+	private void reviewRequirementsEffectRuleC(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<ReviewRequirementsAction> reviewrequirementsActs = state
@@ -1553,7 +1550,7 @@ public class RuleExecutor {
 	}
 
 	// ChangePayRateEffectRuleA rule (ChangePayRate Action):
-	private void changePayRateEffectRuleA(JFrame gui, int updateInstructions,
+	private void changePayRateEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<ChangePayRateAction> changepayrateActs = state
 				.getActionStateRepository()
@@ -1570,12 +1567,11 @@ public class RuleExecutor {
 						boolean cancel = false;
 						if (!cancel) {
 							while (!gotValidInput0) {
-								String response = JOptionPane
-										.showInputDialog(
-												null,
-												"Please enter the new pay rate: (Double >= 0.0)",
-												"Input",
-												JOptionPane.QUESTION_MESSAGE);
+								Dialog<String> dialog = new Dialog<>();
+								dialog.setTitle("Input");
+								dialog.setContentText("Please enter the new pay rate: Double >= 0.0");
+								dialog.showAndWait();
+								String response = dialog.getResult();
 								if (response != null) {
 									try {
 										Double temp = new Double(response);
@@ -1584,20 +1580,16 @@ public class RuleExecutor {
 													.doubleValue());
 											gotValidInput0 = true;
 										} else {
-											JOptionPane
-													.showMessageDialog(
-															null,
-															"Invalid Input -- Please try again!",
-															"Invalid Input",
-															JOptionPane.WARNING_MESSAGE);
+											Dialog<String> d2 = new Dialog<>();
+											d2.setTitle("Invalid Input");
+											d2.setContentText("Invalid Input -- Please try again!");
+											d2.showAndWait();
 										}
 									} catch (NumberFormatException e) {
-										JOptionPane
-												.showMessageDialog(
-														null,
-														"Invalid Input -- Please try again!",
-														"Invalid Input",
-														JOptionPane.WARNING_MESSAGE);
+										Dialog<String> d2 = new Dialog<>();
+										d2.setTitle("Invalid Input");
+										d2.setContentText("Invalid Input -- Please try again!");
+										d2.showAndWait();
 									}
 								} else // action cancelled
 								{
@@ -1686,7 +1678,7 @@ public class RuleExecutor {
 	}
 
 	// ReviewRequirementsEffectRuleA rule (ReviewRequirements Action):
-	private void reviewRequirementsEffectRuleA(JFrame gui,
+	private void reviewRequirementsEffectRuleA(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<ReviewRequirementsAction> reviewrequirementsActs = state
@@ -1760,7 +1752,7 @@ public class RuleExecutor {
 
 	// IntroduceNewRequirementsEffectRuleA rule (IntroduceNewRequirements
 	// Action):
-	private void introduceNewRequirementsEffectRuleA(JFrame gui,
+	private void introduceNewRequirementsEffectRuleA(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<IntroduceNewRequirementsAction> introducenewrequirementsActs = state
@@ -1915,7 +1907,7 @@ public class RuleExecutor {
 	}
 
 	// CreateSystemTestPlanEffectRuleFirst rule (CreateSystemTestPlan Action):
-	private void createSystemTestPlanEffectRuleFirst(JFrame gui,
+	private void createSystemTestPlanEffectRuleFirst(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<CreateSystemTestPlanAction> createsystemtestplanActs = state
@@ -2006,7 +1998,7 @@ public class RuleExecutor {
 	}
 
 	// CreateSystemTestPlanEffectRuleA rule (CreateSystemTestPlan Action):
-	private void createSystemTestPlanEffectRuleA(JFrame gui,
+	private void createSystemTestPlanEffectRuleA(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<CreateSystemTestPlanAction> createsystemtestplanActs = state
@@ -2210,7 +2202,7 @@ public class RuleExecutor {
 	}
 
 	// SystemTestEffectRuleFirst rule (SystemTest Action):
-	private void systemTestEffectRuleFirst(JFrame gui, int updateInstructions,
+	private void systemTestEffectRuleFirst(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SystemTestAction> systemtestActs = state
 				.getActionStateRepository()
@@ -2283,7 +2275,7 @@ public class RuleExecutor {
 	}
 
 	// SystemTestEffectRuleC rule (SystemTest Action):
-	private void systemTestEffectRuleC(JFrame gui, int updateInstructions,
+	private void systemTestEffectRuleC(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SystemTestAction> systemtestActs = state
 				.getActionStateRepository()
@@ -2344,7 +2336,7 @@ public class RuleExecutor {
 	}
 
 	// SystemTestEffectRuleA rule (SystemTest Action):
-	private void systemTestEffectRuleA(JFrame gui, int updateInstructions,
+	private void systemTestEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SystemTestAction> systemtestActs = state
 				.getActionStateRepository()
@@ -2461,7 +2453,7 @@ public class RuleExecutor {
 	}
 
 	// SystemTestEffectRuleB rule (SystemTest Action):
-	private void systemTestEffectRuleB(JFrame gui, int updateInstructions,
+	private void systemTestEffectRuleB(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SystemTestAction> systemtestActs = state
 				.getActionStateRepository()
@@ -2528,7 +2520,7 @@ public class RuleExecutor {
 	}
 
 	// ReviewDesignEffectRuleB rule (ReviewDesign Action):
-	private void reviewDesignEffectRuleB(JFrame gui, int updateInstructions,
+	private void reviewDesignEffectRuleB(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<ReviewDesignAction> reviewdesignActs = state
 				.getActionStateRepository()
@@ -2582,7 +2574,7 @@ public class RuleExecutor {
 	}
 
 	// ReviewDesignEffectRuleA rule (ReviewDesign Action):
-	private void reviewDesignEffectRuleA(JFrame gui, int updateInstructions,
+	private void reviewDesignEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<ReviewDesignAction> reviewdesignActs = state
 				.getActionStateRepository()
@@ -2666,7 +2658,7 @@ public class RuleExecutor {
 	}
 
 	// ReviewDesignEffectRuleC rule (ReviewDesign Action):
-	private void reviewDesignEffectRuleC(JFrame gui, int updateInstructions,
+	private void reviewDesignEffectRuleC(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<ReviewDesignAction> reviewdesignActs = state
 				.getActionStateRepository()
@@ -2728,7 +2720,7 @@ public class RuleExecutor {
 	}
 
 	// InspectCodeEffectRuleB rule (InspectCode Action):
-	private void inspectCodeEffectRuleB(JFrame gui, int updateInstructions,
+	private void inspectCodeEffectRuleB(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<InspectCodeAction> inspectcodeActs = state
 				.getActionStateRepository()
@@ -2790,7 +2782,7 @@ public class RuleExecutor {
 	}
 
 	// InspectCodeEffectRuleA rule (InspectCode Action):
-	private void inspectCodeEffectRuleA(JFrame gui, int updateInstructions,
+	private void inspectCodeEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<InspectCodeAction> inspectcodeActs = state
 				.getActionStateRepository()
@@ -2883,7 +2875,7 @@ public class RuleExecutor {
 	}
 
 	// InspectCodeEffectRuleC rule (InspectCode Action):
-	private void inspectCodeEffectRuleC(JFrame gui, int updateInstructions,
+	private void inspectCodeEffectRuleC(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<InspectCodeAction> inspectcodeActs = state
 				.getActionStateRepository()
@@ -2951,7 +2943,7 @@ public class RuleExecutor {
 	}
 
 	// ReviewTestPlanEffectRuleB rule (ReviewSystemTestPlan Action):
-	private void reviewTestPlanEffectRuleB(JFrame gui, int updateInstructions,
+	private void reviewTestPlanEffectRuleB(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<ReviewSystemTestPlanAction> reviewsystemtestplanActs = state
 				.getActionStateRepository()
@@ -3007,7 +2999,7 @@ public class RuleExecutor {
 	}
 
 	// ReviewTestPlanEffectRuleA rule (ReviewSystemTestPlan Action):
-	private void reviewTestPlanEffectRuleA(JFrame gui, int updateInstructions,
+	private void reviewTestPlanEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<ReviewSystemTestPlanAction> reviewsystemtestplanActs = state
 				.getActionStateRepository()
@@ -3093,7 +3085,7 @@ public class RuleExecutor {
 	}
 
 	// ReviewTestPlanEffectRuleC rule (ReviewSystemTestPlan Action):
-	private void reviewTestPlanEffectRuleC(JFrame gui, int updateInstructions,
+	private void reviewTestPlanEffectRuleC(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<ReviewSystemTestPlanAction> reviewsystemtestplanActs = state
 				.getActionStateRepository()
@@ -3157,7 +3149,7 @@ public class RuleExecutor {
 	}
 
 	// CreateDesignEffectRuleFirst rule (CreateDesign Action):
-	private void createDesignEffectRuleFirst(JFrame gui,
+	private void createDesignEffectRuleFirst(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<CreateDesignAction> createdesignActs = state
@@ -3256,7 +3248,7 @@ public class RuleExecutor {
 	}
 
 	// CreateDesignEffectRuleA rule (CreateDesign Action):
-	private void createDesignEffectRuleA(JFrame gui, int updateInstructions,
+	private void createDesignEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<CreateDesignAction> createdesignActs = state
 				.getActionStateRepository()
@@ -3473,7 +3465,7 @@ public class RuleExecutor {
 	}
 
 	// CreateRequirementsEffectRuleFirst rule (CreateRequirements Action):
-	private void createRequirementsEffectRuleFirst(JFrame gui,
+	private void createRequirementsEffectRuleFirst(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<CreateRequirementsAction> createrequirementsActs = state
@@ -3598,7 +3590,7 @@ public class RuleExecutor {
 	}
 
 	// CreateRequirementsEffectRuleA rule (CreateRequirements Action):
-	private void createRequirementsEffectRuleA(JFrame gui,
+	private void createRequirementsEffectRuleA(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<CreateRequirementsAction> createrequirementsActs = state
@@ -3867,7 +3859,7 @@ public class RuleExecutor {
 	}
 
 	// CorrectRequirementsEffectRuleA rule (CorrectRequirements Action):
-	private void correctRequirementsEffectRuleA(JFrame gui,
+	private void correctRequirementsEffectRuleA(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<CorrectRequirementsAction> correctrequirementsActs = state
@@ -3998,7 +3990,7 @@ public class RuleExecutor {
 	}
 
 	// CorrectDesignEffectRuleA rule (CorrectDesign Action):
-	private void correctDesignEffectRuleA(JFrame gui, int updateInstructions,
+	private void correctDesignEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<CorrectDesignAction> correctdesignActs = state
 				.getActionStateRepository()
@@ -4135,7 +4127,7 @@ public class RuleExecutor {
 	}
 
 	// CreateCodeTrigRule rule (CreateCode Action):
-	private void createCodeTrigRule(JFrame gui, int updateInstructions,
+	private void createCodeTrigRule(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<CreateCodeAction> createcodeActs = state
 				.getActionStateRepository()
@@ -4226,7 +4218,7 @@ public class RuleExecutor {
 	}
 
 	// CorrectTestPlanEffectRuleA rule (CorrectSystemTestPlan Action):
-	private void correctTestPlanEffectRuleA(JFrame gui, int updateInstructions,
+	private void correctTestPlanEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<CorrectSystemTestPlanAction> correctsystemtestplanActs = state
 				.getActionStateRepository()
@@ -4363,7 +4355,7 @@ public class RuleExecutor {
 	}
 
 	// CalculateScore rule (DeliverProduct Action):
-	private void calculateScore(JFrame gui, int updateInstructions,
+	private void calculateScore(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<DeliverProductAction> deliverproductActs = state
 				.getActionStateRepository()
@@ -4487,7 +4479,7 @@ public class RuleExecutor {
 	}
 
 	// BreakDestRule rule (Break Action):
-	private void breakDestRule(JFrame gui, int updateInstructions,
+	private void breakDestRule(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<BreakAction> breakActs = state.getActionStateRepository()
 				.getBreakActionStateRepository().getAllActions();
@@ -4741,7 +4733,7 @@ public class RuleExecutor {
 	}
 
 	// GetSickDestRule rule (GetSick Action):
-	private void getSickDestRule(JFrame gui, int updateInstructions,
+	private void getSickDestRule(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<GetSickAction> getsickActs = state.getActionStateRepository()
 				.getGetSickActionStateRepository().getAllActions();
@@ -4860,7 +4852,7 @@ public class RuleExecutor {
 	}
 
 	// PurchaseToolEffectRuleA rule (PurchaseTool Action):
-	private void purchaseToolEffectRuleA(JFrame gui, int updateInstructions,
+	private void purchaseToolEffectRuleA(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<PurchaseToolAction> purchasetoolActs = state
 				.getActionStateRepository()
@@ -4960,7 +4952,7 @@ public class RuleExecutor {
 	}
 
 	// DeactivateEmpsSuggReq rule (SuggestedRequirementsPhaseDuration Action):
-	private void deactivateEmpsSuggReq(JFrame gui, int updateInstructions,
+	private void deactivateEmpsSuggReq(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SuggestedRequirementsPhaseDurationAction> suggestedrequirementsphasedurationActs = state
 				.getActionStateRepository()
@@ -5010,7 +5002,7 @@ public class RuleExecutor {
 
 	// SetSuggestedRequirementsDone rule (SuggestedRequirementsPhaseDuration
 	// Action):
-	private void setSuggestedRequirementsDone(JFrame gui,
+	private void setSuggestedRequirementsDone(Stage gui,
 			int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<SuggestedRequirementsPhaseDurationAction> suggestedrequirementsphasedurationActs = state
@@ -5051,7 +5043,7 @@ public class RuleExecutor {
 	}
 
 	// DeactivateEmpsSuggDes rule (SuggestedDesignPhaseDuration Action):
-	private void deactivateEmpsSuggDes(JFrame gui, int updateInstructions,
+	private void deactivateEmpsSuggDes(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SuggestedDesignPhaseDurationAction> suggesteddesignphasedurationActs = state
 				.getActionStateRepository()
@@ -5099,7 +5091,7 @@ public class RuleExecutor {
 	}
 
 	// SetSuggestedDesignDone rule (SuggestedDesignPhaseDuration Action):
-	private void setSuggestedDesignDone(JFrame gui, int updateInstructions,
+	private void setSuggestedDesignDone(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SuggestedDesignPhaseDurationAction> suggesteddesignphasedurationActs = state
 				.getActionStateRepository()
@@ -5139,7 +5131,7 @@ public class RuleExecutor {
 
 	// DeactivateEmpsSuggImp rule (SuggestedImplIntegrationPhaseDuration
 	// Action):
-	private void deactivateEmpsSuggImp(JFrame gui, int updateInstructions,
+	private void deactivateEmpsSuggImp(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SuggestedImplIntegrationPhaseDurationAction> suggestedimplintegrationphasedurationActs = state
 				.getActionStateRepository()
@@ -5189,7 +5181,7 @@ public class RuleExecutor {
 	}
 
 	// SetSuggestedImplDone rule (SuggestedImplIntegrationPhaseDuration Action):
-	private void setSuggestedImplDone(JFrame gui, int updateInstructions,
+	private void setSuggestedImplDone(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SuggestedImplIntegrationPhaseDurationAction> suggestedimplintegrationphasedurationActs = state
 				.getActionStateRepository()
@@ -5231,7 +5223,7 @@ public class RuleExecutor {
 	}
 
 	// DeactivateEmpsSuggTest rule (SuggestedTestingPhaseDuration Action):
-	private void deactivateEmpsSuggTest(JFrame gui, int updateInstructions,
+	private void deactivateEmpsSuggTest(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SuggestedTestingPhaseDurationAction> suggestedtestingphasedurationActs = state
 				.getActionStateRepository()
@@ -5279,7 +5271,7 @@ public class RuleExecutor {
 	}
 
 	// SetSuggestedTestingDone rule (SuggestedTestingPhaseDuration Action):
-	private void setSuggestedTestingDone(JFrame gui, int updateInstructions,
+	private void setSuggestedTestingDone(Stage gui, int updateInstructions,
 			String ruleName, simse.adts.actions.Action action) {
 		Vector<SuggestedTestingPhaseDurationAction> suggestedtestingphasedurationActs = state
 				.getActionStateRepository()
@@ -5317,7 +5309,7 @@ public class RuleExecutor {
 		}
 	}
 
-	private void checkAllMins(JFrame parent) {
+	private void checkAllMins(Stage parent) {
 		Vector<simse.adts.actions.Action> actions = state
 				.getActionStateRepository().getAllActions();
 		for (int i = 0; i < actions.size(); i++) {
