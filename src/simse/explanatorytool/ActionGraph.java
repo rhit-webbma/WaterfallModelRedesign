@@ -31,6 +31,7 @@ import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
 
+
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Dialog;

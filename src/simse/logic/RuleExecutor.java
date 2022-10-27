@@ -10,6 +10,8 @@ import java.util.*;
 import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
 
+import javafx.stage.Stage;
+
 public class RuleExecutor {
 	public static final int UPDATE_ALL_CONTINUOUS = 0;
 	public static final int UPDATE_ONE = 1;

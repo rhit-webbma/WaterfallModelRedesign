@@ -9,6 +9,8 @@ import java.util.*;
 
 import javafx.stage.Stage;
 
+import javafx.stage.Stage;
+
 public class DestroyerChecker {
 	private State state;
 	private RuleExecutor ruleExec;

@@ -6,23 +6,32 @@ import simse.logic.*;
 import simse.adts.objects.*;
 import simse.adts.actions.*;
 import java.util.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
 
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class ChooseActionToJoinDialog extends JDialog implements ActionListener {
-	private JFrame gui;
+public class ChooseActionToJoinDialog extends Dialog implements EventHandler<MouseEvent> {
+	private Stage gui;
 	private Vector<? extends simse.adts.actions.Action> actions;
 	private State state;
 	private Employee emp;
-	private Vector<JRadioButton> radioButtons;
-	private ButtonGroup radioButtonGroup;
-	private JButton okButton;
-	private JButton cancelButton;
+	private Vector<RadioButton> radioButtons;
+	private ToggleGroup radioButtonGroup;
+	private Button okButton;
+	private Button cancelButton;
 	private String menuText;
 	private RuleExecutor ruleExec;
 
@@ -36,11 +45,11 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 		state = s;
 		menuText = menText;
 		ruleExec = re;
-		radioButtons = new Vector<JRadioButton>();
-		radioButtonGroup = new ButtonGroup();
+		radioButtons = new Vector<RadioButton>();
+		radioButtonGroup = new ToggleGroup();
 		setTitle("Join Action");
-		Box mainPane = Box.createVerticalBox();
-		JPanel topPane = new JPanel();
+		VBox mainPane = new VBox();
+		Pane topPane = new Pane();
 		String actionName = new String();
 		simse.adts.actions.Action tempAct = actions.elementAt(0);
 		if (tempAct instanceof CreateRequirementsAction) {
@@ -82,9 +91,9 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 		} else if (tempAct instanceof PurchaseToolAction) {
 			actionName = "PurchaseTool";
 		}
-		topPane.add(new JLabel("Choose which " + actionName
+		topPane.getChildren().add(new Label("Choose which " + actionName
 				+ " Action to join:"));
-		JPanel middlePane = new JPanel(new GridLayout(0, 1));
+		GridPane middlePane = new GridPane();
 		if (tempAct instanceof CreateRequirementsAction) {
 			for (int i = 0; i < actions.size(); i++) {
 				CreateRequirementsAction act = (CreateRequirementsAction) actions
@@ -184,13 +193,13 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(
 						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof ReviewRequirementsAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -237,13 +246,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof CorrectRequirementsAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -304,13 +312,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof CreateDesignAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -397,13 +404,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof ReviewDesignAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -463,13 +469,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof CorrectDesignAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -543,13 +548,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof CreateCodeAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -648,13 +652,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof InspectCodeAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -727,13 +730,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof CorrectCodeAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -819,13 +821,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof IntegrateCodeAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -911,13 +912,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof SystemTestAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -988,13 +988,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof CreateSystemTestPlanAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -1081,13 +1080,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof ReviewSystemTestPlanAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -1147,13 +1145,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof CorrectSystemTestPlanAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -1226,13 +1223,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof DeliverProductAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -1290,13 +1286,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof ChangePayRateAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -1316,13 +1311,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof GiveBonusAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -1355,13 +1349,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof FireAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -1380,13 +1373,12 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		} else if (tempAct instanceof PurchaseToolAction) {
 			for (int i = 0; i < actions.size(); i++) {
@@ -1441,64 +1433,60 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 					}
 				}
 				label.append("</HTML>");
-				JPanel tempPane = new JPanel(new BorderLayout());
-				JRadioButton tempRadioButton = new JRadioButton(
-						label.toString());
-				radioButtonGroup.add(tempRadioButton);
-				tempPane.add(tempRadioButton, BorderLayout.WEST);
+				BorderPane tempPane = new BorderPane();
+				RadioButton tempRadioButton = new RadioButton(label.toString());
+				tempRadioButton.setToggleGroup(radioButtonGroup);
+				tempPane.setLeft(tempRadioButton);
 				radioButtons.add(tempRadioButton);
-				middlePane.add(tempPane);
+				middlePane.getChildren().add(tempPane);
 			}
 		}
-		JPanel bottomPane = new JPanel();
-		okButton = new JButton("OK");
-		okButton.addActionListener(this);
-		bottomPane.add(okButton);
-		cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(this);
-		bottomPane.add(cancelButton);
-		mainPane.add(topPane);
-		mainPane.add(middlePane);
-		mainPane.add(bottomPane);
-		setContentPane(mainPane);
-		validate();
-		pack();
-		repaint();
-		toFront();
-		Point ownerLoc = parent.getLocationOnScreen();
-		Point thisLoc = new Point();
-		thisLoc.setLocation(
-				(ownerLoc.getX() + (parent.getWidth() / 2) - (this.getWidth() / 2)),
-				(ownerLoc.getY() + (parent.getHeight() / 2) - (this.getHeight() / 2)));
-		setLocation(thisLoc);
+		Pane bottomPane = new Pane();
+		okButton = new Button("OK");
+		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		bottomPane.getChildren().add(okButton);
+		cancelButton = new Button("Cancel");
+		cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		bottomPane.getChildren().add(cancelButton);
+		mainPane.getChildren().addAll(topPane, middlePane, bottomPane);
+//		setContentPane(mainPane);
+//		validate();
+//		pack();
+//		repaint();
+//		toFront();
+		Point2D ownerLoc = new Point2D(owner.getX(), owner.getY());
+		Point2D thisLoc = new Point2D((ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
+				(ownerLoc.getY() + (owner.getHeight() / 2) - (this.getHeight() / 2)));
+		this.setX(thisLoc.getX());
+		this.setY(thisLoc.getY());
 		if (radioButtons.size() == 1) {
 			onlyOneChoice(parent);
 		} else {
-			setVisible(true);
+			show();
 		}
 	}
-
-	public void actionPerformed(ActionEvent evt) {
+	
+	@Override
+	public void handle(MouseEvent evt) {
 		Object source = evt.getSource();
 		if (source == cancelButton) {
-			setVisible(false);
-			dispose();
+			close();
 		} else if (source == okButton) {
 			boolean anySelected = false;
 			for (int i = 0; i < radioButtons.size(); i++) {
-				JRadioButton tempRButt = radioButtons.elementAt(i);
+				RadioButton tempRButt = radioButtons.elementAt(i);
 				if (tempRButt.isSelected()) {
 					anySelected = true;
 					break;
 				}
 			}
 			if (!anySelected) {
-				JOptionPane.showMessageDialog(null,
-						("You must choose at least one action"),
-						"Invalid Input", JOptionPane.ERROR_MESSAGE);
+				Alert alert = new Alert(AlertType.WARNING, "You must choose at least one action");
+				alert.setTitle("Invalid Input");
+				alert.show();
 			} else {
 				for (int i = 0; i < radioButtons.size(); i++) {
-					JRadioButton rButt = radioButtons.elementAt(i);
+					RadioButton rButt = radioButtons.elementAt(i);
 					if (rButt.isSelected()) {
 						simse.adts.actions.Action tempAct = actions
 								.elementAt(i);
@@ -1786,8 +1774,7 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 						}
 						new ChooseRoleToPlayDialog(gui, participantNames, emp,
 								tempAct, menuText, ruleExec);
-						setVisible(false);
-						dispose();
+						close();
 						break;
 					}
 				}
@@ -1795,9 +1782,9 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 		}
 	}
 
-	private void onlyOneChoice(JFrame owner) {
+	private void onlyOneChoice(Stage owner) {
 		for (int i = 0; i < radioButtons.size(); i++) {
-			JRadioButton rButt = radioButtons.elementAt(i);
+			RadioButton rButt = radioButtons.elementAt(i);
 			simse.adts.actions.Action tempAct = actions.elementAt(i);
 			Vector<String> participantNames = new Vector<String>();
 			if (tempAct instanceof CreateRequirementsAction) {
@@ -2028,7 +2015,7 @@ public class ChooseActionToJoinDialog extends JDialog implements ActionListener 
 			}
 			new ChooseRoleToPlayDialog(owner, participantNames, emp, tempAct,
 					menuText, ruleExec);
-			dispose();
+			close();
 			break;
 		}
 	}

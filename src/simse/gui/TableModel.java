@@ -115,5 +115,4 @@ public abstract class TableModel<T> {
 	public Class getColumnClass(int c) {
 		return getValueAt(0, c).getClass();
 	}
-	
 }

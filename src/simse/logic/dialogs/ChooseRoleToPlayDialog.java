@@ -6,73 +6,76 @@ import simse.logic.*;
 import simse.adts.objects.*;
 import simse.adts.actions.*;
 import java.util.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
 
-public class ChooseRoleToPlayDialog extends JDialog implements ActionListener {
-	private JFrame gui;
+import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class ChooseRoleToPlayDialog extends Dialog implements EventHandler<MouseEvent> {
+	private Stage gui;
 	private Employee emp;
 	private simse.adts.actions.Action action;
 	private String menuText;
 	private RuleExecutor ruleExec;
-	private JComboBox partNameList;
-	private JButton okButton;
-	private JButton cancelButton;
+	private ComboBox partNameList;
+	private Button okButton;
+	private Button cancelButton;
 
-	public ChooseRoleToPlayDialog(JFrame owner, Vector<String> partNames,
+	public ChooseRoleToPlayDialog(Stage owner, Vector<String> partNames,
 			Employee e, simse.adts.actions.Action act, String menText,
 			RuleExecutor re) {
-		super(owner, true);
 		gui = owner;
 		emp = e;
 		action = act;
 		menuText = menText;
 		ruleExec = re;
 		setTitle("Choose Action Role");
-		Box mainPane = Box.createVerticalBox();
-		JPanel topPane = new JPanel();
-		topPane.add(new JLabel("Choose role to play:"));
-		JPanel middlePane = new JPanel();
-		partNameList = new JComboBox(partNames);
-		middlePane.add(partNameList);
-		JPanel bottomPane = new JPanel();
-		okButton = new JButton("OK");
-		okButton.addActionListener(this);
-		bottomPane.add(okButton);
-		cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(this);
-		bottomPane.add(cancelButton);
-		mainPane.add(topPane);
-		mainPane.add(middlePane);
-		mainPane.add(bottomPane);
-		setContentPane(mainPane);
-		validate();
-		pack();
-		repaint();
-		toFront();
-		Point ownerLoc = owner.getLocationOnScreen();
-		Point thisLoc = new Point();
-		thisLoc.setLocation(
-				(ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
+		VBox mainPane = new VBox();
+		Pane topPane = new Pane();
+		topPane.getChildren().add(new Label("Choose role to play:"));
+		Pane middlePane = new Pane();
+		partNameList = new ComboBox(FXCollections.observableList(partNames));
+		middlePane.getChildren().add(partNameList);
+		Pane bottomPane = new Pane();
+		okButton = new Button("OK");
+		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		bottomPane.getChildren().add(okButton);
+		cancelButton = new Button("Cancel");
+		cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		bottomPane.getChildren().add(cancelButton);
+		mainPane.getChildren().addAll(topPane, middlePane, bottomPane);
+//		setContentPane(mainPane);
+//		validate();
+//		pack();
+//		repaint();
+//		toFront();
+		Point2D ownerLoc = new Point2D(owner.getX(), owner.getY());
+		Point2D thisLoc = new Point2D((ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
 				(ownerLoc.getY() + (owner.getHeight() / 2) - (this.getHeight() / 2)));
-		setLocation(thisLoc);
+		this.setX(thisLoc.getX());
+		this.setY(thisLoc.getY());
 		if (partNames.size() == 1) {
 			onlyOneRole();
 		} else {
-			setVisible(true);
+			show();
 		}
 	}
 
-	public void actionPerformed(ActionEvent evt) {
+	@Override
+	public void handle(MouseEvent evt) {
 		Object source = evt.getSource();
 		if (source == cancelButton) {
-			setVisible(false);
-			dispose();
+			close();
 		} else if (source == okButton) {
-			String partName = (String) (partNameList.getSelectedItem());
+			String partName = (String) (partNameList.getSelectionModel().getSelectedItem());
 			if (action instanceof CreateRequirementsAction) {
 				if (menuText.equals("Create Requirements Document")) {
 					emp.setOverheadText("I'm creating the requirements document now");
@@ -216,13 +219,12 @@ public class ChooseRoleToPlayDialog extends JDialog implements ActionListener {
 					((PurchaseToolAction) action).addEmpWhoseMenuClickedOn(emp);
 				}
 			}
-			setVisible(false);
-			dispose();
+			close();
 		}
 	}
 
 	private void onlyOneRole() {
-		String partName = (String) (partNameList.getItemAt(0));
+		String partName = (String) (partNameList.getItems().get(0));
 		if (action instanceof CreateRequirementsAction) {
 			if (menuText.equals("Create Requirements Document")) {
 				emp.setOverheadText("I'm creating the requirements document now");
@@ -348,7 +350,6 @@ public class ChooseRoleToPlayDialog extends JDialog implements ActionListener {
 				((PurchaseToolAction) action).addEmpWhoseMenuClickedOn(emp);
 			}
 		}
-		setVisible(false);
-		dispose();
+		close();
 	}
 }
