@@ -20,7 +20,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.chart.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
 
 import javafx.event.EventHandler;
@@ -796,7 +796,7 @@ public class ObjectGraph extends Stage implements EventHandler<MouseEvent> {
 							.getRenderingInfo();
 					Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 					NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-					org.jfree.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+					RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
 					double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
 							domainAxisEdge);
 					lastRightClickedX = (int) Math.rint(chartX);

@@ -222,7 +222,7 @@ public class CompositeGraph extends Stage implements EventHandler<MouseEvent> {
 							.getRenderingInfo();
 					Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 					NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-					org.jfree.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+					RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
 					double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
 							domainAxisEdge);
 					lastRightClickedX = (int) Math.rint(chartX);
