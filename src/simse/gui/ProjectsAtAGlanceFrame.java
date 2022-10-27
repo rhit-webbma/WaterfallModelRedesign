@@ -86,154 +86,154 @@ public class ProjectsAtAGlanceFrame extends Stage implements EventHandler<MouseE
 	
 	@Override
 	public void handle(MouseEvent e) {
-		Object source = e.getSource();
-		Point2D p = new Point2D(e.getX(), e.getY());
-
-		if (e.isPopupTrigger()) {
-			if (source.equals(seprojectTable)) // correct table
-			{
-				createPopupMenu(seprojectTable, p);
-			}
-		}
-		
-		if (source instanceof MenuItem) {
-			String itemText = ((MenuItem) source).getText();
-			if (itemText.equals("Hide")) {
-				if (selectedTable != null) {
-					selectedTable.getColumns().get(realColumnIndex).setMaxWidth(0);
-				}
-			} else // an item on the "Unhide" menu
-			{
-				TableModel model = selectedTable.getModel();
-				TableColumn column = null;
-				if (model instanceof SEProjectTableModel) {
-					column = selectedTable.getColumnModel()
-							.getColumn(
-									((SEProjectTableModel) selectedTable
-											.getModel())
-											.getColumnIndex(itemText));
-				}
-				if (column != null) {
-					column.setMinWidth(0);
-					column.setMaxWidth(2147483647);
-					column.setPreferredWidth(selectedTable.getWidth()
-							/ (selectedTable.getColumnCount()
-									- getAllHiddenColumnIndices(
-											selectedTable).size() + 1));
-				}
-			}
-		}
+//		Object source = e.getSource();
+//		Point2D p = new Point2D(e.getX(), e.getY());
+//
+//		if (e.isPopupTrigger()) {
+//			if (source.equals(seprojectTable)) // correct table
+//			{
+//				createPopupMenu(seprojectTable, p);
+//			}
+//		}
+//		
+//		if (source instanceof MenuItem) {
+//			String itemText = ((MenuItem) source).getText();
+//			if (itemText.equals("Hide")) {
+//				if (selectedTable != null) {
+//					selectedTable.getColumns().get(realColumnIndex).setMaxWidth(0);
+//				}
+//			} else // an item on the "Unhide" menu
+//			{
+//				TableModel model = selectedTable.getModel();
+//				TableColumn column = null;
+//				if (model instanceof SEProjectTableModel) {
+//					column = selectedTable.getColumnModel()
+//							.getColumn(
+//									((SEProjectTableModel) selectedTable
+//											.getModel())
+//											.getColumnIndex(itemText));
+//				}
+//				if (column != null) {
+//					column.setMinWidth(0);
+//					column.setMaxWidth(2147483647);
+//					column.setPreferredWidth(selectedTable.getWidth()
+//							/ (selectedTable.getColumnCount()
+//									- getAllHiddenColumnIndices(
+//											selectedTable).size() + 1));
+//				}
+//			}
+//		}
 	}
 
 
 	public void createPopupMenu(TableView<SEProject> table, Point2D p) {
-		popup.getItems().removeAll();
-
-		int colIndex = table.columnAtPoint(p);
-		realColumnIndex = table.convertColumnIndexToModel(colIndex);
-
-		Vector<Integer> hiddenCols = getAllHiddenColumnIndices(table);
-
-		if ((realColumnIndex >= 0) || (hiddenCols.size() > 0)) // user clicked
-																// on a column
-																// and/or there
-																// is at least
-																// one hidden
-																// column
-		{
-			if (realColumnIndex >= 0) {
-				JMenuItem hideItem = new JMenuItem("Hide");
-				hideItem.addActionListener(this);
-				popup.add(hideItem);
-			}
-
-			if (hiddenCols.size() > 0) // there is at least one hidden column
-			{
-				JMenu unhideMenu = new JMenu("Unhide");
-				for (int i = 0; i < hiddenCols.size(); i++) {
-					int index = hiddenCols.elementAt(i).intValue();
-					JMenuItem tempItem = new JMenuItem(
-							table.getColumnName(index));
-					tempItem.addActionListener(this);
-					unhideMenu.add(tempItem);
-				}
-				if (popup.getComponents().length > 0) // already has the hide
-														// menu item
-				{
-					popup.addSeparator();
-				}
-				popup.add(unhideMenu);
-			}
-
-			addMouseListener(popupListener);
-			popup.show(table, (int) p.getX(), (int) p.getY());
-			selectedTable = table;
-			repaint();
-		}
+//		popup.getItems().removeAll();
+//
+//		int colIndex = table.columnAtPoint(p);
+//		realColumnIndex = table.convertColumnIndexToModel(colIndex);
+//
+//		Vector<Integer> hiddenCols = getAllHiddenColumnIndices(table);
+//
+//		if ((realColumnIndex >= 0) || (hiddenCols.size() > 0)) // user clicked
+//																// on a column
+//																// and/or there
+//																// is at least
+//																// one hidden
+//																// column
+//		{
+//			if (realColumnIndex >= 0) {
+//				JMenuItem hideItem = new JMenuItem("Hide");
+//				hideItem.addActionListener(this);
+//				popup.add(hideItem);
+//			}
+//
+//			if (hiddenCols.size() > 0) // there is at least one hidden column
+//			{
+//				JMenu unhideMenu = new JMenu("Unhide");
+//				for (int i = 0; i < hiddenCols.size(); i++) {
+//					int index = hiddenCols.elementAt(i).intValue();
+//					JMenuItem tempItem = new JMenuItem(
+//							table.getColumnName(index));
+//					tempItem.addActionListener(this);
+//					unhideMenu.add(tempItem);
+//				}
+//				if (popup.getComponents().length > 0) // already has the hide
+//														// menu item
+//				{
+//					popup.addSeparator();
+//				}
+//				popup.add(unhideMenu);
+//			}
+//
+//			addMouseListener(popupListener);
+//			popup.show(table, (int) p.getX(), (int) p.getY());
+//			selectedTable = table;
+//			repaint();
+//		}
 	}
 
 	public void update() {
-		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
-		rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
-		seprojectModel.update();
-		if (!state.getClock().isStopped()) { // game not over
-			seprojectTable.getColumnModel()
-					.getColumn(seprojectModel.getColumnIndex("Budget"))
-					.setCellRenderer(rightAlignRenderer);
-			seprojectTable.getColumnModel()
-					.getColumn(seprojectModel.getColumnIndex("MoneySpent"))
-					.setCellRenderer(rightAlignRenderer);
-			seprojectTable.getColumnModel()
-					.getColumn(seprojectModel.getColumnIndex("AllottedTime"))
-					.setCellRenderer(rightAlignRenderer);
-			seprojectTable.getColumnModel()
-					.getColumn(seprojectModel.getColumnIndex("TimeUsed"))
-					.setCellRenderer(rightAlignRenderer);
-		} else { // game over
-			seprojectTable.getColumnModel()
-					.getColumn(seprojectModel.getColumnIndex("Budget"))
-					.setCellRenderer(rightAlignRenderer);
-			seprojectTable.getColumnModel()
-					.getColumn(seprojectModel.getColumnIndex("MoneySpent"))
-					.setCellRenderer(rightAlignRenderer);
-			seprojectTable.getColumnModel()
-					.getColumn(seprojectModel.getColumnIndex("AllottedTime"))
-					.setCellRenderer(rightAlignRenderer);
-			seprojectTable.getColumnModel()
-					.getColumn(seprojectModel.getColumnIndex("TimeUsed"))
-					.setCellRenderer(rightAlignRenderer);
-			seprojectTable.getColumnModel()
-					.getColumn(seprojectModel.getColumnIndex("Score"))
-					.setCellRenderer(rightAlignRenderer);
-		}
-		seprojectTable.update(seprojectTable.getGraphics());
-		resetHeight();
+//		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
+//		rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
+//		seprojectModel.update();
+//		if (!state.getClock().isStopped()) { // game not over
+//			seprojectTable.getColumnModel()
+//					.getColumn(seprojectModel.getColumnIndex("Budget"))
+//					.setCellRenderer(rightAlignRenderer);
+//			seprojectTable.getColumnModel()
+//					.getColumn(seprojectModel.getColumnIndex("MoneySpent"))
+//					.setCellRenderer(rightAlignRenderer);
+//			seprojectTable.getColumnModel()
+//					.getColumn(seprojectModel.getColumnIndex("AllottedTime"))
+//					.setCellRenderer(rightAlignRenderer);
+//			seprojectTable.getColumnModel()
+//					.getColumn(seprojectModel.getColumnIndex("TimeUsed"))
+//					.setCellRenderer(rightAlignRenderer);
+//		} else { // game over
+//			seprojectTable.getColumnModel()
+//					.getColumn(seprojectModel.getColumnIndex("Budget"))
+//					.setCellRenderer(rightAlignRenderer);
+//			seprojectTable.getColumnModel()
+//					.getColumn(seprojectModel.getColumnIndex("MoneySpent"))
+//					.setCellRenderer(rightAlignRenderer);
+//			seprojectTable.getColumnModel()
+//					.getColumn(seprojectModel.getColumnIndex("AllottedTime"))
+//					.setCellRenderer(rightAlignRenderer);
+//			seprojectTable.getColumnModel()
+//					.getColumn(seprojectModel.getColumnIndex("TimeUsed"))
+//					.setCellRenderer(rightAlignRenderer);
+//			seprojectTable.getColumnModel()
+//					.getColumn(seprojectModel.getColumnIndex("Score"))
+//					.setCellRenderer(rightAlignRenderer);
+//		}
+//		seprojectTable.update(seprojectTable.getGraphics());
+//		resetHeight();
 	}
 
 	private void resetHeight() {
 		// Set appropriate height:
-		double height = 0;
-		height += ((seprojectTable.getRowHeight() + (seprojectTable
-				.getRowMargin() * 2)) * (seprojectTable.getRowCount() + 1));
-		height += seprojectTitlePane.getSize().getHeight();
-
-		mainPane.setPreferredSize(new Dimension((int) (mainPane.getSize()
-				.getWidth()), (int) height));
-		pack();
-		validate();
-		repaint();
+//		double height = 0;
+//		height += ((seprojectTable.getRowHeight() + (seprojectTable
+//				.getRowMargin() * 2)) * (seprojectTable.getRowCount() + 1));
+//		height += seprojectTitlePane.getSize().getHeight();
+//
+//		mainPane.setPreferredSize(new Dimension((int) (mainPane.getSize()
+//				.getWidth()), (int) height));
+//		pack();
+//		validate();
+//		repaint();
 	}
 
-	private Vector<Integer> getAllHiddenColumnIndices(JTable table) {
+	private Vector<Integer> getAllHiddenColumnIndices(TableView table) {
 		Vector<Integer> hiddenCols = new Vector<Integer>();
-		int numCols = table.getColumnModel().getColumnCount();
-		for (int i = 0; i < numCols; i++) {
-			TableColumn col = table.getColumnModel().getColumn(i);
-			if (col.getWidth() == 0) // hidden
-			{
-				hiddenCols.add(new Integer(i));
-			}
-		}
+//		int numCols = table.getColumnModel().getColumnCount();
+//		for (int i = 0; i < numCols; i++) {
+//			TableColumn col = table.getColumnModel().getColumn(i);
+//			if (col.getWidth() == 0) // hidden
+//			{
+//				hiddenCols.add(new Integer(i));
+//			}
+//		}
 		return hiddenCols;
 	}
 }

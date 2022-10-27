@@ -150,93 +150,93 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 	
 	@Override
 	public void handle(MouseEvent me) {
-		Object source = me.getSource();
-		if (source instanceof MenuItem) {
-			String itemText = ((MenuItem) source).getText();
-			if (itemText.equals("Hide")) {
-				if (selectedTable != null) {
-					selectedTable.getColumnModel().getColumn(realColumnIndex)
-							.setMaxWidth(0);
-				}
-			} else // an item on the "Unhide" menu
-			{
-				if (selectedTable != null) {
-					TableModel model = selectedTable.getModel();
-					TableColumn column = null;
-					if (model instanceof ACustomerTableModel) {
-						column = selectedTable.getColumnModel()
-								.getColumn(
-										((ACustomerTableModel) selectedTable
-												.getModel())
-												.getColumnIndex(itemText));
-					}
-					if (column != null) {
-						column.setMinWidth(0);
-						column.setMaxWidth(2147483647);
-						column.setPreferredWidth(selectedTable.getWidth()
-								/ (selectedTable.getColumnCount()
-										- getAllHiddenColumnIndices(
-												selectedTable).size() + 1));
-					}
-				}
-			}
-		} else {
-			Point2D p = new Point2D(me.getScreenX(), me.getScreenY());
-
-			if (me.isPopupTrigger()) {
-				if (me.getSource().equals(acustomerTable)) // correct table
-				{
-					createPopupMenu(acustomerTable, p);
-				}
-			}
-		}
+//		Object source = me.getSource();
+//		if (source instanceof MenuItem) {
+//			String itemText = ((MenuItem) source).getText();
+//			if (itemText.equals("Hide")) {
+//				if (selectedTable != null) {
+//					selectedTable.getColumnModel().getColumn(realColumnIndex)
+//							.setMaxWidth(0);
+//				}
+//			} else // an item on the "Unhide" menu
+//			{
+//				if (selectedTable != null) {
+//					TableModel model = selectedTable.getModel();
+//					TableColumn column = null;
+//					if (model instanceof ACustomerTableModel) {
+//						column = selectedTable.getColumnModel()
+//								.getColumn(
+//										((ACustomerTableModel) selectedTable
+//												.getModel())
+//												.getColumnIndex(itemText));
+//					}
+//					if (column != null) {
+//						column.setMinWidth(0);
+//						column.setMaxWidth(2147483647);
+//						column.setPreferredWidth(selectedTable.getWidth()
+//								/ (selectedTable.getColumnCount()
+//										- getAllHiddenColumnIndices(
+//												selectedTable).size() + 1));
+//					}
+//				}
+//			}
+//		} else {
+//			Point2D p = new Point2D(me.getScreenX(), me.getScreenY());
+//
+//			if (me.isPopupTrigger()) {
+//				if (me.getSource().equals(acustomerTable)) // correct table
+//				{
+//					createPopupMenu(acustomerTable, p);
+//				}
+//			}
+//		}
 	}
 
 	public void createPopupMenu(TableView table, Point2D p) {
-		popup.getItems().removeAll();
-
-		int colIndex = table.columnAtPoint(p);
-		realColumnIndex = table.convertColumnIndexToModel(colIndex);
-
-		Vector<Integer> hiddenCols = getAllHiddenColumnIndices(table);
-
-		if ((realColumnIndex >= 0) || (hiddenCols.size() > 0)) // user clicked
-																// on a column
-																// and/or there
-																// is at least
-																// one hidden
-																// column
-		{
-			if (realColumnIndex >= 0) {
-				MenuItem hideItem = new MenuItem("Hide");
-				hideItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-				popup.getItems().add(hideItem);
-			}
-
-			if (hiddenCols.size() > 0) // there is at least one hidden column
-			{
-				Menu unhideMenu = new Menu("Unhide");
-				for (int i = 0; i < hiddenCols.size(); i++) {
-					int index = hiddenCols.elementAt(i).intValue();
-					MenuItem tempItem = new MenuItem(
-							acustomerModel.getColumnName(index));
-					tempItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-					unhideMenu.getItems().add(tempItem);
-				}
-				if (popup.getItems().size() > 0) // already has the hide
-														// menu item
-				{
-					popup.getItems().add(new SeparatorMenuItem());
-				}
-				popup.getItems().add(unhideMenu);
-			}
-
-//			addMouseListener(popupListener);
-			addEventHandler(MouseEvent.MOUSE_CLICKED, popupListener);
-			popup.show(table, (int) p.getX(), (int) p.getY());
-			selectedTable = table;
-//			repaint();
-		}
+//		popup.getItems().removeAll();
+//
+//		int colIndex = table.columnAtPoint(p);
+//		realColumnIndex = table.convertColumnIndexToModel(colIndex);
+//
+//		Vector<Integer> hiddenCols = getAllHiddenColumnIndices(table);
+//
+//		if ((realColumnIndex >= 0) || (hiddenCols.size() > 0)) // user clicked
+//																// on a column
+//																// and/or there
+//																// is at least
+//																// one hidden
+//																// column
+//		{
+//			if (realColumnIndex >= 0) {
+//				MenuItem hideItem = new MenuItem("Hide");
+//				hideItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+//				popup.getItems().add(hideItem);
+//			}
+//
+//			if (hiddenCols.size() > 0) // there is at least one hidden column
+//			{
+//				Menu unhideMenu = new Menu("Unhide");
+//				for (int i = 0; i < hiddenCols.size(); i++) {
+//					int index = hiddenCols.elementAt(i).intValue();
+//					MenuItem tempItem = new MenuItem(
+//							acustomerModel.getColumnName(index));
+//					tempItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+//					unhideMenu.getItems().add(tempItem);
+//				}
+//				if (popup.getItems().size() > 0) // already has the hide
+//														// menu item
+//				{
+//					popup.getItems().add(new SeparatorMenuItem());
+//				}
+//				popup.getItems().add(unhideMenu);
+//			}
+//
+////			addMouseListener(popupListener);
+//			addEventHandler(MouseEvent.MOUSE_CLICKED, popupListener);
+//			popup.show(table, (int) p.getX(), (int) p.getY());
+//			selectedTable = table;
+////			repaint();
+//		}
 	}
 
 	public void update() {
@@ -267,14 +267,14 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 
 	private Vector<Integer> getAllHiddenColumnIndices(TableView table) {
 		Vector<Integer> hiddenCols = new Vector<Integer>();
-		int numCols = acustomerModel.getColumnCount();
-		for (int i = 0; i < numCols; i++) {
-			TableColumn col = acustomerModel.getColumn(i);
-			if (col.getWidth() == 0) // hidden
-			{
-				hiddenCols.add(new Integer(i));
-			}
-		}
+//		int numCols = acustomerModel.getColumnCount();
+//		for (int i = 0; i < numCols; i++) {
+//			TableColumn col = acustomerModel.getColumn(i);
+//			if (col.getWidth() == 0) // hidden
+//			{
+//				hiddenCols.add(new Integer(i));
+//			}
+//		}
 		return hiddenCols;
 	}
 

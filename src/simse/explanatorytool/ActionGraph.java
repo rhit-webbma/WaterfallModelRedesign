@@ -28,7 +28,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.chart.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
 
 
@@ -1120,7 +1120,7 @@ public class ActionGraph extends Stage implements EventHandler<MouseEvent> {
 				true, false);
 		chart.setBackgroundPaint(Color.WHITE);
 		XYPlot plot = (XYPlot) chart.getPlot();
-		plot.getRenderer().setToolTipGenerator(new ActionGraphToolTipGenerator());
+		plot.getRenderer().setDefaultToolTipGenerator(new ActionGraphToolTipGenerator());
 		plot.setBackgroundPaint(new Color(0xFF, 0xFF, 0xCC));
 		plot.setAxisOffset(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
 		plot.setDomainGridlinePaint(Color.BLACK);
@@ -2178,7 +2178,7 @@ public class ActionGraph extends Stage implements EventHandler<MouseEvent> {
 							.getRenderingInfo();
 					Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 					NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-					org.jfree.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+					org.jfree.chart.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
 					double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
 							domainAxisEdge);
 					lastRightClickedX = (int) Math.rint(chartX);

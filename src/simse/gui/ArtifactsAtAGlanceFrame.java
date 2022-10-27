@@ -309,208 +309,208 @@ public class ArtifactsAtAGlanceFrame extends Stage implements EventHandler<Mouse
 
 	public void createPopupMenu(TableView table, Point2D p) {
 		
-		popup.getItems().clear();
-		
-		int colIndex = table.columnAtPoint(p);
-		realColumnIndex = table.cnvertColumnIndexToModel(colIndex);
-
-		Vector<Integer> hiddenCols = getAllHiddenColumnIndices(table);
-
-		if ((realColumnIndex >= 0) || (hiddenCols.size() > 0)) // user clicked
-																// on a column
-																// and/or there
-																// is at least
-																// one hidden
-																// column
-		{
-			if (realColumnIndex >= 0) {
-				JMenuItem hideItem = new JMenuItem("Hide");
-				hideItem.addActionListener(this);
-				popup.add(hideItem);
-			}
-
-			if (hiddenCols.size() > 0) // there is at least one hidden column
-			{
-				JMenu unhideMenu = new JMenu("Unhide");
-				for (int i = 0; i < hiddenCols.size(); i++) {
-					int index = hiddenCols.elementAt(i).intValue();
-					JMenuItem tempItem = new JMenuItem(
-							table.getColumnName(index));
-					tempItem.addActionListener(this);
-					unhideMenu.add(tempItem);
-				}
-				if (popup.getComponents().length > 0) // already has the hide
-														// menu item
-				{
-					popup.addSeparator();
-				}
-				popup.add(unhideMenu);
-			}
-
-			addMouseListener(popupListener);
-			popup.show(table, (int) p.getX(), (int) p.getY());
-			selectedTable = table;
-			repaint();
-		}
+//		popup.getItems().clear();
+//		
+//		int colIndex = table.columnAtPoint(p);
+//		realColumnIndex = table.cnvertColumnIndexToModel(colIndex);
+//
+//		Vector<Integer> hiddenCols = getAllHiddenColumnIndices(table);
+//
+//		if ((realColumnIndex >= 0) || (hiddenCols.size() > 0)) // user clicked
+//																// on a column
+//																// and/or there
+//																// is at least
+//																// one hidden
+//																// column
+//		{
+//			if (realColumnIndex >= 0) {
+//				JMenuItem hideItem = new JMenuItem("Hide");
+//				hideItem.addActionListener(this);
+//				popup.add(hideItem);
+//			}
+//
+//			if (hiddenCols.size() > 0) // there is at least one hidden column
+//			{
+//				JMenu unhideMenu = new JMenu("Unhide");
+//				for (int i = 0; i < hiddenCols.size(); i++) {
+//					int index = hiddenCols.elementAt(i).intValue();
+//					JMenuItem tempItem = new JMenuItem(
+//							table.getColumnName(index));
+//					tempItem.addActionListener(this);
+//					unhideMenu.add(tempItem);
+//				}
+//				if (popup.getComponents().length > 0) // already has the hide
+//														// menu item
+//				{
+//					popup.addSeparator();
+//				}
+//				popup.add(unhideMenu);
+//			}
+//
+//			addMouseListener(popupListener);
+//			popup.show(table, (int) p.getX(), (int) p.getY());
+//			selectedTable = table;
+//			repaint();
+//		}
 	}
 
 	public void update() {
-		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
-		rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
-		requirementsdocumentModel.update();
-		if (!state.getClock().isStopped()) { // game not over
-			requirementsdocumentTable
-					.getColumnModel()
-					.getColumn(
-							requirementsdocumentModel
-									.getColumnIndex("NumKnownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			requirementsdocumentTable
-					.getColumnModel()
-					.getColumn(
-							requirementsdocumentModel
-									.getColumnIndex("PercentComplete"))
-					.setCellRenderer(rightAlignRenderer);
-		} else { // game over
-			requirementsdocumentTable
-					.getColumnModel()
-					.getColumn(
-							requirementsdocumentModel
-									.getColumnIndex("NumKnownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			requirementsdocumentTable
-					.getColumnModel()
-					.getColumn(
-							requirementsdocumentModel
-									.getColumnIndex("NumUnknownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			requirementsdocumentTable
-					.getColumnModel()
-					.getColumn(
-							requirementsdocumentModel
-									.getColumnIndex("PercentErroneous"))
-					.setCellRenderer(rightAlignRenderer);
-			requirementsdocumentTable
-					.getColumnModel()
-					.getColumn(
-							requirementsdocumentModel
-									.getColumnIndex("PercentComplete"))
-					.setCellRenderer(rightAlignRenderer);
-		}
-		requirementsdocumentTable.update(requirementsdocumentTable
-				.getGraphics());
-		designdocumentModel.update();
-		if (!state.getClock().isStopped()) { // game not over
-			designdocumentTable
-					.getColumnModel()
-					.getColumn(
-							designdocumentModel
-									.getColumnIndex("NumKnownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			designdocumentTable
-					.getColumnModel()
-					.getColumn(
-							designdocumentModel
-									.getColumnIndex("PercentComplete"))
-					.setCellRenderer(rightAlignRenderer);
-		} else { // game over
-			designdocumentTable
-					.getColumnModel()
-					.getColumn(
-							designdocumentModel
-									.getColumnIndex("NumKnownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			designdocumentTable
-					.getColumnModel()
-					.getColumn(
-							designdocumentModel
-									.getColumnIndex("NumUnknownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			designdocumentTable
-					.getColumnModel()
-					.getColumn(
-							designdocumentModel
-									.getColumnIndex("PercentErroneous"))
-					.setCellRenderer(rightAlignRenderer);
-			designdocumentTable
-					.getColumnModel()
-					.getColumn(
-							designdocumentModel
-									.getColumnIndex("PercentComplete"))
-					.setCellRenderer(rightAlignRenderer);
-		}
-		designdocumentTable.update(designdocumentTable.getGraphics());
-		codeModel.update();
-		if (!state.getClock().isStopped()) { // game not over
-			codeTable.getColumnModel()
-					.getColumn(codeModel.getColumnIndex("PercentComplete"))
-					.setCellRenderer(rightAlignRenderer);
-			codeTable.getColumnModel()
-					.getColumn(codeModel.getColumnIndex("PercentIntegrated"))
-					.setCellRenderer(rightAlignRenderer);
-			codeTable.getColumnModel()
-					.getColumn(codeModel.getColumnIndex("NumKnownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-		} else { // game over
-			codeTable.getColumnModel()
-					.getColumn(codeModel.getColumnIndex("PercentComplete"))
-					.setCellRenderer(rightAlignRenderer);
-			codeTable.getColumnModel()
-					.getColumn(codeModel.getColumnIndex("PercentIntegrated"))
-					.setCellRenderer(rightAlignRenderer);
-			codeTable.getColumnModel()
-					.getColumn(codeModel.getColumnIndex("NumKnownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			codeTable.getColumnModel()
-					.getColumn(codeModel.getColumnIndex("NumUnknownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			codeTable.getColumnModel()
-					.getColumn(codeModel.getColumnIndex("PercentErroneous"))
-					.setCellRenderer(rightAlignRenderer);
-		}
-		codeTable.update(codeTable.getGraphics());
-		systemtestplanModel.update();
-		if (!state.getClock().isStopped()) { // game not over
-			systemtestplanTable
-					.getColumnModel()
-					.getColumn(
-							systemtestplanModel
-									.getColumnIndex("NumKnownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			systemtestplanTable
-					.getColumnModel()
-					.getColumn(
-							systemtestplanModel
-									.getColumnIndex("PercentComplete"))
-					.setCellRenderer(rightAlignRenderer);
-		} else { // game over
-			systemtestplanTable
-					.getColumnModel()
-					.getColumn(
-							systemtestplanModel
-									.getColumnIndex("NumKnownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			systemtestplanTable
-					.getColumnModel()
-					.getColumn(
-							systemtestplanModel
-									.getColumnIndex("NumUnknownErrors"))
-					.setCellRenderer(rightAlignRenderer);
-			systemtestplanTable
-					.getColumnModel()
-					.getColumn(
-							systemtestplanModel
-									.getColumnIndex("PercentErroneous"))
-					.setCellRenderer(rightAlignRenderer);
-			systemtestplanTable
-					.getColumnModel()
-					.getColumn(
-							systemtestplanModel
-									.getColumnIndex("PercentComplete"))
-					.setCellRenderer(rightAlignRenderer);
-		}
-		systemtestplanTable.update(systemtestplanTable.getGraphics());
-		resetHeight();
+//		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
+//		rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
+//		requirementsdocumentModel.update();
+//		if (!state.getClock().isStopped()) { // game not over
+//			requirementsdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							requirementsdocumentModel
+//									.getColumnIndex("NumKnownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			requirementsdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							requirementsdocumentModel
+//									.getColumnIndex("PercentComplete"))
+//					.setCellRenderer(rightAlignRenderer);
+//		} else { // game over
+//			requirementsdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							requirementsdocumentModel
+//									.getColumnIndex("NumKnownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			requirementsdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							requirementsdocumentModel
+//									.getColumnIndex("NumUnknownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			requirementsdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							requirementsdocumentModel
+//									.getColumnIndex("PercentErroneous"))
+//					.setCellRenderer(rightAlignRenderer);
+//			requirementsdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							requirementsdocumentModel
+//									.getColumnIndex("PercentComplete"))
+//					.setCellRenderer(rightAlignRenderer);
+//		}
+//		requirementsdocumentTable.update(requirementsdocumentTable
+//				.getGraphics());
+//		designdocumentModel.update();
+//		if (!state.getClock().isStopped()) { // game not over
+//			designdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							designdocumentModel
+//									.getColumnIndex("NumKnownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			designdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							designdocumentModel
+//									.getColumnIndex("PercentComplete"))
+//					.setCellRenderer(rightAlignRenderer);
+//		} else { // game over
+//			designdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							designdocumentModel
+//									.getColumnIndex("NumKnownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			designdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							designdocumentModel
+//									.getColumnIndex("NumUnknownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			designdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							designdocumentModel
+//									.getColumnIndex("PercentErroneous"))
+//					.setCellRenderer(rightAlignRenderer);
+//			designdocumentTable
+//					.getColumnModel()
+//					.getColumn(
+//							designdocumentModel
+//									.getColumnIndex("PercentComplete"))
+//					.setCellRenderer(rightAlignRenderer);
+//		}
+//		designdocumentTable.update(designdocumentTable.getGraphics());
+//		codeModel.update();
+//		if (!state.getClock().isStopped()) { // game not over
+//			codeTable.getColumnModel()
+//					.getColumn(codeModel.getColumnIndex("PercentComplete"))
+//					.setCellRenderer(rightAlignRenderer);
+//			codeTable.getColumnModel()
+//					.getColumn(codeModel.getColumnIndex("PercentIntegrated"))
+//					.setCellRenderer(rightAlignRenderer);
+//			codeTable.getColumnModel()
+//					.getColumn(codeModel.getColumnIndex("NumKnownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//		} else { // game over
+//			codeTable.getColumnModel()
+//					.getColumn(codeModel.getColumnIndex("PercentComplete"))
+//					.setCellRenderer(rightAlignRenderer);
+//			codeTable.getColumnModel()
+//					.getColumn(codeModel.getColumnIndex("PercentIntegrated"))
+//					.setCellRenderer(rightAlignRenderer);
+//			codeTable.getColumnModel()
+//					.getColumn(codeModel.getColumnIndex("NumKnownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			codeTable.getColumnModel()
+//					.getColumn(codeModel.getColumnIndex("NumUnknownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			codeTable.getColumnModel()
+//					.getColumn(codeModel.getColumnIndex("PercentErroneous"))
+//					.setCellRenderer(rightAlignRenderer);
+//		}
+//		codeTable.update(codeTable.getGraphics());
+//		systemtestplanModel.update();
+//		if (!state.getClock().isStopped()) { // game not over
+//			systemtestplanTable
+//					.getColumnModel()
+//					.getColumn(
+//							systemtestplanModel
+//									.getColumnIndex("NumKnownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			systemtestplanTable
+//					.getColumnModel()
+//					.getColumn(
+//							systemtestplanModel
+//									.getColumnIndex("PercentComplete"))
+//					.setCellRenderer(rightAlignRenderer);
+//		} else { // game over
+//			systemtestplanTable
+//					.getColumnModel()
+//					.getColumn(
+//							systemtestplanModel
+//									.getColumnIndex("NumKnownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			systemtestplanTable
+//					.getColumnModel()
+//					.getColumn(
+//							systemtestplanModel
+//									.getColumnIndex("NumUnknownErrors"))
+//					.setCellRenderer(rightAlignRenderer);
+//			systemtestplanTable
+//					.getColumnModel()
+//					.getColumn(
+//							systemtestplanModel
+//									.getColumnIndex("PercentErroneous"))
+//					.setCellRenderer(rightAlignRenderer);
+//			systemtestplanTable
+//					.getColumnModel()
+//					.getColumn(
+//							systemtestplanModel
+//									.getColumnIndex("PercentComplete"))
+//					.setCellRenderer(rightAlignRenderer);
+//		}
+//		systemtestplanTable.update(systemtestplanTable.getGraphics());
+//		resetHeight();
 	}
 
 //	private void resetHeight() {
