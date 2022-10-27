@@ -3,6 +3,7 @@ package simse.gui;
 
 import simse.state.*;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 import java.util.*;
 import java.text.*;
 import java.awt.Color;
+
 
 public class ArtifactsAtAGlanceFrame extends Stage implements EventHandler<MouseEvent> {
 
@@ -215,7 +217,6 @@ public class ArtifactsAtAGlanceFrame extends Stage implements EventHandler<Mouse
 //		mainPane.add(systemtestplanPane);
 
 		// Set main window frame properties:
-//		this
 //		setBackground(Color.white);
 //		setContentPane(mainPane);
 //		setVisible(false);

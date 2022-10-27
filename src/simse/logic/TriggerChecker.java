@@ -19,7 +19,7 @@ public class TriggerChecker {
 		ranNumGen = new Random();
 	}
 
-	public void update(boolean updateUserTrigsOnly, JFrame gui) {
+	public void update(boolean updateUserTrigsOnly, SimSEGUI gui) {
 		if (!updateUserTrigsOnly) {
 			Vector<Employee> quitters0 = new Vector<Employee>();
 			Vector<SoftwareEngineer> softwareengineers = state

@@ -21,7 +21,10 @@ public class SimSE {
 		SimSEGUI gui = new SimSEGUI(engine, state, logic, branch,
 				timelinesBrowser);
 		state.getClock().setGUI(gui);
-		gui.setBounds(0, 0, 1024, 744);
+		gui.setX(0);
+		gui.setY(0);
+		gui.setWidth(1024);
+		gui.setHeight(744);
 		engine.giveGUI(gui);
 		logic.getTriggerChecker().update(false, gui);
 		branches.add(branch);
