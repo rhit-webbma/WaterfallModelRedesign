@@ -200,11 +200,10 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 			setCursor(Cursor.DEFAULT);
 		} else if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
 			if (source.equals(aboutButton)) {
-//				Point2D p = new Point2D(300, 300);
-				Point p = new Point(300, 300);
-				SimSEAboutDialog about = new SimSEAboutDialog(null);
-				about.setLocation(p);
-				about.setVisible(true);
+				SimSEAboutDialog about = new SimSEAboutDialog();
+				about.setX(300);
+				about.setY(300);
+				about.show();
 			} else if (source.equals(infoButton)) {
 				new StartingNarrativeDialog();
 			} else if (source.equals(resetButton)) {

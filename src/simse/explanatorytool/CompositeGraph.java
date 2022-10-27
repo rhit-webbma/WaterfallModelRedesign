@@ -105,59 +105,59 @@ public class CompositeGraph extends Stage implements EventHandler<MouseEvent> {
 	}
 
 	// responds to LEFT mouse clicks on the chart
-	public void chartMouseClicked(ChartMouseEvent event) {
-		// send the event to the action graph:
-		actGraph.chartMouseClicked(event);
-	}
-
-	public void chartMouseMoved(ChartMouseEvent event) {
-	}
-
-	// responds to RIGHT-clicks on the chart
-	public void mouseReleased(MouseEvent me) {
-		if (me.getButton() != MouseButton.PRIMARY) { // not left-click
-			XYPlot plot = chart.getXYPlot();
-			Range domainRange = plot.getDataRange(plot.getDomainAxis());
-			if (domainRange != null) { // chart is not blank\
-				javafx.geometry.Point2D pt = chartViewer.localToScreen(me.getScreenX(), me.getScreenY());
-				ChartRenderingInfo info = this.chartViewer
-						.getRenderingInfo();
-				Rectangle2D dataArea = info.getPlotInfo().getDataArea();
-				NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-				org.jfree.chart.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
-				double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
-						domainAxisEdge);
-				lastRightClickedX = (int) Math.rint(chartX);
-				if (domainRange != null
-						&& lastRightClickedX >= domainRange.getLowerBound()
-						&& lastRightClickedX <= domainRange.getUpperBound()) { // clicked
-																				// within
-																				// domain
-																				// range
-					if ((chartViewer).getContextMenu().getItems().indexOf(
-							newBranchItem) == -1) { // no new branch item on
-													// menu currently
-						chartViewer.getContextMenu().getItems().add(separator);
-						chartViewer.getContextMenu().getItems().add(newBranchItem);
-//						chartViewer.getPopupMenu().pack();
-//						chartViewer.getPopupMenu().repaint();
-					}
-				} else { // clicked outside of domain range
-					if (chartViewer.getContextMenu().getItems().indexOf(
-							newBranchItem) >= 0) { // new branch item currently
-													// on menu
-						chartViewer.getContextMenu().getItems().remove(newBranchItem);
-						if (chartViewer.getContextMenu().getItems().indexOf(
-								separator) >= 0) { // has separator
-							chartViewer.getContextMenu().getItems().remove(separator);
-						}
-//						chartViewer.getPopupMenu().pack();
-//						chartViewer.getPopupMenu().repaint();
-					}
-				}
-			}
-		}
-	}
+//	public void chartMouseClicked(ChartMouseEvent event) {
+//		// send the event to the action graph:
+//		actGraph.chartMouseClicked(event);
+//	}
+//
+//	public void chartMouseMoved(ChartMouseEvent event) {
+//	}
+//
+//	// responds to RIGHT-clicks on the chart
+//	public void mouseReleased(MouseEvent me) {
+//		if (me.getButton() != MouseButton.PRIMARY) { // not left-click
+//			XYPlot plot = chart.getXYPlot();
+//			Range domainRange = plot.getDataRange(plot.getDomainAxis());
+//			if (domainRange != null) { // chart is not blank\
+//				javafx.geometry.Point2D pt = chartViewer.localToScreen(me.getScreenX(), me.getScreenY());
+//				ChartRenderingInfo info = this.chartViewer
+//						.getRenderingInfo();
+//				Rectangle2D dataArea = info.getPlotInfo().getDataArea();
+//				NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
+//				org.jfree.chart.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+//				double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
+//						domainAxisEdge);
+//				lastRightClickedX = (int) Math.rint(chartX);
+//				if (domainRange != null
+//						&& lastRightClickedX >= domainRange.getLowerBound()
+//						&& lastRightClickedX <= domainRange.getUpperBound()) { // clicked
+//																				// within
+//																				// domain
+//																				// range
+//					if ((chartViewer).getContextMenu().getItems().indexOf(
+//							newBranchItem) == -1) { // no new branch item on
+//													// menu currently
+//						chartViewer.getContextMenu().getItems().add(separator);
+//						chartViewer.getContextMenu().getItems().add(newBranchItem);
+////						chartViewer.getPopupMenu().pack();
+////						chartViewer.getPopupMenu().repaint();
+//					}
+//				} else { // clicked outside of domain range
+//					if (chartViewer.getContextMenu().getItems().indexOf(
+//							newBranchItem) >= 0) { // new branch item currently
+//													// on menu
+//						chartViewer.getContextMenu().getItems().remove(newBranchItem);
+//						if (chartViewer.getContextMenu().getItems().indexOf(
+//								separator) >= 0) { // has separator
+//							chartViewer.getContextMenu().getItems().remove(separator);
+//						}
+////						chartViewer.getPopupMenu().pack();
+////						chartViewer.getPopupMenu().repaint();
+//					}
+//				}
+//			}
+//		}
+//	}
 
 //	public void mousePressed(MouseEvent me) {
 //	}
@@ -222,7 +222,7 @@ public class CompositeGraph extends Stage implements EventHandler<MouseEvent> {
 							.getRenderingInfo();
 					Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 					NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-					org.jfree.chart.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+					org.jfree.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
 					double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
 							domainAxisEdge);
 					lastRightClickedX = (int) Math.rint(chartX);

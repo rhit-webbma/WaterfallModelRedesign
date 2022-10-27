@@ -6,6 +6,7 @@ package simse.gui;
 import com.sun.javafx.tk.Toolkit;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import simse.gui.util.JavaFXHelpers;
 
 public class MapData {
@@ -117,7 +118,7 @@ public class MapData {
 		return JavaFXHelpers.createImage(file);
 	}
 
-	public static ImageView getImage(int key) {
+	public static Image getImage(int key) {
 		switch (key) {
 		case TRANSPARENT:
 			return transparent;

@@ -70,8 +70,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		logic = l;
 		engine = e;
 
-		expTool = new ExplanatoryTool(this, state.getLogger().getLog(), branch,
-				timelinesBrowser);
+		expTool = new ExplanatoryTool(state.getLogger().getLog(), branch, timelinesBrowser);
 
 		attribPanel = new AttributePanel(this, state, engine);
 		tabPanel = new TabPanel(this, state, logic, attribPanel);
@@ -155,7 +154,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 
 	public void close() {
 		branch.setClosed();
-		if (!timelinesBrowser.isVisible() && SimSE.getNumOpenBranches() == 0) {
+		if (!timelinesBrowser.isShowing() && SimSE.getNumOpenBranches() == 0) {
 			System.exit(0);
 		}
 		timelinesBrowser.update();

@@ -129,7 +129,7 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 		chart.setBackgroundPaint(Color.white);
 		XYPlot plot = (XYPlot) chart.getPlot();
 		plot.setBackgroundPaint(Color.WHITE);
-		plot.setAxisOffset(new org.jfree.chart.ui.RectangleInsets(5.0, 5.0, 5.0, 5.0));
+		plot.setAxisOffset(new org.jfree.ui.RectangleInsets(5.0, 5.0, 5.0, 5.0));
 		plot.setDomainGridlinesVisible(true);
 		plot.setRangeGridlinesVisible(false);
 		ValueAxis rangeAxis = plot.getRangeAxis();
@@ -240,7 +240,7 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 			if (str.length() > 0) {
 				XYTextAnnotation annotation = new XYTextAnnotation(str,
 						b.getEndTick(), i * 10 + 1);
-				annotation.setTextAnchor(org.jfree.chart.ui.TextAnchor.HALF_ASCENT_LEFT);
+				annotation.setTextAnchor(org.jfree.ui.TextAnchor.HALF_ASCENT_LEFT);
 				annotation.setFont(font);
 				plot.addAnnotation(annotation);
 			}
@@ -280,10 +280,10 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 							// bring up branch (if not closed):
 							SimSEGUI g = SimSE.getGUIs().get(i);
 							if (!b.isClosed()) {
-								if (g.getState() == Frame.ICONIFIED) {
-									g.setState(Frame.NORMAL);
+								if (g.isIconified()) {
+									g.setIconified(false);
 								}
-								g.setVisible(true);
+								g.show();
 							}
 						}
 					}
@@ -310,7 +310,7 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 						ChartRenderingInfo info = this.chartViewer.getRenderingInfo();
 						Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 						NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-						RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+						org.jfree.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
 						double chartX = domainAxis.java2DToValue(e.getX(), dataArea, domainAxisEdge);
 						int intX = (int) Math.rint(chartX);
 						if (intX < lastRightClickedBranch.getEndTick()) { // not end tick
@@ -383,12 +383,12 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 			ChartRenderingInfo info = this.chartViewer.getRenderingInfo();
 			Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 			NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-			RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+			org.jfree.ui.RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
 			double dblX = domainAxis.java2DToValue(me.getX(), dataArea,
 					domainAxisEdge);
 			int intX = (int) Math.rint(dblX);
 			NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-			RectangleEdge rangeAxisEdge = plot.getRangeAxisEdge();
+			org.jfree.ui.RectangleEdge rangeAxisEdge = plot.getRangeAxisEdge();
 			double dblY = rangeAxis.java2DToValue(me.getY(), dataArea,rangeAxisEdge);
 			int intY = (int) Math.rint(dblY);
 

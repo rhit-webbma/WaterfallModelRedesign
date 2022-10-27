@@ -38,7 +38,6 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 	public ChooseActionToDestroyDialog(Stage parent,
 			Vector<? extends simse.adts.actions.Action> acts, State s,
 			Employee e, RuleExecutor r, String mText) {
-		super(parent, true);
 		actions = acts;
 		state = s;
 		ruleExec = r;
@@ -1251,9 +1250,9 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 //		pack();
 //		repaint();
 //		toFront();
-		Point2D ownerLoc = new Point2D(owner.getX(), owner.getY());
-		Point2D thisLoc = new Point2D((ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
-									(ownerLoc.getY() + (owner.getHeight() / 2) - (this.getHeight() / 2)));
+		Point2D ownerLoc = new Point2D(parent.getX(), parent.getY());
+		Point2D thisLoc = new Point2D((ownerLoc.getX() + (parent.getWidth() / 2) - (this.getWidth() / 2)),
+									(ownerLoc.getY() + (parent.getHeight() / 2) - (this.getHeight() / 2)));
 		this.setX(thisLoc.getX());
 		this.setY(thisLoc.getY());
 		show();
