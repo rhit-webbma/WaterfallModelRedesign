@@ -9,105 +9,92 @@ import java.text.*;
 import simse.adts.objects.*;
 import simse.state.*;
 
-public class ACustomerTableModel extends AbstractTableModel {
-	private Vector<String> columnNames; // column names
-	private Vector<Vector<Object>> data; // data in table
-	private State state;
-
-	private NumberFormat numFormat;
+public class ACustomerTableModel extends TableModel<ACustomer>{
 
 	public ACustomerTableModel(State s) {
-		state = s;
-		columnNames = new Vector<String>();
-		data = new Vector<Vector<Object>>();
-		numFormat = NumberFormat.getNumberInstance(Locale.US);
-		initColNames();
-		update();
+		super(s);
 	}
 
-	public int getColumnCount() {
-		return columnNames.size();
-	}
-
-	public int getRowCount() {
-		if (data.size() > 0) {
-			return data.elementAt(0).size();
-		}
-		return 0;
-	}
-
-	public String getColumnName(int col) {
-		return columnNames.elementAt(col);
-	}
-
-	public int getColumnIndex(String columnName) {
-		for (int i = 0; i < columnNames.size(); i++) {
-			String colName = columnNames.elementAt(i);
-			if (colName.equals(columnName)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
+	@Override
 	public Object getValueAt(int row, int col) {
-		return data.elementAt(col).elementAt(row);
+		ACustomer model = data.elementAt(col);
+		Object returnValue = null;
+		switch(row) {
+		case 0: returnValue = model.getName();
+		break;
+		}
+		return returnValue;
 	}
 
+	@Override
 	public void setValueAt(Object value, int row, int col) {
-		data.elementAt(col).add(value);
+		ACustomer model = data.elementAt(col);
+		switch(row) {
+		case 0: model.setName((String) value);
+		}
 		fireTableCellUpdated(row, col);
 	}
 
-	private void initColNames() {
+	@Override
+	void initColNames() {
 		columnNames.add("Name");
 	}
 
-	public void update() {
+//	@Override
+//	public void update() {
+//
+//		if (!state.getClock().isStopped()) {
+//			data.clear();
+//			for(ACustomer aCustomer: this.getRepository()) {
+//				data.add(aCustomer)
+//			}
+//			
+//			
+//			Vector<ACustomer> acustomers = state.getCustomerStateRepository()
+//					.getACustomerStateRepository().getAll();
+//			Vector<Object> temp = new Vector<Object>();
+//			// Initialize Name:
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < acustomers.size(); i++) {
+//				temp.add(acustomers.elementAt(i).getName());
+//			}
+//			if (data.size() < 1) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 0);
+//			}
+//
+//		} else // game over
+//		{
+//			data.clear();
+//			columnNames.clear();
+//			Vector<ACustomer> acustomers = state.getCustomerStateRepository()
+//					.getACustomerStateRepository().getAll();
+//			Vector<Object> temp = new Vector<Object>();
+//			// Initialize Name:
+//			if (columnNames.contains("Name") == false) {
+//				columnNames.add("Name");
+//			}
+//			temp = new Vector<Object>();
+//			for (int i = 0; i < acustomers.size(); i++) {
+//				temp.add(acustomers.elementAt(i).getName());
+//			}
+//			if (data.size() < 1) {
+//				data.add(temp);
+//			} else {
+//				data.setElementAt(temp, 0);
+//			}
+//
+//			fireTableStructureChanged();
+//		}
+//
+//		fireTableDataChanged(); // notify listeners that table data has changed
+//	}
 
-		if (!state.getClock().isStopped()) {
-			Vector<ACustomer> acustomers = state.getCustomerStateRepository()
-					.getACustomerStateRepository().getAll();
-			Vector<Object> temp = new Vector<Object>();
-			// Initialize Name:
-			temp = new Vector<Object>();
-			for (int i = 0; i < acustomers.size(); i++) {
-				temp.add(acustomers.elementAt(i).getName());
-			}
-			if (data.size() < 1) {
-				data.add(temp);
-			} else {
-				data.setElementAt(temp, 0);
-			}
-
-		} else // game over
-		{
-			data.clear();
-			columnNames.clear();
-			Vector<ACustomer> acustomers = state.getCustomerStateRepository()
-					.getACustomerStateRepository().getAll();
-			Vector<Object> temp = new Vector<Object>();
-			// Initialize Name:
-			if (columnNames.contains("Name") == false) {
-				columnNames.add("Name");
-			}
-			temp = new Vector<Object>();
-			for (int i = 0; i < acustomers.size(); i++) {
-				temp.add(acustomers.elementAt(i).getName());
-			}
-			if (data.size() < 1) {
-				data.add(temp);
-			} else {
-				data.setElementAt(temp, 0);
-			}
-
-			fireTableStructureChanged();
-		}
-
-		fireTableDataChanged(); // notify listeners that table data has changed
-	}
-
-	public Class getColumnClass(int c) {
-		return getValueAt(0, c).getClass();
+	@Override
+	Vector<ACustomer> getRepository() {
+		// TODO Auto-generated method stub
+		return state.getCustomerStateRepository()
+				.getACustomerStateRepository().getAll();
 	}
 }
