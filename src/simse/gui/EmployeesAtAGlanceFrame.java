@@ -5,7 +5,6 @@ import simse.state.*;
 
 
 import java.awt.Dimension;
-
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -22,10 +21,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
 import java.util.*;
 import java.text.*;
 import java.awt.Color;
+
 
 public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<MouseEvent> {
 
@@ -88,6 +87,7 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 //		validate();
 
 //		resetHeight();
+
 	}
 
 //	public void mousePressed(MouseEvent me) {

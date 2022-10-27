@@ -5,6 +5,8 @@ import simse.state.State;
 
 import org.jfree.ui.RefineryUtilities;
 
+import javafx.stage.Stage;
+
 import java.awt.event.*;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,10 +19,10 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class ExplanatoryTool extends JFrame implements ActionListener,
+public class ExplanatoryTool extends Stage implements ActionListener,
 		ListSelectionListener {
 	private ArrayList<State> log; // log for current simulation
-	private ArrayList<JFrame> visibleGraphs; // holds all of the currently
+	private ArrayList<Stage> visibleGraphs; // holds all of the currently
 												// visible graphs
 	private static MultipleTimelinesBrowser timelinesBrowser;
 	private JButton multipleTimelinesButton;
@@ -40,7 +42,7 @@ public class ExplanatoryTool extends JFrame implements ActionListener,
 	private Box mainPane;
 	private Branch branch;
 
-	public ExplanatoryTool(JFrame owner, ArrayList<State> log, Branch branch,
+	public ExplanatoryTool(Stage owner, ArrayList<State> log, Branch branch,
 			MultipleTimelinesBrowser browser) {
 		super();
 		this.branch = branch;
@@ -51,7 +53,7 @@ public class ExplanatoryTool extends JFrame implements ActionListener,
 		}
 		setTitle(title);
 		this.log = log;
-		this.visibleGraphs = new ArrayList<JFrame>();
+		this.visibleGraphs = new ArrayList<Stage>();
 
 		// Create main panel (box):
 		mainPane = Box.createVerticalBox();
@@ -277,15 +279,15 @@ public class ExplanatoryTool extends JFrame implements ActionListener,
 		mainPane.add(closeButtonPane);
 
 		// Set main window frame properties:
-		setBackground(Color.black);
-		setContentPane(mainPane);
-		validate();
-		pack();
-		repaint();
+//		setBackground(Color.black);
+//		setContentPane(mainPane);
+//		validate();
+//		pack();
+//		repaint();
 		toFront();
 		// Make it show up in the center of the screen:
-		RefineryUtilities.centerFrameOnScreen(this);
-		setVisible(false);
+//		RefineryUtilities.centerFrameOnScreen(this);
+//		setVisible(false);
 	}
 
 	public void actionPerformed(ActionEvent evt) {
@@ -318,7 +320,7 @@ public class ExplanatoryTool extends JFrame implements ActionListener,
 			if (attributes.length > 0) { // at least one attribute is selected
 				ObjectGraph graph = new ObjectGraph(title, log, objTypeType,
 						objType, keyAttVal, attributes, true, branch);
-				visibleGraphs.add(graph);
+//				visibleGraphs.add(graph);
 			} else {
 				JOptionPane.showMessageDialog(null,
 						("Please select at least one attribute"), "Warning",
@@ -333,7 +335,7 @@ public class ExplanatoryTool extends JFrame implements ActionListener,
 			}
 			if (actions.length > 0) { // at least one attribute is selected
 				ActionGraph graph = new ActionGraph(log, actions, true, branch);
-				visibleGraphs.add(graph);
+//				visibleGraphs.add(graph);
 			} else {
 				JOptionPane.showMessageDialog(null,
 						("Please select at least one action"), "Warning",
@@ -372,7 +374,7 @@ public class ExplanatoryTool extends JFrame implements ActionListener,
 					// generate composite graph:
 					CompositeGraph compGraph = new CompositeGraph(objGraph,
 							actGraph, branch);
-					visibleGraphs.add(compGraph);
+//					visibleGraphs.add(compGraph);
 				} else {
 					JOptionPane.showMessageDialog(null,
 							("Please select at least one action"), "Warning",
@@ -389,8 +391,8 @@ public class ExplanatoryTool extends JFrame implements ActionListener,
 				descriptionArea.setText("");
 			}
 		} else if (source == closeButton) {
-			setVisible(false);
-			dispose();
+//			setVisible(false);
+//			dispose();
 		}
 	}
 
@@ -420,17 +422,18 @@ public class ExplanatoryTool extends JFrame implements ActionListener,
 	// Updates all of the visible graphs
 	public void update() {
 		for (int i = 0; i < visibleGraphs.size(); i++) {
-			JFrame graph = visibleGraphs.get(i);
+			Stage graph = visibleGraphs.get(i);
 			// remove graphs whose windows have been closed from visibleGraphs:
 			if (!graph.isShowing()) {
 				visibleGraphs.remove(graph);
-			} else if (graph instanceof ObjectGraph) {
-				((ObjectGraph) graph).update();
-			} else if (graph instanceof ActionGraph) {
-				((ActionGraph) graph).update();
-			} else if (graph instanceof CompositeGraph) {
-				((CompositeGraph) graph).update();
-			}
+			} 
+//				else if (graph instanceof ObjectGraph) {
+//				((ObjectGraph) graph).update();
+//			} else if (graph instanceof ActionGraph) {
+//				((ActionGraph) graph).update();
+//			} else if (graph instanceof CompositeGraph) {
+//				((CompositeGraph) graph).update();
+//			}
 		}
 
 		// update timelines browser:

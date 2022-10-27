@@ -3,6 +3,7 @@ package simse.gui;
 
 import simse.state.*;
 
+
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -85,7 +86,6 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 //		setVisible(false);
 //		pack();
 //		validate();
-
 //		resetHeight();
 	}
 

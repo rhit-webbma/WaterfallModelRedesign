@@ -9,26 +9,33 @@ import simse.explanatorytool.Branch;
 import simse.explanatorytool.ExplanatoryTool;
 import simse.explanatorytool.MultipleTimelinesBrowser;
 
-import java.awt.event.*;
-import java.awt.*;
-import java.awt.Dimension;
-import java.awt.Color;
-
 import java.util.ArrayList;
 
-import javax.swing.*;
-
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
-public class SimSEGUI extends Stage implements ActionListener {
+public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private TabPanel tabPanel;
 	private AttributePanel attribPanel;
 	private ActionPanel actionPanel;
 
 	// Analyze menu:
-	private JMenuBar menuBar; // menu bar at top of window
-	private JMenu analyzeMenu; // analyze menu
-	private JMenuItem analyzeSimItem; // menu item in "Analyze" menu
+	private MenuBar menuBar; // menu bar at top of window
+	private Menu analyzeMenu; // analyze menu
+	private MenuItem analyzeSimItem; // menu item in "Analyze" menu
 
 	private State state;
 	private Logic logic;
@@ -37,7 +44,20 @@ public class SimSEGUI extends Stage implements ActionListener {
 	private ExplanatoryTool expTool;
 	private static MultipleTimelinesBrowser timelinesBrowser;
 	private Branch branch; // branch associated with this particular game
-
+	
+	private EventHandler<ActionEvent> menuEvent = new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent event)
+        {
+        	Object source = event.getSource(); // get which component the action came from
+			if (source == analyzeSimItem) {
+				if (expTool.isIconified()) {
+					expTool.setIconified(false);
+				}
+			expTool.show();
+			}
+        }
+    };
+	
 	public SimSEGUI(Engine e, State s, Logic l, Branch branch,
 			MultipleTimelinesBrowser browser) {
 		this.branch = branch;
@@ -62,50 +82,38 @@ public class SimSEGUI extends Stage implements ActionListener {
 		if (branch.getName() != null) {
 			title = title.concat(" - " + branch.getName());
 		}
-		setTitle(title);
+		this.setTitle(title);
 
-		menuBar = new JMenuBar();
+		menuBar = new MenuBar();
 		// Analyze menu:
-		analyzeMenu = new JMenu("Analyze"); // "Analyze" menu
-		analyzeSimItem = new JMenuItem("Analyze Simulation");
-		analyzeMenu.add(analyzeSimItem);
-		analyzeSimItem.addActionListener(this);
-		menuBar.add(analyzeMenu);
-
-		// Add menu bar to this frame:
-		this.setJMenuBar(menuBar);
+		analyzeMenu = new Menu("Analyze"); // "Analyze" menu
+		analyzeSimItem = new MenuItem("Analyze Simulation");
+		analyzeMenu.getItems().add(analyzeSimItem);
+		analyzeSimItem.setOnAction(menuEvent);
+		menuBar.getMenus().add(analyzeMenu);
 
 		// Create main panel:
-		JPanel mainPane = new JPanel(new BorderLayout());
-		mainPane.setPreferredSize(new Dimension(1024, 710));
-
-		mainPane.add(tabPanel, BorderLayout.NORTH);
-		mainPane.add(attribPanel, BorderLayout.SOUTH);
-		world = new World(state, logic, this);
-		mainPane.add(world, BorderLayout.CENTER);
-		mainPane.add(actionPanel, BorderLayout.EAST);
+        BorderPane bPane = new BorderPane();
+		bPane.setTop(tabPanel);
+		bPane.setBottom(attribPanel);
+//		world = new World(state, logic, this);
+		bPane.setCenter(world);
+		bPane.setRight(actionPanel);
+		
+		bPane.setPrefSize(1024, 710);
+		VBox panes = new VBox();
+		panes.getChildren().addAll(menuBar, bPane);
+		Scene mainPane = new Scene(panes);
 
 		// Set main window frame properties:
-		mainPane.setBackground(Color.white);
-		addWindowListener(new ExitListener());
-		setContentPane(mainPane);
-		setVisible(true);
-		setSize(getLayout().preferredLayoutSize(this));
+		mainPane.setFill(Color.WHITE);
+		this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this);
+		this.setScene(mainPane);
+//		this.setSize(bPane.getLayout().preferredLayoutSize(this));
 		// Make it show up in the center of the screen:
-		setLocationRelativeTo(null);
-		validate();
-		repaint();
-	}
-
-	public void actionPerformed(ActionEvent evt) {
-		Object source = evt.getSource(); // get which component the action came
-											// from
-		if (source == analyzeSimItem) {
-			if (expTool.getState() == Frame.ICONIFIED) {
-				expTool.setState(Frame.NORMAL);
-			}
-			expTool.setVisible(true);
-		}
+//		setLocationRelativeTo(null);
+		
+//		this.show();
 	}
 
 	public Engine getEngine() {
@@ -153,9 +161,20 @@ public class SimSEGUI extends Stage implements ActionListener {
 		timelinesBrowser.update();
 	}
 
-	public class ExitListener extends WindowAdapter {
-		public void windowClosing(WindowEvent event) {
+	@Override
+	public void handle(Event event) {
+		if (event.getEventType() == WindowEvent.WINDOW_CLOSE_REQUEST) {
 			close();
+		} else if (event.getEventType() ==  ActionEvent.ACTION) {
+			Object source = event.getSource(); // get which component the action came from
+			System.out.println("Got action event from " + source.toString());
+			if (source == analyzeSimItem) {
+				if (expTool.isIconified()) {
+					expTool.setIconified(false);
+				}
+			expTool.show();
+			}
 		}
+		
 	}
 }
