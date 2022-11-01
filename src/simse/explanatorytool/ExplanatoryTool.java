@@ -271,6 +271,8 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 
 		// set up tool tips:
 		setUpToolTips();
+		
+		mainPane = new BorderPane();
 
 		// Add panes to main pane and main sub-pane:
 		mainPane.getChildren().add(multipleTimelinesPanel);
@@ -301,6 +303,9 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		separator5.setMaxSize(2900, 1);
 		mainPane.getChildren().add(separator5);
 		mainPane.getChildren().add(closeButtonPane);
+		
+		Scene scene = new Scene(mainPane);
+		this.setScene(scene);
 
 		// Set main window frame properties:
 //		setBackground(Color.black);
@@ -459,90 +464,93 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 	private void refreshAttributeList() {
 		attributeList.getItems().removeAll();
 		String selectedObject = (String) objectList.getSelectionModel().getSelectedItem();
-		if (selectedObject.startsWith("SoftwareEngineer Employee")) {
-			String[] attributes = { "Energy", "Mood", "PayRate", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("RequirementsDocument Artifact")) {
-			String[] attributes = { "NumKnownErrors", "NumUnknownErrors",
-					"PercentErroneous", "PercentComplete", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("DesignDocument Artifact")) {
-			String[] attributes = { "NumKnownErrors", "NumUnknownErrors",
-					"PercentErroneous", "PercentComplete", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("Code Artifact")) {
-			String[] attributes = { "PercentComplete", "PercentIntegrated",
-					"NumKnownErrors", "NumUnknownErrors", "PercentErroneous", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("SystemTestPlan Artifact")) {
-			String[] attributes = { "NumKnownErrors", "NumUnknownErrors",
-					"PercentErroneous", "PercentComplete", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("SEProject Project")) {
-			String[] attributes = { "Budget", "MoneySpent", "AllottedTime",
-					"TimeUsed", "Score", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("RequirementsCaptureTool Tool")) {
-			String[] attributes = { "Cost", "ProductivityIncreaseFactor",
-					"ErrorRateDecreaseFactor", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("DesignEnvironment Tool")) {
-			String[] attributes = { "Cost", "ProductivityIncreaseFactor",
-					"ErrorRateDecreaseFactor", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("IDE Tool")) {
-			String[] attributes = { "Cost", "ProductivityIncreaseFactor",
-					"ErrorRateDecreaseFactor", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("AutomatedTestingTool Tool")) {
-			String[] attributes = { "Cost", "ProductivityIncreaseFactor",
-					"ErrorRateDecreaseFactor", };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(true);
-			attributeList.scrollTo(0);
-			attributeList.getSelectionModel().select(0);
-			attributeList.getFocusModel().focus(0);
-		} else if (selectedObject.startsWith("ACustomer Customer")) {
-			String[] attributes = { "(No numerical attributes)" };
-			attributeList.getItems().setAll(attributes);
-			attributeList.setEditable(false);
+		if(selectedObject != null) {
+			if (selectedObject.startsWith("SoftwareEngineer Employee")) {
+				String[] attributes = { "Energy", "Mood", "PayRate", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("RequirementsDocument Artifact")) {
+				String[] attributes = { "NumKnownErrors", "NumUnknownErrors",
+						"PercentErroneous", "PercentComplete", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("DesignDocument Artifact")) {
+				String[] attributes = { "NumKnownErrors", "NumUnknownErrors",
+						"PercentErroneous", "PercentComplete", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("Code Artifact")) {
+				String[] attributes = { "PercentComplete", "PercentIntegrated",
+						"NumKnownErrors", "NumUnknownErrors", "PercentErroneous", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("SystemTestPlan Artifact")) {
+				String[] attributes = { "NumKnownErrors", "NumUnknownErrors",
+						"PercentErroneous", "PercentComplete", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("SEProject Project")) {
+				String[] attributes = { "Budget", "MoneySpent", "AllottedTime",
+						"TimeUsed", "Score", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("RequirementsCaptureTool Tool")) {
+				String[] attributes = { "Cost", "ProductivityIncreaseFactor",
+						"ErrorRateDecreaseFactor", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("DesignEnvironment Tool")) {
+				String[] attributes = { "Cost", "ProductivityIncreaseFactor",
+						"ErrorRateDecreaseFactor", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("IDE Tool")) {
+				String[] attributes = { "Cost", "ProductivityIncreaseFactor",
+						"ErrorRateDecreaseFactor", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("AutomatedTestingTool Tool")) {
+				String[] attributes = { "Cost", "ProductivityIncreaseFactor",
+						"ErrorRateDecreaseFactor", };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(true);
+				attributeList.scrollTo(0);
+				attributeList.getSelectionModel().select(0);
+				attributeList.getFocusModel().focus(0);
+			} else if (selectedObject.startsWith("ACustomer Customer")) {
+				String[] attributes = { "(No numerical attributes)" };
+				attributeList.getItems().setAll(attributes);
+				attributeList.setEditable(false);
+			}
 		}
+
 	}
 
 	private void setUpToolTips() {

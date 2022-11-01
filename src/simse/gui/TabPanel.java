@@ -151,7 +151,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		// Add panes and labels to main pane
 		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
 				Priority.NEVER, new Insets(0, 0, 10, 0));
-		gridPane.add(buttonsScrollPane, 1, 0);
+//		gridPane.add(buttonsScrollPane, 1, 0); //TODO: Put this back :)
 //
 		setPrefSize(1024, 100);
 		updateImages(EMPLOYEE);
@@ -222,7 +222,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				button[index].disarm();
 				GridPane.setConstraints(button[index], i, j, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, 
 						Priority.NEVER, new Insets(2, 1, 0, 0));
-				pane.getChildren().add(button[index]);
+				if(!pane.getChildren().contains(button[index])) {
+					pane.getChildren().add(button[index]);
+				}
 			}
 		}
 	}

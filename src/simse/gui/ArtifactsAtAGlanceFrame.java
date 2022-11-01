@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -215,6 +216,9 @@ public class ArtifactsAtAGlanceFrame extends Stage implements EventHandler<Mouse
 //		mainPane.add(codePane);
 		mainPane.getChildren().add(systemtestplanTitlePane);
 //		mainPane.add(systemtestplanPane);
+		
+		Scene scene = new Scene(mainPane);
+		this.setScene(scene);
 
 		// Set main window frame properties:
 //		setBackground(Color.white);

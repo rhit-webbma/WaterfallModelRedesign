@@ -10,7 +10,11 @@ import simse.explanatorytool.MultipleTimelinesBrowser;
 
 import java.util.ArrayList;
 
-public class SimSE {
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
+public class SimSE extends Application{
 	private static ArrayList<Branch> branches = new ArrayList<Branch>();
 	private static ArrayList<SimSEGUI> guis = new ArrayList<SimSEGUI>();
 	private static MultipleTimelinesBrowser timelinesBrowser = new MultipleTimelinesBrowser();
@@ -30,6 +34,8 @@ public class SimSE {
 		branches.add(branch);
 		guis.add(gui);
 		timelinesBrowser.update();
+
+
 	}
 
 	public static ArrayList<Branch> getBranches() {
@@ -52,6 +58,15 @@ public class SimSE {
 	}
 
 	public static void main(String args[]) {
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage arg0) throws Exception {
+		// TODO Auto-generated method stub
 		startNewBranch(new State(), new Branch(null, 0, 0, null, ""));
+		ArrayList<SimSEGUI> guis = this.getGUIs();
+		arg0 = guis.get(0);
+		arg0.show();
 	}
 }

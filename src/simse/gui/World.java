@@ -21,8 +21,8 @@ import javafx.scene.text.Font;
 
 import java.util.*;
 
-import com.sun.javafx.tk.FontMetrics;
-import com.sun.javafx.tk.Toolkit;
+//import com.sun.javafx.tk.FontMetrics;
+//import com.sun.javafx.tk.Toolkit;
 
 public class World extends SimSEMap implements EventHandler<Event> {
 	private int clickedHeightModifier = 5;
@@ -268,8 +268,9 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		float tmpW = 0;
 
 		ArrayList<String> strList = new ArrayList<String>();
-		FontMetrics f = Toolkit.getToolkit().getFontLoader().getFontMetrics(dbGraphics.getFont());
-
+//		FontMetrics f = Toolkit.getToolkit().getFontLoader().getFontMetrics(dbGraphics.getFont());
+		Font f = dbGraphics.getFont();
+		
 		// if string is longer than <lengthofOneLine> characters, break it into
 		// several lines
 		while (strlength > lengthOfOneLine) {
@@ -277,7 +278,8 @@ public class World extends SimSEMap implements EventHandler<Event> {
 			int space = temp.lastIndexOf(" ");
 			temp = s.substring(0, space);
 
-			tmpW = f.computeStringWidth(temp) + 4; // offset of 4 for spacing purposes
+			tmpW = s.length();
+//			tmpW = f.computeStringWidth(temp) + 4; // offset of 4 for spacing purposes
 			
 
 			strList.add(temp);
@@ -285,7 +287,8 @@ public class World extends SimSEMap implements EventHandler<Event> {
 			s = s.substring(space + 1, strlength - 1);
 			strlength = s.length() + 1;
 		}
-		tmpW = f.computeStringWidth(s) + 4;
+//		tmpW = f.computeStringWidth(s) + 4;
+		tmpW = s.length();
 
 		strList.add(s); // append either the whole string or the rest of the
 						// string
@@ -502,7 +505,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 
 		x += xspacer;
 		y += yspacer;
-		gc.setFill(new Color(230, 240, 255, 1));
+		gc.setFill(new Color(0.9, 0.94, 1, 1));
 		gc.fillRoundRect(x, y, w, h, 4, 4);
 		gc.setStroke(new Color(0, 30, 110, 1));
 		gc.strokeRoundRect(x, y, w, h, 8, 8);

@@ -65,7 +65,6 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 		mainGUIFrame = gui;
 
 		layout = new VBox();
-		this.getChildren().add(layout);		
 
 		actionPane = new ScrollPane();
 		actionPane.setPrefSize(225, 495);
@@ -94,6 +93,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 		layout.getChildren().add(actionPane);
 		
 		update();
+		this.getChildren().add(layout);		
 	}
 
 	public void createPopupMenu(Node node, double x, double y) {
@@ -162,7 +162,9 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 
 			Label picLabel = empsToPicLabels.get(emp);
 			picLabel.setAlignment(Pos.BASELINE_LEFT);
-			picPanel.getChildren().add(picLabel);
+			if(!picPanel.getChildren().contains(picLabel)) {
+				picPanel.getChildren().add(picLabel);
+			}
 			if (emp instanceof SoftwareEngineer) {
 				SoftwareEngineer e = (SoftwareEngineer) emp;
 				if (empsToKeyLabels.get(e) == null) {
@@ -173,15 +175,18 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 					empsToKeyLabels.put(e, temp);
 				}
 				Label keyLabel = empsToKeyLabels.get(e);
-				picPanel.getChildren().add(keyLabel);
+				if(!picPanel.getChildren().contains(keyLabel)) {
+					picPanel.getChildren().add(keyLabel);
+				}
 			}
 //			picPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 			picPanel.setBorder(Border.EMPTY);
 //			gbc.weightx = 1;
 //			gbc.weighty = 1;
 //			gbc.anchor = GridBagConstraints.WEST;
-			empPanel.getChildren().add(picPanel);
-
+			if(!empPanel.getChildren().contains(picPanel)) {
+				empPanel.getChildren().add(picPanel);
+			}
 			VBox actsPanel = new VBox();
 			// actsPanel.removeAll();
 

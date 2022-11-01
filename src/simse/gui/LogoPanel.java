@@ -84,7 +84,8 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		gc.fillRect(0, 0, 340, 100);
 		gc.drawImage(logo, 0, 0);
 		
-		gridPane.add(canvas, 0, 0, 1, 5);
+		gridPane.add(canvas, 0, 0, 1, 1);
+		gridPane.setGridLinesVisible(true);
 	}
 
 	public void setTabPanel(TabPanel tab) {
@@ -117,7 +118,8 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		GridPane buttonGPane = new GridPane();
 		buttonGPane.setOpacity(1);
 		buttonGPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		GridPane.setConstraints(buttonGPane, 1, 0, 3, 5, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+		GridPane.setConstraints(buttonGPane, 1, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+//		buttonGPane.setGridLinesVisible(true);
 		
 		infoButton = new Button();
 		infoButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
@@ -126,7 +128,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		infoButton.setPrefSize(24, 40);
 		infoButton.setBorder(null);
 		infoButton.addEventHandler(MouseEvent.ANY, this);
-		GridPane.setConstraints(infoButton, 0, 0, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 5, 0));
+		GridPane.setConstraints(infoButton, 0, 0, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
 		buttonGPane.getChildren().add(infoButton);
 		resetButton = new Button();
 		resetButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
@@ -135,51 +137,53 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		resetButton.setPrefSize(24, 40);
 		resetButton.setBorder(null);
 		resetButton.addEventHandler(MouseEvent.ANY, this);
-		GridPane.setConstraints(resetButton, 0, 1, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, Priority.NEVER, new Insets(5, 0, 0, 0));
+		GridPane.setConstraints(resetButton, 0, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
 		buttonGPane.getChildren().add(resetButton);
 		aboutButton = new Button();
 		aboutButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
 		aboutButton.setOpacity(1);
 		aboutButton.setMinSize(170, 88);
 		aboutButton.setPrefSize(170, 88);
-		addButton(aboutButton, 1, 0, 1, 5, 0, 1, buttonGPane);
+		addButton(aboutButton, 0, 0, 1, 1, 0, 1, buttonGPane);
 		// spacers to get the angled tab effect:
 		Label lblCustSpacer1 = new Label("--");
 		Label lblEmpSpacer1 = new Label("--");
 		Label lblEmpSpacer2 = new Label("--");
 		Label lblProjSpacer1 = new Label("--");
 
-		addButton(artifactButton, 2, 0, 3, 1, 1, 0, buttonGPane);
+		addButton(artifactButton, 0, 1, 1, 1, 1, 0, buttonGPane);
 
-		addLabel(lblCustSpacer1, 2, 1, 1, 1, 0, 0, buttonGPane);
-		addButton(customerButton, 3, 1, 2, 1, 1, 0, buttonGPane);
+		addLabel(lblCustSpacer1, 0, 0, 1, 1, 0, 0, buttonGPane);
+		addButton(customerButton, 1, 0, 1, 1, 1, 0, buttonGPane);
 
-		addLabel(lblEmpSpacer1, 2, 2, 1, 1, 0, 0, buttonGPane);
-		addLabel(lblEmpSpacer2, 3, 2, 1, 1, 0, 0, buttonGPane);
-		addButton(employeeButton, 4, 2, 1, 1, 1, 0, buttonGPane);
+		addLabel(lblEmpSpacer1, 0, 0, 1, 1, 0, 0, buttonGPane);
+		addLabel(lblEmpSpacer2, 0, 0, 1, 1, 0, 0, buttonGPane);
+		addButton(employeeButton, 1, 1, 1, 1, 1, 0, buttonGPane);
 
-		addLabel(lblProjSpacer1, 2, 3, 1, 1, 0, 0, buttonGPane);
-		addButton(projectButton, 3, 3, 2, 1, 1, 0, buttonGPane);
+		addLabel(lblProjSpacer1, 0, 0, 1, 1, 0, 0, buttonGPane);
+		addButton(projectButton, 1, 2, 2, 1, 1, 0, buttonGPane);
 
-		addButton(toolButton, 2, 4, 3, 1, 1, 1, buttonGPane);
+		addButton(toolButton, 0, 0, 1, 1, 1, 1, buttonGPane);
 		
 		gridPane.getChildren().add(buttonGPane);
 	}
 
 	public void addLabel(Label lb, int x, int y, int rowspan, int colspan,
 			double wx, double wy, GridPane gp) {
+		gp.getChildren().add(lb);
 		GridPane.setConstraints(lb, x, y, colspan, rowspan, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
 		lb.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		gp.getChildren().add(lb);
+
 	}
 
 	public void addButton(Button jb, int x, int y, int rowspan, int colspan,
 			double wx, double wy, GridPane gp) {
+		gp.getChildren().add(jb);
 		jb.setBorder(null);
 		jb.addEventHandler(MouseEvent.ANY, this);
 		jb.setOpacity(1);
-		GridPane.setConstraints(jb, x, y, colspan, rowspan, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(1, 1, 1, 1));
-		gp.getChildren().add(jb);
+		GridPane.setConstraints(jb, x, y, colspan, rowspan, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+
 	}
 
 //	public void paintComponent(Graphics g) {

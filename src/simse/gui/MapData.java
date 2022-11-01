@@ -3,8 +3,6 @@
 // the ImagImageViewociated with that key. Currently some keys are not in use i.e. have no image associated with them
 package simse.gui;
 
-import com.sun.javafx.tk.Toolkit;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import simse.gui.util.JavaFXHelpers;
