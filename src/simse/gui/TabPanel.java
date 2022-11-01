@@ -121,7 +121,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		gridPane = new GridPane();
 		gridPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1.0)));
 		gridPane.setPrefWidth(1024);
-		gridPane.setGridLinesVisible(true);
+//		gridPane.setGridLinesVisible(true);
 
 		logoPane = new LogoPanel(gui);
 		logoPane.setMinSize(340, 90);
