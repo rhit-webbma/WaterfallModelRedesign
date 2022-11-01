@@ -151,7 +151,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		// Add panes and labels to main pane
 		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
 				Priority.NEVER, new Insets(0, 0, 10, 0));
-//		gridPane.add(buttonsScrollPane, 1, 0); //TODO: Put this back :)
+		gridPane.add(buttonsScrollPane, 2, 0); //TODO: Put this back :)
 //
 		setPrefSize(1024, 100);
 		updateImages(EMPLOYEE);
@@ -215,8 +215,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //					pListener.setEnabled(false);
 					button[index].disarm();
 				}
-				button[index].setGraphic(JavaFXHelpers.createImageView("src/simse/gui/images/error.GIF"));
-				button[index].setPrefSize(35, 35);
+//				button[index].setGraphic(JavaFXHelpers.createImageView("src/simse/gui/images/error.GIF"));
+				button[index].setPrefSize(5, 5);
 				button[index].setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 				button[index].setBorder(defaultBorder);
 				button[index].disarm();
@@ -317,13 +317,14 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //		artifactFrame.update();
 //		toolFrame.update();
 //		projectFrame.update();
-//		customerFrame.update();
+		customerFrame.update();
 		if (!guiChanged) {
 			return;
 		}
 		// clear buttons:
 		buttonsToObjs.clear();
-		buttonsPane.getChildren().removeAll();
+//		buttonsPane.getChildren().removeAll();
+		buttonsPane.getChildren().clear();
 
 		// update images:
 		updateImages(index);
