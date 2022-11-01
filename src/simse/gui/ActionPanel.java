@@ -11,7 +11,6 @@ import simse.adts.actions.*;
 import java.util.*;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -23,14 +22,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-
-import java.io.*;
 
 public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 	private State state;
@@ -42,7 +43,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 	private Employee selectedEmp;
 
 	private ScrollPane actionPane;
-	private Hashtable<Employee, Pane> empsToEmpPanels;
+	private Hashtable<Employee, VBox> empsToEmpPanels;
 	private Hashtable<Employee, VBox> empsToPicPanels;
 	// private Hashtable empsToActPanels;
 	private Hashtable<Employee, Label> empsToPicLabels;
@@ -67,10 +68,10 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 		layout = new VBox();
 
 		actionPane = new ScrollPane();
-		actionPane.setPrefSize(225, 495);
-		actionPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
+		actionPane.setPrefSize(225, 425);
+		actionPane.setStyle("-fx-background: rgb(102, 102, 102, 1);\n -fx-background-color: rgb(102, 102, 102, 1)");
 
-		empsToEmpPanels = new Hashtable<Employee, Pane>();
+		empsToEmpPanels = new Hashtable<Employee, VBox>();
 		empsToPicPanels = new Hashtable<Employee, VBox>();
 		// empsToActPanels = new Hashtable();
 		empsToPicLabels = new Hashtable<Employee, Label>();
@@ -118,12 +119,13 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 	}
 
 	public void update() {
-		actionPane.setContent(null);;
+		actionPane.setContent(null);
+		VBox employees = new VBox();
 		Vector<Employee> allEmps = state.getEmployeeStateRepository().getAll();
 		for (int i = 0; i < allEmps.size(); i++) {
 			Employee emp = allEmps.elementAt(i);
 			if (empsToEmpPanels.get(emp) == null) {
-				Pane tempPanel = new Pane();
+				VBox tempPanel = new VBox();
 				tempPanel.addEventHandler(MouseEvent.ANY, this);
 				empsToEmpPanels.put(emp, tempPanel);
 			}
@@ -138,7 +140,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 			 * temp.setMinimumSize(new Dimension(150, 10)); empsToActPanels.put(emp, temp);
 			 * }
 			 */
-			Pane empPanel = empsToEmpPanels.get(emp);
+			VBox empPanel = empsToEmpPanels.get(emp);
 			empPanel.getChildren().removeAll();
 			VBox picPanel = (VBox) empsToPicPanels.get(emp);
 			picPanel.getChildren().removeAll();
@@ -172,6 +174,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 					temp.setTextFill(Color.WHITE);
 					temp.setAlignment(Pos.BASELINE_LEFT);
 					temp.setTextAlignment(TextAlignment.LEFT);
+					System.out.println("Adding " + temp.getText());
 					empsToKeyLabels.put(e, temp);
 				}
 				Label keyLabel = empsToKeyLabels.get(e);
@@ -191,6 +194,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 			// actsPanel.removeAll();
 
 			actsPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
+			empPanel.setBorder(new Border(new BorderStroke(Color.rgb(102, 102, 102, 1), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
 			Vector<simse.adts.actions.Action> acts = state.getActionStateRepository().getAllActions(emp);
 			for (int j = 0; j < acts.size(); j++) {
 				simse.adts.actions.Action tempAct = acts.elementAt(j);
@@ -281,7 +285,9 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 			actsPanel.setPrefSize(150, (int) (actsPanel.getPrefHeight()));
 			empPanel.getChildren().add(actsPanel);
 //			empPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			employees.getChildren().add(empPanel);
 		}
+		actionPane.setContent(employees);
 	}	
 
 	public void popupMenuActions(MenuItem source) {
