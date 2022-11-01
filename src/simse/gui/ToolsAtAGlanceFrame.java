@@ -135,7 +135,12 @@ public class ToolsAtAGlanceFrame extends Stage implements EventHandler<MouseEven
 		mainPane.getChildren().add(automatedtestingtoolTitlePane);
 //		mainPane.add(automatedtestingtoolPane);
 		
-		Scene scene = new Scene(mainPane);
+		requirementscapturetoolTable.prefWidthProperty().bind(mainPane.widthProperty());
+		designenvironmentTable.prefWidthProperty().bind(mainPane.widthProperty());
+		ideTable.prefWidthProperty().bind(mainPane.widthProperty());
+		automatedtestingtoolTable.prefWidthProperty().bind(mainPane.widthProperty());
+		
+		Scene scene = new Scene(mainPane, 800, 500);
 		this.setScene(scene);
 //
 //		// Set main window frame properties:

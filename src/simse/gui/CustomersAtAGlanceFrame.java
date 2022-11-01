@@ -74,10 +74,12 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 
 		// Create main pane:
 		mainPane = new VBox();
+		
+		acustomerTable.prefWidthProperty().bind(mainPane.widthProperty());
 
 		// Add panes to main pane:
 		mainPane.getChildren().add(acustomerTitlePane);
-		Scene scene = new Scene(mainPane);
+		Scene scene = new Scene(mainPane, 800, 500);
 		this.setScene(scene);
 
 		// Set main window frame properties:

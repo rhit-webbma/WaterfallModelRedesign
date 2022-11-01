@@ -72,8 +72,10 @@ public class ProjectsAtAGlanceFrame extends Stage implements EventHandler<MouseE
 
 		// Add panes to main pane:
 		mainPane.getChildren().addAll(seprojectTitlePane, seprojectPane);
+		
+		seprojectTable.prefWidthProperty().bind(mainPane.widthProperty());
 
-		Scene scene = new Scene(mainPane);
+		Scene scene = new Scene(mainPane, 800, 500);
 		this.setScene(scene);
 		// Set main window frame properties:
 //		setBackground(Color.white);
