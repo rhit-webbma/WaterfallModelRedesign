@@ -185,7 +185,7 @@ public class ArtifactsAtAGlanceFrame extends Stage implements EventHandler<Mouse
 
 		// right click menu:
 		popup = new ContextMenu();
-//		popupListener = new PopupListener(popup, gui);
+		popupListener = new PopupListener(popup, gui);
 
 		// Create panes:
 		ScrollPane requirementsdocumentPane = new ScrollPane(requirementsdocumentTable);
