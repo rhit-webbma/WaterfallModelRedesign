@@ -9,127 +9,57 @@ import java.text.*;
 import simse.adts.objects.*;
 import simse.state.*;
 
-public class SoftwareEngineerTableModel extends TableModel<SoftwareEngineer> {
-	
+public class SoftwareEngineerTableModel extends AbstractTableModel {
+	private Vector<String> columnNames; // column names
+	private Vector<Vector<Object>> data; // data in table
+	private State state;
+
+	private NumberFormat numFormat;
+
 	public SoftwareEngineerTableModel(State s) {
-		super(s);
+		state = s;
+		columnNames = new Vector<String>();
+		data = new Vector<Vector<Object>>();
+		numFormat = NumberFormat.getNumberInstance(Locale.US);
+		initColNames();
+		update();
+	}
+
+	public int getColumnCount() {
+		return columnNames.size();
+	}
+
+	public int getRowCount() {
+		if (data.size() > 0) {
+			return data.elementAt(0).size();
+		}
+		return 0;
+	}
+
+	public String getColumnName(int col) {
+		return columnNames.elementAt(col);
+	}
+
+	public int getColumnIndex(String columnName) {
+		for (int i = 0; i < columnNames.size(); i++) {
+			String colName = columnNames.elementAt(i);
+			if (colName.equals(columnName)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public Object getValueAt(int row, int col) {
-		SoftwareEngineer model = data.elementAt(col);
-		Object returnVal = null;
-		switch(row) {
-		case 0: model.getName();
-		break;
-		case 1: model.getEnergy();
-		break;
-		case 2: model.getMood();
-		break;
-		case 3: model.getHealth();
-		break;
-		case 4: model.getRequirementsExperience();
-		break;
-		case 5: model.getDesignExperience();
-		break;
-		case 6: model.getCodingExperience();
-		break;
-		case 7: model.getTestingExperience();
-		break;
-		case 8: model.getProductivityInRequirementsUnadjusted();
-		break;
-		case 9: model.getProductivityInDesignUnadjusted();
-		break;
-		case 10: model.getProductivityInCodingUnadjusted();
-		break;
-		case 11: model.getProductivityInTestingUnadjusted();
-		break;
-		case 12: model.getErrorRateInRequirementsUnadjusted();
-		break;
-		case 13: model.getErrorRateInDesignUnadjusted();
-		break;
-		case 14: model.getErrorRateInCodingUnadjusted();
-		break;
-		case 15: model.getErrorRateInTestingUnadjusted();
-		break;
-		case 16: model.getProductivityInRequirements();
-		break;
-		case 17: model.getProductivityInDesign();
-		break;
-		case 18: model.getProductivityInCoding();
-		break;
-		case 19: model.getProductivityInTesting();
-		break;
-		case 20: model.getErrorRateInRequirements();
-		break;
-		case 21: model.getErrorRateInCoding();
-		break;
-		case 22: model.getErrorRateInTesting();
-		break;
-		case 23: model.getOnBreak();
-		break;
-		case 24: model.getPayRate();
-		}
-		return returnVal;
+		return data.elementAt(col).elementAt(row);
 	}
 
 	public void setValueAt(Object value, int row, int col) {
-		SoftwareEngineer model = data.elementAt(col);
-		switch(row) {
-		case 0: model.setName((String) value);
-		break;
-		case 1: model.setEnergy((double) value);
-		break;
-		case 2: model.setMood((double) value);
-		break;
-		case 3: model.setHealth((double) value);
-		break;
-		case 4: model.setRequirementsExperience((String) value);
-		break;
-		case 5: model.setDesignExperience((String) value);
-		break;
-		case 6: model.setCodingExperience((String) value);
-		break;
-		case 7: model.setTestingExperience((String) value);
-		break;
-		case 8: model.setProductivityInRequirementsUnadjusted((double) value);
-		break;
-		case 9: model.setProductivityInDesignUnadjusted((double) value);
-		break;
-		case 10: model.setProductivityInCodingUnadjusted((double) value);
-		break;
-		case 11: model.setProductivityInTestingUnadjusted((double) value);
-		break;
-		case 12: model.setErrorRateInRequirementsUnadjusted((double) value);
-		break;
-		case 13: model.setErrorRateInDesignUnadjusted((double) value);
-		break;
-		case 14: model.setErrorRateInCodingUnadjusted((double) value);
-		break;
-		case 15: model.setErrorRateInTestingUnadjusted((double) value);
-		break;
-		case 16: model.setProductivityInRequirements((double) value);
-		break;
-		case 17: model.setProductivityInDesign((double) value);
-		break;
-		case 18: model.setProductivityInCoding((double) value);
-		break;
-		case 19: model.setProductivityInTesting((double) value);
-		break;
-		case 20: model.setErrorRateInRequirements((double) value);
-		break;
-		case 21: model.setErrorRateInCoding((double) value);
-		break;
-		case 22: model.setErrorRateInTesting((double) value);
-		break;
-		case 23: model.setOnBreak((boolean) value);
-		break;
-		case 24: model.setPayRate((double) value);
-		}
+		data.elementAt(col).add(value);
 		fireTableCellUpdated(row, col);
 	}
 
-	@Override
-	void initColNames() {
+	private void initColNames() {
 		columnNames.add("Name");
 		columnNames.add("Energy");
 		columnNames.add("Mood");
@@ -140,255 +70,251 @@ public class SoftwareEngineerTableModel extends TableModel<SoftwareEngineer> {
 		columnNames.add("PayRate");
 	}
 
-//	public void update() {
-//
-//		if (!state.getClock().isStopped()) {
-//			Vector<SoftwareEngineer> softwareengineers = state
-//					.getEmployeeStateRepository()
-//					.getSoftwareEngineerStateRepository().getAll();
-//			Vector<Object> temp = new Vector<Object>();
-//			// Initialize Name:
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i).getName());
-//			}
-//			if (data.size() < 1) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 0);
-//			}
-//
-//			// Initialize Energy:
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				numFormat.setMinimumFractionDigits(2);
-//				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(softwareengineers.elementAt(i)
-//						.getEnergy()));
-//
-//			}
-//			if (data.size() < 2) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 1);
-//			}
-//
-//			// Initialize Mood:
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				numFormat.setMinimumFractionDigits(2);
-//				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(softwareengineers.elementAt(i)
-//						.getMood()));
-//
-//			}
-//			if (data.size() < 3) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 2);
-//			}
-//
-//			// Initialize RequirementsExperience:
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i)
-//						.getRequirementsExperience());
-//			}
-//			if (data.size() < 4) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 3);
-//			}
-//
-//			// Initialize DesignExperience:
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i).getDesignExperience());
-//			}
-//			if (data.size() < 5) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 4);
-//			}
-//
-//			// Initialize CodingExperience:
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i).getCodingExperience());
-//			}
-//			if (data.size() < 6) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 5);
-//			}
-//
-//			// Initialize TestingExperience:
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i).getTestingExperience());
-//			}
-//			if (data.size() < 7) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 6);
-//			}
-//
-//			// Initialize PayRate:
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				numFormat.setMinimumFractionDigits(2);
-//				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(softwareengineers.elementAt(i)
-//						.getPayRate()));
-//
-//			}
-//			if (data.size() < 8) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 7);
-//			}
-//
-//		} else // game over
-//		{
-//			data.clear();
-//			columnNames.clear();
-//			Vector<SoftwareEngineer> softwareengineers = state
-//					.getEmployeeStateRepository()
-//					.getSoftwareEngineerStateRepository().getAll();
-//			Vector<Object> temp = new Vector<Object>();
-//			// Initialize Name:
-//			if (columnNames.contains("Name") == false) {
-//				columnNames.add("Name");
-//			}
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i).getName());
-//			}
-//			if (data.size() < 1) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 0);
-//			}
-//
-//			// Initialize Energy:
-//			if (columnNames.contains("Energy") == false) {
-//				columnNames.add("Energy");
-//			}
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				numFormat.setMinimumFractionDigits(2);
-//				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(softwareengineers.elementAt(i)
-//						.getEnergy()));
-//			}
-//			if (data.size() < 2) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 1);
-//			}
-//
-//			// Initialize Mood:
-//			if (columnNames.contains("Mood") == false) {
-//				columnNames.add("Mood");
-//			}
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				numFormat.setMinimumFractionDigits(2);
-//				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(softwareengineers.elementAt(i)
-//						.getMood()));
-//			}
-//			if (data.size() < 3) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 2);
-//			}
-//
-//			// Initialize RequirementsExperience:
-//			if (columnNames.contains("RequirementsExperience") == false) {
-//				columnNames.add("RequirementsExperience");
-//			}
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i)
-//						.getRequirementsExperience());
-//			}
-//			if (data.size() < 4) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 3);
-//			}
-//
-//			// Initialize DesignExperience:
-//			if (columnNames.contains("DesignExperience") == false) {
-//				columnNames.add("DesignExperience");
-//			}
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i).getDesignExperience());
-//			}
-//			if (data.size() < 5) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 4);
-//			}
-//
-//			// Initialize CodingExperience:
-//			if (columnNames.contains("CodingExperience") == false) {
-//				columnNames.add("CodingExperience");
-//			}
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i).getCodingExperience());
-//			}
-//			if (data.size() < 6) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 5);
-//			}
-//
-//			// Initialize TestingExperience:
-//			if (columnNames.contains("TestingExperience") == false) {
-//				columnNames.add("TestingExperience");
-//			}
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				temp.add(softwareengineers.elementAt(i).getTestingExperience());
-//			}
-//			if (data.size() < 7) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 6);
-//			}
-//
-//			// Initialize PayRate:
-//			if (columnNames.contains("PayRate") == false) {
-//				columnNames.add("PayRate");
-//			}
-//			temp = new Vector<Object>();
-//			for (int i = 0; i < softwareengineers.size(); i++) {
-//				numFormat.setMinimumFractionDigits(2);
-//				numFormat.setMaximumFractionDigits(2);
-//				temp.add(numFormat.format(softwareengineers.elementAt(i)
-//						.getPayRate()));
-//			}
-//			if (data.size() < 8) {
-//				data.add(temp);
-//			} else {
-//				data.setElementAt(temp, 7);
-//			}
-//
-//			fireTableStructureChanged();
-//		}
-//
-//		fireTableDataChanged(); // notify listeners that table data has changed
-//	}
+	public void update() {
 
-	@Override
-	Vector<SoftwareEngineer> getRepository() {
-		// TODO Auto-generated method stub
-		return state
-				.getEmployeeStateRepository()
-				.getSoftwareEngineerStateRepository().getAll();
+		if (!state.getClock().isStopped()) {
+			Vector<SoftwareEngineer> softwareengineers = state
+					.getEmployeeStateRepository()
+					.getSoftwareEngineerStateRepository().getAll();
+			Vector<Object> temp = new Vector<Object>();
+			// Initialize Name:
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i).getName());
+			}
+			if (data.size() < 1) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 0);
+			}
+
+			// Initialize Energy:
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				numFormat.setMinimumFractionDigits(2);
+				numFormat.setMaximumFractionDigits(2);
+				temp.add(numFormat.format(softwareengineers.elementAt(i)
+						.getEnergy()));
+
+			}
+			if (data.size() < 2) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 1);
+			}
+
+			// Initialize Mood:
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				numFormat.setMinimumFractionDigits(2);
+				numFormat.setMaximumFractionDigits(2);
+				temp.add(numFormat.format(softwareengineers.elementAt(i)
+						.getMood()));
+
+			}
+			if (data.size() < 3) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 2);
+			}
+
+			// Initialize RequirementsExperience:
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i)
+						.getRequirementsExperience());
+			}
+			if (data.size() < 4) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 3);
+			}
+
+			// Initialize DesignExperience:
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i).getDesignExperience());
+			}
+			if (data.size() < 5) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 4);
+			}
+
+			// Initialize CodingExperience:
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i).getCodingExperience());
+			}
+			if (data.size() < 6) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 5);
+			}
+
+			// Initialize TestingExperience:
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i).getTestingExperience());
+			}
+			if (data.size() < 7) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 6);
+			}
+
+			// Initialize PayRate:
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				numFormat.setMinimumFractionDigits(2);
+				numFormat.setMaximumFractionDigits(2);
+				temp.add(numFormat.format(softwareengineers.elementAt(i)
+						.getPayRate()));
+
+			}
+			if (data.size() < 8) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 7);
+			}
+
+		} else // game over
+		{
+			data.clear();
+			columnNames.clear();
+			Vector<SoftwareEngineer> softwareengineers = state
+					.getEmployeeStateRepository()
+					.getSoftwareEngineerStateRepository().getAll();
+			Vector<Object> temp = new Vector<Object>();
+			// Initialize Name:
+			if (columnNames.contains("Name") == false) {
+				columnNames.add("Name");
+			}
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i).getName());
+			}
+			if (data.size() < 1) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 0);
+			}
+
+			// Initialize Energy:
+			if (columnNames.contains("Energy") == false) {
+				columnNames.add("Energy");
+			}
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				numFormat.setMinimumFractionDigits(2);
+				numFormat.setMaximumFractionDigits(2);
+				temp.add(numFormat.format(softwareengineers.elementAt(i)
+						.getEnergy()));
+			}
+			if (data.size() < 2) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 1);
+			}
+
+			// Initialize Mood:
+			if (columnNames.contains("Mood") == false) {
+				columnNames.add("Mood");
+			}
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				numFormat.setMinimumFractionDigits(2);
+				numFormat.setMaximumFractionDigits(2);
+				temp.add(numFormat.format(softwareengineers.elementAt(i)
+						.getMood()));
+			}
+			if (data.size() < 3) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 2);
+			}
+
+			// Initialize RequirementsExperience:
+			if (columnNames.contains("RequirementsExperience") == false) {
+				columnNames.add("RequirementsExperience");
+			}
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i)
+						.getRequirementsExperience());
+			}
+			if (data.size() < 4) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 3);
+			}
+
+			// Initialize DesignExperience:
+			if (columnNames.contains("DesignExperience") == false) {
+				columnNames.add("DesignExperience");
+			}
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i).getDesignExperience());
+			}
+			if (data.size() < 5) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 4);
+			}
+
+			// Initialize CodingExperience:
+			if (columnNames.contains("CodingExperience") == false) {
+				columnNames.add("CodingExperience");
+			}
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i).getCodingExperience());
+			}
+			if (data.size() < 6) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 5);
+			}
+
+			// Initialize TestingExperience:
+			if (columnNames.contains("TestingExperience") == false) {
+				columnNames.add("TestingExperience");
+			}
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				temp.add(softwareengineers.elementAt(i).getTestingExperience());
+			}
+			if (data.size() < 7) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 6);
+			}
+
+			// Initialize PayRate:
+			if (columnNames.contains("PayRate") == false) {
+				columnNames.add("PayRate");
+			}
+			temp = new Vector<Object>();
+			for (int i = 0; i < softwareengineers.size(); i++) {
+				numFormat.setMinimumFractionDigits(2);
+				numFormat.setMaximumFractionDigits(2);
+				temp.add(numFormat.format(softwareengineers.elementAt(i)
+						.getPayRate()));
+			}
+			if (data.size() < 8) {
+				data.add(temp);
+			} else {
+				data.setElementAt(temp, 7);
+			}
+
+			fireTableStructureChanged();
+		}
+
+		fireTableDataChanged(); // notify listeners that table data has changed
+	}
+
+	public Class getColumnClass(int c) {
+		return getValueAt(0, c).getClass();
 	}
 }
