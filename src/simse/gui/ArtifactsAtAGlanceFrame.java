@@ -185,7 +185,7 @@ public class ArtifactsAtAGlanceFrame extends Stage implements EventHandler<Mouse
 
 		// right click menu:
 		popup = new ContextMenu();
-//		popupListener = new PopupListener(popup, gui);
+		popupListener = new PopupListener(popup, gui);
 
 		// Create panes:
 		ScrollPane requirementsdocumentPane = new ScrollPane(requirementsdocumentTable);
@@ -217,7 +217,12 @@ public class ArtifactsAtAGlanceFrame extends Stage implements EventHandler<Mouse
 		mainPane.getChildren().add(systemtestplanTitlePane);
 //		mainPane.add(systemtestplanPane);
 		
-		Scene scene = new Scene(mainPane);
+		requirementsdocumentTable.prefWidthProperty().bind(mainPane.widthProperty());
+		designdocumentTable.prefWidthProperty().bind(mainPane.widthProperty());
+		codeTable.prefWidthProperty().bind(mainPane.widthProperty());
+		systemtestplanTable.prefWidthProperty().bind(mainPane.widthProperty());
+		
+		Scene scene = new Scene(mainPane, 800, 500);
 		this.setScene(scene);
 
 		// Set main window frame properties:

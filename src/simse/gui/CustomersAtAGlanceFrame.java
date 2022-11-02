@@ -2,8 +2,7 @@
 package simse.gui;
 
 import simse.state.*;
-
-
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -74,10 +73,12 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 
 		// Create main pane:
 		mainPane = new VBox();
+		
+		acustomerTable.prefWidthProperty().bind(mainPane.widthProperty());
 
 		// Add panes to main pane:
 		mainPane.getChildren().add(acustomerTitlePane);
-		Scene scene = new Scene(mainPane);
+		Scene scene = new Scene(mainPane, 800, 500);
 		this.setScene(scene);
 
 		// Set main window frame properties:
@@ -112,9 +113,9 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 //		}
 //	}
 //
-//	public void actionPerformed(ActionEvent e) // dealing with actions generated
-//												// by popup menus
-//	{
+	public void actionPerformed(ActionEvent e) // dealing with actions generated
+												// by popup menus
+	{
 //		Object source = e.getSource();
 //		if (source instanceof MenuItem) {
 //			String itemText = ((MenuItem) source).getText();
@@ -146,7 +147,7 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 //				}
 //			}
 //		}
-//	}
+	}
 	
 	@Override
 	public void handle(MouseEvent me) {

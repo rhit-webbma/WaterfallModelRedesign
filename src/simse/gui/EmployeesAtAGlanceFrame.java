@@ -67,19 +67,23 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 		// Create panes:
 		Pane softwareengineerPane = new Pane(
 				softwareengineerTable);
-
+		
 		// Table headers:
 		softwareengineerTitlePane = new TitledPane("SoftwareEngineers:", softwareengineerPane);
+		
+        
 
 		// Create main pane:
 		mainPane = new VBox(softwareengineerTitlePane);
 
+		softwareengineerTable.prefWidthProperty().bind(mainPane.widthProperty());
+		
 		// Add panes to main pane:
 //		mainPane.add(softwareengineerTitlePane);
 //		mainPane.add(softwareengineerPane);
 
 		// Set main window frame properties:
-		setScene(new Scene(mainPane));
+		setScene(new Scene(mainPane, 800, 500));
 //		setBackground(Color.white);
 //		setContentPane(mainPane);
 //		setVisible(false);

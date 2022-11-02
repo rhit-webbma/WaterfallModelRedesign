@@ -7,6 +7,7 @@ import java.util.Optional;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -22,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import simse.SimSE;
 import simse.engine.*;
@@ -31,6 +33,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 	private String path = "src/simse/gui/images/layout/";
 
 	private TabPanel tabPane;
+	private StackPane logoPane;
 
 	private Button artifactButton;
 	private Button customerButton;
@@ -53,7 +56,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		gui = g;
 		gridPane = new GridPane();
 		this.getChildren().add(gridPane);
-
+		gridPane.setGridLinesVisible(true);
 		// loads the tab buttons
 		createButtonImageSet();
 
@@ -73,19 +76,40 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		toolButton = new Button("", inactiveButton[4]);
 		toolButton.setMinSize(120, 16);
 		toolButton.setPadding(new Insets(0, 0, 0, 0));
-
+		
+		aboutButton = new Button("", JavaFXHelpers.createImageView(path + "simselogo-about.gif"));
+//		aboutButton.setMinSize(250, 250);
+		aboutButton.setPadding(new Insets(0,0,0,5));
+		aboutButton.addEventHandler(MouseEvent.ANY, this);
+		
+		infoButton = new Button("Info");
+		infoButton.setPadding(new Insets(0,0,0,0));
+		infoButton.addEventHandler(MouseEvent.ANY, this);
+		
+		resetButton = new Button("Reset");
+		resetButton.setPadding(new Insets(0,1,0,0));
+		resetButton.addEventHandler(MouseEvent.ANY, this);
+		
+		GridPane extraButtonPane = new GridPane();
+		extraButtonPane.add(infoButton, 0, 0);
+		extraButtonPane.add(resetButton, 0, 1);
+		extraButtonPane.setPrefWidth(40);
+		extraButtonPane.setVgap(50);
+		extraButtonPane.setOpacity(1);
+		extraButtonPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(1,0,0,0)));
+	
+		
+		logoPane = new StackPane();
+		logoPane.getChildren().addAll(aboutButton, extraButtonPane);
+		StackPane.setAlignment(extraButtonPane, Pos.TOP_LEFT);
+		
 		// create the layout:
 		createLayout();
 		
-		Image logo = JavaFXHelpers.createImage(path + "simselogo.gif");
-		final Canvas canvas = new Canvas(250,250);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.setFill(Color.rgb(102, 102, 102, 0));
-		gc.fillRect(0, 0, 340, 100);
-		gc.drawImage(logo, 0, 0);
+		gridPane.add(logoPane, 0, 0, 1, 1);
 		
-		gridPane.add(canvas, 0, 0, 1, 1);
-		gridPane.setGridLinesVisible(true);
+
+//		gridPane.setGridLinesVisible(true);
 	}
 
 	public void setTabPanel(TabPanel tab) {
@@ -116,73 +140,75 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 
 	public void createLayout() {
 		GridPane buttonGPane = new GridPane();
-		buttonGPane.setOpacity(1);
-		buttonGPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		GridPane.setConstraints(buttonGPane, 1, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+		buttonGPane.setVgap(0.8);
+//		buttonGPane.setOpacity(1);
+//		buttonGPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
+//		GridPane.setConstraints(buttonGPane, 1, 0, 4, 1, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
 //		buttonGPane.setGridLinesVisible(true);
 		
-		infoButton = new Button();
-		infoButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		infoButton.setOpacity(1);
-		infoButton.setMinSize(24, 40);
-		infoButton.setPrefSize(24, 40);
-		infoButton.setBorder(null);
-		infoButton.addEventHandler(MouseEvent.ANY, this);
-		GridPane.setConstraints(infoButton, 0, 0, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
-		buttonGPane.getChildren().add(infoButton);
-		resetButton = new Button();
-		resetButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		resetButton.setOpacity(1);
-		resetButton.setMinSize(24, 40);
-		resetButton.setPrefSize(24, 40);
-		resetButton.setBorder(null);
-		resetButton.addEventHandler(MouseEvent.ANY, this);
-		GridPane.setConstraints(resetButton, 0, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
-		buttonGPane.getChildren().add(resetButton);
-		aboutButton = new Button();
-		aboutButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
-		aboutButton.setOpacity(1);
-		aboutButton.setMinSize(170, 88);
-		aboutButton.setPrefSize(170, 88);
-		addButton(aboutButton, 0, 0, 1, 1, 0, 1, buttonGPane);
+//		infoButton = new Button("");
+//		infoButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
+//		infoButton.setOpacity(1);
+//		infoButton.setMinSize(24, 40);
+//		infoButton.setPrefSize(24, 40);
+//		infoButton.setBorder(null);
+//		infoButton.addEventHandler(MouseEvent.ANY, this);
+//		logoPane.getChildren().add(infoButton);
+//		GridPane.setConstraints(infoButton, 0, 0, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+//		gridPane.getChildren().add(infoButton);
+//		gridPane.add(infoButton, 0, 0, 1, 1);
+//		resetButton = new Button();
+//		resetButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
+//		resetButton.setOpacity(1);
+//		resetButton.setMinSize(24, 40);
+//		resetButton.setPrefSize(24, 40);
+//		resetButton.setBorder(null);
+//		resetButton.addEventHandler(MouseEvent.ANY, this);
+//		GridPane.setConstraints(resetButton, 0, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+//		logoPane.getChildren().add(resetButton);
+//		gridPane.add(resetButton, 0, 1, 1, 1);
+//		addButton(resetButton, 0, 0, 1, 1, gridPane);
+//		aboutButton = new Button("", JavaFXHelpers.createImageView(path + "simselogo-about.gif"));
+//		aboutButton.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
+//		aboutButton.setOpacity(1);
+//		aboutButton.setMinSize(170, 88);
+//		aboutButton.setPrefSize(170, 88);
+//		logoPane.getChildren().add(aboutButton);
+//		StackPane.setAlignment(aboutButton, Pos.CENTER);
+//		addButton(aboutButton, 0, 0, 1, 1, gridPane);
 		// spacers to get the angled tab effect:
-		Label lblCustSpacer1 = new Label("--");
-		Label lblEmpSpacer1 = new Label("--");
-		Label lblEmpSpacer2 = new Label("--");
-		Label lblProjSpacer1 = new Label("--");
 
-		addButton(artifactButton, 0, 1, 1, 1, 1, 0, buttonGPane);
-
-		addLabel(lblCustSpacer1, 0, 0, 1, 1, 0, 0, buttonGPane);
-		addButton(customerButton, 1, 0, 1, 1, 1, 0, buttonGPane);
-
-		addLabel(lblEmpSpacer1, 0, 0, 1, 1, 0, 0, buttonGPane);
-		addLabel(lblEmpSpacer2, 0, 0, 1, 1, 0, 0, buttonGPane);
-		addButton(employeeButton, 1, 1, 1, 1, 1, 0, buttonGPane);
-
-		addLabel(lblProjSpacer1, 0, 0, 1, 1, 0, 0, buttonGPane);
-		addButton(projectButton, 1, 2, 2, 1, 1, 0, buttonGPane);
-
-		addButton(toolButton, 0, 0, 1, 1, 1, 1, buttonGPane);
+		addButton(artifactButton, 0, 0, 1, 1, buttonGPane);
+//		addLabel(lblCustSpacer1, 0, 1, 1, 1, buttonGPane);
+		addButton(customerButton, 0, 2, 1, 1, buttonGPane);
+//		addLabel(lblEmpSpacer1, 0, 3, 1, 1, buttonGPane);
+//		addLabel(lblEmpSpacer2, 0, 4, 1, 1, buttonGPane);
+		addButton(employeeButton, 0, 5, 1, 1, buttonGPane);
+//		addLabel(lblProjSpacer1, 0, 6, 1, 1, buttonGPane);
+		addButton(projectButton, 0, 7, 1, 1, buttonGPane);
+		addButton(toolButton, 0, 8, 1, 1, buttonGPane);
 		
-		gridPane.getChildren().add(buttonGPane);
+		gridPane.add(buttonGPane, 1, 0);
+//		buttonGPane.setGridLinesVisible(true);
+		
+//		gridPane.getChildren().add(buttonGPane);
 	}
 
-	public void addLabel(Label lb, int x, int y, int rowspan, int colspan,
-			double wx, double wy, GridPane gp) {
-		gp.getChildren().add(lb);
-		GridPane.setConstraints(lb, x, y, colspan, rowspan, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+	public void addLabel(Label lb, int x, int y, int rowspan, int colspan, GridPane gp) {
 		lb.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0, 0, 0, 0)));
+		gp.add(lb, x, y, colspan, rowspan);
+//		gridPane.getChildren().add(lb);
+//		GridPane.setConstraints(lb, x, y, colspan, rowspan, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
 
 	}
 
-	public void addButton(Button jb, int x, int y, int rowspan, int colspan,
-			double wx, double wy, GridPane gp) {
-		gp.getChildren().add(jb);
+	public void addButton(Button jb, int x, int y, int rowspan, int colspan, GridPane gp) {
+//		gridPane.getChildren().add(jb);
 		jb.setBorder(null);
 		jb.addEventHandler(MouseEvent.ANY, this);
 		jb.setOpacity(1);
-		GridPane.setConstraints(jb, x, y, colspan, rowspan, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+		gp.add(jb, x, y, colspan, rowspan);
+//		GridPane.setConstraints(jb, x, y, colspan, rowspan, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
 
 	}
 

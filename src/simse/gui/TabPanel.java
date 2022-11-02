@@ -121,7 +121,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		gridPane = new GridPane();
 		gridPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1.0)));
 		gridPane.setPrefWidth(1024);
-		gridPane.setGridLinesVisible(true);
+//		gridPane.setGridLinesVisible(true);
 
 		logoPane = new LogoPanel(gui);
 		logoPane.setMinSize(340, 90);
@@ -130,7 +130,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		// Create buttons pane:
 		buttonsPane = new FlowPane();
-		buttonsPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(69, 135, 156, 1.0))); // dark green color
+		buttonsPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY)); // dark green color
 		ScrollPane buttonsScrollPane = new ScrollPane(buttonsPane);
 		buttonsScrollPane.setPrefSize(292, 75);
 
@@ -151,7 +151,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		// Add panes and labels to main pane
 		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
 				Priority.NEVER, new Insets(0, 0, 10, 0));
-//		gridPane.add(buttonsScrollPane, 1, 0); //TODO: Put this back :)
+		gridPane.add(buttonsScrollPane, 2, 0); //TODO: Put this back :)
 //
 		setPrefSize(1024, 100);
 		updateImages(EMPLOYEE);
@@ -215,8 +215,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //					pListener.setEnabled(false);
 					button[index].disarm();
 				}
-				button[index].setGraphic(JavaFXHelpers.createImageView("src/simse/gui/images/error.GIF"));
-				button[index].setPrefSize(35, 35);
+//				button[index].setGraphic(JavaFXHelpers.createImageView("src/simse/gui/images/error.GIF"));
 				button[index].setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 				button[index].setBorder(defaultBorder);
 				button[index].disarm();
@@ -253,11 +252,11 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 					Enumeration<Button> buttons = buttonsToObjs.keys();
 					for (int i = 0; i < buttonsToObjs.size(); i++) {
 						Button key = buttons.nextElement();
-						key.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
+						key.setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 						key.setBorder(defaultBorder);
 					}
 
-					button.setBackground(JavaFXHelpers.createBackgroundColor(btnBlue));
+					button.setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 					button.setBorder(selectedBorder);
 				} else if (((ImageView) button.getGraphic()).getImage().equals(allIcon)) {
 					switch (logoPane.getSelectedTabIndex()) {
@@ -323,7 +322,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		}
 		// clear buttons:
 		buttonsToObjs.clear();
-		buttonsPane.getChildren().removeAll();
+//		buttonsPane.getChildren().removeAll();
+		buttonsPane.getChildren().clear();
 
 		// update images:
 		updateImages(index);
@@ -367,6 +367,10 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				Button allButton = buttonList[0];
 				allButton.arm();
 				allButton.setBorder(defaultBorder);
+				ImageView allImage = new ImageView(allIcon);
+				allImage.setPreserveRatio(true);
+				allImage.setFitHeight(30);
+				allImage.setFitWidth(30);
 				allButton.setGraphic(new ImageView(allIcon));
 			}
 
@@ -383,22 +387,24 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				if ((index == EMPLOYEE)
 						&& (state.getClock().isStopped() == false)) {
 					Employee e = (Employee) obj;
-					PopupListener pListener = ((PopupListener) button.getOnMouseReleased());
-					pListener.setEnabled(true);
-					ContextMenu p = pListener.getPopupMenu();
-					p.getItems().removeAll();
-					Vector<String> v = e.getMenu();
-					for (int k = 0; k < v.size(); k++) {
-						MenuItem tempItem = new MenuItem(v.elementAt(k));
-						tempItem.setOnAction(menuItemEvent);
-						p.getItems().add(tempItem);
+					PopupListener pListener = ((PopupListener) button.getOnMousePressed());
+					if(pListener != null) {
+						pListener.setEnabled(true);
+						ContextMenu p = pListener.getPopupMenu();
+						p.getItems().removeAll();
+						Vector<String> v = e.getMenu();
+						for (int k = 0; k < v.size(); k++) {
+							MenuItem tempItem = new MenuItem(v.elementAt(k));
+							tempItem.setOnAction(menuItemEvent);
+							p.getItems().add(tempItem);
+						}
 					}
 				}
 				button.arm();
 				button.setGraphic(objsToImages.get(obj));
 
 				if (obj.equals(objInFocus)) {
-					button.setBackground(JavaFXHelpers.createBackgroundColor(btnBlue));
+					button.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
 					button.setBorder(selectedBorder);
 				} else {
 					button.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
@@ -442,7 +448,10 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			String filename = getImage(objs.elementAt(i));
 
 			ImageView scaledImage = JavaFXHelpers.createImageView(filename);
-			scaledImage.resize(35, 35);
+			scaledImage.setFitHeight(30);
+			scaledImage.setFitWidth(30);
+//			scaledImage.resize(10, 10);
+			scaledImage.setPreserveRatio(true);
 
 			objsToImages.put(objs.elementAt(i), scaledImage);
 		}
