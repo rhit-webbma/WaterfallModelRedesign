@@ -73,11 +73,11 @@ public class SimSEAboutDialog extends Stage implements EventHandler<MouseEvent> 
 //				Priority.NEVER, new Insets(5, 0, 5, 0));
 		
 		Image logo = JavaFXHelpers.createImage(path + "simselogo-about.gif");
-		final Canvas canvas = new Canvas(125,125);
+		final Canvas canvas = new Canvas(250,250);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.setFill(Color.rgb(102, 102, 102, 0));
-		gc.fillRect(0, 0, 340, 100);
-		gc.drawImage(logo, 0, 0);
+		gc.fillRect(0, 0, 250, 250);
+		gc.drawImage(logo, 20, 100); //TODO: Remove Hardcode :)
 		
 //		top.getChildren().add(canvas);
 
