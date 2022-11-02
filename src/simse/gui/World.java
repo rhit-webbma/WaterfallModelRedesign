@@ -30,6 +30,9 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	private int clickedY;
 	public final int xViewable = 9;
 	public final int yViewable = 9;
+	
+	private final double width = 1000;
+	private final double height = 625;
 
 	private final SimSEGUI mainGUIFrame;
 
@@ -68,9 +71,8 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		super(s, l);
 		mainGUIFrame = parent;
 		overheadTextDisplayed = false;
-		
-		int width = (int) getWidth();
-		int height = (int) getHeight();
+//		int width = (int) getWidth();
+//		int height = (int) getHeight();
 		final Canvas canvas = new Canvas(width, height);
 		dbGraphics = canvas.getGraphicsContext2D();
 		
@@ -124,8 +126,9 @@ public class World extends SimSEMap implements EventHandler<Event> {
 
 		// clear screen in background:
 		dbGraphics.setFill(Color.BLACK);
-		dbGraphics.fillRect(0, 0, getWidth(), getHeight());
-
+//		dbGraphics.fillRect(0, 0, getWidth(), getHeight());
+		dbGraphics.fillRect(0, 0, width, height);
+		
 		// draw elements in background:
 		paint();
 		// draw image on the screen:
@@ -145,10 +148,9 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	}
 
 	public void paint() {
-		int width = (int) getWidth();
-		int height = (int) getHeight();
-		final Canvas canvas = new Canvas(width, height);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
+//		int width = (int) getWidth();
+//		int height = (int) getHeight();
+		GraphicsContext gc = dbGraphics;
 
 		xspacer = (width - MapData.X_MAPSIZE * MapData.TILE_SIZE) / 2;
 		yspacer = (height - MapData.Y_MAPSIZE * MapData.TILE_SIZE) / 2;
