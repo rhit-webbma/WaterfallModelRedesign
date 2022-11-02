@@ -95,20 +95,13 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		extraButtonPane.add(resetButton, 0, 1);
 		extraButtonPane.setGridLinesVisible(true);
 		extraButtonPane.setPrefWidth(40);
-		extraButtonPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(0,0,0,0)));
-		
-
-//		Image logo = JavaFXHelpers.createImage(path + "simselogo.gif");
-//		final Canvas canvas = new Canvas(250,250);
-//		GraphicsContext gc = canvas.getGraphicsContext2D();
-//		gc.setFill(Color.rgb(102, 102, 102, 0));
-//		gc.fillRect(0, 0, 340, 100);
-//		gc.drawImage(logo, 0, 0);
+		extraButtonPane.setOpacity(1);
+		extraButtonPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(1,0,0,0)));
+	
 		
 		logoPane = new StackPane();
 		logoPane.getChildren().addAll(extraButtonPane, aboutButton);
-//		StackPane.setAlignment(aboutButton, Pos.TOP_LEFT);
-//		StackPane.setAlignment(extraButtonPane, Pos.TOP_LEFT);
+		StackPane.setAlignment(extraButtonPane, Pos.TOP_LEFT);
 		
 		// create the layout:
 		createLayout();

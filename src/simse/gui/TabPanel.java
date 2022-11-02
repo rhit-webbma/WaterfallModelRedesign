@@ -216,7 +216,6 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 					button[index].disarm();
 				}
 //				button[index].setGraphic(JavaFXHelpers.createImageView("src/simse/gui/images/error.GIF"));
-				button[index].setPrefSize(5, 5);
 				button[index].setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 				button[index].setBorder(defaultBorder);
 				button[index].disarm();
@@ -317,7 +316,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //		artifactFrame.update();
 //		toolFrame.update();
 //		projectFrame.update();
-		customerFrame.update();
+//		customerFrame.update();
 		if (!guiChanged) {
 			return;
 		}
@@ -384,15 +383,17 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				if ((index == EMPLOYEE)
 						&& (state.getClock().isStopped() == false)) {
 					Employee e = (Employee) obj;
-					PopupListener pListener = ((PopupListener) button.getOnMouseReleased());
-					pListener.setEnabled(true);
-					ContextMenu p = pListener.getPopupMenu();
-					p.getItems().removeAll();
-					Vector<String> v = e.getMenu();
-					for (int k = 0; k < v.size(); k++) {
-						MenuItem tempItem = new MenuItem(v.elementAt(k));
-						tempItem.setOnAction(menuItemEvent);
-						p.getItems().add(tempItem);
+					PopupListener pListener = ((PopupListener) button.getOnMousePressed());
+					if(pListener != null) {
+						pListener.setEnabled(true);
+						ContextMenu p = pListener.getPopupMenu();
+						p.getItems().removeAll();
+						Vector<String> v = e.getMenu();
+						for (int k = 0; k < v.size(); k++) {
+							MenuItem tempItem = new MenuItem(v.elementAt(k));
+							tempItem.setOnAction(menuItemEvent);
+							p.getItems().add(tempItem);
+						}
 					}
 				}
 				button.arm();
@@ -443,7 +444,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			String filename = getImage(objs.elementAt(i));
 
 			ImageView scaledImage = JavaFXHelpers.createImageView(filename);
-			scaledImage.resize(35, 35);
+			scaledImage.resize(10, 10);
 
 			objsToImages.put(objs.elementAt(i), scaledImage);
 		}
