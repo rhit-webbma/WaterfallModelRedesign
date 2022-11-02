@@ -8,6 +8,7 @@ import java.util.*;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -71,8 +72,11 @@ public class ProjectsAtAGlanceFrame extends Stage implements EventHandler<MouseE
 
 		// Add panes to main pane:
 		mainPane.getChildren().addAll(seprojectTitlePane, seprojectPane);
+		
+		seprojectTable.prefWidthProperty().bind(mainPane.widthProperty());
 
-
+		Scene scene = new Scene(mainPane, 800, 500);
+		this.setScene(scene);
 		// Set main window frame properties:
 //		setBackground(Color.white);
 //		setContentPane(mainPane);
