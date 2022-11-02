@@ -130,7 +130,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		// Create buttons pane:
 		buttonsPane = new FlowPane();
-		buttonsPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(69, 135, 156, 1.0))); // dark green color
+		buttonsPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY)); // dark green color
 		ScrollPane buttonsScrollPane = new ScrollPane(buttonsPane);
 		buttonsScrollPane.setPrefSize(292, 75);
 
@@ -252,11 +252,11 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 					Enumeration<Button> buttons = buttonsToObjs.keys();
 					for (int i = 0; i < buttonsToObjs.size(); i++) {
 						Button key = buttons.nextElement();
-						key.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
+						key.setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 						key.setBorder(defaultBorder);
 					}
 
-					button.setBackground(JavaFXHelpers.createBackgroundColor(btnBlue));
+					button.setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 					button.setBorder(selectedBorder);
 				} else if (((ImageView) button.getGraphic()).getImage().equals(allIcon)) {
 					switch (logoPane.getSelectedTabIndex()) {
@@ -367,6 +367,10 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				Button allButton = buttonList[0];
 				allButton.arm();
 				allButton.setBorder(defaultBorder);
+				ImageView allImage = new ImageView(allIcon);
+				allImage.setPreserveRatio(true);
+				allImage.setFitHeight(30);
+				allImage.setFitWidth(30);
 				allButton.setGraphic(new ImageView(allIcon));
 			}
 
@@ -400,7 +404,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				button.setGraphic(objsToImages.get(obj));
 
 				if (obj.equals(objInFocus)) {
-					button.setBackground(JavaFXHelpers.createBackgroundColor(btnBlue));
+					button.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
 					button.setBorder(selectedBorder);
 				} else {
 					button.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
@@ -444,7 +448,10 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			String filename = getImage(objs.elementAt(i));
 
 			ImageView scaledImage = JavaFXHelpers.createImageView(filename);
-			scaledImage.resize(10, 10);
+			scaledImage.setFitHeight(30);
+			scaledImage.setFitWidth(30);
+//			scaledImage.resize(10, 10);
+			scaledImage.setPreserveRatio(true);
 
 			objsToImages.put(objs.elementAt(i), scaledImage);
 		}
