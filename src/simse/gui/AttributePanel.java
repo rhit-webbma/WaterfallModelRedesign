@@ -113,9 +113,9 @@ public class AttributePanel extends Pane {
 
 	public void setObjectInFocus(SSObject obj, Image img) {
 		objInFocus = obj;
-//		if (img != null) {
-//			setGraphic(img);
-//		}
+		if (img != null) {
+			this.setIcon(new ImageView(img));
+		}
 		updateAttributeList();
 	}
 
