@@ -8,8 +8,14 @@ import org.jfree.ui.RefineryUtilities;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -26,9 +32,11 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
 import java.awt.event.*;
@@ -58,7 +66,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 	private ListView<String> intermediateRuleList;
 	private TextArea descriptionArea;
 	private Button closeButton;
-	private BorderPane mainPane;
+	private GridPane mainPane;
 	private Branch branch;
 
 	public ExplanatoryTool(ArrayList<State> log, Branch branch, MultipleTimelinesBrowser browser) {
@@ -77,9 +85,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		multipleTimelinesButton = new Button("Multiple Timelines Browser");
 		multipleTimelinesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		multipleTimelinesPanel.getChildren().add(multipleTimelinesButton);
-
-		// Create main sub-panel:
-		Pane generateGraphsPanel = new Pane();
 
 		// Create generate graphs title pane and label:
 		Pane generateGraphsTitlePane = new Pane();
@@ -109,12 +114,18 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 				"AutomatedTestingTool Tool JUnit",
 				"ACustomer Customer Grocery Home Delivery Service");
 		objectList = new ComboBox<String>(objects);
-		objectList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		objectList.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				refreshAttributeList();
+			}
+		});
 		objectPane.getChildren().add(objectList);
 
 		// Create attribute list pane:
 		Pane attributeListTitlePane = new Pane();
 		attributeListTitlePane.getChildren().add(new Label("Show Attributes:"));
+		attributeListTitlePane.setMinHeight(20);
 		objectPane.getChildren().add(attributeListTitlePane);
 		attributeList = new ListView<String>();
 //		attributeList.setVisibleRowCount(5); // make 5 items visible at a time
@@ -122,7 +133,9 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		attributeList.setFixedCellSize(24);
 		attributeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		attributeList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		attributeList.setMinWidth(550);
 		ScrollPane attributeListPane = new ScrollPane(attributeList);
+		attributeListPane.setMinHeight(120);
 		objectPane.getChildren().add(attributeListPane);
 
 		// Create objectBottom pane & button:
@@ -136,6 +149,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		VBox actionPane = new VBox();
 		Pane actionTitlePane = new Pane();
 		actionTitlePane.getChildren().add(new Label("Action Graph:"));
+		actionTitlePane.setMinHeight(20);
 		actionPane.getChildren().add(actionTitlePane);
 
 		// action list:
@@ -157,8 +171,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		attributeList.setFixedCellSize(24);
 		actionList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		actionList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		ScrollPane actionListPane = new ScrollPane(actionList);
-		actionPane.getChildren().add(actionListPane);
+		actionPane.getChildren().add(actionList);
 
 		// Create actionBottom pane & buttons:
 		Pane actBottomPane = new Pane();
@@ -190,11 +203,19 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		Pane actionComboBoxPane = new Pane();
 		actionComboBoxPane.getChildren().add(new Label("Actions:"));
 		actionComboBox = new ComboBox<String>(actions);
-		actionComboBox.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		actionComboBox.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (actionComboBox.getItems().size() > 0) {
+					refreshRuleLists((String) actionComboBox.getSelectionModel().getSelectedItem());
+					descriptionArea.setText("");
+				}
+			}
+		});
 		actionComboBoxPane.getChildren().add(actionComboBox);
 
 		// Create rulesMainPane:
-		Pane rulesMainPane = new Pane();
+		TilePane rulesMainPane = new TilePane();
 
 		// Create ruleListsPane:
 		VBox ruleListsPane = new VBox();
@@ -209,7 +230,9 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		triggerRuleList.setFixedCellSize(24);
 		triggerRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		triggerRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		triggerRuleList.setMinWidth(272);
 		ScrollPane triggerRuleListPane = new ScrollPane(triggerRuleList);
+		triggerRuleListPane.setMaxHeight(80);
 		ruleListsPane.getChildren().add(triggerRuleListPane);
 
 		Pane destRuleTitlePane = new Pane();
@@ -221,7 +244,9 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		destroyerRuleList.setFixedCellSize(24);
 		destroyerRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		destroyerRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		destroyerRuleList.setMinWidth(272);
 		ScrollPane destroyerRuleListPane = new ScrollPane(destroyerRuleList);
+		destroyerRuleListPane.setMaxHeight(80);
 		ruleListsPane.getChildren().add(destroyerRuleListPane);
 
 		Pane intRuleTitlePane = new Pane();
@@ -230,12 +255,14 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		intermediateRuleList = new ListView<String>();
 //		intermediateRuleList.setVisibleRowCount(4);
 //		intermediateRuleList.setFixedCellWidth(250);
-		destroyerRuleList.setFixedCellSize(24);
+		intermediateRuleList.setFixedCellSize(24);
 		intermediateRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		intermediateRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		intermediateRuleList.setMinWidth(272);
 		ScrollPane intermediateRuleListPane = new ScrollPane(intermediateRuleList);
+		intermediateRuleListPane.setMaxHeight(80);
 		ruleListsPane.getChildren().add(intermediateRuleListPane);
-
+		ruleListsPane.setPadding(new Insets(0,40,0,40));
 		rulesMainPane.getChildren().add(ruleListsPane);
 
 		// description pane:
@@ -272,39 +299,43 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		// set up tool tips:
 		setUpToolTips();
 		
-		mainPane = new BorderPane();
+		mainPane = new GridPane();
+	    mainPane.setHgap(10);
+	    mainPane.setVgap(30);
+	    mainPane.setPadding(new Insets(0, 10, 0, 10));
 
 		// Add panes to main pane and main sub-pane:
-		mainPane.getChildren().add(multipleTimelinesPanel);
-		Separator separator0 = new Separator();
-		separator0.setMaxSize(2900, 1);
-		mainPane.getChildren().add(separator0);
-		generateGraphsPanel.getChildren().add(objectPane);
-		generateGraphsPanel.getChildren().add(actionPane);
-		mainPane.getChildren().add(generateGraphsTitlePane);
-		Separator separator1 = new Separator();
-		separator1.setMaxSize(2900, 1);
-		mainPane.getChildren().add(separator1);
-		mainPane.getChildren().add(generateGraphsPanel);
-		Separator separator2 = new Separator();
-		separator2.setMaxSize(2900, 1);
-		mainPane.getChildren().add(separator2);
-		mainPane.getChildren().add(generateCompGraphPane);
-		Separator separator3 = new Separator();
-		separator3.setMaxSize(2900, 1);
-		mainPane.getChildren().add(separator3);
-		mainPane.getChildren().add(viewRulesTitlePane);
-		Separator separator4 = new Separator();
-		separator4.setMaxSize(2900, 1);
-		mainPane.getChildren().add(separator4);
-		mainPane.getChildren().add(actionComboBoxPane);
-		mainPane.getChildren().add(rulesMainPane);
-		Separator separator5 = new Separator();
-		separator5.setMaxSize(2900, 1);
-		mainPane.getChildren().add(separator5);
-		mainPane.getChildren().add(closeButtonPane);
+	    Pane spacerPane = new Pane();
+	    spacerPane.setMinWidth(300);
+	    mainPane.add(spacerPane, 0, 0);
+		mainPane.add(multipleTimelinesPanel, 1, 0);
+//		Separator separator0 = new Separator();
+//		separator0.setMaxSize(2900, 1);
+//		mainPane.add(separator0, 0, 1, 3, 1);
+		mainPane.add(generateGraphsTitlePane, 1, 1);
+//		Separator separator1 = new Separator();
+//		separator1.setMaxSize(2900, 1);
+//		mainPane.add(separator1, 0, 3, 3, 1);
+		mainPane.add(objectPane, 0, 2, 2, 1);
+		mainPane.add(actionPane, 2, 2);
+//		Separator separator2 = new Separator();
+//		separator2.setMaxSize(2900, 1);
+//		mainPane.add(separator2, 0, 5, 3, 1);
+		mainPane.add(generateCompGraphPane, 1, 3);
+//		Separator separator3 = new Separator();
+//		separator3.setMaxSize(2900, 1);
+//		mainPane.add(separator3, 0, 7, 3, 1);
+		mainPane.add(viewRulesTitlePane, 1, 4);
+//		Separator separator4 = new Separator();
+//		separator4.setMaxSize(2900, 1);
+//		mainPane.add(separator4, 0, 9, 3, 1);
+		mainPane.add(actionComboBoxPane, 1, 5);
+		mainPane.add(rulesMainPane, 0, 6, 3, 1);
+		mainPane.add(closeButtonPane, 1, 7);
+		Pane spacerPane2 = new Pane();
+		mainPane.add(spacerPane2, 0, 8, 3, 1);
 		
-		Scene scene = new Scene(mainPane);
+		Scene scene = new Scene(mainPane, 900, 720);
 		this.setScene(scene);
 
 		// Set main window frame properties:
@@ -317,6 +348,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		// Make it show up in the center of the screen:
 //		RefineryUtilities.centerFrameOnScreen(this);
 //		setVisible(false);
+//		mainPane.setPrefSize(100, 70);
 		hide();
 	}
 	
@@ -324,9 +356,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 	public void handle(MouseEvent evt) {
 		Object source = evt.getSource(); // get which component the action came from
 		
-		if (source == objectList) { // user has chosen an object
-			refreshAttributeList();
-		} else if (source == multipleTimelinesButton) {
+		if (source == multipleTimelinesButton) {
 			if (timelinesBrowser.isIconified()) {
 				timelinesBrowser.setIconified(false);
 			}
@@ -411,11 +441,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 			} else {
 				Alert alert = new Alert(AlertType.WARNING, "Please select at least one attribute");
 				alert.show();
-			}
-		} else if (source == actionComboBox) {
-			if (actionComboBox.getItems().size() > 0) {
-				refreshRuleLists((String) actionComboBox.getSelectionModel().getSelectedItem());
-				descriptionArea.setText("");
 			}
 		} else if ((source == attributeList) || (source == actionList)) {
 			refreshButtons();
