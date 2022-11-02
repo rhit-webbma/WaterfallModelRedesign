@@ -129,97 +129,99 @@ public class AttributePanel extends Pane {
 
 	private void updateAttributeList() {
 		attributes.clear();
+		attributeListLeft.getItems().clear();
+		attributeListRight.getItems().clear();
 
 		// Employee:
 		if ((objInFocus != null) && state.getEmployeeStateRepository().getAll().contains(objInFocus)) {
 			if (objInFocus instanceof SoftwareEngineer) {
 				SoftwareEngineer p = (SoftwareEngineer) objInFocus;
-				attributes.add("<html><font size=2>Type: SoftwareEngineer</font></html>");
+				attributes.add("Type: SoftwareEngineer");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Energy: " + numFormat.format(p.getEnergy()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Energy: " + numFormat.format(p.getEnergy()) + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					numFormat.setMinimumFractionDigits(2);
 					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Mood: " + numFormat.format(p.getMood()) + "</font></html>");
+					attributes.add("Energy: " + numFormat.format(p.getEnergy()) );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					numFormat.setMinimumFractionDigits(2);
 					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Mood: " + numFormat.format(p.getMood()) + "</font></html>");
+					attributes.add("Energy: " + numFormat.format(p.getEnergy()) );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>RequirementsExperience: " + p.getRequirementsExperience()
-							+ "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Mood: " + numFormat.format(p.getMood()) );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>RequirementsExperience: " + p.getRequirementsExperience()
-							+ "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Mood: " + numFormat.format(p.getMood()) );
+				}
+				if (!state.getClock().isStopped()) // game not over
+				{
+					attributes.add("RequirementsExperience: " + p.getRequirementsExperience()
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					attributes.add("RequirementsExperience: " + p.getRequirementsExperience()
+							);
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					attributes
-							.add("<html><font size=2>DesignExperience: " + p.getDesignExperience() + "</font></html>");
+							.add("DesignExperience: " + p.getDesignExperience() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					attributes
-							.add("<html><font size=2>DesignExperience: " + p.getDesignExperience() + "</font></html>");
+							.add("DesignExperience: " + p.getDesignExperience() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					attributes
-							.add("<html><font size=2>CodingExperience: " + p.getCodingExperience() + "</font></html>");
+							.add("CodingExperience: " + p.getCodingExperience() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					attributes
-							.add("<html><font size=2>CodingExperience: " + p.getCodingExperience() + "</font></html>");
+							.add("CodingExperience: " + p.getCodingExperience() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					attributes.add(
-							"<html><font size=2>TestingExperience: " + p.getTestingExperience() + "</font></html>");
+							"TestingExperience: " + p.getTestingExperience() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					attributes.add(
-							"<html><font size=2>TestingExperience: " + p.getTestingExperience() + "</font></html>");
+							"TestingExperience: " + p.getTestingExperience() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					numFormat.setMinimumFractionDigits(2);
 					numFormat.setMaximumFractionDigits(2);
 					attributes
-							.add("<html><font size=2>PayRate: " + numFormat.format(p.getPayRate()) + "</font></html>");
+							.add("PayRate: " + numFormat.format(p.getPayRate()) );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					numFormat.setMinimumFractionDigits(2);
 					numFormat.setMaximumFractionDigits(2);
 					attributes
-							.add("<html><font size=2>PayRate: " + numFormat.format(p.getPayRate()) + "</font></html>");
+							.add("PayRate: " + numFormat.format(p.getPayRate()) );
 				}
 			}
 		}
@@ -227,229 +229,229 @@ public class AttributePanel extends Pane {
 		else if ((objInFocus != null) && state.getArtifactStateRepository().getAll().contains(objInFocus)) {
 			if (objInFocus instanceof RequirementsDocument) {
 				RequirementsDocument p = (RequirementsDocument) objInFocus;
-				attributes.add("<html><font size=2>Type: RequirementsDocument</font></html>");
+				attributes.add("Type: RequirementsDocument");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumUnknownErrors: " + numFormat.format(p.getNumUnknownErrors())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentErroneous: " + numFormat.format(p.getPercentErroneous())
-							+ "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentComplete: " + numFormat.format(p.getPercentComplete())
-							+ "</font></html>");
+					attributes.add("NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
+							);
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentComplete: " + numFormat.format(p.getPercentComplete())
-							+ "</font></html>");
+					attributes.add("NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("NumUnknownErrors: " + numFormat.format(p.getNumUnknownErrors())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentErroneous: " + numFormat.format(p.getPercentErroneous())
+							);
+				}
+				if (!state.getClock().isStopped()) // game not over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentComplete: " + numFormat.format(p.getPercentComplete())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentComplete: " + numFormat.format(p.getPercentComplete())
+							);
 				}
 			} else if (objInFocus instanceof DesignDocument) {
 				DesignDocument p = (DesignDocument) objInFocus;
-				attributes.add("<html><font size=2>Type: DesignDocument</font></html>");
+				attributes.add("Type: DesignDocument");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumUnknownErrors: " + numFormat.format(p.getNumUnknownErrors())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentErroneous: " + numFormat.format(p.getPercentErroneous())
-							+ "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentComplete: " + numFormat.format(p.getPercentComplete())
-							+ "</font></html>");
+					attributes.add("NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
+							);
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentComplete: " + numFormat.format(p.getPercentComplete())
-							+ "</font></html>");
+					attributes.add("NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("NumUnknownErrors: " + numFormat.format(p.getNumUnknownErrors())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentErroneous: " + numFormat.format(p.getPercentErroneous())
+							);
+				}
+				if (!state.getClock().isStopped()) // game not over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentComplete: " + numFormat.format(p.getPercentComplete())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentComplete: " + numFormat.format(p.getPercentComplete())
+							);
 				}
 			} else if (objInFocus instanceof Code) {
 				Code p = (Code) objInFocus;
-				attributes.add("<html><font size=2>Type: Code</font></html>");
+				attributes.add("Type: Code");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentComplete: " + numFormat.format(p.getPercentComplete())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentComplete: " + numFormat.format(p.getPercentComplete())
-							+ "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentIntegrated: " + numFormat.format(p.getPercentIntegrated())
-							+ "</font></html>");
+					attributes.add("PercentComplete: " + numFormat.format(p.getPercentComplete())
+							);
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentIntegrated: " + numFormat.format(p.getPercentIntegrated())
-							+ "</font></html>");
+					attributes.add("PercentComplete: " + numFormat.format(p.getPercentComplete())
+							);
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
-							+ "</font></html>");
+					attributes.add("PercentIntegrated: " + numFormat.format(p.getPercentIntegrated())
+							);
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
-							+ "</font></html>");
+					attributes.add("PercentIntegrated: " + numFormat.format(p.getPercentIntegrated())
+							);
+				}
+				if (!state.getClock().isStopped()) // game not over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
+							);
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumUnknownErrors: " + numFormat.format(p.getNumUnknownErrors())
-							+ "</font></html>");
+					attributes.add("NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
+							);
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentErroneous: " + numFormat.format(p.getPercentErroneous())
-							+ "</font></html>");
+					attributes.add("NumUnknownErrors: " + numFormat.format(p.getNumUnknownErrors())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentErroneous: " + numFormat.format(p.getPercentErroneous())
+							);
 				}
 			} else if (objInFocus instanceof SystemTestPlan) {
 				SystemTestPlan p = (SystemTestPlan) objInFocus;
-				attributes.add("<html><font size=2>Type: SystemTestPlan</font></html>");
+				attributes.add("Type: SystemTestPlan");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>NumUnknownErrors: " + numFormat.format(p.getNumUnknownErrors())
-							+ "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(0);
-					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentErroneous: " + numFormat.format(p.getPercentErroneous())
-							+ "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentComplete: " + numFormat.format(p.getPercentComplete())
-							+ "</font></html>");
+					attributes.add("NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
+							);
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
 					numFormat.setMinimumFractionDigits(0);
 					numFormat.setMaximumFractionDigits(0);
-					attributes.add("<html><font size=2>PercentComplete: " + numFormat.format(p.getPercentComplete())
-							+ "</font></html>");
+					attributes.add("NumKnownErrors: " + numFormat.format(p.getNumKnownErrors())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("NumUnknownErrors: " + numFormat.format(p.getNumUnknownErrors())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentErroneous: " + numFormat.format(p.getPercentErroneous())
+							);
+				}
+				if (!state.getClock().isStopped()) // game not over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentComplete: " + numFormat.format(p.getPercentComplete())
+							);
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(0);
+					numFormat.setMaximumFractionDigits(0);
+					attributes.add("PercentComplete: " + numFormat.format(p.getPercentComplete())
+							);
 				}
 			}
 		}
@@ -457,183 +459,183 @@ public class AttributePanel extends Pane {
 		else if ((objInFocus != null) && state.getToolStateRepository().getAll().contains(objInFocus)) {
 			if (objInFocus instanceof RequirementsCaptureTool) {
 				RequirementsCaptureTool p = (RequirementsCaptureTool) objInFocus;
-				attributes.add("<html><font size=2>Type: RequirementsCaptureTool</font></html>");
+				attributes.add("Type: RequirementsCaptureTool");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Cost: " + numFormat.format(p.getCost()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Cost: " + numFormat.format(p.getCost()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>ProductivityIncreaseFactor: "
-							+ numFormat.format(p.getProductivityIncreaseFactor()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>ErrorRateDecreaseFactor: "
-							+ numFormat.format(p.getErrorRateDecreaseFactor()) + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Purchased: " + p.getPurchased() + "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Cost: " + numFormat.format(p.getCost()) );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Purchased: " + p.getPurchased() + "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Cost: " + numFormat.format(p.getCost()) );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("ProductivityIncreaseFactor: "
+							+ numFormat.format(p.getProductivityIncreaseFactor()) );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("ErrorRateDecreaseFactor: "
+							+ numFormat.format(p.getErrorRateDecreaseFactor()) );
+				}
+				if (!state.getClock().isStopped()) // game not over
+				{
+					attributes.add("Purchased: " + p.getPurchased() );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					attributes.add("Purchased: " + p.getPurchased() );
 				}
 			} else if (objInFocus instanceof DesignEnvironment) {
 				DesignEnvironment p = (DesignEnvironment) objInFocus;
-				attributes.add("<html><font size=2>Type: DesignEnvironment</font></html>");
+				attributes.add("Type: DesignEnvironment");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Cost: " + numFormat.format(p.getCost()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Cost: " + numFormat.format(p.getCost()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>ProductivityIncreaseFactor: "
-							+ numFormat.format(p.getProductivityIncreaseFactor()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>ErrorRateDecreaseFactor: "
-							+ numFormat.format(p.getErrorRateDecreaseFactor()) + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Purchased: " + p.getPurchased() + "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Cost: " + numFormat.format(p.getCost()) );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Purchased: " + p.getPurchased() + "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Cost: " + numFormat.format(p.getCost()) );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("ProductivityIncreaseFactor: "
+							+ numFormat.format(p.getProductivityIncreaseFactor()) );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("ErrorRateDecreaseFactor: "
+							+ numFormat.format(p.getErrorRateDecreaseFactor()) );
+				}
+				if (!state.getClock().isStopped()) // game not over
+				{
+					attributes.add("Purchased: " + p.getPurchased() );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					attributes.add("Purchased: " + p.getPurchased() );
 				}
 			} else if (objInFocus instanceof IDE) {
 				IDE p = (IDE) objInFocus;
-				attributes.add("<html><font size=2>Type: IDE</font></html>");
+				attributes.add("Type: IDE");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Cost: " + numFormat.format(p.getCost()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Cost: " + numFormat.format(p.getCost()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>ProductivityIncreaseFactor: "
-							+ numFormat.format(p.getProductivityIncreaseFactor()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>ErrorRateDecreaseFactor: "
-							+ numFormat.format(p.getErrorRateDecreaseFactor()) + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Purchased: " + p.getPurchased() + "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Cost: " + numFormat.format(p.getCost()) );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Purchased: " + p.getPurchased() + "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Cost: " + numFormat.format(p.getCost()) );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("ProductivityIncreaseFactor: "
+							+ numFormat.format(p.getProductivityIncreaseFactor()) );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("ErrorRateDecreaseFactor: "
+							+ numFormat.format(p.getErrorRateDecreaseFactor()) );
+				}
+				if (!state.getClock().isStopped()) // game not over
+				{
+					attributes.add("Purchased: " + p.getPurchased() );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					attributes.add("Purchased: " + p.getPurchased() );
 				}
 			} else if (objInFocus instanceof AutomatedTestingTool) {
 				AutomatedTestingTool p = (AutomatedTestingTool) objInFocus;
-				attributes.add("<html><font size=2>Type: AutomatedTestingTool</font></html>");
+				attributes.add("Type: AutomatedTestingTool");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Cost: " + numFormat.format(p.getCost()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Cost: " + numFormat.format(p.getCost()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>ProductivityIncreaseFactor: "
-							+ numFormat.format(p.getProductivityIncreaseFactor()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>ErrorRateDecreaseFactor: "
-							+ numFormat.format(p.getErrorRateDecreaseFactor()) + "</font></html>");
+					attributes.add("Name: " + p.getName() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Purchased: " + p.getPurchased() + "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Cost: " + numFormat.format(p.getCost()) );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Purchased: " + p.getPurchased() + "</font></html>");
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Cost: " + numFormat.format(p.getCost()) );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("ProductivityIncreaseFactor: "
+							+ numFormat.format(p.getProductivityIncreaseFactor()) );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("ErrorRateDecreaseFactor: "
+							+ numFormat.format(p.getErrorRateDecreaseFactor()) );
+				}
+				if (!state.getClock().isStopped()) // game not over
+				{
+					attributes.add("Purchased: " + p.getPurchased() );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					attributes.add("Purchased: " + p.getPurchased() );
 				}
 			}
 		}
@@ -641,60 +643,60 @@ public class AttributePanel extends Pane {
 		else if ((objInFocus != null) && state.getProjectStateRepository().getAll().contains(objInFocus)) {
 			if (objInFocus instanceof SEProject) {
 				SEProject p = (SEProject) objInFocus;
-				attributes.add("<html><font size=2>Type: SEProject</font></html>");
+				attributes.add("Type: SEProject");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Description: " + p.getDescription() + "</font></html>");
+					attributes.add("Description: " + p.getDescription() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Description: " + p.getDescription() + "</font></html>");
-				}
-				if (!state.getClock().isStopped()) // game not over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Budget: " + numFormat.format(p.getBudget()) + "</font></html>");
-				}
-				if (state.getClock().isStopped()) // game is over
-				{
-					numFormat.setMinimumFractionDigits(2);
-					numFormat.setMaximumFractionDigits(2);
-					attributes.add("<html><font size=2>Budget: " + numFormat.format(p.getBudget()) + "</font></html>");
+					attributes.add("Description: " + p.getDescription() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
 					numFormat.setMinimumFractionDigits(2);
 					numFormat.setMaximumFractionDigits(2);
-					attributes.add(
-							"<html><font size=2>MoneySpent: " + numFormat.format(p.getMoneySpent()) + "</font></html>");
+					attributes.add("Budget: " + numFormat.format(p.getBudget()) );
 				}
 				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add("Budget: " + numFormat.format(p.getBudget()) );
+				}
+				if (!state.getClock().isStopped()) // game not over
 				{
 					numFormat.setMinimumFractionDigits(2);
 					numFormat.setMaximumFractionDigits(2);
 					attributes.add(
-							"<html><font size=2>MoneySpent: " + numFormat.format(p.getMoneySpent()) + "</font></html>");
+							"MoneySpent: " + numFormat.format(p.getMoneySpent()) );
+				}
+				if (state.getClock().isStopped()) // game is over
+				{
+					numFormat.setMinimumFractionDigits(2);
+					numFormat.setMaximumFractionDigits(2);
+					attributes.add(
+							"MoneySpent: " + numFormat.format(p.getMoneySpent()) );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>AllottedTime: " + p.getAllottedTime() + "</font></html>");
+					attributes.add("AllottedTime: " + p.getAllottedTime() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>AllottedTime: " + p.getAllottedTime() + "</font></html>");
+					attributes.add("AllottedTime: " + p.getAllottedTime() );
 				}
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>TimeUsed: " + p.getTimeUsed() + "</font></html>");
+					attributes.add("TimeUsed: " + p.getTimeUsed() );
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>TimeUsed: " + p.getTimeUsed() + "</font></html>");
+					attributes.add("TimeUsed: " + p.getTimeUsed());
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Score: " + p.getScore() + "</font></html>");
+					attributes.add("Score: " + p.getScore());
 				}
 			}
 		}
@@ -702,32 +704,44 @@ public class AttributePanel extends Pane {
 		else if ((objInFocus != null) && state.getCustomerStateRepository().getAll().contains(objInFocus)) {
 			if (objInFocus instanceof ACustomer) {
 				ACustomer p = (ACustomer) objInFocus;
-				attributes.add("<html><font size=2>Type: aCustomer</font></html>");
+				attributes.add("Type: aCustomer");
 				if (!state.getClock().isStopped()) // game not over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName());
 				}
 				if (state.getClock().isStopped()) // game is over
 				{
-					attributes.add("<html><font size=2>Name: " + p.getName() + "</font></html>");
+					attributes.add("Name: " + p.getName());
 				}
 			}
 		} else {
 			this.setIcon(JavaFXHelpers.createImageView("src/simse/gui/images/grid.gif"));
 		}
 
-		attributeListLeft.setUserData(attributes);
-		attributeListRight.setUserData(new Vector());
+//		attributeListLeft.setUserData(attributes);
+		
+		for(String data : attributes) {
+			attributeListLeft.getItems().add(data);
+		}
+//		attributeListRight.setUserData(new Vector());
 
 		// distribute attributes to both sides, if needed:
 		Vector<String> rightHandAtts = new Vector<String>();
 		if (attributes.size() > ATTRIBUTE_LIST_CAPACITY) { // need to use 2nd list
+			attributeListLeft.getItems().clear();
+			attributeListRight.getItems().clear();
 			while ((ATTRIBUTE_LIST_CAPACITY) < attributes.size()) { // there are still more elements to
 																	// move to right
 				rightHandAtts.add(attributes.remove(ATTRIBUTE_LIST_CAPACITY)); // remove from left, put on right
 			}
-			attributeListRight.setUserData(rightHandAtts);
-			attributeListLeft.setUserData(attributes);
+			for(String data : rightHandAtts) {
+				attributeListRight.getItems().add(data);
+			}
+//			attributeListRight.setUserData(rightHandAtts);
+			for(String data : attributes) {
+				attributeListLeft.getItems().add(data);
+			}
+//			attributeListLeft.setUserData(attributes);
 
 //				if (attributePaneLeft.) // need to move one more over to account
 //																			// for extra space that scrollbar takes up
