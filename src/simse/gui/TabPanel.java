@@ -150,13 +150,14 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		// Add panes and labels to main pane
 		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
-				Priority.NEVER, new Insets(0, 0, 10, 0));
-		gridPane.add(buttonsScrollPane, 2, 0); //TODO: Put this back :)
+				Priority.NEVER, new Insets(10, 0, 0, 0));
+		gridPane.add(buttonsScrollPane, 2, 0);
 //
-		setPrefSize(1024, 100);
+		setPrefSize(1920, 100);
 		updateImages(EMPLOYEE);
 		
 		this.getChildren().add(gridPane);
+		this.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 	}
 
 //	public void paintComponent(Graphics g) {
