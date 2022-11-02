@@ -150,7 +150,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		// Add panes and labels to main pane
 		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
-				Priority.NEVER, new Insets(0, 0, 10, 0));
+				Priority.NEVER, new Insets(10, 0, 0, 0));
 		gridPane.add(buttonsScrollPane, 2, 0); //TODO: Put this back :)
 //
 		setPrefSize(1920, 100);
