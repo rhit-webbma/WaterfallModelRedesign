@@ -7,7 +7,13 @@ import simse.adts.actions.*;
 import simse.logic.*;
 import simse.gui.*;
 import java.util.*;
-import javax.swing.*;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Dialog;
+import javafx.stage.Stage;
+
+import javafx.stage.Stage;
 
 public class ParticipantSelectionDialogsDriver {
 	private Vector<String> partNames;
@@ -19,7 +25,7 @@ public class ParticipantSelectionDialogsDriver {
 	private DestroyerChecker destChecker;
 	private String menuText;
 
-	public ParticipantSelectionDialogsDriver(JFrame gui, Vector<String> pNames,
+	public ParticipantSelectionDialogsDriver(Stage parent, Vector<String> pNames,
 			Vector<Vector<? extends SSObject>> parts,
 			simse.adts.actions.Action act, State s, RuleExecutor re,
 			DestroyerChecker dc, Employee emp, String mText) {
@@ -84,7 +90,7 @@ public class ParticipantSelectionDialogsDriver {
 				{
 					participants.remove(selectedEmp);
 					EmployeeParticipantSelectionDialog psd = new EmployeeParticipantSelectionDialog(
-							gui, participantName, new Vector<SSObject>(
+							parent, participantName, new Vector<SSObject>(
 									participants), action, state, selectedEmp);
 					if (psd.actionCancelled()) {
 						actionValid = false;
@@ -93,7 +99,7 @@ public class ParticipantSelectionDialogsDriver {
 				} else // pass null in instead of selectedEmp
 				{
 					EmployeeParticipantSelectionDialog psd = new EmployeeParticipantSelectionDialog(
-							gui, participantName, new Vector<SSObject>(
+							parent, participantName, new Vector<SSObject>(
 									participants), action, state, null);
 					if (psd.actionCancelled()) {
 						actionValid = false;
@@ -102,7 +108,7 @@ public class ParticipantSelectionDialogsDriver {
 				}
 			} else {
 				NonEmployeeParticipantSelectionDialog psd = new NonEmployeeParticipantSelectionDialog(
-						gui, participantName,
+						parent, participantName,
 						new Vector<SSObject>(participants), action, state);
 				if (psd.actionCancelled()) {
 					actionValid = false;
@@ -130,7 +136,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getCreateRequirementsActionStateRepository()
 						.add((CreateRequirementsAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof ReviewRequirementsAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -150,7 +156,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getReviewRequirementsActionStateRepository()
 						.add((ReviewRequirementsAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof CorrectRequirementsAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -172,7 +178,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getCorrectRequirementsActionStateRepository()
 						.add((CorrectRequirementsAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof CreateDesignAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -192,7 +198,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getCreateDesignActionStateRepository()
 						.add((CreateDesignAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof ReviewDesignAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -212,7 +218,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getReviewDesignActionStateRepository()
 						.add((ReviewDesignAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof CorrectDesignAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -232,7 +238,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getCorrectDesignActionStateRepository()
 						.add((CorrectDesignAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof CreateCodeAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -250,9 +256,9 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getCreateCodeActionStateRepository()
 						.add((CreateCodeAction) action);
-				ruleExec.update(gui, RuleExecutor.UPDATE_ONE,
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
 						"CreateCodeTrigRule", action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof InspectCodeAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -272,7 +278,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getInspectCodeActionStateRepository()
 						.add((InspectCodeAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof CorrectCodeAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -292,7 +298,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getCorrectCodeActionStateRepository()
 						.add((CorrectCodeAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof IntegrateCodeAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -312,7 +318,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getIntegrateCodeActionStateRepository()
 						.add((IntegrateCodeAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof SystemTestAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -332,7 +338,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getSystemTestActionStateRepository()
 						.add((SystemTestAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof CreateSystemTestPlanAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -352,7 +358,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getCreateSystemTestPlanActionStateRepository()
 						.add((CreateSystemTestPlanAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof ReviewSystemTestPlanAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -372,7 +378,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getReviewSystemTestPlanActionStateRepository()
 						.add((ReviewSystemTestPlanAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof CorrectSystemTestPlanAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -392,7 +398,7 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getCorrectSystemTestPlanActionStateRepository()
 						.add((CorrectSystemTestPlanAction) action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof DeliverProductAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -404,9 +410,9 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getDeliverProductActionStateRepository()
 						.add((DeliverProductAction) action);
-				ruleExec.update(gui, RuleExecutor.UPDATE_ONE, "CalculateScore",
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE, "CalculateScore",
 						action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 				if (menuText.equals("Deliver product to customer")) {
 					// stop game and give score:
 					DeliverProductAction a = (DeliverProductAction) action;
@@ -416,10 +422,11 @@ public class ParticipantSelectionDialogsDriver {
 							int v = t.getScore();
 							state.getClock().stop();
 							state.setScore(v);
-							((SimSEGUI) gui).update();
-							JOptionPane.showMessageDialog(null,
-									("Your score is " + v), "Game over!",
-									JOptionPane.INFORMATION_MESSAGE);
+							((SimSEGUI) parent).update();
+							Dialog d = new Dialog();
+							d.setContentText(("Your score is " + v));
+							d.setTitle("Game over!");
+							d.show();
 						}
 					}
 				}
@@ -434,9 +441,9 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getChangePayRateActionStateRepository()
 						.add((ChangePayRateAction) action);
-				ruleExec.update(gui, RuleExecutor.UPDATE_ONE,
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
 						"ChangePayRateEffectRuleA", action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof GiveBonusAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -448,9 +455,9 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getGiveBonusActionStateRepository()
 						.add((GiveBonusAction) action);
-				ruleExec.update(gui, RuleExecutor.UPDATE_ONE,
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
 						"GiveBonusEffectRuleA", action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof FireAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -469,9 +476,9 @@ public class ParticipantSelectionDialogsDriver {
 				}
 				state.getActionStateRepository().getFireActionStateRepository()
 						.add((FireAction) action);
-				ruleExec.update(gui, RuleExecutor.UPDATE_ONE,
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
 						"FireDestroyObjectsRuleA", action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			} else if (action instanceof PurchaseToolAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -491,9 +498,9 @@ public class ParticipantSelectionDialogsDriver {
 				state.getActionStateRepository()
 						.getPurchaseToolActionStateRepository()
 						.add((PurchaseToolAction) action);
-				ruleExec.update(gui, RuleExecutor.UPDATE_ONE,
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
 						"PurchaseToolEffectRuleA", action);
-				destChecker.update(false, gui);
+				destChecker.update(false, parent);
 			}
 		}
 	}

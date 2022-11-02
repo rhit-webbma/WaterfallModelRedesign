@@ -108,7 +108,7 @@ public class Engine implements ActionListener {
 
 	public void giveGUI(SimSEGUI g) {
 		gui = g;
-		new StartingNarrativeDialog(gui);
+//		new StartingNarrativeDialog(gui);
 	}
 
 	public void actionPerformed(ActionEvent ae) {

@@ -6,7 +6,8 @@ import simse.gui.*;
 import simse.adts.objects.*;
 import simse.adts.actions.*;
 import java.util.*;
-import javax.swing.*;
+
+import javafx.stage.Stage;
 
 public class TriggerChecker {
 	private State state;
@@ -19,7 +20,7 @@ public class TriggerChecker {
 		ranNumGen = new Random();
 	}
 
-	public void update(boolean updateUserTrigsOnly, JFrame gui) {
+	public void update(boolean updateUserTrigsOnly, Stage gui) {
 		if (!updateUserTrigsOnly) {
 			Vector<Employee> quitters0 = new Vector<Employee>();
 			Vector<SoftwareEngineer> softwareengineers = state

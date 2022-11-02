@@ -7,7 +7,11 @@ import simse.adts.objects.*;
 import simse.adts.actions.*;
 import simse.logic.dialogs.*;
 import java.util.*;
-import javax.swing.*;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
 public class MenuInputManager {
 	private State state;
@@ -23,7 +27,7 @@ public class MenuInputManager {
 		ruleExec = r;
 	}
 
-	public void menuItemSelected(Employee e, String s, JFrame parent) {
+	public void menuItemSelected(Employee e, String s, Stage parent) {
 		boolean hasStr = false;
 		Vector<String> menu = e.getMenu();
 		for (int i = 0; i < menu.size(); i++) {
@@ -36,736 +40,738 @@ public class MenuInputManager {
 		if (!hasStr) {
 		} else {
 			if (s.equals("Everyone stop what you're doing")) {
-				int choice = JOptionPane
-						.showConfirmDialog(
-								null,
-								("Are you sure you want everyone to stop what they're doing?"),
-								"Confirm Activities Ending",
-								JOptionPane.YES_NO_OPTION);
-				if (choice == JOptionPane.YES_OPTION) {
-					Vector<Employee> allEmps = state
-							.getEmployeeStateRepository().getAll();
-					for (int z = 0; z < allEmps.size(); z++) {
-						Employee emp = allEmps.elementAt(z);
-						// Stop creating the requirements document:
-						Vector<CreateRequirementsAction> allActions0 = state
-								.getActionStateRepository()
-								.getCreateRequirementsActionStateRepository()
-								.getAllActions();
-						int a0 = 0;
-						for (int i = 0; i < allActions0.size(); i++) {
-							CreateRequirementsAction b0 = allActions0
-									.elementAt(i);
-							if (b0.getAllParticipants().contains(emp)) {
-								a0++;
-							}
-						}
-						if (a0 == 1) {
+				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+				alert.setTitle("Confirm Activities Ending");
+				alert.setContentText("Are you sure you want everyone to stop what they're doing?");
+				ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+				ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+				alert.getButtonTypes().setAll(okButton, noButton);
+				alert.showAndWait().ifPresent(type -> {
+					if (type == okButton) {
+						Vector<Employee> allEmps = state
+								.getEmployeeStateRepository().getAll();
+						for (int z = 0; z < allEmps.size(); z++) {
+							Employee emp = allEmps.elementAt(z);
+							// Stop creating the requirements document:
+							Vector<CreateRequirementsAction> allActions0 = state
+									.getActionStateRepository()
+									.getCreateRequirementsActionStateRepository()
+									.getAllActions();
+							int a0 = 0;
 							for (int i = 0; i < allActions0.size(); i++) {
 								CreateRequirementsAction b0 = allActions0
 										.elementAt(i);
-								if (b0.getAllEmps().contains(emp)) {
-									b0.removeEmp(emp);
-									emp.setOverheadText("I've stopped creating the requirements document");
-									if (b0.getAllEmps().size() < 1) {
-										Vector<SSObject> c0 = b0
-												.getAllParticipants();
-										for (int j = 0; j < c0.size(); j++) {
-											SSObject d0 = c0.elementAt(j);
-											if (d0 instanceof Employee) {
-												((Employee) d0)
-														.setOverheadText("I've stopped creating the requirements document");
-											} else if (d0 instanceof Customer) {
-												((Customer) d0)
-														.setOverheadText("I've stopped creating the requirements document");
+								if (b0.getAllParticipants().contains(emp)) {
+									a0++;
+								}
+							}
+							if (a0 == 1) {
+								for (int i = 0; i < allActions0.size(); i++) {
+									CreateRequirementsAction b0 = allActions0
+											.elementAt(i);
+									if (b0.getAllEmps().contains(emp)) {
+										b0.removeEmp(emp);
+										emp.setOverheadText("I've stopped creating the requirements document");
+										if (b0.getAllEmps().size() < 1) {
+											Vector<SSObject> c0 = b0
+													.getAllParticipants();
+											for (int j = 0; j < c0.size(); j++) {
+												SSObject d0 = c0.elementAt(j);
+												if (d0 instanceof Employee) {
+													((Employee) d0)
+															.setOverheadText("I've stopped creating the requirements document");
+												} else if (d0 instanceof Customer) {
+													((Customer) d0)
+															.setOverheadText("I've stopped creating the requirements document");
+												}
 											}
+											state.getActionStateRepository()
+													.getCreateRequirementsActionStateRepository()
+													.remove(b0);
 										}
-										state.getActionStateRepository()
-												.getCreateRequirementsActionStateRepository()
-												.remove(b0);
 									}
 								}
-							}
-						} else if (a0 > 1) {
-							Vector<CreateRequirementsAction> b0 = new Vector<CreateRequirementsAction>();
-							for (int i = 0; i < allActions0.size(); i++) {
-								CreateRequirementsAction c0 = (CreateRequirementsAction) allActions0
-										.elementAt(i);
-								if ((c0.getAllEmps().contains(emp))
-										&& (!(b0.contains(c0)))) {
-									b0.add(c0);
+							} else if (a0 > 1) {
+								Vector<CreateRequirementsAction> b0 = new Vector<CreateRequirementsAction>();
+								for (int i = 0; i < allActions0.size(); i++) {
+									CreateRequirementsAction c0 = (CreateRequirementsAction) allActions0
+											.elementAt(i);
+									if ((c0.getAllEmps().contains(emp))
+											&& (!(b0.contains(c0)))) {
+										b0.add(c0);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b0, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b0, state,
-									emp, ruleExec, s);
-						}
-						// Stop reviewing the requirements document:
-						Vector<ReviewRequirementsAction> allActions1 = state
-								.getActionStateRepository()
-								.getReviewRequirementsActionStateRepository()
-								.getAllActions();
-						int a1 = 0;
-						for (int i = 0; i < allActions1.size(); i++) {
-							ReviewRequirementsAction b1 = allActions1
-									.elementAt(i);
-							if (b1.getAllParticipants().contains(emp)) {
-								a1++;
-							}
-						}
-						if (a1 == 1) {
+							// Stop reviewing the requirements document:
+							Vector<ReviewRequirementsAction> allActions1 = state
+									.getActionStateRepository()
+									.getReviewRequirementsActionStateRepository()
+									.getAllActions();
+							int a1 = 0;
 							for (int i = 0; i < allActions1.size(); i++) {
 								ReviewRequirementsAction b1 = allActions1
 										.elementAt(i);
-								if (b1.getAllEmps().contains(emp)) {
-									b1.removeEmp(emp);
-									emp.setOverheadText("I'm done reviewing the requirements document");
-									if (b1.getAllEmps().size() < 1) {
-										Vector<SSObject> c1 = b1
-												.getAllParticipants();
-										for (int j = 0; j < c1.size(); j++) {
-											SSObject d1 = c1.elementAt(j);
-											if (d1 instanceof Employee) {
-												((Employee) d1)
-														.setOverheadText("I'm done reviewing the requirements document");
-											} else if (d1 instanceof Customer) {
-												((Customer) d1)
-														.setOverheadText("I'm done reviewing the requirements document");
+								if (b1.getAllParticipants().contains(emp)) {
+									a1++;
+								}
+							}
+							if (a1 == 1) {
+								for (int i = 0; i < allActions1.size(); i++) {
+									ReviewRequirementsAction b1 = allActions1
+											.elementAt(i);
+									if (b1.getAllEmps().contains(emp)) {
+										b1.removeEmp(emp);
+										emp.setOverheadText("I'm done reviewing the requirements document");
+										if (b1.getAllEmps().size() < 1) {
+											Vector<SSObject> c1 = b1
+													.getAllParticipants();
+											for (int j = 0; j < c1.size(); j++) {
+												SSObject d1 = c1.elementAt(j);
+												if (d1 instanceof Employee) {
+													((Employee) d1)
+															.setOverheadText("I'm done reviewing the requirements document");
+												} else if (d1 instanceof Customer) {
+													((Customer) d1)
+															.setOverheadText("I'm done reviewing the requirements document");
+												}
 											}
+											state.getActionStateRepository()
+													.getReviewRequirementsActionStateRepository()
+													.remove(b1);
 										}
-										state.getActionStateRepository()
-												.getReviewRequirementsActionStateRepository()
-												.remove(b1);
 									}
 								}
-							}
-						} else if (a1 > 1) {
-							Vector<ReviewRequirementsAction> b1 = new Vector<ReviewRequirementsAction>();
-							for (int i = 0; i < allActions1.size(); i++) {
-								ReviewRequirementsAction c1 = (ReviewRequirementsAction) allActions1
-										.elementAt(i);
-								if ((c1.getAllEmps().contains(emp))
-										&& (!(b1.contains(c1)))) {
-									b1.add(c1);
+							} else if (a1 > 1) {
+								Vector<ReviewRequirementsAction> b1 = new Vector<ReviewRequirementsAction>();
+								for (int i = 0; i < allActions1.size(); i++) {
+									ReviewRequirementsAction c1 = (ReviewRequirementsAction) allActions1
+											.elementAt(i);
+									if ((c1.getAllEmps().contains(emp))
+											&& (!(b1.contains(c1)))) {
+										b1.add(c1);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b1, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b1, state,
-									emp, ruleExec, s);
-						}
-						// Stop correcting the requirements doc:
-						Vector<CorrectRequirementsAction> allActions2 = state
-								.getActionStateRepository()
-								.getCorrectRequirementsActionStateRepository()
-								.getAllActions();
-						int a2 = 0;
-						for (int i = 0; i < allActions2.size(); i++) {
-							CorrectRequirementsAction b2 = allActions2
-									.elementAt(i);
-							if (b2.getAllParticipants().contains(emp)) {
-								a2++;
-							}
-						}
-						if (a2 == 1) {
+							// Stop correcting the requirements doc:
+							Vector<CorrectRequirementsAction> allActions2 = state
+									.getActionStateRepository()
+									.getCorrectRequirementsActionStateRepository()
+									.getAllActions();
+							int a2 = 0;
 							for (int i = 0; i < allActions2.size(); i++) {
 								CorrectRequirementsAction b2 = allActions2
 										.elementAt(i);
-								if (b2.getAllEmps().contains(emp)) {
-									b2.removeEmp(emp);
-									emp.setOverheadText("I've stopped correcting the requirements document");
-									if (b2.getAllEmps().size() < 1) {
-										Vector<SSObject> c2 = b2
-												.getAllParticipants();
-										for (int j = 0; j < c2.size(); j++) {
-											SSObject d2 = c2.elementAt(j);
-											if (d2 instanceof Employee) {
-												((Employee) d2)
-														.setOverheadText("I've stopped correcting the requirements document");
-											} else if (d2 instanceof Customer) {
-												((Customer) d2)
-														.setOverheadText("I've stopped correcting the requirements document");
+								if (b2.getAllParticipants().contains(emp)) {
+									a2++;
+								}
+							}
+							if (a2 == 1) {
+								for (int i = 0; i < allActions2.size(); i++) {
+									CorrectRequirementsAction b2 = allActions2
+											.elementAt(i);
+									if (b2.getAllEmps().contains(emp)) {
+										b2.removeEmp(emp);
+										emp.setOverheadText("I've stopped correcting the requirements document");
+										if (b2.getAllEmps().size() < 1) {
+											Vector<SSObject> c2 = b2
+													.getAllParticipants();
+											for (int j = 0; j < c2.size(); j++) {
+												SSObject d2 = c2.elementAt(j);
+												if (d2 instanceof Employee) {
+													((Employee) d2)
+															.setOverheadText("I've stopped correcting the requirements document");
+												} else if (d2 instanceof Customer) {
+													((Customer) d2)
+															.setOverheadText("I've stopped correcting the requirements document");
+												}
 											}
+											state.getActionStateRepository()
+													.getCorrectRequirementsActionStateRepository()
+													.remove(b2);
 										}
-										state.getActionStateRepository()
-												.getCorrectRequirementsActionStateRepository()
-												.remove(b2);
 									}
 								}
-							}
-						} else if (a2 > 1) {
-							Vector<CorrectRequirementsAction> b2 = new Vector<CorrectRequirementsAction>();
-							for (int i = 0; i < allActions2.size(); i++) {
-								CorrectRequirementsAction c2 = (CorrectRequirementsAction) allActions2
-										.elementAt(i);
-								if ((c2.getAllEmps().contains(emp))
-										&& (!(b2.contains(c2)))) {
-									b2.add(c2);
+							} else if (a2 > 1) {
+								Vector<CorrectRequirementsAction> b2 = new Vector<CorrectRequirementsAction>();
+								for (int i = 0; i < allActions2.size(); i++) {
+									CorrectRequirementsAction c2 = (CorrectRequirementsAction) allActions2
+											.elementAt(i);
+									if ((c2.getAllEmps().contains(emp))
+											&& (!(b2.contains(c2)))) {
+										b2.add(c2);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b2, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b2, state,
-									emp, ruleExec, s);
-						}
-						// Stop creating the design:
-						Vector<CreateDesignAction> allActions3 = state
-								.getActionStateRepository()
-								.getCreateDesignActionStateRepository()
-								.getAllActions();
-						int a3 = 0;
-						for (int i = 0; i < allActions3.size(); i++) {
-							CreateDesignAction b3 = allActions3.elementAt(i);
-							if (b3.getAllParticipants().contains(emp)) {
-								a3++;
-							}
-						}
-						if (a3 == 1) {
+							// Stop creating the design:
+							Vector<CreateDesignAction> allActions3 = state
+									.getActionStateRepository()
+									.getCreateDesignActionStateRepository()
+									.getAllActions();
+							int a3 = 0;
 							for (int i = 0; i < allActions3.size(); i++) {
-								CreateDesignAction b3 = allActions3
-										.elementAt(i);
-								if (b3.getAllEmps().contains(emp)) {
-									b3.removeEmp(emp);
-									emp.setOverheadText("I've stopped creating the design document");
-									if (b3.getAllEmps().size() < 1) {
-										Vector<SSObject> c3 = b3
-												.getAllParticipants();
-										for (int j = 0; j < c3.size(); j++) {
-											SSObject d3 = c3.elementAt(j);
-											if (d3 instanceof Employee) {
-												((Employee) d3)
-														.setOverheadText("I've stopped creating the design document");
-											} else if (d3 instanceof Customer) {
-												((Customer) d3)
-														.setOverheadText("I've stopped creating the design document");
+								CreateDesignAction b3 = allActions3.elementAt(i);
+								if (b3.getAllParticipants().contains(emp)) {
+									a3++;
+								}
+							}
+							if (a3 == 1) {
+								for (int i = 0; i < allActions3.size(); i++) {
+									CreateDesignAction b3 = allActions3
+											.elementAt(i);
+									if (b3.getAllEmps().contains(emp)) {
+										b3.removeEmp(emp);
+										emp.setOverheadText("I've stopped creating the design document");
+										if (b3.getAllEmps().size() < 1) {
+											Vector<SSObject> c3 = b3
+													.getAllParticipants();
+											for (int j = 0; j < c3.size(); j++) {
+												SSObject d3 = c3.elementAt(j);
+												if (d3 instanceof Employee) {
+													((Employee) d3)
+															.setOverheadText("I've stopped creating the design document");
+												} else if (d3 instanceof Customer) {
+													((Customer) d3)
+															.setOverheadText("I've stopped creating the design document");
+												}
 											}
+											state.getActionStateRepository()
+													.getCreateDesignActionStateRepository()
+													.remove(b3);
 										}
-										state.getActionStateRepository()
-												.getCreateDesignActionStateRepository()
-												.remove(b3);
 									}
 								}
-							}
-						} else if (a3 > 1) {
-							Vector<CreateDesignAction> b3 = new Vector<CreateDesignAction>();
-							for (int i = 0; i < allActions3.size(); i++) {
-								CreateDesignAction c3 = (CreateDesignAction) allActions3
-										.elementAt(i);
-								if ((c3.getAllEmps().contains(emp))
-										&& (!(b3.contains(c3)))) {
-									b3.add(c3);
+							} else if (a3 > 1) {
+								Vector<CreateDesignAction> b3 = new Vector<CreateDesignAction>();
+								for (int i = 0; i < allActions3.size(); i++) {
+									CreateDesignAction c3 = (CreateDesignAction) allActions3
+											.elementAt(i);
+									if ((c3.getAllEmps().contains(emp))
+											&& (!(b3.contains(c3)))) {
+										b3.add(c3);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b3, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b3, state,
-									emp, ruleExec, s);
-						}
-						// Stop reviewing the design document:
-						Vector<ReviewDesignAction> allActions4 = state
-								.getActionStateRepository()
-								.getReviewDesignActionStateRepository()
-								.getAllActions();
-						int a4 = 0;
-						for (int i = 0; i < allActions4.size(); i++) {
-							ReviewDesignAction b4 = allActions4.elementAt(i);
-							if (b4.getAllParticipants().contains(emp)) {
-								a4++;
-							}
-						}
-						if (a4 == 1) {
+							// Stop reviewing the design document:
+							Vector<ReviewDesignAction> allActions4 = state
+									.getActionStateRepository()
+									.getReviewDesignActionStateRepository()
+									.getAllActions();
+							int a4 = 0;
 							for (int i = 0; i < allActions4.size(); i++) {
-								ReviewDesignAction b4 = allActions4
-										.elementAt(i);
-								if (b4.getAllEmps().contains(emp)) {
-									b4.removeEmp(emp);
-									emp.setOverheadText("I've stopped reviewing the design document");
-									if (b4.getAllEmps().size() < 1) {
-										Vector<SSObject> c4 = b4
-												.getAllParticipants();
-										for (int j = 0; j < c4.size(); j++) {
-											SSObject d4 = c4.elementAt(j);
-											if (d4 instanceof Employee) {
-												((Employee) d4)
-														.setOverheadText("I've stopped reviewing the design document");
-											} else if (d4 instanceof Customer) {
-												((Customer) d4)
-														.setOverheadText("I've stopped reviewing the design document");
+								ReviewDesignAction b4 = allActions4.elementAt(i);
+								if (b4.getAllParticipants().contains(emp)) {
+									a4++;
+								}
+							}
+							if (a4 == 1) {
+								for (int i = 0; i < allActions4.size(); i++) {
+									ReviewDesignAction b4 = allActions4
+											.elementAt(i);
+									if (b4.getAllEmps().contains(emp)) {
+										b4.removeEmp(emp);
+										emp.setOverheadText("I've stopped reviewing the design document");
+										if (b4.getAllEmps().size() < 1) {
+											Vector<SSObject> c4 = b4
+													.getAllParticipants();
+											for (int j = 0; j < c4.size(); j++) {
+												SSObject d4 = c4.elementAt(j);
+												if (d4 instanceof Employee) {
+													((Employee) d4)
+															.setOverheadText("I've stopped reviewing the design document");
+												} else if (d4 instanceof Customer) {
+													((Customer) d4)
+															.setOverheadText("I've stopped reviewing the design document");
+												}
 											}
+											state.getActionStateRepository()
+													.getReviewDesignActionStateRepository()
+													.remove(b4);
 										}
-										state.getActionStateRepository()
-												.getReviewDesignActionStateRepository()
-												.remove(b4);
 									}
 								}
-							}
-						} else if (a4 > 1) {
-							Vector<ReviewDesignAction> b4 = new Vector<ReviewDesignAction>();
-							for (int i = 0; i < allActions4.size(); i++) {
-								ReviewDesignAction c4 = (ReviewDesignAction) allActions4
-										.elementAt(i);
-								if ((c4.getAllEmps().contains(emp))
-										&& (!(b4.contains(c4)))) {
-									b4.add(c4);
-								}
-							}
-							new ChooseActionToDestroyDialog(parent, b4, state,
-									emp, ruleExec, s);
-						}
-						// Stop correcting the design document:
-						Vector<CorrectDesignAction> allActions5 = state
-								.getActionStateRepository()
-								.getCorrectDesignActionStateRepository()
-								.getAllActions();
-						int a5 = 0;
-						for (int i = 0; i < allActions5.size(); i++) {
-							CorrectDesignAction b5 = allActions5.elementAt(i);
-							if (b5.getAllParticipants().contains(emp)) {
-								a5++;
-							}
-						}
-						if (a5 == 1) {
-							for (int i = 0; i < allActions5.size(); i++) {
-								CorrectDesignAction b5 = allActions5
-										.elementAt(i);
-								if (b5.getAllEmps().contains(emp)) {
-									b5.removeEmp(emp);
-									emp.setOverheadText("I've stopped correcting the design document");
-									if (b5.getAllEmps().size() < 1) {
-										Vector<SSObject> c5 = b5
-												.getAllParticipants();
-										for (int j = 0; j < c5.size(); j++) {
-											SSObject d5 = c5.elementAt(j);
-											if (d5 instanceof Employee) {
-												((Employee) d5)
-														.setOverheadText("I've stopped correcting the design document");
-											} else if (d5 instanceof Customer) {
-												((Customer) d5)
-														.setOverheadText("I've stopped correcting the design document");
-											}
-										}
-										state.getActionStateRepository()
-												.getCorrectDesignActionStateRepository()
-												.remove(b5);
+							} else if (a4 > 1) {
+								Vector<ReviewDesignAction> b4 = new Vector<ReviewDesignAction>();
+								for (int i = 0; i < allActions4.size(); i++) {
+									ReviewDesignAction c4 = (ReviewDesignAction) allActions4
+											.elementAt(i);
+									if ((c4.getAllEmps().contains(emp))
+											&& (!(b4.contains(c4)))) {
+										b4.add(c4);
 									}
 								}
+								new ChooseActionToDestroyDialog(parent, b4, state,
+										emp, ruleExec, s);
 							}
-						} else if (a5 > 1) {
-							Vector<CorrectDesignAction> b5 = new Vector<CorrectDesignAction>();
+							// Stop correcting the design document:
+							Vector<CorrectDesignAction> allActions5 = state
+									.getActionStateRepository()
+									.getCorrectDesignActionStateRepository()
+									.getAllActions();
+							int a5 = 0;
 							for (int i = 0; i < allActions5.size(); i++) {
-								CorrectDesignAction c5 = (CorrectDesignAction) allActions5
-										.elementAt(i);
-								if ((c5.getAllEmps().contains(emp))
-										&& (!(b5.contains(c5)))) {
-									b5.add(c5);
+								CorrectDesignAction b5 = allActions5.elementAt(i);
+								if (b5.getAllParticipants().contains(emp)) {
+									a5++;
 								}
 							}
-							new ChooseActionToDestroyDialog(parent, b5, state,
-									emp, ruleExec, s);
-						}
-						// Stop creating code:
-						Vector<CreateCodeAction> allActions6 = state
-								.getActionStateRepository()
-								.getCreateCodeActionStateRepository()
-								.getAllActions();
-						int a6 = 0;
-						for (int i = 0; i < allActions6.size(); i++) {
-							CreateCodeAction b6 = allActions6.elementAt(i);
-							if (b6.getAllParticipants().contains(emp)) {
-								a6++;
+							if (a5 == 1) {
+								for (int i = 0; i < allActions5.size(); i++) {
+									CorrectDesignAction b5 = allActions5
+											.elementAt(i);
+									if (b5.getAllEmps().contains(emp)) {
+										b5.removeEmp(emp);
+										emp.setOverheadText("I've stopped correcting the design document");
+										if (b5.getAllEmps().size() < 1) {
+											Vector<SSObject> c5 = b5
+													.getAllParticipants();
+											for (int j = 0; j < c5.size(); j++) {
+												SSObject d5 = c5.elementAt(j);
+												if (d5 instanceof Employee) {
+													((Employee) d5)
+															.setOverheadText("I've stopped correcting the design document");
+												} else if (d5 instanceof Customer) {
+													((Customer) d5)
+															.setOverheadText("I've stopped correcting the design document");
+												}
+											}
+											state.getActionStateRepository()
+													.getCorrectDesignActionStateRepository()
+													.remove(b5);
+										}
+									}
+								}
+							} else if (a5 > 1) {
+								Vector<CorrectDesignAction> b5 = new Vector<CorrectDesignAction>();
+								for (int i = 0; i < allActions5.size(); i++) {
+									CorrectDesignAction c5 = (CorrectDesignAction) allActions5
+											.elementAt(i);
+									if ((c5.getAllEmps().contains(emp))
+											&& (!(b5.contains(c5)))) {
+										b5.add(c5);
+									}
+								}
+								new ChooseActionToDestroyDialog(parent, b5, state,
+										emp, ruleExec, s);
 							}
-						}
-						if (a6 == 1) {
+							// Stop creating code:
+							Vector<CreateCodeAction> allActions6 = state
+									.getActionStateRepository()
+									.getCreateCodeActionStateRepository()
+									.getAllActions();
+							int a6 = 0;
 							for (int i = 0; i < allActions6.size(); i++) {
 								CreateCodeAction b6 = allActions6.elementAt(i);
-								if (b6.getAllEmps().contains(emp)) {
-									b6.removeEmp(emp);
-									emp.setOverheadText("I've stopped creating code");
-									if (b6.getAllEmps().size() < 1) {
-										Vector<SSObject> c6 = b6
-												.getAllParticipants();
-										for (int j = 0; j < c6.size(); j++) {
-											SSObject d6 = c6.elementAt(j);
-											if (d6 instanceof Employee) {
-												((Employee) d6)
-														.setOverheadText("I've stopped creating code");
-											} else if (d6 instanceof Customer) {
-												((Customer) d6)
-														.setOverheadText("I've stopped creating code");
+								if (b6.getAllParticipants().contains(emp)) {
+									a6++;
+								}
+							}
+							if (a6 == 1) {
+								for (int i = 0; i < allActions6.size(); i++) {
+									CreateCodeAction b6 = allActions6.elementAt(i);
+									if (b6.getAllEmps().contains(emp)) {
+										b6.removeEmp(emp);
+										emp.setOverheadText("I've stopped creating code");
+										if (b6.getAllEmps().size() < 1) {
+											Vector<SSObject> c6 = b6
+													.getAllParticipants();
+											for (int j = 0; j < c6.size(); j++) {
+												SSObject d6 = c6.elementAt(j);
+												if (d6 instanceof Employee) {
+													((Employee) d6)
+															.setOverheadText("I've stopped creating code");
+												} else if (d6 instanceof Customer) {
+													((Customer) d6)
+															.setOverheadText("I've stopped creating code");
+												}
 											}
+											state.getActionStateRepository()
+													.getCreateCodeActionStateRepository()
+													.remove(b6);
 										}
-										state.getActionStateRepository()
-												.getCreateCodeActionStateRepository()
-												.remove(b6);
 									}
 								}
-							}
-						} else if (a6 > 1) {
-							Vector<CreateCodeAction> b6 = new Vector<CreateCodeAction>();
-							for (int i = 0; i < allActions6.size(); i++) {
-								CreateCodeAction c6 = (CreateCodeAction) allActions6
-										.elementAt(i);
-								if ((c6.getAllEmps().contains(emp))
-										&& (!(b6.contains(c6)))) {
-									b6.add(c6);
+							} else if (a6 > 1) {
+								Vector<CreateCodeAction> b6 = new Vector<CreateCodeAction>();
+								for (int i = 0; i < allActions6.size(); i++) {
+									CreateCodeAction c6 = (CreateCodeAction) allActions6
+											.elementAt(i);
+									if ((c6.getAllEmps().contains(emp))
+											&& (!(b6.contains(c6)))) {
+										b6.add(c6);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b6, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b6, state,
-									emp, ruleExec, s);
-						}
-						// Stop inspecting code:
-						Vector<InspectCodeAction> allActions7 = state
-								.getActionStateRepository()
-								.getInspectCodeActionStateRepository()
-								.getAllActions();
-						int a7 = 0;
-						for (int i = 0; i < allActions7.size(); i++) {
-							InspectCodeAction b7 = allActions7.elementAt(i);
-							if (b7.getAllParticipants().contains(emp)) {
-								a7++;
-							}
-						}
-						if (a7 == 1) {
+							// Stop inspecting code:
+							Vector<InspectCodeAction> allActions7 = state
+									.getActionStateRepository()
+									.getInspectCodeActionStateRepository()
+									.getAllActions();
+							int a7 = 0;
 							for (int i = 0; i < allActions7.size(); i++) {
 								InspectCodeAction b7 = allActions7.elementAt(i);
-								if (b7.getAllEmps().contains(emp)) {
-									b7.removeEmp(emp);
-									emp.setOverheadText("I've stopped inspecting the code");
-									if (b7.getAllEmps().size() < 3) {
-										Vector<SSObject> c7 = b7
-												.getAllParticipants();
-										for (int j = 0; j < c7.size(); j++) {
-											SSObject d7 = c7.elementAt(j);
-											if (d7 instanceof Employee) {
-												((Employee) d7)
-														.setOverheadText("I've stopped inspecting the code");
-											} else if (d7 instanceof Customer) {
-												((Customer) d7)
-														.setOverheadText("I've stopped inspecting the code");
+								if (b7.getAllParticipants().contains(emp)) {
+									a7++;
+								}
+							}
+							if (a7 == 1) {
+								for (int i = 0; i < allActions7.size(); i++) {
+									InspectCodeAction b7 = allActions7.elementAt(i);
+									if (b7.getAllEmps().contains(emp)) {
+										b7.removeEmp(emp);
+										emp.setOverheadText("I've stopped inspecting the code");
+										if (b7.getAllEmps().size() < 3) {
+											Vector<SSObject> c7 = b7
+													.getAllParticipants();
+											for (int j = 0; j < c7.size(); j++) {
+												SSObject d7 = c7.elementAt(j);
+												if (d7 instanceof Employee) {
+													((Employee) d7)
+															.setOverheadText("I've stopped inspecting the code");
+												} else if (d7 instanceof Customer) {
+													((Customer) d7)
+															.setOverheadText("I've stopped inspecting the code");
+												}
 											}
+											state.getActionStateRepository()
+													.getInspectCodeActionStateRepository()
+													.remove(b7);
 										}
-										state.getActionStateRepository()
-												.getInspectCodeActionStateRepository()
-												.remove(b7);
 									}
 								}
-							}
-						} else if (a7 > 1) {
-							Vector<InspectCodeAction> b7 = new Vector<InspectCodeAction>();
-							for (int i = 0; i < allActions7.size(); i++) {
-								InspectCodeAction c7 = (InspectCodeAction) allActions7
-										.elementAt(i);
-								if ((c7.getAllEmps().contains(emp))
-										&& (!(b7.contains(c7)))) {
-									b7.add(c7);
+							} else if (a7 > 1) {
+								Vector<InspectCodeAction> b7 = new Vector<InspectCodeAction>();
+								for (int i = 0; i < allActions7.size(); i++) {
+									InspectCodeAction c7 = (InspectCodeAction) allActions7
+											.elementAt(i);
+									if ((c7.getAllEmps().contains(emp))
+											&& (!(b7.contains(c7)))) {
+										b7.add(c7);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b7, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b7, state,
-									emp, ruleExec, s);
-						}
-						// Stop correcting code:
-						Vector<CorrectCodeAction> allActions8 = state
-								.getActionStateRepository()
-								.getCorrectCodeActionStateRepository()
-								.getAllActions();
-						int a8 = 0;
-						for (int i = 0; i < allActions8.size(); i++) {
-							CorrectCodeAction b8 = allActions8.elementAt(i);
-							if (b8.getAllParticipants().contains(emp)) {
-								a8++;
-							}
-						}
-						if (a8 == 1) {
+							// Stop correcting code:
+							Vector<CorrectCodeAction> allActions8 = state
+									.getActionStateRepository()
+									.getCorrectCodeActionStateRepository()
+									.getAllActions();
+							int a8 = 0;
 							for (int i = 0; i < allActions8.size(); i++) {
 								CorrectCodeAction b8 = allActions8.elementAt(i);
-								if (b8.getAllEmps().contains(emp)) {
-									b8.removeEmp(emp);
-									emp.setOverheadText("I've stopped correcting code");
-									if (b8.getAllEmps().size() < 1) {
-										Vector<SSObject> c8 = b8
-												.getAllParticipants();
-										for (int j = 0; j < c8.size(); j++) {
-											SSObject d8 = c8.elementAt(j);
-											if (d8 instanceof Employee) {
-												((Employee) d8)
-														.setOverheadText("I've stopped correcting code");
-											} else if (d8 instanceof Customer) {
-												((Customer) d8)
-														.setOverheadText("I've stopped correcting code");
+								if (b8.getAllParticipants().contains(emp)) {
+									a8++;
+								}
+							}
+							if (a8 == 1) {
+								for (int i = 0; i < allActions8.size(); i++) {
+									CorrectCodeAction b8 = allActions8.elementAt(i);
+									if (b8.getAllEmps().contains(emp)) {
+										b8.removeEmp(emp);
+										emp.setOverheadText("I've stopped correcting code");
+										if (b8.getAllEmps().size() < 1) {
+											Vector<SSObject> c8 = b8
+													.getAllParticipants();
+											for (int j = 0; j < c8.size(); j++) {
+												SSObject d8 = c8.elementAt(j);
+												if (d8 instanceof Employee) {
+													((Employee) d8)
+															.setOverheadText("I've stopped correcting code");
+												} else if (d8 instanceof Customer) {
+													((Customer) d8)
+															.setOverheadText("I've stopped correcting code");
+												}
 											}
+											state.getActionStateRepository()
+													.getCorrectCodeActionStateRepository()
+													.remove(b8);
 										}
-										state.getActionStateRepository()
-												.getCorrectCodeActionStateRepository()
-												.remove(b8);
 									}
 								}
-							}
-						} else if (a8 > 1) {
-							Vector<CorrectCodeAction> b8 = new Vector<CorrectCodeAction>();
-							for (int i = 0; i < allActions8.size(); i++) {
-								CorrectCodeAction c8 = (CorrectCodeAction) allActions8
-										.elementAt(i);
-								if ((c8.getAllEmps().contains(emp))
-										&& (!(b8.contains(c8)))) {
-									b8.add(c8);
+							} else if (a8 > 1) {
+								Vector<CorrectCodeAction> b8 = new Vector<CorrectCodeAction>();
+								for (int i = 0; i < allActions8.size(); i++) {
+									CorrectCodeAction c8 = (CorrectCodeAction) allActions8
+											.elementAt(i);
+									if ((c8.getAllEmps().contains(emp))
+											&& (!(b8.contains(c8)))) {
+										b8.add(c8);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b8, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b8, state,
-									emp, ruleExec, s);
-						}
-						// Stop integrating code:
-						Vector<IntegrateCodeAction> allActions9 = state
-								.getActionStateRepository()
-								.getIntegrateCodeActionStateRepository()
-								.getAllActions();
-						int a9 = 0;
-						for (int i = 0; i < allActions9.size(); i++) {
-							IntegrateCodeAction b9 = allActions9.elementAt(i);
-							if (b9.getAllParticipants().contains(emp)) {
-								a9++;
-							}
-						}
-						if (a9 == 1) {
+							// Stop integrating code:
+							Vector<IntegrateCodeAction> allActions9 = state
+									.getActionStateRepository()
+									.getIntegrateCodeActionStateRepository()
+									.getAllActions();
+							int a9 = 0;
 							for (int i = 0; i < allActions9.size(); i++) {
-								IntegrateCodeAction b9 = allActions9
-										.elementAt(i);
-								if (b9.getAllEmps().contains(emp)) {
-									b9.removeEmp(emp);
-									emp.setOverheadText("I've stopped integrating code");
-									if (b9.getAllEmps().size() < 1) {
-										Vector<SSObject> c9 = b9
-												.getAllParticipants();
-										for (int j = 0; j < c9.size(); j++) {
-											SSObject d9 = c9.elementAt(j);
-											if (d9 instanceof Employee) {
-												((Employee) d9)
-														.setOverheadText("I've stopped integrating code");
-											} else if (d9 instanceof Customer) {
-												((Customer) d9)
-														.setOverheadText("I've stopped integrating code");
+								IntegrateCodeAction b9 = allActions9.elementAt(i);
+								if (b9.getAllParticipants().contains(emp)) {
+									a9++;
+								}
+							}
+							if (a9 == 1) {
+								for (int i = 0; i < allActions9.size(); i++) {
+									IntegrateCodeAction b9 = allActions9
+											.elementAt(i);
+									if (b9.getAllEmps().contains(emp)) {
+										b9.removeEmp(emp);
+										emp.setOverheadText("I've stopped integrating code");
+										if (b9.getAllEmps().size() < 1) {
+											Vector<SSObject> c9 = b9
+													.getAllParticipants();
+											for (int j = 0; j < c9.size(); j++) {
+												SSObject d9 = c9.elementAt(j);
+												if (d9 instanceof Employee) {
+													((Employee) d9)
+															.setOverheadText("I've stopped integrating code");
+												} else if (d9 instanceof Customer) {
+													((Customer) d9)
+															.setOverheadText("I've stopped integrating code");
+												}
 											}
+											state.getActionStateRepository()
+													.getIntegrateCodeActionStateRepository()
+													.remove(b9);
 										}
-										state.getActionStateRepository()
-												.getIntegrateCodeActionStateRepository()
-												.remove(b9);
 									}
 								}
-							}
-						} else if (a9 > 1) {
-							Vector<IntegrateCodeAction> b9 = new Vector<IntegrateCodeAction>();
-							for (int i = 0; i < allActions9.size(); i++) {
-								IntegrateCodeAction c9 = (IntegrateCodeAction) allActions9
-										.elementAt(i);
-								if ((c9.getAllEmps().contains(emp))
-										&& (!(b9.contains(c9)))) {
-									b9.add(c9);
-								}
-							}
-							new ChooseActionToDestroyDialog(parent, b9, state,
-									emp, ruleExec, s);
-						}
-						// Stop doing the system test:
-						Vector<SystemTestAction> allActions10 = state
-								.getActionStateRepository()
-								.getSystemTestActionStateRepository()
-								.getAllActions();
-						int a10 = 0;
-						for (int i = 0; i < allActions10.size(); i++) {
-							SystemTestAction b10 = allActions10.elementAt(i);
-							if (b10.getAllParticipants().contains(emp)) {
-								a10++;
-							}
-						}
-						if (a10 == 1) {
-							for (int i = 0; i < allActions10.size(); i++) {
-								SystemTestAction b10 = allActions10
-										.elementAt(i);
-								if (b10.getAllEmps().contains(emp)) {
-									b10.removeEmp(emp);
-									emp.setOverheadText("I've stopped doing the system test");
-									if (b10.getAllEmps().size() < 1) {
-										Vector<SSObject> c10 = b10
-												.getAllParticipants();
-										for (int j = 0; j < c10.size(); j++) {
-											SSObject d10 = c10.elementAt(j);
-											if (d10 instanceof Employee) {
-												((Employee) d10)
-														.setOverheadText("I've stopped doing the system test");
-											} else if (d10 instanceof Customer) {
-												((Customer) d10)
-														.setOverheadText("I've stopped doing the system test");
-											}
-										}
-										state.getActionStateRepository()
-												.getSystemTestActionStateRepository()
-												.remove(b10);
+							} else if (a9 > 1) {
+								Vector<IntegrateCodeAction> b9 = new Vector<IntegrateCodeAction>();
+								for (int i = 0; i < allActions9.size(); i++) {
+									IntegrateCodeAction c9 = (IntegrateCodeAction) allActions9
+											.elementAt(i);
+									if ((c9.getAllEmps().contains(emp))
+											&& (!(b9.contains(c9)))) {
+										b9.add(c9);
 									}
 								}
+								new ChooseActionToDestroyDialog(parent, b9, state,
+										emp, ruleExec, s);
 							}
-						} else if (a10 > 1) {
-							Vector<SystemTestAction> b10 = new Vector<SystemTestAction>();
+							// Stop doing the system test:
+							Vector<SystemTestAction> allActions10 = state
+									.getActionStateRepository()
+									.getSystemTestActionStateRepository()
+									.getAllActions();
+							int a10 = 0;
 							for (int i = 0; i < allActions10.size(); i++) {
-								SystemTestAction c10 = (SystemTestAction) allActions10
-										.elementAt(i);
-								if ((c10.getAllEmps().contains(emp))
-										&& (!(b10.contains(c10)))) {
-									b10.add(c10);
+								SystemTestAction b10 = allActions10.elementAt(i);
+								if (b10.getAllParticipants().contains(emp)) {
+									a10++;
 								}
 							}
-							new ChooseActionToDestroyDialog(parent, b10, state,
-									emp, ruleExec, s);
-						}
-						// Stop creating the system test plan:
-						Vector<CreateSystemTestPlanAction> allActions11 = state
-								.getActionStateRepository()
-								.getCreateSystemTestPlanActionStateRepository()
-								.getAllActions();
-						int a11 = 0;
-						for (int i = 0; i < allActions11.size(); i++) {
-							CreateSystemTestPlanAction b11 = allActions11
-									.elementAt(i);
-							if (b11.getAllParticipants().contains(emp)) {
-								a11++;
+							if (a10 == 1) {
+								for (int i = 0; i < allActions10.size(); i++) {
+									SystemTestAction b10 = allActions10
+											.elementAt(i);
+									if (b10.getAllEmps().contains(emp)) {
+										b10.removeEmp(emp);
+										emp.setOverheadText("I've stopped doing the system test");
+										if (b10.getAllEmps().size() < 1) {
+											Vector<SSObject> c10 = b10
+													.getAllParticipants();
+											for (int j = 0; j < c10.size(); j++) {
+												SSObject d10 = c10.elementAt(j);
+												if (d10 instanceof Employee) {
+													((Employee) d10)
+															.setOverheadText("I've stopped doing the system test");
+												} else if (d10 instanceof Customer) {
+													((Customer) d10)
+															.setOverheadText("I've stopped doing the system test");
+												}
+											}
+											state.getActionStateRepository()
+													.getSystemTestActionStateRepository()
+													.remove(b10);
+										}
+									}
+								}
+							} else if (a10 > 1) {
+								Vector<SystemTestAction> b10 = new Vector<SystemTestAction>();
+								for (int i = 0; i < allActions10.size(); i++) {
+									SystemTestAction c10 = (SystemTestAction) allActions10
+											.elementAt(i);
+									if ((c10.getAllEmps().contains(emp))
+											&& (!(b10.contains(c10)))) {
+										b10.add(c10);
+									}
+								}
+								new ChooseActionToDestroyDialog(parent, b10, state,
+										emp, ruleExec, s);
 							}
-						}
-						if (a11 == 1) {
+							// Stop creating the system test plan:
+							Vector<CreateSystemTestPlanAction> allActions11 = state
+									.getActionStateRepository()
+									.getCreateSystemTestPlanActionStateRepository()
+									.getAllActions();
+							int a11 = 0;
 							for (int i = 0; i < allActions11.size(); i++) {
 								CreateSystemTestPlanAction b11 = allActions11
 										.elementAt(i);
-								if (b11.getAllEmps().contains(emp)) {
-									b11.removeEmp(emp);
-									emp.setOverheadText("I've stopped creating the system test plan");
-									if (b11.getAllEmps().size() < 1) {
-										Vector<SSObject> c11 = b11
-												.getAllParticipants();
-										for (int j = 0; j < c11.size(); j++) {
-											SSObject d11 = c11.elementAt(j);
-											if (d11 instanceof Employee) {
-												((Employee) d11)
-														.setOverheadText("I've stopped creating the system test plan");
-											} else if (d11 instanceof Customer) {
-												((Customer) d11)
-														.setOverheadText("I've stopped creating the system test plan");
+								if (b11.getAllParticipants().contains(emp)) {
+									a11++;
+								}
+							}
+							if (a11 == 1) {
+								for (int i = 0; i < allActions11.size(); i++) {
+									CreateSystemTestPlanAction b11 = allActions11
+											.elementAt(i);
+									if (b11.getAllEmps().contains(emp)) {
+										b11.removeEmp(emp);
+										emp.setOverheadText("I've stopped creating the system test plan");
+										if (b11.getAllEmps().size() < 1) {
+											Vector<SSObject> c11 = b11
+													.getAllParticipants();
+											for (int j = 0; j < c11.size(); j++) {
+												SSObject d11 = c11.elementAt(j);
+												if (d11 instanceof Employee) {
+													((Employee) d11)
+															.setOverheadText("I've stopped creating the system test plan");
+												} else if (d11 instanceof Customer) {
+													((Customer) d11)
+															.setOverheadText("I've stopped creating the system test plan");
+												}
 											}
+											state.getActionStateRepository()
+													.getCreateSystemTestPlanActionStateRepository()
+													.remove(b11);
 										}
-										state.getActionStateRepository()
-												.getCreateSystemTestPlanActionStateRepository()
-												.remove(b11);
 									}
 								}
-							}
-						} else if (a11 > 1) {
-							Vector<CreateSystemTestPlanAction> b11 = new Vector<CreateSystemTestPlanAction>();
-							for (int i = 0; i < allActions11.size(); i++) {
-								CreateSystemTestPlanAction c11 = (CreateSystemTestPlanAction) allActions11
-										.elementAt(i);
-								if ((c11.getAllEmps().contains(emp))
-										&& (!(b11.contains(c11)))) {
-									b11.add(c11);
+							} else if (a11 > 1) {
+								Vector<CreateSystemTestPlanAction> b11 = new Vector<CreateSystemTestPlanAction>();
+								for (int i = 0; i < allActions11.size(); i++) {
+									CreateSystemTestPlanAction c11 = (CreateSystemTestPlanAction) allActions11
+											.elementAt(i);
+									if ((c11.getAllEmps().contains(emp))
+											&& (!(b11.contains(c11)))) {
+										b11.add(c11);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b11, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b11, state,
-									emp, ruleExec, s);
-						}
-						// Stop reviewing the system test plan:
-						Vector<ReviewSystemTestPlanAction> allActions12 = state
-								.getActionStateRepository()
-								.getReviewSystemTestPlanActionStateRepository()
-								.getAllActions();
-						int a12 = 0;
-						for (int i = 0; i < allActions12.size(); i++) {
-							ReviewSystemTestPlanAction b12 = allActions12
-									.elementAt(i);
-							if (b12.getAllParticipants().contains(emp)) {
-								a12++;
-							}
-						}
-						if (a12 == 1) {
+							// Stop reviewing the system test plan:
+							Vector<ReviewSystemTestPlanAction> allActions12 = state
+									.getActionStateRepository()
+									.getReviewSystemTestPlanActionStateRepository()
+									.getAllActions();
+							int a12 = 0;
 							for (int i = 0; i < allActions12.size(); i++) {
 								ReviewSystemTestPlanAction b12 = allActions12
 										.elementAt(i);
-								if (b12.getAllEmps().contains(emp)) {
-									b12.removeEmp(emp);
-									emp.setOverheadText("I've stopped reviewing the system test plan");
-									if (b12.getAllEmps().size() < 1) {
-										Vector<SSObject> c12 = b12
-												.getAllParticipants();
-										for (int j = 0; j < c12.size(); j++) {
-											SSObject d12 = c12.elementAt(j);
-											if (d12 instanceof Employee) {
-												((Employee) d12)
-														.setOverheadText("I've stopped reviewing the system test plan");
-											} else if (d12 instanceof Customer) {
-												((Customer) d12)
-														.setOverheadText("I've stopped reviewing the system test plan");
+								if (b12.getAllParticipants().contains(emp)) {
+									a12++;
+								}
+							}
+							if (a12 == 1) {
+								for (int i = 0; i < allActions12.size(); i++) {
+									ReviewSystemTestPlanAction b12 = allActions12
+											.elementAt(i);
+									if (b12.getAllEmps().contains(emp)) {
+										b12.removeEmp(emp);
+										emp.setOverheadText("I've stopped reviewing the system test plan");
+										if (b12.getAllEmps().size() < 1) {
+											Vector<SSObject> c12 = b12
+													.getAllParticipants();
+											for (int j = 0; j < c12.size(); j++) {
+												SSObject d12 = c12.elementAt(j);
+												if (d12 instanceof Employee) {
+													((Employee) d12)
+															.setOverheadText("I've stopped reviewing the system test plan");
+												} else if (d12 instanceof Customer) {
+													((Customer) d12)
+															.setOverheadText("I've stopped reviewing the system test plan");
+												}
 											}
+											state.getActionStateRepository()
+													.getReviewSystemTestPlanActionStateRepository()
+													.remove(b12);
 										}
-										state.getActionStateRepository()
-												.getReviewSystemTestPlanActionStateRepository()
-												.remove(b12);
 									}
 								}
-							}
-						} else if (a12 > 1) {
-							Vector<ReviewSystemTestPlanAction> b12 = new Vector<ReviewSystemTestPlanAction>();
-							for (int i = 0; i < allActions12.size(); i++) {
-								ReviewSystemTestPlanAction c12 = (ReviewSystemTestPlanAction) allActions12
-										.elementAt(i);
-								if ((c12.getAllEmps().contains(emp))
-										&& (!(b12.contains(c12)))) {
-									b12.add(c12);
+							} else if (a12 > 1) {
+								Vector<ReviewSystemTestPlanAction> b12 = new Vector<ReviewSystemTestPlanAction>();
+								for (int i = 0; i < allActions12.size(); i++) {
+									ReviewSystemTestPlanAction c12 = (ReviewSystemTestPlanAction) allActions12
+											.elementAt(i);
+									if ((c12.getAllEmps().contains(emp))
+											&& (!(b12.contains(c12)))) {
+										b12.add(c12);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b12, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b12, state,
-									emp, ruleExec, s);
-						}
-						// Stop correcting the system test plan:
-						Vector<CorrectSystemTestPlanAction> allActions13 = state
-								.getActionStateRepository()
-								.getCorrectSystemTestPlanActionStateRepository()
-								.getAllActions();
-						int a13 = 0;
-						for (int i = 0; i < allActions13.size(); i++) {
-							CorrectSystemTestPlanAction b13 = allActions13
-									.elementAt(i);
-							if (b13.getAllParticipants().contains(emp)) {
-								a13++;
-							}
-						}
-						if (a13 == 1) {
+							// Stop correcting the system test plan:
+							Vector<CorrectSystemTestPlanAction> allActions13 = state
+									.getActionStateRepository()
+									.getCorrectSystemTestPlanActionStateRepository()
+									.getAllActions();
+							int a13 = 0;
 							for (int i = 0; i < allActions13.size(); i++) {
 								CorrectSystemTestPlanAction b13 = allActions13
 										.elementAt(i);
-								if (b13.getAllEmps().contains(emp)) {
-									b13.removeEmp(emp);
-									emp.setOverheadText("I've stopped correcting the system test plan");
-									if (b13.getAllEmps().size() < 1) {
-										Vector<SSObject> c13 = b13
-												.getAllParticipants();
-										for (int j = 0; j < c13.size(); j++) {
-											SSObject d13 = c13.elementAt(j);
-											if (d13 instanceof Employee) {
-												((Employee) d13)
-														.setOverheadText("I've stopped correcting the system test plan");
-											} else if (d13 instanceof Customer) {
-												((Customer) d13)
-														.setOverheadText("I've stopped correcting the system test plan");
+								if (b13.getAllParticipants().contains(emp)) {
+									a13++;
+								}
+							}
+							if (a13 == 1) {
+								for (int i = 0; i < allActions13.size(); i++) {
+									CorrectSystemTestPlanAction b13 = allActions13
+											.elementAt(i);
+									if (b13.getAllEmps().contains(emp)) {
+										b13.removeEmp(emp);
+										emp.setOverheadText("I've stopped correcting the system test plan");
+										if (b13.getAllEmps().size() < 1) {
+											Vector<SSObject> c13 = b13
+													.getAllParticipants();
+											for (int j = 0; j < c13.size(); j++) {
+												SSObject d13 = c13.elementAt(j);
+												if (d13 instanceof Employee) {
+													((Employee) d13)
+															.setOverheadText("I've stopped correcting the system test plan");
+												} else if (d13 instanceof Customer) {
+													((Customer) d13)
+															.setOverheadText("I've stopped correcting the system test plan");
+												}
 											}
+											state.getActionStateRepository()
+													.getCorrectSystemTestPlanActionStateRepository()
+													.remove(b13);
 										}
-										state.getActionStateRepository()
-												.getCorrectSystemTestPlanActionStateRepository()
-												.remove(b13);
 									}
 								}
-							}
-						} else if (a13 > 1) {
-							Vector<CorrectSystemTestPlanAction> b13 = new Vector<CorrectSystemTestPlanAction>();
-							for (int i = 0; i < allActions13.size(); i++) {
-								CorrectSystemTestPlanAction c13 = (CorrectSystemTestPlanAction) allActions13
-										.elementAt(i);
-								if ((c13.getAllEmps().contains(emp))
-										&& (!(b13.contains(c13)))) {
-									b13.add(c13);
+							} else if (a13 > 1) {
+								Vector<CorrectSystemTestPlanAction> b13 = new Vector<CorrectSystemTestPlanAction>();
+								for (int i = 0; i < allActions13.size(); i++) {
+									CorrectSystemTestPlanAction c13 = (CorrectSystemTestPlanAction) allActions13
+											.elementAt(i);
+									if ((c13.getAllEmps().contains(emp))
+											&& (!(b13.contains(c13)))) {
+										b13.add(c13);
+									}
 								}
+								new ChooseActionToDestroyDialog(parent, b13, state,
+										emp, ruleExec, s);
 							}
-							new ChooseActionToDestroyDialog(parent, b13, state,
-									emp, ruleExec, s);
 						}
 					}
-				}
+				});
 			}
 			if (s.equals("Create Requirements Document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
@@ -2637,93 +2643,98 @@ public class MenuInputManager {
 				new ChooseActionToJoinDialog(parent, b, e, state,
 						"Correct the system test plan", ruleExec);
 			} else if (s.equals("Deliver product to customer")) {
-				int choice = JOptionPane.showConfirmDialog(null,
-						("Are you sure you want to end the game?"),
-						"Confirm Game Ending", JOptionPane.YES_NO_OPTION);
-				if (choice == JOptionPane.YES_OPTION) {
-					Vector<Employee> emps0 = new Vector<Employee>();
-					Vector<SoftwareEngineer> softwareengineers = state
-							.getEmployeeStateRepository()
-							.getSoftwareEngineerStateRepository().getAll();
-					for (int i = 0; i < softwareengineers.size(); i++) {
-						SoftwareEngineer a = softwareengineers.elementAt(i);
-						boolean alreadyInAction = false;
-						Vector<DeliverProductAction> allActions = state
-								.getActionStateRepository()
-								.getDeliverProductActionStateRepository()
-								.getAllActions(a);
-						for (int j = 0; j < allActions.size(); j++) {
-							DeliverProductAction b = allActions.elementAt(j);
-							if (b.getAllEmps().contains(a)) {
-								alreadyInAction = true;
-								break;
+				Alert a2 = new Alert(Alert.AlertType.CONFIRMATION);
+				a2.setTitle("Confirm Game Ending");
+				a2.setContentText("Are you sure you want to end the game?");
+				ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+				ButtonType noButton = new ButtonType("Yes", ButtonBar.ButtonData.NO);
+				a2.getButtonTypes().setAll(okButton, noButton);
+				a2.showAndWait().ifPresent(type -> {
+					if (type == okButton) {
+						Vector<Employee> emps0 = new Vector<Employee>();
+						Vector<SoftwareEngineer> softwareengineers = state
+								.getEmployeeStateRepository()
+								.getSoftwareEngineerStateRepository().getAll();
+						for (int i = 0; i < softwareengineers.size(); i++) {
+							SoftwareEngineer a = softwareengineers.elementAt(i);
+							boolean alreadyInAction = false;
+							Vector<DeliverProductAction> allActions = state
+									.getActionStateRepository()
+									.getDeliverProductActionStateRepository()
+									.getAllActions(a);
+							for (int j = 0; j < allActions.size(); j++) {
+								DeliverProductAction b = allActions.elementAt(j);
+								if (b.getAllEmps().contains(a)) {
+									alreadyInAction = true;
+									break;
+								}
+							}
+							if ((alreadyInAction == false)
+									&& (a.getHealth() >= 0.7)) {
+								emps0.add(a);
 							}
 						}
-						if ((alreadyInAction == false)
-								&& (a.getHealth() >= 0.7)) {
-							emps0.add(a);
-						}
-					}
-					Vector<Project> projs1 = new Vector<Project>();
-					Vector<SEProject> seprojects = state
-							.getProjectStateRepository()
-							.getSEProjectStateRepository().getAll();
-					for (int i = 0; i < seprojects.size(); i++) {
-						SEProject a = seprojects.elementAt(i);
-						boolean alreadyInAction = false;
-						if ((alreadyInAction == false)) {
-							projs1.add(a);
-						}
-					}
-					Vector<Artifact> codedocs2 = new Vector<Artifact>();
-					Vector<Code> codes = state.getArtifactStateRepository()
-							.getCodeStateRepository().getAll();
-					for (int i = 0; i < codes.size(); i++) {
-						Code a = codes.elementAt(i);
-						boolean alreadyInAction = false;
-						Vector<DeliverProductAction> allActions = state
-								.getActionStateRepository()
-								.getDeliverProductActionStateRepository()
-								.getAllActions(a);
-						for (int j = 0; j < allActions.size(); j++) {
-							DeliverProductAction b = allActions.elementAt(j);
-							if (b.getAllCodeDocs().contains(a)) {
-								alreadyInAction = true;
-								break;
+						Vector<Project> projs1 = new Vector<Project>();
+						Vector<SEProject> seprojects = state
+								.getProjectStateRepository()
+								.getSEProjectStateRepository().getAll();
+						for (int i = 0; i < seprojects.size(); i++) {
+							SEProject a = seprojects.elementAt(i);
+							boolean alreadyInAction = false;
+							if ((alreadyInAction == false)) {
+								projs1.add(a);
 							}
 						}
-						if ((alreadyInAction == false)) {
-							codedocs2.add(a);
+						Vector<Artifact> codedocs2 = new Vector<Artifact>();
+						Vector<Code> codes = state.getArtifactStateRepository()
+								.getCodeStateRepository().getAll();
+						for (int i = 0; i < codes.size(); i++) {
+							Code a = codes.elementAt(i);
+							boolean alreadyInAction = false;
+							Vector<DeliverProductAction> allActions = state
+									.getActionStateRepository()
+									.getDeliverProductActionStateRepository()
+									.getAllActions(a);
+							for (int j = 0; j < allActions.size(); j++) {
+								DeliverProductAction b = allActions.elementAt(j);
+								if (b.getAllCodeDocs().contains(a)) {
+									alreadyInAction = true;
+									break;
+								}
+							}
+							if ((alreadyInAction == false)) {
+								codedocs2.add(a);
+							}
+						}
+						Vector<Customer> custs3 = new Vector<Customer>();
+						Vector<ACustomer> acustomers = state
+								.getCustomerStateRepository()
+								.getACustomerStateRepository().getAll();
+						for (int i = 0; i < acustomers.size(); i++) {
+							ACustomer a = acustomers.elementAt(i);
+							boolean alreadyInAction = false;
+							if ((alreadyInAction == false)) {
+								custs3.add(a);
+							}
+						}
+						if ((emps0.size() >= 1) && (projs1.size() >= 1)
+								&& (codedocs2.size() >= 1) && (custs3.size() >= 1)) {
+							Vector<String> c = new Vector<String>();
+							c.add("Emp");
+							c.add("Proj");
+							c.add("CodeDoc");
+							c.add("Cust");
+							Vector<Vector<? extends SSObject>> d = new Vector<Vector<? extends SSObject>>();
+							d.add(emps0);
+							d.add(projs1);
+							d.add(codedocs2);
+							d.add(custs3);
+							DeliverProductAction f = new DeliverProductAction();
+							new ParticipantSelectionDialogsDriver(parent, c, d, f,
+									state, ruleExec, destChecker, e, s);
 						}
 					}
-					Vector<Customer> custs3 = new Vector<Customer>();
-					Vector<ACustomer> acustomers = state
-							.getCustomerStateRepository()
-							.getACustomerStateRepository().getAll();
-					for (int i = 0; i < acustomers.size(); i++) {
-						ACustomer a = acustomers.elementAt(i);
-						boolean alreadyInAction = false;
-						if ((alreadyInAction == false)) {
-							custs3.add(a);
-						}
-					}
-					if ((emps0.size() >= 1) && (projs1.size() >= 1)
-							&& (codedocs2.size() >= 1) && (custs3.size() >= 1)) {
-						Vector<String> c = new Vector<String>();
-						c.add("Emp");
-						c.add("Proj");
-						c.add("CodeDoc");
-						c.add("Cust");
-						Vector<Vector<? extends SSObject>> d = new Vector<Vector<? extends SSObject>>();
-						d.add(emps0);
-						d.add(projs1);
-						d.add(codedocs2);
-						d.add(custs3);
-						DeliverProductAction f = new DeliverProductAction();
-						new ParticipantSelectionDialogsDriver(parent, c, d, f,
-								state, ruleExec, destChecker, e, s);
-					}
-				}
+				});
 			} else if (s.equals("JOIN Deliver product to customer")) {
 				Vector<DeliverProductAction> a = state
 						.getActionStateRepository()
