@@ -98,7 +98,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 	}
 
 	public void createPopupMenu(Node node, double x, double y) {
-		popup.getItems().removeAll();
+		popup.getItems().clear();
 
 		if (mainGUIFrame.getEngine().isRunning()) {
 			return;
@@ -338,7 +338,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 					} else if (event.isPopupTrigger() && (state.getClock().isStopped() == false)) // right-click
 					{
 						selectedEmp = emp;
-						createPopupMenu(label, event.getX(), event.getY());
+						createPopupMenu(label, event.getSceneX(), event.getSceneY());
 					}
 				}
 			} else if (event.getSource() instanceof Pane) {
@@ -354,7 +354,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 					} else if (event.isPopupTrigger() && (state.getClock().isStopped() == false)) // right-click
 					{
 						selectedEmp = emp;
-						createPopupMenu(pane, event.getX(), event.getY());
+						createPopupMenu(pane, event.getSceneX(), event.getSceneY());
 					}
 				}
 			}
