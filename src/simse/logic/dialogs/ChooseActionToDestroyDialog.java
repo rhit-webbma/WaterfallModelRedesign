@@ -7,47 +7,38 @@ import simse.adts.actions.*;
 import simse.logic.*;
 import simse.gui.*;
 import java.util.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 
-import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Box;
-import javafx.stage.Stage;
-
-public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<MouseEvent> {
+public class ChooseActionToDestroyDialog extends JDialog implements
+		ActionListener {
 	private Vector<? extends simse.adts.actions.Action> actions;
 	private State state;
 	private RuleExecutor ruleExec;
 	private Employee emp;
 	private String menuText;
-	private Stage gui;
-	private Vector<CheckBox> checkBoxes;
-	private Button okButton;
-	private Button cancelButton;
+	private JFrame gui;
+	private Vector<JCheckBox> checkBoxes;
+	private JButton okButton;
+	private JButton cancelButton;
 
-	public ChooseActionToDestroyDialog(Stage parent,
+	public ChooseActionToDestroyDialog(JFrame owner,
 			Vector<? extends simse.adts.actions.Action> acts, State s,
 			Employee e, RuleExecutor r, String mText) {
+		super(owner, true);
 		actions = acts;
 		state = s;
 		ruleExec = r;
-		gui = parent;
+		gui = owner;
 		emp = e;
 		menuText = mText;
-		checkBoxes = new Vector<CheckBox>();
+		checkBoxes = new Vector<JCheckBox>();
 		setTitle("Stop Action(s)");
-		VBox mainPane = new VBox();
-		Pane topPane = new Pane();
+		Box mainPane = Box.createVerticalBox();
+		JPanel topPane = new JPanel();
 		String actionName = new String();
 		simse.adts.actions.Action tempAct = actions.elementAt(0);
 		if (tempAct instanceof CreateRequirementsAction) {
@@ -79,9 +70,9 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 		} else if (tempAct instanceof CorrectSystemTestPlanAction) {
 			actionName = "CorrectSystemTestPlan";
 		}
-		topPane.getChildren().add(new Label("Choose which " + actionName
+		topPane.add(new JLabel("Choose which " + actionName
 				+ " Action to stop:"));
-		GridPane middlePane = new GridPane();
+		JPanel middlePane = new JPanel(new GridLayout(0, 1));
 		if (tempAct instanceof CreateRequirementsAction) {
 			for (int i = 0; i < actions.size(); i++) {
 				CreateRequirementsAction act = (CreateRequirementsAction) actions
@@ -183,11 +174,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ((SystemTestPlan) a).getName() + ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof ReviewRequirementsAction) {
@@ -236,11 +227,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ((SEProject) a).getDescription() + ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof CorrectRequirementsAction) {
@@ -304,11 +295,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof CreateDesignAction) {
@@ -397,11 +388,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 							label.append("Code(" + ((Code) a).getName() + ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof ReviewDesignAction) {
@@ -463,12 +454,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ")");
 						}
 					}
-
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof CorrectDesignAction) {
@@ -544,11 +534,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ((DesignEnvironment) a).getName() + ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof CreateCodeAction) {
@@ -649,11 +639,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ((SystemTestPlan) a).getName() + ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof InspectCodeAction) {
@@ -728,11 +718,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ((DesignDocument) a).getName() + ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof CorrectCodeAction) {
@@ -820,11 +810,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 							label.append("IDE(" + ((IDE) a).getName() + ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof IntegrateCodeAction) {
@@ -912,11 +902,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 							label.append("IDE(" + ((IDE) a).getName() + ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof SystemTestAction) {
@@ -989,11 +979,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof CreateSystemTestPlanAction) {
@@ -1083,11 +1073,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof ReviewSystemTestPlanAction) {
@@ -1149,11 +1139,11 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ((SEProject) a).getDescription() + ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		} else if (tempAct instanceof CorrectSystemTestPlanAction) {
@@ -1229,55 +1219,58 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 									+ ")");
 						}
 					}
-					BorderPane tempPane = new BorderPane();
-					CheckBox tempCheckBox = new CheckBox(label.toString());
-					tempPane.setLeft(tempCheckBox);
+					JPanel tempPane = new JPanel(new BorderLayout());
+					JCheckBox tempCheckBox = new JCheckBox(label.toString());
+					tempPane.add(tempCheckBox, BorderLayout.WEST);
 					checkBoxes.add(tempCheckBox);
-					middlePane.getChildren().add(tempPane);
+					middlePane.add(tempPane);
 				}
 			}
 		}
-		Pane bottomPane = new Pane();
-		okButton = new Button("OK");
-		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		bottomPane.getChildren().add(okButton);
-		cancelButton = new Button("Cancel");
-		cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		bottomPane.getChildren().add(cancelButton);
-		mainPane.getChildren().addAll(topPane, middlePane, bottomPane);
-//		setContentPane(mainPane);
-//		validate();
-//		pack();
-//		repaint();
-//		toFront();
-		Point2D ownerLoc = new Point2D(parent.getX(), parent.getY());
-		Point2D thisLoc = new Point2D((ownerLoc.getX() + (parent.getWidth() / 2) - (this.getWidth() / 2)),
-									(ownerLoc.getY() + (parent.getHeight() / 2) - (this.getHeight() / 2)));
-		this.setX(thisLoc.getX());
-		this.setY(thisLoc.getY());
-		show();
+		JPanel bottomPane = new JPanel();
+		okButton = new JButton("OK");
+		okButton.addActionListener(this);
+		bottomPane.add(okButton);
+		cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(this);
+		bottomPane.add(cancelButton);
+		mainPane.add(topPane);
+		mainPane.add(middlePane);
+		mainPane.add(bottomPane);
+		setContentPane(mainPane);
+		validate();
+		pack();
+		repaint();
+		toFront();
+		Point ownerLoc = owner.getLocationOnScreen();
+		Point thisLoc = new Point();
+		thisLoc.setLocation(
+				(ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
+				(ownerLoc.getY() + (owner.getHeight() / 2) - (this.getHeight() / 2)));
+		setLocation(thisLoc);
+		setVisible(true);
 	}
 
-	@Override
-	public void handle(MouseEvent evt) {
+	public void actionPerformed(ActionEvent evt) {
 		Object source = evt.getSource();
 		if (source == cancelButton) {
-			hide();
+			setVisible(false);
+			dispose();
 		} else if (source == okButton) {
 			int numChecked = 0;
 			for (int i = 0; i < checkBoxes.size(); i++) {
-				CheckBox tempCBox = checkBoxes.elementAt(i);
+				JCheckBox tempCBox = checkBoxes.elementAt(i);
 				if (tempCBox.isSelected()) {
 					numChecked++;
 				}
 			}
 			if (numChecked == 0) {
-				Alert alert = new Alert(AlertType.WARNING, "You must choose at least one action");
-				alert.setTitle("Invalid Input");
-				alert.show();
+				JOptionPane.showMessageDialog(null,
+						("You must choose at least one action"),
+						"Invalid Input", JOptionPane.ERROR_MESSAGE);
 			} else {
 				for (int i = 0; i < checkBoxes.size(); i++) {
-					CheckBox cBox = checkBoxes.elementAt(i);
+					JCheckBox cBox = checkBoxes.elementAt(i);
 					if (cBox.isSelected()) {
 						simse.adts.actions.Action tempAct = actions
 								.elementAt(i);
@@ -3042,9 +3035,9 @@ public class ChooseActionToDestroyDialog extends Dialog implements EventHandler<
 						}
 					}
 				}
-				hide();
+				setVisible(false);
+				dispose();
 			}
 		}
 	}
-
 }

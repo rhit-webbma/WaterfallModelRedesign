@@ -6,10 +6,7 @@ import simse.gui.*;
 import simse.adts.objects.*;
 import simse.adts.actions.*;
 import java.util.*;
-
-import javafx.stage.Stage;
-
-import javafx.stage.Stage;
+import javax.swing.*;
 
 public class DestroyerChecker {
 	private State state;
@@ -24,7 +21,7 @@ public class DestroyerChecker {
 		ranNumGen = new Random();
 	}
 
-	public void update(boolean updateUserDestsOnly, Stage gui) {
+	public void update(boolean updateUserDestsOnly, JFrame gui) {
 		Vector<simse.adts.actions.Action> actions = state
 				.getActionStateRepository().getAllActions();
 		for (int i = 0; i < actions.size(); i++) {

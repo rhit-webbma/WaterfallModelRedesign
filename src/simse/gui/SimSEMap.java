@@ -6,11 +6,13 @@ import simse.state.*;
 import simse.logic.*;
 
 import java.util.*;
+import java.awt.event.*;
+import java.awt.Image;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
 
-import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
-
-public class SimSEMap extends Pane {
+public class SimSEMap extends JPanel implements MouseListener, ActionListener {
 	protected State state;
 	protected Logic logic;
 	protected String sopFile; // location of sop file if loaded
@@ -28,50 +30,60 @@ public class SimSEMap extends Pane {
 		mapRep = new TileData[MapData.X_MAPSIZE][MapData.Y_MAPSIZE];
 		for (int i = 0; i < MapData.Y_MAPSIZE; i++)
 			for (int j = 0; j < MapData.X_MAPSIZE; j++)
-				mapRep[j][i] = new TileData(MapData.TILE_GRID, MapData.TRANSPARENT);
+				mapRep[j][i] = new TileData(MapData.TILE_GRID,
+						MapData.TRANSPARENT);
 		sopUsers = new ArrayList<DisplayedEmployee>();
 
 		// get all of the employees from the state:
 		Vector<Employee> allEmps = state.getEmployeeStateRepository().getAll();
 		for (int i = 0; i < allEmps.size(); i++) {
 			Employee tempEmp = allEmps.elementAt(i);
-			DisplayedEmployee tmpUser = new DisplayedEmployee(tempEmp, null, false, false, -1, -1);
+			DisplayedEmployee tmpUser = new DisplayedEmployee(tempEmp, null,
+					this, false, false, -1, -1);
 			sopUsers.add(tmpUser);
 		}
 
 		// go through all sopUsers and set information:
 		for (int i = 0; i < sopUsers.size(); i++) {
 			DisplayedEmployee user = sopUsers.get(i);
-			user.setXYLocations(getXYCoordinates(user.getEmployee())[0], getXYCoordinates(user.getEmployee())[1]);
+			user.setXYLocations(getXYCoordinates(user.getEmployee())[0],
+					getXYCoordinates(user.getEmployee())[1]);
 			String url = getImage(user.getEmployee());
 			if (url != null) {
 				user.setUserIcon(url);
 				if ((user.getEmployee() instanceof SoftwareEngineer)
-						&& (((SoftwareEngineer) user.getEmployee()).getName().equals("Mimi"))) {
+						&& (((SoftwareEngineer) user.getEmployee()).getName()
+								.equals("Mimi"))) {
 					user.setDisplayed(true);
 					user.setActivated(true);
 				} else if ((user.getEmployee() instanceof SoftwareEngineer)
-						&& (((SoftwareEngineer) user.getEmployee()).getName().equals("Roger"))) {
+						&& (((SoftwareEngineer) user.getEmployee()).getName()
+								.equals("Roger"))) {
 					user.setDisplayed(true);
 					user.setActivated(true);
 				} else if ((user.getEmployee() instanceof SoftwareEngineer)
-						&& (((SoftwareEngineer) user.getEmployee()).getName().equals("Calvin"))) {
+						&& (((SoftwareEngineer) user.getEmployee()).getName()
+								.equals("Calvin"))) {
 					user.setDisplayed(true);
 					user.setActivated(true);
 				} else if ((user.getEmployee() instanceof SoftwareEngineer)
-						&& (((SoftwareEngineer) user.getEmployee()).getName().equals("Anita"))) {
+						&& (((SoftwareEngineer) user.getEmployee()).getName()
+								.equals("Anita"))) {
 					user.setDisplayed(true);
 					user.setActivated(true);
 				} else if ((user.getEmployee() instanceof SoftwareEngineer)
-						&& (((SoftwareEngineer) user.getEmployee()).getName().equals("Emily"))) {
+						&& (((SoftwareEngineer) user.getEmployee()).getName()
+								.equals("Emily"))) {
 					user.setDisplayed(true);
 					user.setActivated(true);
 				} else if ((user.getEmployee() instanceof SoftwareEngineer)
-						&& (((SoftwareEngineer) user.getEmployee()).getName().equals("Pedro"))) {
+						&& (((SoftwareEngineer) user.getEmployee()).getName()
+								.equals("Pedro"))) {
 					user.setDisplayed(true);
 					user.setActivated(true);
 				} else if ((user.getEmployee() instanceof SoftwareEngineer)
-						&& (((SoftwareEngineer) user.getEmployee()).getName().equals("Andre"))) {
+						&& (((SoftwareEngineer) user.getEmployee()).getName()
+								.equals("Andre"))) {
 					user.setDisplayed(true);
 					user.setActivated(true);
 				}
@@ -399,6 +411,24 @@ public class SimSEMap extends Pane {
 		mapRep[14][9].fringeKey = -1;
 		mapRep[15][9].baseKey = -3;
 		mapRep[15][9].fringeKey = -1;
+	}
+
+	public void mouseClicked(MouseEvent me) {
+	}
+
+	public void mousePressed(MouseEvent me) {
+	}
+
+	public void mouseReleased(MouseEvent me) {
+	}
+
+	public void mouseEntered(MouseEvent me) {
+	}
+
+	public void mouseExited(MouseEvent me) {
+	}
+
+	public void actionPerformed(ActionEvent e) {
 	}
 
 	protected String getImage(Employee e) // returns the url of the employee's
