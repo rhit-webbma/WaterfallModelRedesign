@@ -82,25 +82,25 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		aboutButton.setPadding(new Insets(0,0,0,5));
 		aboutButton.addEventHandler(MouseEvent.ANY, this);
 		
-		infoButton = new Button();
+		infoButton = new Button("Info");
 		infoButton.setPadding(new Insets(0,0,0,0));
 		infoButton.addEventHandler(MouseEvent.ANY, this);
 		
-		resetButton = new Button();
-		resetButton.setPadding(new Insets(0,0,0,0));
+		resetButton = new Button("Reset");
+		resetButton.setPadding(new Insets(0,1,0,0));
 		resetButton.addEventHandler(MouseEvent.ANY, this);
 		
 		GridPane extraButtonPane = new GridPane();
 		extraButtonPane.add(infoButton, 0, 0);
 		extraButtonPane.add(resetButton, 0, 1);
-		extraButtonPane.setGridLinesVisible(true);
 		extraButtonPane.setPrefWidth(40);
+		extraButtonPane.setVgap(50);
 		extraButtonPane.setOpacity(1);
 		extraButtonPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(1,0,0,0)));
 	
 		
 		logoPane = new StackPane();
-		logoPane.getChildren().addAll(extraButtonPane, aboutButton);
+		logoPane.getChildren().addAll(aboutButton, extraButtonPane);
 		StackPane.setAlignment(extraButtonPane, Pos.TOP_LEFT);
 		
 		// create the layout:
