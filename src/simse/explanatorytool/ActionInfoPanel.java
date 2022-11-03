@@ -8,33 +8,17 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TitledPane;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-
 import java.awt.Dimension;
 import java.util.Vector;
 
-public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
+public class ActionInfoPanel extends JPanel implements ListSelectionListener {
 	private simse.adts.actions.Action action; // action in focus
 
-	private TableView table;
-	private ListView triggerList; // for choosing which trigger show
-	private ListView destroyerList; // for choosing which destroyer to show
-	private TextArea descriptionArea; // for displaying a trigger/destroyer
+	private JList triggerList; // for choosing which trigger show
+	private JList destroyerList; // for choosing which destroyer to show
+	private JTextArea descriptionArea; // for displaying a trigger/destroyer
 										// description
-	private TextArea actionDescriptionArea; // for displaying the action
+	private JTextArea actionDescriptionArea; // for displaying the action
 												// description
 
 	private final int TRIGGER = 0;
@@ -44,156 +28,117 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		this.action = action;
 
 		// Create main panel (box):
-		VBox mainPane = new VBox();
-//		mainPane.setPreferredSize(new Dimension(900, 550));
+		Box mainPane = Box.createVerticalBox();
+		mainPane.setPreferredSize(new Dimension(900, 550));
 
 		// Create actionDescription pane and components:
-		VBox actionDescriptionPane = new VBox();
-		TitledPane actionDescriptionTitlePane = new TitledPane("ActionDescription: ", actionDescriptionPane);
-//		JPanel actionDescriptionTitlePane = new JPanel();
-//		actionDescriptionTitlePane.add(new JLabel("ActionDescription:"));
-//		actionDescriptionPane.add(actionDescriptionTitlePane);
-		actionDescriptionArea = new TextArea();
-		actionDescriptionArea.setWrapText(true);
-		actionDescriptionArea.setPrefRowCount(1);
-		actionDescriptionArea.setPrefColumnCount(50);
-//		actionDescriptionArea.setWrapStyleWord(true);
+		Box actionDescriptionPane = Box.createVerticalBox();
+		JPanel actionDescriptionTitlePane = new JPanel();
+		actionDescriptionTitlePane.add(new JLabel("ActionDescription:"));
+		actionDescriptionPane.add(actionDescriptionTitlePane);
+		actionDescriptionArea = new JTextArea(1, 50);
+		actionDescriptionArea.setLineWrap(true);
+		actionDescriptionArea.setWrapStyleWord(true);
 		actionDescriptionArea.setEditable(false);
-		ScrollPane actionDescriptionScrollPane = new ScrollPane(actionDescriptionArea);
-		actionDescriptionScrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		actionDescriptionScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-//		JScrollPane actionDescriptionScrollPane = new JScrollPane(
-//				actionDescriptionArea,
-//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-//				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane actionDescriptionScrollPane = new JScrollPane(
+				actionDescriptionArea,
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		initializeActionDescription();
-//		actionDescriptionPane.add(actionDescriptionScrollPane);
-		actionDescriptionPane.getChildren().add(actionDescriptionScrollPane);
-		
+		actionDescriptionPane.add(actionDescriptionScrollPane);
+
 		// Create participants pane and components:
-		VBox participantsPane = new VBox();
-		TitledPane participantsTitlePane = new TitledPane("Participants:", participantsPane);
-//		participantsTitlePane.add(new JLabel("Participants:"));
-//		participantsPane.add(participantsTitlePane);
+		Box participantsPane = Box.createVerticalBox();
+		JPanel participantsTitlePane = new JPanel();
+		participantsTitlePane.add(new JLabel("Participants:"));
+		participantsPane.add(participantsTitlePane);
 
 		// participants table:
-		ScrollPane participantsTablePane = new ScrollPane(
+		JScrollPane participantsTablePane = new JScrollPane(
 				createParticipantsTable());
 		participantsTablePane
-				.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		participantsTablePane.setPrefSize(900, 125);
-		participantsPane.getChildren().add(participantsTablePane);
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		participantsTablePane.setPreferredSize(new Dimension(900, 125));
+		participantsPane.add(participantsTablePane);
 
 		// Create triggerDestroyer pane and components:
-		Pane triggerDestroyerPane = new Pane();
+		JPanel triggerDestroyerPane = new JPanel();
 
 		// list pane:
-		VBox listPane = new VBox();
+		Box listPane = Box.createVerticalBox();
 
 		// trigger list:
-		TitledPane triggerListTitlePane = new TitledPane("Triggers:", listPane);
-//		triggerListTitlePane.add(new JLabel("Triggers:"));
-//		listPane.add(triggerListTitlePane);
-		triggerList = new ListView();
-		triggerList.setFixedCellSize(3);
-//		triggerList.s
-		//TODO: Set Width on Columns
-//		triggerList.setFixedCellWidth(400);
-//		triggerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		triggerList.addListSelectionListener(this);
-		triggerList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		
-		triggerList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		
+		JPanel triggerListTitlePane = new JPanel();
+		triggerListTitlePane.add(new JLabel("Triggers:"));
+		listPane.add(triggerListTitlePane);
+		triggerList = new JList();
+		triggerList.setVisibleRowCount(3);
+		triggerList.setFixedCellWidth(400);
+		triggerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		triggerList.addListSelectionListener(this);
 		initializeTriggerList();
-		ScrollPane triggerListPane = new ScrollPane(triggerList);
-//		listPane.add(triggerListPane);
-		listPane.getChildren().add(triggerListPane);
+		JScrollPane triggerListPane = new JScrollPane(triggerList);
+		listPane.add(triggerListPane);
 
 		// destroyer list:
-		TitledPane destroyerListTitlePane = new TitledPane("Destroyers: ", listPane);
-//		destroyerListTitlePane.add(new JLabel("Destroyers:"));
-//		listPane.add(destroyerListTitlePane);
-		destroyerList = new ListView();
-		destroyerList.setFixedCellSize(3);
-		destroyerList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		destroyerList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-//		destroyerList.setVisibleRowCount(3);
-//		destroyerList.setFixedCellWidth(400);
-//		destroyerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		destroyerList.addListSelectionListener(this);
+		JPanel destroyerListTitlePane = new JPanel();
+		destroyerListTitlePane.add(new JLabel("Destroyers:"));
+		listPane.add(destroyerListTitlePane);
+		destroyerList = new JList();
+		destroyerList.setVisibleRowCount(3);
+		destroyerList.setFixedCellWidth(400);
+		destroyerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		destroyerList.addListSelectionListener(this);
 		initializeDestroyerList();
-		ScrollPane destroyerListPane = new ScrollPane(destroyerList);
-//		listPane.add(destroyerListPane);
-		listPane.getChildren().add(destroyerListPane);
+		JScrollPane destroyerListPane = new JScrollPane(destroyerList);
+		listPane.add(destroyerListPane);
 
-//		triggerDestroyerPane.add(listPane);
+		triggerDestroyerPane.add(listPane);
 
 		// description pane:
-		VBox descriptionPane = new VBox();
-		TitledPane descriptionTitlePane = new TitledPane("Description: ", descriptionPane);
-//		descriptionTitlePane.add(new JLabel("Description:"));
-//		descriptionPane.add(descriptionTitlePane);
+		Box descriptionPane = Box.createVerticalBox();
+		JPanel descriptionTitlePane = new JPanel();
+		descriptionTitlePane.add(new JLabel("Description:"));
+		descriptionPane.add(descriptionTitlePane);
 
 		// description text area:
-		descriptionArea = new TextArea();
-		descriptionArea.setWrapText(true);
-		descriptionArea.setPrefRowCount(9);
-		descriptionArea.setPrefColumnCount(30);
-//		actionDescriptionArea.setWrapStyleWord(true);
+		descriptionArea = new JTextArea(9, 30);
+		descriptionArea.setLineWrap(true);
+		descriptionArea.setWrapStyleWord(true);
 		descriptionArea.setEditable(false);
-		
-//		descriptionArea = new TextArea(9, 30);
-//		descriptionArea.setLineWrap(true);
-//		descriptionArea.setWrapStyleWord(true);
-//		descriptionArea.setEditable(false);
-		ScrollPane descriptionScrollPane = new ScrollPane();
-		descriptionScrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		descriptionScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-		descriptionScrollPane.setContent(descriptionArea);
-//		JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea,
-//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-//				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//		descriptionPane.add(descriptionScrollPane);
-		descriptionPane.getChildren().add(descriptionScrollPane);
+		JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea,
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		descriptionPane.add(descriptionScrollPane);
 
-//		triggerDestroyerPane.add(descriptionPane);
-		triggerDestroyerPane.getChildren().add(descriptionPane);
+		triggerDestroyerPane.add(descriptionPane);
 
 		// Add panes to main pane:
-//		mainPane.add(actionDescriptionPane);
-//		mainPane.add(participantsPane);
-//		mainPane.add(triggerDestroyerPane);
-		
-		mainPane.getChildren().add(actionDescriptionPane);
-		mainPane.getChildren().add(participantsPane);
-		mainPane.getChildren().add(triggerDestroyerPane);
-		
-//		add(mainPane);
-		
-		this.getChildren().add(mainPane);
-		this.setPrefSize(900, 550);
+		mainPane.add(actionDescriptionPane);
+		mainPane.add(participantsPane);
+		mainPane.add(triggerDestroyerPane);
+		add(mainPane);
 
 		// Set main window frame properties:
-//		setOpaque(true);
-//		validate();
-//		repaint();
+		setOpaque(true);
+		validate();
+		repaint();
 	}
 
 	// responds to list selections
 	public void valueChanged(ListSelectionEvent e) {
-		if (e.getSource() == triggerList && triggerList.getSelectionModel().getSelectedIndex() >= 0) {
+		if (e.getSource() == triggerList && triggerList.getSelectedIndex() >= 0) {
 			refreshDescriptionArea(TRIGGER);
 
 			// clear selection for destroyer list:
-			destroyerList.getSelectionModel().clearSelection();
+			destroyerList.clearSelection();
 
 		} else if (e.getSource() == destroyerList
-				&& destroyerList.getSelectionModel().getSelectedIndex() >= 0) {
+				&& destroyerList.getSelectedIndex() >= 0) {
 			refreshDescriptionArea(DESTROYER);
 
 			// clear selection for trigger list:
-			triggerList.getSelectionModel().clearSelection();
+			triggerList.clearSelection();
 		}
 	}
 
@@ -256,120 +201,92 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			text = "Suggested duration of the testing phase.";
 		}
 		actionDescriptionArea.setText(text);
-		actionDescriptionArea.positionCaret(0);
-//		actionDescriptionArea.setCaretPosition(0);
+		actionDescriptionArea.setCaretPosition(0);
 	}
 
 	// initializes the JList of triggers
 	private void initializeTriggerList() {
 		if (action instanceof CreateRequirementsAction) {
 			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-//			triggerList.setListData(list);
+			triggerList.setListData(list);
 		} else if (action instanceof ReviewRequirementsAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof CorrectRequirementsAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof CreateDesignAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof ReviewDesignAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof CorrectDesignAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof CreateCodeAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof InspectCodeAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof CorrectCodeAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof IntegrateCodeAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof SystemTestAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof CreateSystemTestPlanAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof ReviewSystemTestPlanAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof CorrectSystemTestPlanAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof DeliverProductAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof BreakAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof GetSickAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof QuitAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof IntroduceNewRequirementsAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof ChangePayRateAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof GiveBonusAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof FireAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof PurchaseToolAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-//			triggerList.setListData(list);
-			triggerList.getItems().add(list);
+			triggerList.setListData(list);
 		}
 	}
 
@@ -377,123 +294,91 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	private void initializeDestroyerList() {
 		if (action instanceof CreateRequirementsAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof ReviewRequirementsAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof CorrectRequirementsAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof CreateDesignAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof ReviewDesignAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof CorrectDesignAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof CreateCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof InspectCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof CorrectCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof IntegrateCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof SystemTestAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof CreateSystemTestPlanAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof ReviewSystemTestPlanAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof CorrectSystemTestPlanAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof DeliverProductAction) {
 			String[] list = {};
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof BreakAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof GetSickAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof QuitAction) {
 			String[] list = { "DestO", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof IntroduceNewRequirementsAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof ChangePayRateAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof GiveBonusAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof FireAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof PurchaseToolAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-//			destroyerList.setListData(list);/
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-//			destroyerList.setListData(list);
-			destroyerList.getItems().add(list);
+			destroyerList.setListData(list);
 		}
 	}
 
-	private TableView createParticipantsTable() {
-		TableView newView = new TableView();
-		TableColumn name = new TableColumn("Participant Name");
-		TableColumn participant = new TableColumn("Participant");
-		TableColumn status = new TableColumn("Status");
-//		String[] columnNames = { "Participant Name", "Participant", "Status" };
-//		Object[][] data = new Object[action.getAllParticipants().size()][3];
-		ObservableList<Participant> data = FXCollections.observableArrayList();
+	private JTable createParticipantsTable() {
+		String[] columnNames = { "Participant Name", "Participant", "Status" };
+		Object[][] data = new Object[action.getAllParticipants().size()][3];
 		int index = 0;
 		if (action instanceof CreateRequirementsAction) {
 			CreateRequirementsAction createrequirementsAction = (CreateRequirementsAction) action;
@@ -504,12 +389,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-//				TableColumn empColumn = new TableColumn("Emp");
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -524,8 +407,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -535,11 +417,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveReqDocs();
 			for (int i = 0; i < reqdocs.size(); i++) {
 				Artifact reqdoc = reqdocs.get(i);
-				String title = "ReqDoc";
-				String title1 = "";
+				data[index][0] = "ReqDoc";
 				if (reqdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentReqDoc = (RequirementsDocument) reqdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentReqDoc.getName();
 
 					// find out whether it's active or not:
@@ -555,9 +436,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("ReqDoc", title1, active ? "Active" : "Inactive"));
-					
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -567,11 +446,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -586,8 +464,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -598,11 +475,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveRequirementsCaptureTools();
 			for (int i = 0; i < requirementscapturetools.size(); i++) {
 				Tool requirementscapturetool = requirementscapturetools.get(i);
-				String title = "RequirementsCaptureTool";
-				String title1 = "";
+				data[index][0] = "RequirementsCaptureTool";
 				if (requirementscapturetool instanceof RequirementsCaptureTool) {
 					RequirementsCaptureTool requirementscapturetoolRequirementsCaptureTool = (RequirementsCaptureTool) requirementscapturetool;
-					title1 = "RequirementsCaptureTool Tool "
+					data[index][1] = "RequirementsCaptureTool Tool "
 							+ requirementscapturetoolRequirementsCaptureTool
 									.getName();
 
@@ -620,8 +496,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("RequirementsCaptureTool", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -632,11 +507,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveAssociatedCodeDocs();
 			for (int i = 0; i < associatedcodedocs.size(); i++) {
 				Artifact associatedcodedoc = associatedcodedocs.get(i);
-				String title = "AssociatedCodeDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedCodeDoc";
 				if (associatedcodedoc instanceof Code) {
 					Code codeAssociatedCodeDoc = (Code) associatedcodedoc;
-					title1 = "Code Artifact "
+					data[index][1] = "Code Artifact "
 							+ codeAssociatedCodeDoc.getName();
 
 					// find out whether it's active or not:
@@ -652,8 +526,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("AssociatedCodeDoc", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -664,11 +537,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveAssociatedDesignDocs();
 			for (int i = 0; i < associateddesigndocs.size(); i++) {
 				Artifact associateddesigndoc = associateddesigndocs.get(i);
-				String title = "AssociatedDesignDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedDesignDoc";
 				if (associateddesigndoc instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDoc = (DesignDocument) associateddesigndoc;
-					title1 = "DesignDocument Artifact "
+					data[index][1] = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -685,8 +557,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("AssociatedDesignDoc", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -698,11 +569,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedsystemtestplans.size(); i++) {
 				Artifact associatedsystemtestplan = associatedsystemtestplans
 						.get(i);
-				String title = "AssociatedSystemTestPlan";
-				String title1 = "";
+				data[index][0] = "AssociatedSystemTestPlan";
 				if (associatedsystemtestplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanAssociatedSystemTestPlan = (SystemTestPlan) associatedsystemtestplan;
-					title1 = "SystemTestPlan Artifact "
+					data[index][1] = "SystemTestPlan Artifact "
 							+ systemtestplanAssociatedSystemTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -719,8 +589,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("AssociatedSystemTestPlan", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -733,11 +602,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -752,8 +620,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -764,11 +631,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveRequirementsDocs();
 			for (int i = 0; i < requirementsdocs.size(); i++) {
 				Artifact requirementsdoc = requirementsdocs.get(i);
-				String title = "RequirementsDoc";
-				String title1 = "";
+				data[index][0] = "RequirementsDoc";
 				if (requirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentRequirementsDoc = (RequirementsDocument) requirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentRequirementsDoc.getName();
 
 					// find out whether it's active or not:
@@ -785,8 +651,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("RequirementsDoc", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -796,11 +661,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -815,8 +679,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -829,11 +692,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -848,8 +710,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -860,11 +721,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveRequirementsDocs();
 			for (int i = 0; i < requirementsdocs.size(); i++) {
 				Artifact requirementsdoc = requirementsdocs.get(i);
-				String title = "RequirementsDoc";
-				String title1 = "";
+				data[index][0] = "RequirementsDoc";
 				if (requirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentRequirementsDoc = (RequirementsDocument) requirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentRequirementsDoc.getName();
 
 					// find out whether it's active or not:
@@ -881,8 +741,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("RequirementsDoc", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -892,11 +751,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -911,8 +769,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -923,11 +780,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveRequirementsCaptureTools();
 			for (int i = 0; i < requirementscapturetools.size(); i++) {
 				Tool requirementscapturetool = requirementscapturetools.get(i);
-				String title = "RequirementsCaptureTool";
-				String title1 = "";
+				data[index][0] = "RequirementsCaptureTool";
 				if (requirementscapturetool instanceof RequirementsCaptureTool) {
 					RequirementsCaptureTool requirementscapturetoolRequirementsCaptureTool = (RequirementsCaptureTool) requirementscapturetool;
-					title1 = "RequirementsCaptureTool Tool "
+					data[index][1] = "RequirementsCaptureTool Tool "
 							+ requirementscapturetoolRequirementsCaptureTool
 									.getName();
 
@@ -945,8 +801,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("RequirementsCaptureTool", title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -958,11 +813,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Employee> activeEmps = createdesignAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -977,8 +831,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -988,11 +841,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveDesignDocs();
 			for (int i = 0; i < designdocs.size(); i++) {
 				Artifact designdoc = designdocs.get(i);
-				String title = "DesignDoc";
-				String title1 = "";
+				data[index][0] = "DesignDoc";
 				if (designdoc instanceof DesignDocument) {
 					DesignDocument designdocumentDesignDoc = (DesignDocument) designdoc;
-					title1 = "DesignDocument Artifact "
+					data[index][1] = "DesignDocument Artifact "
 							+ designdocumentDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1007,8 +859,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1018,11 +869,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1037,7 +887,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1049,11 +899,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1071,7 +920,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1082,11 +931,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveDesignEnvironments();
 			for (int i = 0; i < designenvironments.size(); i++) {
 				Tool designenvironment = designenvironments.get(i);
-				String title = "DesignEnvironment";
-				String title1 = "";
+				data[index][0] = "DesignEnvironment";
 				if (designenvironment instanceof DesignEnvironment) {
 					DesignEnvironment designenvironmentDesignEnvironment = (DesignEnvironment) designenvironment;
-					title1 = "DesignEnvironment Tool "
+					data[index][1] = "DesignEnvironment Tool "
 							+ designenvironmentDesignEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -1103,7 +951,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1114,11 +962,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveAssociatedCodeDocs();
 			for (int i = 0; i < associatedcodedocs.size(); i++) {
 				Artifact associatedcodedoc = associatedcodedocs.get(i);
-				String title = "AssociatedCodeDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedCodeDoc";
 				if (associatedcodedoc instanceof Code) {
 					Code codeAssociatedCodeDoc = (Code) associatedcodedoc;
-					title1 = "Code Artifact "
+					data[index][1] = "Code Artifact "
 							+ codeAssociatedCodeDoc.getName();
 
 					// find out whether it's active or not:
@@ -1134,7 +981,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1146,11 +993,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Employee> activeEmps = reviewdesignAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1165,7 +1011,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1175,11 +1021,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveDesignDocs();
 			for (int i = 0; i < designdocs.size(); i++) {
 				Artifact designdoc = designdocs.get(i);
-				String title = "DesignDoc";
-				String title1 = "";
+				data[index][0] = "DesignDoc";
 				if (designdoc instanceof DesignDocument) {
 					DesignDocument designdocumentDesignDoc = (DesignDocument) designdoc;
-					title1 = "DesignDocument Artifact "
+					data[index][1] = "DesignDocument Artifact "
 							+ designdocumentDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1194,7 +1039,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1204,11 +1049,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1223,7 +1067,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1235,11 +1079,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1257,7 +1100,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1270,11 +1113,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1289,7 +1131,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1300,11 +1142,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveDesignDocs();
 			for (int i = 0; i < designdocs.size(); i++) {
 				Artifact designdoc = designdocs.get(i);
-				String title = "DesignDoc";
-				String title1 = "";
+				data[index][0] = "DesignDoc";
 				if (designdoc instanceof DesignDocument) {
 					DesignDocument designdocumentDesignDoc = (DesignDocument) designdoc;
-					title1 = "DesignDocument Artifact "
+					data[index][1] = "DesignDocument Artifact "
 							+ designdocumentDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1319,7 +1160,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1329,11 +1170,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1348,7 +1188,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1360,11 +1200,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1382,7 +1221,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1393,11 +1232,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveDesignEnvironments();
 			for (int i = 0; i < designenvironments.size(); i++) {
 				Tool designenvironment = designenvironments.get(i);
-				String title = "DesignEnvironment";
-				String title1 = "";
+				data[index][0] = "DesignEnvironment";
 				if (designenvironment instanceof DesignEnvironment) {
 					DesignEnvironment designenvironmentDesignEnvironment = (DesignEnvironment) designenvironment;
-					title1 = "DesignEnvironment Tool "
+					data[index][1] = "DesignEnvironment Tool "
 							+ designenvironmentDesignEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -1414,7 +1252,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1426,11 +1264,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Employee> activeEmps = createcodeAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1445,7 +1282,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1455,11 +1292,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				String title = "CodeDoc";
-				String title1 = "";
+				data[index][0] = "CodeDoc";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					title1 = "Code Artifact " + codeCodeDoc.getName();
+					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -1472,7 +1308,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1481,11 +1317,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Project> activeProjs = createcodeAction.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1500,7 +1335,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1512,11 +1347,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1534,7 +1368,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1546,11 +1380,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associateddesigndocuments.size(); i++) {
 				Artifact associateddesigndocument = associateddesigndocuments
 						.get(i);
-				String title = "AssociatedDesignDocument";
-				String title1 = "";
+				data[index][0] = "AssociatedDesignDocument";
 				if (associateddesigndocument instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDocument = (DesignDocument) associateddesigndocument;
-					title1 = "DesignDocument Artifact "
+					data[index][1] = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDocument.getName();
 
 					// find out whether it's active or not:
@@ -1567,7 +1400,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1578,11 +1411,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveDevelopmentEnvironments();
 			for (int i = 0; i < developmentenvironments.size(); i++) {
 				Tool developmentenvironment = developmentenvironments.get(i);
-				String title = "DevelopmentEnvironment";
-				String title1 = "";
+				data[index][0] = "DevelopmentEnvironment";
 				if (developmentenvironment instanceof IDE) {
 					IDE ideDevelopmentEnvironment = (IDE) developmentenvironment;
-					title1 = "IDE Tool "
+					data[index][1] = "IDE Tool "
 							+ ideDevelopmentEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -1599,7 +1431,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1611,11 +1443,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedsystemtestplans.size(); i++) {
 				Artifact associatedsystemtestplan = associatedsystemtestplans
 						.get(i);
-				String title = "AssociatedSystemTestPlan";
-				String title1 = "";
+				data[index][0] = "AssociatedSystemTestPlan";
 				if (associatedsystemtestplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanAssociatedSystemTestPlan = (SystemTestPlan) associatedsystemtestplan;
-					title1 = "SystemTestPlan Artifact "
+					data[index][1] = "SystemTestPlan Artifact "
 							+ systemtestplanAssociatedSystemTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -1632,7 +1463,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1644,11 +1475,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Employee> activeEmps = inspectcodeAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1663,7 +1493,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1673,11 +1503,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				String title = "CodeDoc";
-				String title1 = "";
+				data[index][0] = "CodeDoc";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					title1 = "Code Artifact " + codeCodeDoc.getName();
+					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -1690,7 +1519,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1699,11 +1528,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Project> activeProjs = inspectcodeAction.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1718,7 +1546,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1730,11 +1558,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1752,7 +1579,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1763,11 +1590,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveAssociatedDesignDocs();
 			for (int i = 0; i < associateddesigndocs.size(); i++) {
 				Artifact associateddesigndoc = associateddesigndocs.get(i);
-				String title = "AssociatedDesignDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedDesignDoc";
 				if (associateddesigndoc instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDoc = (DesignDocument) associateddesigndoc;
-					title1 = "DesignDocument Artifact "
+					data[index][1] = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1784,7 +1610,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1796,11 +1622,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Employee> activeEmps = correctcodeAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -1815,7 +1640,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1825,11 +1650,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				String title = "CodeDoc";
-				String title1 = "";
+				data[index][0] = "CodeDoc";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					title1 = "Code Artifact " + codeCodeDoc.getName();
+					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -1842,7 +1666,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1851,11 +1675,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Project> activeProjs = correctcodeAction.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -1870,7 +1693,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1882,11 +1705,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -1904,7 +1726,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1915,11 +1737,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveAssociatedDesignDocs();
 			for (int i = 0; i < associateddesigndocs.size(); i++) {
 				Artifact associateddesigndoc = associateddesigndocs.get(i);
-				String title = "AssociatedDesignDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedDesignDoc";
 				if (associateddesigndoc instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDoc = (DesignDocument) associateddesigndoc;
-					title1 = "DesignDocument Artifact "
+					data[index][1] = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -1936,7 +1757,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1947,11 +1768,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveDevelopmentEnvironments();
 			for (int i = 0; i < developmentenvironments.size(); i++) {
 				Tool developmentenvironment = developmentenvironments.get(i);
-				String title = "DevelopmentEnvironment";
-				String title1 = "";
+				data[index][0] = "DevelopmentEnvironment";
 				if (developmentenvironment instanceof IDE) {
 					IDE ideDevelopmentEnvironment = (IDE) developmentenvironment;
-					title1 = "IDE Tool "
+					data[index][1] = "IDE Tool "
 							+ ideDevelopmentEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -1968,7 +1788,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -1981,11 +1801,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2000,7 +1819,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2010,11 +1829,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				String title = "CodeDoc";
-				String title1 = "";
+				data[index][0] = "CodeDoc";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					title1 = "Code Artifact " + codeCodeDoc.getName();
+					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -2027,7 +1845,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2037,11 +1855,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2056,7 +1873,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2068,11 +1885,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -2090,7 +1906,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2101,11 +1917,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveAssociatedDesignDocs();
 			for (int i = 0; i < associateddesigndocs.size(); i++) {
 				Artifact associateddesigndoc = associateddesigndocs.get(i);
-				String title = "AssociatedDesignDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedDesignDoc";
 				if (associateddesigndoc instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDoc = (DesignDocument) associateddesigndoc;
-					title1 = "DesignDocument Artifact "
+					data[index][1] = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDoc.getName();
 
 					// find out whether it's active or not:
@@ -2122,7 +1937,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2133,11 +1948,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveDevelopmentEnvironments();
 			for (int i = 0; i < developmentenvironments.size(); i++) {
 				Tool developmentenvironment = developmentenvironments.get(i);
-				String title = "DevelopmentEnvironment";
-				String title1 = "";
+				data[index][0] = "DevelopmentEnvironment";
 				if (developmentenvironment instanceof IDE) {
 					IDE ideDevelopmentEnvironment = (IDE) developmentenvironment;
-					title1 = "IDE Tool "
+					data[index][1] = "IDE Tool "
 							+ ideDevelopmentEnvironment.getName();
 
 					// find out whether it's active or not:
@@ -2154,7 +1968,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2167,11 +1981,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				String title = "CodeDoc";
-				String title1 = "";
+				data[index][0] = "CodeDoc";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					title1 = "Code Artifact " + codeCodeDoc.getName();
+					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -2184,7 +1997,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2193,11 +2006,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Project> activeProjs = systemtestAction.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2212,7 +2024,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2221,11 +2033,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Employee> activeEmps = systemtestAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2240,7 +2051,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2252,11 +2063,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedsystemtestplans.size(); i++) {
 				Artifact associatedsystemtestplan = associatedsystemtestplans
 						.get(i);
-				String title = "AssociatedSystemTestPlan";
-				String title1 = "";
+				data[index][0] = "AssociatedSystemTestPlan";
 				if (associatedsystemtestplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanAssociatedSystemTestPlan = (SystemTestPlan) associatedsystemtestplan;
-					title1 = "SystemTestPlan Artifact "
+					data[index][1] = "SystemTestPlan Artifact "
 							+ systemtestplanAssociatedSystemTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -2273,7 +2083,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2283,11 +2093,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveTestingTools();
 			for (int i = 0; i < testingtools.size(); i++) {
 				Tool testingtool = testingtools.get(i);
-				String title = "TestingTool";
-				String title1 = "";
+				data[index][0] = "TestingTool";
 				if (testingtool instanceof AutomatedTestingTool) {
 					AutomatedTestingTool automatedtestingtoolTestingTool = (AutomatedTestingTool) testingtool;
-					title1 = "AutomatedTestingTool Tool "
+					data[index][1] = "AutomatedTestingTool Tool "
 							+ automatedtestingtoolTestingTool.getName();
 
 					// find out whether it's active or not:
@@ -2303,7 +2112,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2316,11 +2125,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2335,7 +2143,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2346,11 +2154,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveAssociatedCodeDocs();
 			for (int i = 0; i < associatedcodedocs.size(); i++) {
 				Artifact associatedcodedoc = associatedcodedocs.get(i);
-				String title = "AssociatedCodeDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedCodeDoc";
 				if (associatedcodedoc instanceof Code) {
 					Code codeAssociatedCodeDoc = (Code) associatedcodedoc;
-					title1 = "Code Artifact "
+					data[index][1] = "Code Artifact "
 							+ codeAssociatedCodeDoc.getName();
 
 					// find out whether it's active or not:
@@ -2366,7 +2173,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2376,11 +2183,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2395,7 +2201,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2406,11 +2212,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveSystemTestPlanDocs();
 			for (int i = 0; i < systemtestplandocs.size(); i++) {
 				Artifact systemtestplandoc = systemtestplandocs.get(i);
-				String title = "SystemTestPlanDoc";
-				String title1 = "";
+				data[index][0] = "SystemTestPlanDoc";
 				if (systemtestplandoc instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanSystemTestPlanDoc = (SystemTestPlan) systemtestplandoc;
-					title1 = "SystemTestPlan Artifact "
+					data[index][1] = "SystemTestPlan Artifact "
 							+ systemtestplanSystemTestPlanDoc.getName();
 
 					// find out whether it's active or not:
@@ -2427,7 +2232,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2439,11 +2244,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -2461,7 +2265,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2472,11 +2276,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveTestingTools();
 			for (int i = 0; i < testingtools.size(); i++) {
 				Tool testingtool = testingtools.get(i);
-				String title = "TestingTool";
-				String title1 = "";
+				data[index][0] = "TestingTool";
 				if (testingtool instanceof AutomatedTestingTool) {
 					AutomatedTestingTool automatedtestingtoolTestingTool = (AutomatedTestingTool) testingtool;
-					title1 = "AutomatedTestingTool Tool "
+					data[index][1] = "AutomatedTestingTool Tool "
 							+ automatedtestingtoolTestingTool.getName();
 
 					// find out whether it's active or not:
@@ -2492,7 +2295,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2505,11 +2308,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2524,7 +2326,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2535,11 +2337,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveTestPlans();
 			for (int i = 0; i < testplans.size(); i++) {
 				Artifact testplan = testplans.get(i);
-				String title = "TestPlan";
-				String title1 = "";
+				data[index][0] = "TestPlan";
 				if (testplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanTestPlan = (SystemTestPlan) testplan;
-					title1 = "SystemTestPlan Artifact "
+					data[index][1] = "SystemTestPlan Artifact "
 							+ systemtestplanTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -2554,7 +2355,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2566,11 +2367,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -2588,7 +2388,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2598,11 +2398,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2617,7 +2416,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2630,11 +2429,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2649,7 +2447,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2660,11 +2458,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveTestPlans();
 			for (int i = 0; i < testplans.size(); i++) {
 				Artifact testplan = testplans.get(i);
-				String title = "TestPlan";
-				String title1 = "";
+				data[index][0] = "TestPlan";
 				if (testplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanTestPlan = (SystemTestPlan) testplan;
-					title1 = "SystemTestPlan Artifact "
+					data[index][1] = "SystemTestPlan Artifact "
 							+ systemtestplanTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -2679,7 +2476,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2691,11 +2488,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocs.size(); i++) {
 				Artifact associatedrequirementsdoc = associatedrequirementsdocs
 						.get(i);
-				String title = "AssociatedRequirementsDoc";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDoc";
 				if (associatedrequirementsdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDoc = (RequirementsDocument) associatedrequirementsdoc;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDoc
 									.getName();
 
@@ -2713,7 +2509,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2723,11 +2519,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2742,7 +2537,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2753,11 +2548,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveTestingTools();
 			for (int i = 0; i < testingtools.size(); i++) {
 				Tool testingtool = testingtools.get(i);
-				String title = "TestingTool";
-				String title1 = "";
+				data[index][0] = "TestingTool";
 				if (testingtool instanceof AutomatedTestingTool) {
 					AutomatedTestingTool automatedtestingtoolTestingTool = (AutomatedTestingTool) testingtool;
-					title1 = "AutomatedTestingTool Tool "
+					data[index][1] = "AutomatedTestingTool Tool "
 							+ automatedtestingtoolTestingTool.getName();
 
 					// find out whether it's active or not:
@@ -2773,7 +2567,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2786,11 +2580,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -2805,7 +2598,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2815,11 +2608,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -2834,7 +2626,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2844,11 +2636,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveCodeDocs();
 			for (int i = 0; i < codedocs.size(); i++) {
 				Artifact codedoc = codedocs.get(i);
-				String title = "CodeDoc";
-				String title1 = "";
+				data[index][0] = "CodeDoc";
 				if (codedoc instanceof Code) {
 					Code codeCodeDoc = (Code) codedoc;
-					title1 = "Code Artifact " + codeCodeDoc.getName();
+					data[index][1] = "Code Artifact " + codeCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -2861,7 +2652,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2871,11 +2662,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveCusts();
 			for (int i = 0; i < custs.size(); i++) {
 				Customer cust = custs.get(i);
-				String title = "Cust";
-				String title1 = "";
+				data[index][0] = "Cust";
 				if (cust instanceof ACustomer) {
 					ACustomer acustomerCust = (ACustomer) cust;
-					title1 = "aCustomer Customer "
+					data[index][1] = "aCustomer Customer "
 							+ acustomerCust.getName();
 
 					// find out whether it's active or not:
@@ -2889,7 +2679,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2902,11 +2692,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveBreakers();
 			for (int i = 0; i < breakers.size(); i++) {
 				Employee breaker = breakers.get(i);
-				String title = "Breaker";
-				String title1 = "";
+				data[index][0] = "Breaker";
 				if (breaker instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerBreaker = (SoftwareEngineer) breaker;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerBreaker.getName();
 
 					// find out whether it's active or not:
@@ -2921,7 +2710,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2934,11 +2723,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveSickPersons();
 			for (int i = 0; i < sickpersons.size(); i++) {
 				Employee sickperson = sickpersons.get(i);
-				String title = "SickPerson";
-				String title1 = "";
+				data[index][0] = "SickPerson";
 				if (sickperson instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerSickPerson = (SoftwareEngineer) sickperson;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerSickPerson.getName();
 
 					// find out whether it's active or not:
@@ -2954,7 +2742,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2966,11 +2754,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Employee> activeQuitters = quitAction.getAllActiveQuitters();
 			for (int i = 0; i < quitters.size(); i++) {
 				Employee quitter = quitters.get(i);
-				String title = "Quitter";
-				String title1 = "";
+				data[index][0] = "Quitter";
 				if (quitter instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerQuitter = (SoftwareEngineer) quitter;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerQuitter.getName();
 
 					// find out whether it's active or not:
@@ -2985,7 +2772,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -2999,11 +2786,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveCusts();
 			for (int i = 0; i < custs.size(); i++) {
 				Customer cust = custs.get(i);
-				String title = "Cust";
-				String title1 = "";
+				data[index][0] = "Cust";
 				if (cust instanceof ACustomer) {
 					ACustomer acustomerCust = (ACustomer) cust;
-					title1 = "aCustomer Customer "
+					data[index][1] = "aCustomer Customer "
 							+ acustomerCust.getName();
 
 					// find out whether it's active or not:
@@ -3017,7 +2803,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3029,11 +2815,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedrequirementsdocuments.size(); i++) {
 				Artifact associatedrequirementsdocument = associatedrequirementsdocuments
 						.get(i);
-				String title = "AssociatedRequirementsDocument";
-				String title1 = "";
+				data[index][0] = "AssociatedRequirementsDocument";
 				if (associatedrequirementsdocument instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentAssociatedRequirementsDocument = (RequirementsDocument) associatedrequirementsdocument;
-					title1 = "RequirementsDocument Artifact "
+					data[index][1] = "RequirementsDocument Artifact "
 							+ requirementsdocumentAssociatedRequirementsDocument
 									.getName();
 
@@ -3052,7 +2837,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3063,11 +2848,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3082,7 +2866,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3093,11 +2877,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmpWOverheadTexts();
 			for (int i = 0; i < empwoverheadtexts.size(); i++) {
 				Employee empwoverheadtext = empwoverheadtexts.get(i);
-				String title = "EmpWOverheadText";
-				String title1 = "";
+				data[index][0] = "EmpWOverheadText";
 				if (empwoverheadtext instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmpWOverheadText = (SoftwareEngineer) empwoverheadtext;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmpWOverheadText.getName();
 
 					// find out whether it's active or not:
@@ -3114,7 +2897,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3125,11 +2908,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveAssociatedCodes();
 			for (int i = 0; i < associatedcodes.size(); i++) {
 				Artifact associatedcode = associatedcodes.get(i);
-				String title = "AssociatedCode";
-				String title1 = "";
+				data[index][0] = "AssociatedCode";
 				if (associatedcode instanceof Code) {
 					Code codeAssociatedCode = (Code) associatedcode;
-					title1 = "Code Artifact "
+					data[index][1] = "Code Artifact "
 							+ codeAssociatedCode.getName();
 
 					// find out whether it's active or not:
@@ -3145,7 +2927,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3157,11 +2939,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associateddesigndocuments.size(); i++) {
 				Artifact associateddesigndocument = associateddesigndocuments
 						.get(i);
-				String title = "AssociatedDesignDocument";
-				String title1 = "";
+				data[index][0] = "AssociatedDesignDocument";
 				if (associateddesigndocument instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDocument = (DesignDocument) associateddesigndocument;
-					title1 = "DesignDocument Artifact "
+					data[index][1] = "DesignDocument Artifact "
 							+ designdocumentAssociatedDesignDocument.getName();
 
 					// find out whether it's active or not:
@@ -3178,7 +2959,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3190,11 +2971,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			for (int i = 0; i < associatedsystemtestplans.size(); i++) {
 				Artifact associatedsystemtestplan = associatedsystemtestplans
 						.get(i);
-				String title = "AssociatedSystemTestPlan";
-				String title1 = "";
+				data[index][0] = "AssociatedSystemTestPlan";
 				if (associatedsystemtestplan instanceof SystemTestPlan) {
 					SystemTestPlan systemtestplanAssociatedSystemTestPlan = (SystemTestPlan) associatedsystemtestplan;
-					title1 = "SystemTestPlan Artifact "
+					data[index][1] = "SystemTestPlan Artifact "
 							+ systemtestplanAssociatedSystemTestPlan.getName();
 
 					// find out whether it's active or not:
@@ -3211,7 +2991,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3224,11 +3004,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3243,7 +3022,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3255,11 +3034,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<Employee> activeEmps = givebonusAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3274,7 +3052,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3285,11 +3063,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjectWithBudgets();
 			for (int i = 0; i < projectwithbudgets.size(); i++) {
 				Project projectwithbudget = projectwithbudgets.get(i);
-				String title = "ProjectWithBudget";
-				String title1 = "";
+				data[index][0] = "ProjectWithBudget";
 				if (projectwithbudget instanceof SEProject) {
 					SEProject seprojectProjectWithBudget = (SEProject) projectwithbudget;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProjectWithBudget.getDescription();
 
 					// find out whether it's active or not:
@@ -3306,7 +3083,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3319,11 +3096,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveFiredPersons();
 			for (int i = 0; i < firedpersons.size(); i++) {
 				Employee firedperson = firedpersons.get(i);
-				String title = "FiredPerson";
-				String title1 = "";
+				data[index][0] = "FiredPerson";
 				if (firedperson instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerFiredPerson = (SoftwareEngineer) firedperson;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerFiredPerson.getName();
 
 					// find out whether it's active or not:
@@ -3339,7 +3115,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3353,11 +3129,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmpWhoseMenuClickedOns();
 			for (int i = 0; i < empwhosemenuclickedons.size(); i++) {
 				Employee empwhosemenuclickedon = empwhosemenuclickedons.get(i);
-				String title = "EmpWhoseMenuClickedOn";
-				String title1 = "";
+				data[index][0] = "EmpWhoseMenuClickedOn";
 				if (empwhosemenuclickedon instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmpWhoseMenuClickedOn = (SoftwareEngineer) empwhosemenuclickedon;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmpWhoseMenuClickedOn.getName();
 
 					// find out whether it's active or not:
@@ -3374,7 +3149,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3384,11 +3159,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveSETools();
 			for (int i = 0; i < setools.size(); i++) {
 				Tool setool = setools.get(i);
-				String title = "SETool";
-				String title1 = "";
+				data[index][0] = "SETool";
 				if (setool instanceof IDE) {
 					IDE ideSETool = (IDE) setool;
-					title1 = "IDE Tool " + ideSETool.getName();
+					data[index][1] = "IDE Tool " + ideSETool.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -3401,11 +3175,11 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				if (setool instanceof RequirementsCaptureTool) {
 					RequirementsCaptureTool requirementscapturetoolSETool = (RequirementsCaptureTool) setool;
-					title1 = "RequirementsCaptureTool Tool "
+					data[index][1] = "RequirementsCaptureTool Tool "
 							+ requirementscapturetoolSETool.getName();
 
 					// find out whether it's active or not:
@@ -3421,11 +3195,11 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				if (setool instanceof AutomatedTestingTool) {
 					AutomatedTestingTool automatedtestingtoolSETool = (AutomatedTestingTool) setool;
-					title1 = "AutomatedTestingTool Tool "
+					data[index][1] = "AutomatedTestingTool Tool "
 							+ automatedtestingtoolSETool.getName();
 
 					// find out whether it's active or not:
@@ -3441,11 +3215,11 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				if (setool instanceof DesignEnvironment) {
 					DesignEnvironment designenvironmentSETool = (DesignEnvironment) setool;
-					title1 = "DesignEnvironment Tool "
+					data[index][1] = "DesignEnvironment Tool "
 							+ designenvironmentSETool.getName();
 
 					// find out whether it's active or not:
@@ -3460,7 +3234,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3470,11 +3244,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3489,7 +3262,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3503,11 +3276,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3522,7 +3294,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3533,11 +3305,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3552,7 +3323,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3566,11 +3337,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3585,7 +3355,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3596,11 +3366,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3615,7 +3384,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3629,11 +3398,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3648,7 +3416,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3659,11 +3427,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3678,7 +3445,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3692,11 +3459,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
-				String title = "Proj";
-				String title1 = "";
+				data[index][0] = "Proj";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
+					data[index][1] = "SEProject Project "
 							+ seprojectProj.getDescription();
 
 					// find out whether it's active or not:
@@ -3711,7 +3477,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
@@ -3722,11 +3488,10 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-				String title = "Emp";
-				String title1 = "";
+				data[index][0] = "Emp";
 				if (emp instanceof SoftwareEngineer) {
 					SoftwareEngineer softwareengineerEmp = (SoftwareEngineer) emp;
-					title1 = "SoftwareEngineer Employee "
+					data[index][1] = "SoftwareEngineer Employee "
 							+ softwareengineerEmp.getName();
 
 					// find out whether it's active or not:
@@ -3741,22 +3506,18 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
+					data[index][2] = active ? "Active" : "Inactive";
 				}
 				index++;
 			}
 		}
-		
-		newView.getColumns().addAll(name, participant, status);
-		newView.setItems(data);
-		return newView;
-//		return new TableView(data, columnNames);
+		return new JTable(data, columnNames);
 	}
 
 	// refreshes the description area with the selected trigger/destroyer
 	private void refreshDescriptionArea(int trigOrDest) {
 		String name = trigOrDest == TRIGGER ? (String) triggerList
-				.getSelectionModel().getSelectedItem() : (String) destroyerList.getSelectionModel().getSelectedItem();
+				.getSelectedValue() : (String) destroyerList.getSelectedValue();
 		if (name != null) {
 			String text = "";
 			if (action instanceof CreateRequirementsAction) {
@@ -4002,14 +3763,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 				}
 			}
 			descriptionArea.setText(text);
-			descriptionArea.positionCaret(0);
-//			descriptionArea.setCaretPosition(0);
+			descriptionArea.setCaretPosition(0);
 		}
-	}
-
-	@Override
-	public void handle(MouseEvent event) {
-		// TODO Auto-generated method stub
-		
 	}
 }

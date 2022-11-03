@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
@@ -15,5 +16,6 @@
 	<classpathentry kind="lib" path="lib/jfreechart-1.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/org.jfree.chart.fx-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/org.jfree.fxgraphics2d-2.1.jar"/>
+
 	<classpathentry kind="output" path="bin"/>
 </classpath>
