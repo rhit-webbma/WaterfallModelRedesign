@@ -63,7 +63,6 @@ public class SimSE extends Application{
 
 	@Override
 	public void start(Stage arg0) throws Exception {
-		// TODO Auto-generated method stub
 		startNewBranch(new State(), new Branch(null, 0, 0, null, ""));
 		ArrayList<SimSEGUI> guis = this.getGUIs();
 		arg0 = guis.get(0);
