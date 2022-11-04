@@ -31,8 +31,8 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	public final int xViewable = 9;
 	public final int yViewable = 9;
 	
-	private final double width = 1000;
-	private final double height = 625;
+	private final double width = 784;
+	private final double height = 448;
 
 	private final SimSEGUI mainGUIFrame;
 
