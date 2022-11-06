@@ -4,101 +4,81 @@ package simse.gui;
 import simse.state.*;
 import simse.logic.*;
 import simse.adts.objects.*;
-import simse.gui.util.JavaFXHelpers;
 import simse.adts.actions.*;
 
-//import java.text.*;
+import java.text.*;
 import java.util.*;
+import java.awt.event.*;
+import java.awt.*;
+import java.awt.Dimension;
+import javax.swing.*;
+import javax.swing.text.*;
+import javax.swing.event.*;
+import java.awt.Color;
+import java.io.*;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
-
-public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
+public class ActionPanel extends JPanel implements MouseListener,
+		ActionListener {
 	private State state;
 	private Logic logic;
 	private SimSEGUI mainGUIFrame;
 
-	private ContextMenu popup;
+	private JPopupMenu popup;
 
 	private Employee selectedEmp;
 
-	private ScrollPane actionPane;
-	private Hashtable<Employee, VBox> empsToEmpPanels;
-	private Hashtable<Employee, VBox> empsToPicPanels;
+	private JPanel actionPaneMain;
+	private Hashtable<Employee, JPanel> empsToEmpPanels;
+	private Hashtable<Employee, JPanel> empsToPicPanels;
 	// private Hashtable empsToActPanels;
-	private Hashtable<Employee, Label> empsToPicLabels;
-	private Hashtable<Employee, Label> empsToKeyLabels;
-
-	private VBox layout;
-
-	private EventHandler<ActionEvent> menuItemEvent = new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
-			Object source = event.getSource();
-			if (source instanceof MenuItem) {
-				popupMenuActions((MenuItem) source);
-			}
-		}
-	};
+	private Hashtable<Employee, JLabel> empsToPicLabels;
+	private Hashtable<Employee, JLabel> empsToKeyLabels;
 
 	public ActionPanel(SimSEGUI gui, State s, Logic l) {
 		state = s;
 		logic = l;
 		mainGUIFrame = gui;
 
-		layout = new VBox();
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		actionPane = new ScrollPane();
-		actionPane.setPrefSize(225, 425);
-		actionPane.setStyle("-fx-background: rgb(102, 102, 102, 1);\n -fx-background-color: rgb(102, 102, 102, 1)");
+		actionPaneMain = new JPanel();
+		actionPaneMain
+				.setLayout(new BoxLayout(actionPaneMain, BoxLayout.Y_AXIS));
+		actionPaneMain.setBackground(new Color(102, 102, 102, 255));
 
-		empsToEmpPanels = new Hashtable<Employee, VBox>();
-		empsToPicPanels = new Hashtable<Employee, VBox>();
+		JScrollPane actionPane = new JScrollPane(actionPaneMain,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		actionPane.setPreferredSize(new Dimension(225, 495));
+
+		empsToEmpPanels = new Hashtable<Employee, JPanel>();
+		empsToPicPanels = new Hashtable<Employee, JPanel>();
 		// empsToActPanels = new Hashtable();
-		empsToPicLabels = new Hashtable<Employee, Label>();
-		empsToKeyLabels = new Hashtable<Employee, Label>();
+		empsToPicLabels = new Hashtable<Employee, JLabel>();
+		empsToKeyLabels = new Hashtable<Employee, JLabel>();
 
-		BorderPane titlePanel = new BorderPane();
-		titlePanel.setBorder(Border.EMPTY);
-		titlePanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
-		Label titleLabel = new Label("Current Activities:");
+		JPanel titlePanel = new JPanel(new BorderLayout());
+		titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+		titlePanel.setBackground(new Color(102, 102, 102, 255));
+		JLabel titleLabel = new JLabel("Current Activities:");
 		Font f = titleLabel.getFont();
-		Font newFont = new Font(f.getName(), 15);
+		Font newFont = new Font(f.getName(), f.getStyle(), 15);
 		titleLabel.setFont(newFont);
-		titleLabel.setTextFill(Color.WHITE);
-		titlePanel.setLeft(titleLabel);
+		titleLabel.setForeground(Color.WHITE);
+		titlePanel.add(titleLabel, BorderLayout.WEST);
 
 		selectedEmp = null;
-		popup = new ContextMenu();
+		popup = new JPopupMenu();
 
-		layout.getChildren().add(titlePanel);
-		layout.getChildren().add(actionPane);
-		
 		update();
-		this.getChildren().add(layout);		
+
+		add(titlePanel);
+		add(actionPane);
+		repaint();
 	}
 
-	public void createPopupMenu(Node node, double x, double y) {
-		popup.getItems().clear();
+	public void createPopupMenu(Component c, int x, int y) {
+		popup.removeAll();
 
 		if (mainGUIFrame.getEngine().isRunning()) {
 			return;
@@ -108,196 +88,287 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 			Vector<String> menuItems = selectedEmp.getMenu();
 			for (int i = 0; i < menuItems.size(); i++) {
 				String item = menuItems.elementAt(i);
-				MenuItem tempItem = new MenuItem(item);
-				tempItem.setOnAction(menuItemEvent);
-				popup.getItems().add(tempItem);
+				JMenuItem tempItem = new JMenuItem(item);
+				tempItem.addActionListener(this);
+				popup.add(tempItem);
 			}
 			if (menuItems.size() >= 1) {
-				popup.show(node, x, y);
+				popup.show(c, x, y);
 			}
 		}
 	}
 
+	public void paintComponent(Graphics g) {
+	}
+
 	public void update() {
-		actionPane.setContent(null);
-		VBox employees = new VBox();
+		actionPaneMain.removeAll();
 		Vector<Employee> allEmps = state.getEmployeeStateRepository().getAll();
 		for (int i = 0; i < allEmps.size(); i++) {
 			Employee emp = allEmps.elementAt(i);
 			if (empsToEmpPanels.get(emp) == null) {
-				VBox tempPanel = new VBox();
-				tempPanel.addEventHandler(MouseEvent.ANY, this);
+				JPanel tempPanel = new JPanel();
+				tempPanel.addMouseListener(this);
 				empsToEmpPanels.put(emp, tempPanel);
 			}
 			if (empsToPicPanels.get(emp) == null) {
-				VBox tempPanel = new VBox();
-				tempPanel.addEventHandler(MouseEvent.ANY, this);
+				JPanel tempPanel = new JPanel();
+				tempPanel.addMouseListener(this);
 				empsToPicPanels.put(emp, tempPanel);
 			}
 			/*
-			 * if(empsToActPanels.get(emp) == null) { JPanel temp = new JPanel();
-			 * temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
-			 * temp.setMinimumSize(new Dimension(150, 10)); empsToActPanels.put(emp, temp);
-			 * }
+			 * if(empsToActPanels.get(emp) == null) { JPanel temp = new
+			 * JPanel(); temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
+			 * temp.setMinimumSize(new Dimension(150, 10));
+			 * empsToActPanels.put(emp, temp); }
 			 */
-			VBox empPanel = empsToEmpPanels.get(emp);
-			empPanel.getChildren().removeAll();
-			VBox picPanel = (VBox) empsToPicPanels.get(emp);
-			picPanel.getChildren().removeAll();
+			JPanel empPanel = empsToEmpPanels.get(emp);
+			empPanel.removeAll();
+			JPanel picPanel = empsToPicPanels.get(emp);
+			picPanel.removeAll();
 
-			GridPane gpLayout = new GridPane();
-//			GridBagConstraints gbc = new GridBagConstraints();
-//			gpLayout.fill = GridBagConstraints.NONE;
-//			gpLayout.gridwidth = 3;
-//			gpLayout.gridheight = 1;
-			gpLayout.getChildren().add(empPanel);
+			GridBagLayout gbLayout = new GridBagLayout();
+			empPanel.setLayout(gbLayout);
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.fill = GridBagConstraints.NONE;
+			gbc.gridwidth = 3;
+			gbc.gridheight = 1;
 
-			empPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
-			picPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
+			empPanel.setBackground(new Color(102, 102, 102, 255));
+
+			picPanel.setLayout(new BoxLayout(picPanel, BoxLayout.Y_AXIS));
+			picPanel.setBackground(new Color(102, 102, 102, 255));
 			if (empsToPicLabels.get(emp) == null) {
-				ImageView ico = JavaFXHelpers.createImageView(TabPanel.getImage(emp));
-				Label temp = new Label();
-				temp.setGraphic(ico);
-				temp.addEventHandler(MouseEvent.ANY, this);
+				ImageIcon ico = new ImageIcon(
+						ImageLoader.getImageFromURL(TabPanel.getImage(emp)));
+				Image scaledImage = ico.getImage().getScaledInstance(35, 35,
+						Image.SCALE_AREA_AVERAGING);
+				ico.setImage(scaledImage);
+				JLabel temp = new JLabel(ico);
+				temp.addMouseListener(this);
 				empsToPicLabels.put(emp, temp);
 			}
 
-			Label picLabel = empsToPicLabels.get(emp);
-			picLabel.setAlignment(Pos.BASELINE_LEFT);
-			if(!picPanel.getChildren().contains(picLabel)) {
-				picPanel.getChildren().add(picLabel);
-			}
+			JLabel picLabel = empsToPicLabels.get(emp);
+			picLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			picPanel.add(picLabel);
 			if (emp instanceof SoftwareEngineer) {
 				SoftwareEngineer e = (SoftwareEngineer) emp;
 				if (empsToKeyLabels.get(e) == null) {
-					Label temp = new Label("" + e.getName());
-					temp.setTextFill(Color.WHITE);
-					temp.setAlignment(Pos.BASELINE_LEFT);
-					temp.setTextAlignment(TextAlignment.LEFT);
-					System.out.println("Adding " + temp.getText());
+					JLabel temp = new JLabel("" + e.getName());
+					temp.setForeground(Color.WHITE);
+					temp.setHorizontalAlignment(SwingConstants.LEFT);
+					temp.setHorizontalTextPosition(SwingConstants.LEFT);
 					empsToKeyLabels.put(e, temp);
 				}
-				Label keyLabel = empsToKeyLabels.get(e);
-				if(!picPanel.getChildren().contains(keyLabel)) {
-					picPanel.getChildren().add(keyLabel);
-				}
+				JLabel keyLabel = empsToKeyLabels.get(e);
+				picPanel.add(keyLabel);
 			}
-//			picPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-			picPanel.setBorder(Border.EMPTY);
-//			gbc.weightx = 1;
-//			gbc.weighty = 1;
-//			gbc.anchor = GridBagConstraints.WEST;
-			if(!empPanel.getChildren().contains(picPanel)) {
-				empPanel.getChildren().add(picPanel);
-			}
-			VBox actsPanel = new VBox();
+			picPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+			gbc.weightx = 1;
+			gbc.weighty = 1;
+			gbc.anchor = GridBagConstraints.WEST;
+			empPanel.add(picPanel);
+
+			JPanel actsPanel = new JPanel();
 			// actsPanel.removeAll();
 
-			actsPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
-			empPanel.setBorder(new Border(new BorderStroke(Color.rgb(102, 102, 102, 1), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
-			Vector<simse.adts.actions.Action> acts = state.getActionStateRepository().getAllActions(emp);
+			actsPanel.setLayout(new BoxLayout(actsPanel, BoxLayout.Y_AXIS));
+			actsPanel.setBackground(new Color(102, 102, 102, 255));
+			Vector<simse.adts.actions.Action> acts = state
+					.getActionStateRepository().getAllActions(emp);
 			for (int j = 0; j < acts.size(); j++) {
 				simse.adts.actions.Action tempAct = acts.elementAt(j);
 				if (tempAct instanceof CreateRequirementsAction) {
-					Label tempLabel = new Label("Creating requirements");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Creating requirements");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof ReviewRequirementsAction) {
-					Label tempLabel = new Label("Reviewing requirements");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Reviewing requirements");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof CorrectRequirementsAction) {
-					Label tempLabel = new Label("Correcting requirements");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Correcting requirements");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof CreateDesignAction) {
-					Label tempLabel = new Label("Creating design");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Creating design");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof ReviewDesignAction) {
-					Label tempLabel = new Label("Reviewing design");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Reviewing design");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof CorrectDesignAction) {
-					Label tempLabel = new Label("Correcting design");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Correcting design");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof CreateCodeAction) {
-					Label tempLabel = new Label("Creating code");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Creating code");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof InspectCodeAction) {
-					Label tempLabel = new Label("Inspecting code");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Inspecting code");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof CorrectCodeAction) {
-					Label tempLabel = new Label("Correcting code");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Correcting code");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof IntegrateCodeAction) {
-					Label tempLabel = new Label("Integrating code");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Integrating code");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof SystemTestAction) {
-					Label tempLabel = new Label("Doing system test");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Doing system test");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof CreateSystemTestPlanAction) {
-					Label tempLabel = new Label("Creating system test plan");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Creating system test plan");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof ReviewSystemTestPlanAction) {
-					Label tempLabel = new Label("Reviewing system test plan");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Reviewing system test plan");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof CorrectSystemTestPlanAction) {
-					Label tempLabel = new Label("Correcting system test plan");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Correcting system test plan");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof BreakAction) {
-					Label tempLabel = new Label("On a break");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("On a break");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				} else if (tempAct instanceof GetSickAction) {
-					Label tempLabel = new Label("Out sick");
-					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
-					tempLabel.setTextFill(Color.WHITE);
-					actsPanel.getChildren().add(tempLabel);
+					JLabel tempLabel = new JLabel("Out sick");
+					tempLabel.setFont(new Font(tempLabel.getFont().getName(),
+							tempLabel.getFont().getStyle(), 10));
+					tempLabel.setForeground(Color.WHITE);
+					actsPanel.add(tempLabel);
 				}
 			}
-//			gbc.weightx = 2;
-//			gbc.anchor = GridBagConstraints.EAST;
-			actsPanel.setPrefSize(150, (int) (actsPanel.getPrefHeight()));
-			empPanel.getChildren().add(actsPanel);
-//			empPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-			employees.getChildren().add(empPanel);
-		}
-		actionPane.setContent(employees);
-	}	
+			gbc.weightx = 2;
+			gbc.anchor = GridBagConstraints.EAST;
+			actsPanel.setPreferredSize(new Dimension(150,
+					(int) ((Dimension) actsPanel.getPreferredSize())
+							.getHeight()));
+			empPanel.add(actsPanel);
+			empPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-	public void popupMenuActions(MenuItem source) {
-		MenuItem item = (MenuItem) source;
-		logic.getMenuInputManager().menuItemSelected(selectedEmp, item.getText(), mainGUIFrame);
+			actionPaneMain.add(empPanel);
+		}
+		validate();
+		repaint();
+		actionPaneMain.update(actionPaneMain.getGraphics());
+	}
+
+	public void mouseClicked(MouseEvent me) {
+	}
+
+	public void mousePressed(MouseEvent me) {
+	}
+
+	public void mouseEntered(MouseEvent me) {
+	}
+
+	public void mouseExited(MouseEvent me) {
+	}
+
+	public void mouseReleased(MouseEvent me) {
+		if (me.getComponent() instanceof JLabel) {
+			JLabel label = (JLabel) me.getComponent();
+			Employee emp = getEmpFromPicLabel(label);
+			if (emp != null) {
+				if (me.getButton() == MouseEvent.BUTTON1) // left button clicked
+				{
+					mainGUIFrame.getTabPanel().setGUIChanged();
+					mainGUIFrame.getTabPanel().setObjectInFocus(emp);
+					mainGUIFrame.getAttributePanel().setGUIChanged();
+					mainGUIFrame.getAttributePanel().setObjectInFocus(
+							emp,
+							new ImageIcon(ImageLoader.getImageFromURL(TabPanel
+									.getImage(emp))));
+				} else if (me.isPopupTrigger()
+						&& (state.getClock().isStopped() == false)) // right-click
+				{
+					selectedEmp = emp;
+					createPopupMenu(label, me.getX(), me.getY());
+					repaint();
+				}
+			}
+		} else if (me.getComponent() instanceof JPanel) {
+			JPanel panel = (JPanel) me.getComponent();
+			Employee emp = getEmpFromPanel(panel);
+			if (emp != null) {
+				if (me.getButton() == MouseEvent.BUTTON1) // left button clicked
+				{
+					mainGUIFrame.getTabPanel().setGUIChanged();
+					mainGUIFrame.getTabPanel().setObjectInFocus(emp);
+					mainGUIFrame.getAttributePanel().setGUIChanged();
+					mainGUIFrame.getAttributePanel().setObjectInFocus(
+							emp,
+							new ImageIcon(ImageLoader.getImageFromURL(TabPanel
+									.getImage(emp))));
+				} else if (me.isPopupTrigger()
+						&& (state.getClock().isStopped() == false)) // right-click
+				{
+					selectedEmp = emp;
+					createPopupMenu(panel, me.getX(), me.getY());
+					repaint();
+				}
+			}
+		}
+	}
+
+	public void popupMenuActions(JMenuItem source) {
+		JMenuItem item = (JMenuItem) source;
+		logic.getMenuInputManager().menuItemSelected(selectedEmp,
+				item.getText(), mainGUIFrame);
 		mainGUIFrame.getWorld().update();
 	}
 
-	private Employee getEmpFromPicLabel(Label label) {
-		for (Enumeration<Employee> keys = empsToPicLabels.keys(); keys.hasMoreElements();) {
+	public void actionPerformed(ActionEvent e) // dealing with actions generated
+												// by popup menus
+	{
+		Object source = e.getSource();
+		if (source instanceof JMenuItem) {
+			popupMenuActions((JMenuItem) source);
+		}
+	}
+
+	private Employee getEmpFromPicLabel(JLabel label) {
+		for (Enumeration<Employee> keys = empsToPicLabels.keys(); keys
+				.hasMoreElements();) {
 			Employee keyEmp = keys.nextElement();
 			if (empsToPicLabels.get(keyEmp) == label) {
 				return keyEmp;
@@ -306,58 +377,21 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 		return null;
 	}
 
-	private Employee getEmpFromPanel(Pane panel) {
-		for (Enumeration<Employee> keys = empsToEmpPanels.keys(); keys.hasMoreElements();) {
+	private Employee getEmpFromPanel(JPanel panel) {
+		for (Enumeration<Employee> keys = empsToEmpPanels.keys(); keys
+				.hasMoreElements();) {
 			Employee keyEmp = keys.nextElement();
 			if (empsToEmpPanels.get(keyEmp) == panel) {
 				return keyEmp;
 			}
 		}
-		for (Enumeration<Employee> keys = empsToPicPanels.keys(); keys.hasMoreElements();) {
+		for (Enumeration<Employee> keys = empsToPicPanels.keys(); keys
+				.hasMoreElements();) {
 			Employee keyEmp = keys.nextElement();
 			if (empsToPicPanels.get(keyEmp) == panel) {
 				return keyEmp;
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public void handle(MouseEvent event) {
-		if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-			if (event.getSource() instanceof Label) {
-				Label label = (Label) event.getSource();
-				Employee emp = getEmpFromPicLabel(label);
-				if (emp != null) {
-					if (event.isPrimaryButtonDown()) // left button clicked
-					{
-						mainGUIFrame.getTabPanel().setGUIChanged();
-						mainGUIFrame.getTabPanel().setObjectInFocus(emp);
-						mainGUIFrame.getAttributePanel().setGUIChanged();
-						mainGUIFrame.getAttributePanel().setObjectInFocus(emp, JavaFXHelpers.createImage(TabPanel.getImage(emp)));
-					} else if (event.isPopupTrigger() && (state.getClock().isStopped() == false)) // right-click
-					{
-						selectedEmp = emp;
-						createPopupMenu(label, event.getSceneX(), event.getSceneY());
-					}
-				}
-			} else if (event.getSource() instanceof Pane) {
-				Pane pane = (Pane) event.getSource();
-				Employee emp = getEmpFromPanel(pane);
-				if (emp != null) {
-					if (event.isPrimaryButtonDown()) // left button clicked
-					{
-						mainGUIFrame.getTabPanel().setGUIChanged();
-						mainGUIFrame.getTabPanel().setObjectInFocus(emp);
-						mainGUIFrame.getAttributePanel().setGUIChanged();
-						mainGUIFrame.getAttributePanel().setObjectInFocus(emp,JavaFXHelpers.createImage(TabPanel.getImage(emp)));
-					} else if (event.isPopupTrigger() && (state.getClock().isStopped() == false)) // right-click
-					{
-						selectedEmp = emp;
-						createPopupMenu(pane, event.getSceneX(), event.getSceneY());
-					}
-				}
-			}
-		}
 	}
 }

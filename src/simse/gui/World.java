@@ -2,37 +2,21 @@
 package simse.gui;
 
 import simse.adts.objects.*;
-import simse.gui.util.JavaFXHelpers;
 import simse.state.*;
 import simse.logic.*;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.*;
 import java.util.*;
 
-//import com.sun.javafx.tk.FontMetrics;
-//import com.sun.javafx.tk.Toolkit;
-
-public class World extends SimSEMap implements EventHandler<Event> {
+public class World extends SimSEMap implements KeyListener, MouseListener,
+		ActionListener {
 	private int clickedHeightModifier = 5;
 	private int clickedX;
 	private int clickedY;
 	public final int xViewable = 9;
 	public final int yViewable = 9;
-	
-	private final double width = 784;
-	private final double height = 448;
 
 	private final SimSEGUI mainGUIFrame;
 
@@ -46,52 +30,37 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	private boolean overheadTextDisplayed; // whether or not there is overhead
 											// text to display
 
-	private ContextMenu popup;
+	private JPopupMenu popup;
 	private PopupListener popupListener;
 
 	private DisplayedEmployee selectedUser;
 
 	// how much to shift the map when a resize of the screen occurs:
-	private double xspacer;
-	private double yspacer;
+	private int xspacer;
+	private int yspacer;
 	private boolean employeeGone = false;
 	private Image dbImage;
-	private GraphicsContext dbGraphics;
-
-	private EventHandler<ActionEvent> menuItemEvent = new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
-			Object source = event.getSource();
-			if (source instanceof MenuItem) {
-				popupMenuActions((MenuItem) source);
-			}
-		}
-	};
+	private Graphics dbGraphics;
 
 	public World(State s, Logic l, SimSEGUI parent) {
 		super(s, l);
 		mainGUIFrame = parent;
 		overheadTextDisplayed = false;
-//		int width = (int) getWidth();
-//		int height = (int) getHeight();
-		final Canvas canvas = new Canvas(width, height);
-		dbGraphics = canvas.getGraphicsContext2D();
-		
-		this.getChildren().add(canvas);
-		
 		loadDefaultSettings();
 		update();
-		paint();
+		validate();
+		repaint();
 	}
 
 	private void loadDefaultSettings() {
 		selectedUser = null;
-		setBackground(JavaFXHelpers.createBackgroundColor(Color.BLUE));
-		addEventHandler(KeyEvent.ANY, this);
-		addEventHandler(MouseEvent.ANY, this);
+		setBackground(Color.blue);
+		addKeyListener(this);
+		addMouseListener(this);
 		setVisible(true);
 
 		// right click menu:
-		popup = new ContextMenu();
+		popup = new JPopupMenu();
 		popupListener = new PopupListener(popup, mainGUIFrame);
 		popupListener.setEnabled(false);
 		createPopupMenu();
@@ -104,35 +73,35 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	}
 
 	public void createPopupMenu() {
-		popup.getItems().removeAll();
+		popup.removeAll();
 
 		if (selectedUser != null) {
 			Vector<String> menuItems = selectedUser.getEmployee().getMenu();
 			for (int i = 0; i < menuItems.size(); i++) {
 				String item = menuItems.elementAt(i);
-				MenuItem tempItem = new MenuItem(item);
-				tempItem.setOnAction(menuItemEvent);
-				popup.getItems().add(tempItem);
+				JMenuItem tempItem = new JMenuItem(item);
+				tempItem.addActionListener(this);
+				popup.add(tempItem);
 			}
 		}
-		addEventHandler(MouseEvent.ANY, popupListener);
+		addMouseListener(popupListener);
 	}
 
 	// double buffering to prevent flickering
-	public void update(GraphicsContext gc) {
-//		if (dbImage == null) {
-//			dbImage = new Image(, getWidth(), getHeight(), true, true);
-//		}
+	public void update(Graphics g) {
+		if (dbImage == null) {
+			dbImage = createImage(getSize().width, getSize().height);
+			dbGraphics = dbImage.getGraphics();
+		}
 
 		// clear screen in background:
-		dbGraphics.setFill(Color.BLACK);
-//		dbGraphics.fillRect(0, 0, getWidth(), getHeight());
-		dbGraphics.fillRect(0, 0, width, height);
-		
+		dbGraphics.setColor(Color.BLACK);
+		dbGraphics.fillRect(0, 0, getSize().width, getSize().height);
+
 		// draw elements in background:
-		paint();
+		paint(dbGraphics);
 		// draw image on the screen:
-		dbGraphics.drawImage(dbImage, 0, 0);
+		g.drawImage(dbImage, 0, 0, this);
 
 		if (employeeGone) // employee is about to disappear, need to sleep
 							// thread so the user can see their overhead text
@@ -147,10 +116,11 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		}
 	}
 
-	public void paint() {
-//		int width = (int) getWidth();
-//		int height = (int) getHeight();
-		GraphicsContext gc = dbGraphics;
+	public void paint(Graphics g) {
+		Dimension d = getSize();
+		int width = (int) d.getWidth();
+		int height = (int) d.getHeight();
+		g.fillRect(0, 0, width, height);
 
 		xspacer = (width - MapData.X_MAPSIZE * MapData.TILE_SIZE) / 2;
 		yspacer = (height - MapData.Y_MAPSIZE * MapData.TILE_SIZE) / 2;
@@ -163,9 +133,12 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		// draw the map:
 		for (int i = 0; i < MapData.Y_MAPSIZE; i++) {
 			for (int j = 0; j < MapData.X_MAPSIZE; j++) {
-				gc.drawImage(mapRep[j][i].getBase(), xspacer + j * MapData.TILE_SIZE, yspacer + i * MapData.TILE_SIZE);
-				gc.drawImage(mapRep[j][i].getFringe(), xspacer + j * MapData.TILE_SIZE,
-						yspacer + i * MapData.TILE_SIZE);
+				g.drawImage(mapRep[j][i].getBase(), xspacer + j
+						* MapData.TILE_SIZE, yspacer + i * MapData.TILE_SIZE,
+						this);
+				g.drawImage(mapRep[j][i].getFringe(), xspacer + j
+						* MapData.TILE_SIZE, yspacer + i * MapData.TILE_SIZE,
+						this);
 			}
 		}
 
@@ -173,8 +146,9 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		for (int i = 0; i < sopUsers.size(); i++) {
 			DisplayedEmployee tmp = sopUsers.get(i);
 			if (tmp.isDisplayed() && tmp.isActivated()) {
-				gc.drawImage(tmp.getUserIcon(), xspacer + tmp.getXLocation() * MapData.TILE_SIZE,
-						yspacer + tmp.getYLocation() * MapData.TILE_SIZE);
+				g.drawImage(tmp.getUserIcon(), xspacer + tmp.getXLocation()
+						* MapData.TILE_SIZE, yspacer + tmp.getYLocation()
+						* MapData.TILE_SIZE, this);
 			}
 		}
 
@@ -189,11 +163,13 @@ public class World extends SimSEMap implements EventHandler<Event> {
 																		// text
 			{
 				numOverheadTexts++;
-				drawText(overheadText, tempEmp.getXLocation(), tempEmp.getYLocation(), gc);
-				if (state.getEmployeeStateRepository().getAll().contains(tempEmp.getEmployee()) == false) // employee
-																											// is about
-																											// to
-																											// disappear
+				drawText(overheadText, tempEmp.getXLocation(),
+						tempEmp.getYLocation(), g);
+				if (state.getEmployeeStateRepository().getAll()
+						.contains(tempEmp.getEmployee()) == false) // employee
+																	// is about
+																	// to
+																	// disappear
 				{
 					employeeGone = true;
 
@@ -207,23 +183,27 @@ public class World extends SimSEMap implements EventHandler<Event> {
 			overheadTextDisplayed = false;
 		}
 
-		ArrayList<DisplayedEmployee> oldSopUsers = new ArrayList<DisplayedEmployee>(sopUsers);
+		ArrayList<DisplayedEmployee> oldSopUsers = new ArrayList<DisplayedEmployee>(
+				sopUsers);
 		sopUsers.clear();
 
 		// go through sop users and make sure that they are still in the state
 		// (haven't been destroyed):
 		for (int i = 0; i < oldSopUsers.size(); i++) {
 			DisplayedEmployee tempDisEmp = oldSopUsers.get(i);
-			if (state.getEmployeeStateRepository().getAll().contains(tempDisEmp.getEmployee())) // employee is still
-																								// there
+			if (state.getEmployeeStateRepository().getAll()
+					.contains(tempDisEmp.getEmployee())) // employee is still
+															// there
 			{
 				sopUsers.add(tempDisEmp);
 			}
 		}
 		// check if any new emps have been added:
-		if (sopUsers.size() < state.getEmployeeStateRepository().getAll().size()) // new emps have been added
+		if (sopUsers.size() < state.getEmployeeStateRepository().getAll()
+				.size()) // new emps have been added
 		{
-			Vector<Employee> allEmps = state.getEmployeeStateRepository().getAll();
+			Vector<Employee> allEmps = state.getEmployeeStateRepository()
+					.getAll();
 			for (int i = 0; i < allEmps.size(); i++) {
 				Employee tempEmp = allEmps.elementAt(i);
 				boolean newEmp = true;
@@ -236,8 +216,10 @@ public class World extends SimSEMap implements EventHandler<Event> {
 				}
 				if (newEmp) {
 					// create new DisplayedEmployee and add to sopUsers:
-					DisplayedEmployee newDisEmp = new DisplayedEmployee(tempEmp, getImage(tempEmp), true, true,
-							getXYCoordinates(tempEmp)[0], getXYCoordinates(tempEmp)[1]);
+					DisplayedEmployee newDisEmp = new DisplayedEmployee(
+							tempEmp, getImage(tempEmp), this, true, true,
+							getXYCoordinates(tempEmp)[0],
+							getXYCoordinates(tempEmp)[1]);
 					sopUsers.add(newDisEmp);
 				}
 			}
@@ -250,7 +232,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	// int yLoc - y coordinate of the employee to be drawn. ->
 	// UserData.yLocation
 	// Graphics g - use the graphics object from the paintComponent(Graphics g)
-	public void drawText(String s, int xLoc, int yLoc, GraphicsContext gc) {
+	public void drawText(String s, int xLoc, int yLoc, Graphics g) {
 		// do not draw empty strings:
 		if (s == null || s.equals("")) {
 			return;
@@ -266,13 +248,11 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		// stores the strings
 		int strlength = s.length() + 1;
 		int lengthOfOneLine = 28;
-		int scount = 0;
-		float tmpW = 0;
+		int scount = 0, tmpW = 0;
 
 		ArrayList<String> strList = new ArrayList<String>();
-//		FontMetrics f = Toolkit.getToolkit().getFontLoader().getFontMetrics(dbGraphics.getFont());
-		Font f = dbGraphics.getFont();
-		
+		FontMetrics f = getFontMetrics(getFont());
+
 		// if string is longer than <lengthofOneLine> characters, break it into
 		// several lines
 		while (strlength > lengthOfOneLine) {
@@ -280,17 +260,18 @@ public class World extends SimSEMap implements EventHandler<Event> {
 			int space = temp.lastIndexOf(" ");
 			temp = s.substring(0, space);
 
-			tmpW = s.length();
-//			tmpW = f.computeStringWidth(temp) + 4; // offset of 4 for spacing purposes
-			
+			tmpW = f.stringWidth(temp) + 4; // offset of 4 for spacing purposes
+			if (tmpW > w)
+				w = tmpW;
 
 			strList.add(temp);
 			scount++;
 			s = s.substring(space + 1, strlength - 1);
 			strlength = s.length() + 1;
 		}
-//		tmpW = f.computeStringWidth(s) + 4;
-		tmpW = s.length();
+		tmpW = f.stringWidth(s) + 4;
+		if (tmpW > w)
+			w = tmpW;
 
 		strList.add(s); // append either the whole string or the rest of the
 						// string
@@ -335,8 +316,10 @@ public class World extends SimSEMap implements EventHandler<Event> {
 			for (int i = 3; i > 0 && !rconflict; i--) {
 				for (int j = 0; j < sopUsers.size(); j++) {
 					DisplayedEmployee tmp = sopUsers.get(j);
-					boolean clash = tmp.checkXYLocations(xLoc + i, yLoc + (2 * yOffset))
-							|| tmp.checkXYLocations(xLoc + i, yLoc + yOffset) || tmp.checkXYLocations(xLoc + i, yLoc);
+					boolean clash = tmp.checkXYLocations(xLoc + i, yLoc
+							+ (2 * yOffset))
+							|| tmp.checkXYLocations(xLoc + i, yLoc + yOffset)
+							|| tmp.checkXYLocations(xLoc + i, yLoc);
 					if (clash && tmp.isActivated())
 
 					{
@@ -360,8 +343,10 @@ public class World extends SimSEMap implements EventHandler<Event> {
 				for (int i = 4; i > 0 && !lconflict; i--) {
 					for (int j = 0; j < sopUsers.size(); j++) {
 						DisplayedEmployee tmp = sopUsers.get(j);
-						boolean clash = tmp.checkXYLocations(xLoc - i, yLoc + (2 * yOffset))
-								|| tmp.checkXYLocations(xLoc - i, yLoc + yOffset)
+						boolean clash = tmp.checkXYLocations(xLoc - i, yLoc
+								+ (2 * yOffset))
+								|| tmp.checkXYLocations(xLoc - i, yLoc
+										+ yOffset)
 								|| tmp.checkXYLocations(xLoc - i, yLoc);
 						if (clash && tmp.isActivated())
 
@@ -403,8 +388,10 @@ public class World extends SimSEMap implements EventHandler<Event> {
 				for (int i = 4; i > 0 && !lconflict; i--) {
 					for (int j = 0; j < sopUsers.size(); j++) {
 						DisplayedEmployee tmp = sopUsers.get(j);
-						boolean clash = tmp.checkXYLocations(xLoc - i, yLoc + (2 * yOffset))
-								|| tmp.checkXYLocations(xLoc - i, yLoc + yOffset)
+						boolean clash = tmp.checkXYLocations(xLoc - i, yLoc
+								+ (2 * yOffset))
+								|| tmp.checkXYLocations(xLoc - i, yLoc
+										+ yOffset)
 								|| tmp.checkXYLocations(xLoc - i, yLoc);
 						if (clash && tmp.isActivated())
 
@@ -427,8 +414,10 @@ public class World extends SimSEMap implements EventHandler<Event> {
 				for (int i = 3; i > 0 && !rconflict; i--) {
 					for (int j = 0; j < sopUsers.size(); j++) {
 						DisplayedEmployee tmp = sopUsers.get(j);
-						boolean clash = tmp.checkXYLocations(xLoc + i, yLoc + (2 * yOffset))
-								|| tmp.checkXYLocations(xLoc + i, yLoc + yOffset)
+						boolean clash = tmp.checkXYLocations(xLoc + i, yLoc
+								+ (2 * yOffset))
+								|| tmp.checkXYLocations(xLoc + i, yLoc
+										+ yOffset)
 								|| tmp.checkXYLocations(xLoc + i, yLoc);
 						if (clash && tmp.isActivated())
 
@@ -453,8 +442,10 @@ public class World extends SimSEMap implements EventHandler<Event> {
 				for (int i = 3; i > 0 && !rconflict; i--) {
 					for (int j = 0; j < sopUsers.size(); j++) {
 						DisplayedEmployee tmp = sopUsers.get(j);
-						boolean clash = tmp.checkXYLocations(xLoc + i, yLoc + (2 * yOffset))
-								|| tmp.checkXYLocations(xLoc + i, yLoc + yOffset)
+						boolean clash = tmp.checkXYLocations(xLoc + i, yLoc
+								+ (2 * yOffset))
+								|| tmp.checkXYLocations(xLoc + i, yLoc
+										+ yOffset)
 								|| tmp.checkXYLocations(xLoc + i, yLoc);
 						if (clash && tmp.isActivated())
 
@@ -507,84 +498,106 @@ public class World extends SimSEMap implements EventHandler<Event> {
 
 		x += xspacer;
 		y += yspacer;
-		gc.setFill(new Color(0.9, 0.94, 1, 1));
-		gc.fillRoundRect(x, y, w, h, 4, 4);
-		gc.setStroke(new Color(0, 30, 110, 1));
-		gc.strokeRoundRect(x, y, w, h, 8, 8);
-		gc.drawImage(speech, x + xshift, y + yshift);
-		gc.setStroke(Color.BLACK);
+		g.setColor(new Color(230, 240, 255, 255));
+		g.fillRoundRect(x, y, w, h, 4, 4);
+		g.setColor(new Color(0, 30, 110, 255));
+		g.drawRoundRect(x, y, w, h, 8, 8);
+		g.drawImage(speech, x + xshift, y + yshift, this);
+		g.setColor(Color.BLACK);
 
 		for (int i = 0; i < scount; i++) {
 			// space similar to a carriage return add 1 for first line
 			int yl = 12 * (i + 1);
-			gc.strokeText(strings[i], x + 2, y + yl);
+			g.drawString(strings[i], x + 2, y + yl);
 		}
 	}
-	
-	public void popupMenuActions(MenuItem source) {
-		MenuItem item = (MenuItem) source;
-		logic.getMenuInputManager().menuItemSelected(selectedUser.getEmployee(), item.getText(), mainGUIFrame);
+
+	public void keyPressed(KeyEvent e) {
+	}
+
+	public void keyReleased(KeyEvent e) {
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
+
+	public void mousePressed(MouseEvent me) {
+		// -5 is the offset for the border around the GUI
+		clickedX = (me.getX() - xspacer - 5) / MapData.TILE_SIZE;
+		clickedY = (me.getY() - yspacer - clickedHeightModifier)
+				/ MapData.TILE_SIZE;
+
+		if (me.getButton() == MouseEvent.BUTTON1) // left button clicked
+		{
+			for (int i = 0; i < sopUsers.size(); i++) {
+				DisplayedEmployee tmp = sopUsers.get(i);
+				if (tmp.checkXYLocations(clickedX, clickedY)
+						&& tmp.isActivated()) {
+					selectedUser = tmp;
+					i = sopUsers.size();
+					mainGUIFrame.getTabPanel().setGUIChanged();
+					mainGUIFrame.getTabPanel().setObjectInFocus(
+							tmp.getEmployee());
+					mainGUIFrame.getAttributePanel().setGUIChanged();
+
+					mainGUIFrame.getAttributePanel()
+							.setObjectInFocus(tmp.getEmployee(),
+									new ImageIcon(tmp.getUserIcon()));
+				}
+			}
+		}
+
+		else if (state.getClock().isStopped() == false) // clock not stopped,
+														// and not left button
+														// click
+		{
+			boolean found = false;
+			for (int i = 0; i < sopUsers.size(); i++) {
+				DisplayedEmployee tmp = sopUsers.get(i);
+				if (tmp.checkXYLocations(clickedX, clickedY)
+						&& tmp.isActivated()) {
+					selectedUser = tmp;
+					popupListener.setEnabled(true);
+					found = true;
+					i = sopUsers.size();
+
+					createPopupMenu();
+				}
+			}
+
+			// did not click on a User object, disable right click
+			if (!found)
+				popupListener.setEnabled(false);
+
+			repaint();
+		}
+	}
+
+	public void popupMenuActions(JMenuItem source) {
+		JMenuItem item = (JMenuItem) source;
+		logic.getMenuInputManager().menuItemSelected(
+				selectedUser.getEmployee(), item.getText(), mainGUIFrame);
 		update();
 	}
 
-	public void update() {
-		GraphicsContext gc = dbGraphics;
-		if (gc != null) {
-			update(gc);
-		} else {
-			paint();
-		}
-		if (state.getClock().isStopped()) {
-			popupListener.setEnabled(false);
+	public void actionPerformed(ActionEvent e) // dealing with actions generated
+												// by popup menus
+	{
+		Object source = e.getSource();
+		if (source instanceof JMenuItem) {
+			popupMenuActions((JMenuItem) source);
 		}
 	}
 
-	@Override
-	public void handle(Event event) {
-		if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-			MouseEvent mEvent = (MouseEvent) event;
-			// -5 is the offset for the border around the GUI
-			clickedX = (int) ((mEvent.getX() - xspacer - 5) / MapData.TILE_SIZE);
-			clickedY = (int) ((mEvent.getY() - yspacer - clickedHeightModifier) / MapData.TILE_SIZE);
-
-			if (mEvent.isPrimaryButtonDown()) // left button clicked
-			{
-				for (int i = 0; i < sopUsers.size(); i++) {
-					DisplayedEmployee tmp = sopUsers.get(i);
-					if (tmp.checkXYLocations(clickedX, clickedY) && tmp.isActivated()) {
-						selectedUser = tmp;
-						i = sopUsers.size();
-						mainGUIFrame.getTabPanel().setGUIChanged();
-						mainGUIFrame.getTabPanel().setObjectInFocus(tmp.getEmployee());
-						mainGUIFrame.getAttributePanel().setGUIChanged();
-						mainGUIFrame.getAttributePanel().setObjectInFocus(tmp.getEmployee(), tmp.getUserIcon());
-					}
-				}
-			}
-
-			else if (state.getClock().isStopped() == false) // clock not stopped,
-															// and not left button
-															// click
-			{
-				boolean found = false;
-				for (int i = 0; i < sopUsers.size(); i++) {
-					DisplayedEmployee tmp = sopUsers.get(i);
-					if (tmp.checkXYLocations(clickedX, clickedY) && tmp.isActivated()) {
-						selectedUser = tmp;
-						popupListener.setEnabled(true);
-						found = true;
-						i = sopUsers.size();
-
-						createPopupMenu();
-					}
-				}
-
-				// did not click on a User object, disable right click
-				if (!found)
-					popupListener.setEnabled(false);
-
-				paint();
-			}
+	public void update() {
+		Graphics g = getGraphics();
+		if (g != null) {
+			update(g);
+		} else {
+			repaint();
+		}
+		if (state.getClock().isStopped()) {
+			popupListener.setEnabled(false);
 		}
 	}
 }
