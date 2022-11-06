@@ -6,10 +6,20 @@ import java.util.TimerTask;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import simse.adts.objects.*;
-import simse.logic.*;
-import simse.state.*;
-import simse.gui.*;
+import simse.adts.objects.ACustomer;
+import simse.adts.objects.AutomatedTestingTool;
+import simse.adts.objects.Code;
+import simse.adts.objects.DesignDocument;
+import simse.adts.objects.DesignEnvironment;
+import simse.adts.objects.IDE;
+import simse.adts.objects.RequirementsCaptureTool;
+import simse.adts.objects.RequirementsDocument;
+import simse.adts.objects.SEProject;
+import simse.adts.objects.SoftwareEngineer;
+import simse.adts.objects.SystemTestPlan;
+import simse.gui.SimSEGUI;
+import simse.logic.Logic;
+import simse.state.State;
 
 public class Engine extends TimerTask implements EventHandler<ActionEvent> {
 	private Logic logic;

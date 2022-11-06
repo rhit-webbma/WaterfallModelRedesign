@@ -2,7 +2,7 @@
 package simse.logic;
 
 import javafx.stage.Stage;
-import simse.state.*;
+import simse.state.State;
 
 public class Logic {
 	private State state;

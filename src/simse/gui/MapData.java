@@ -4,7 +4,6 @@
 package simse.gui;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import simse.gui.util.JavaFXHelpers;
 
 public class MapData {
