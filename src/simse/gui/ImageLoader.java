@@ -2,23 +2,15 @@
 // ImageLoader is a utility class that fetches images and returns them given a URL
 package simse.gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.net.*;
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class ImageLoader {
 
-	public static ImageView getImageFromURL(String url) {
+	public static Image getImageFromURL(String url) {
 		URL imgURL = ImageLoader.class.getResource(url);
-        ImageView img = null;
-        try {
-            img = new ImageView(new Image(new FileInputStream(url)));
-        } catch (FileNotFoundException e) {
-            System.out.println("Image not found at " + url);
-        }
-        return img;
+		Image img = Toolkit.getDefaultToolkit().getImage(imgURL);
+		return (img);
 	}
 }

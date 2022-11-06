@@ -3,42 +3,32 @@ package simse.gui;
 
 import simse.state.*;
 
-
+import java.awt.event.*;
+import java.awt.*;
 import java.awt.Dimension;
-import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
-import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TitledPane;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
+import javax.swing.*;
+import javax.swing.text.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+import javax.swing.border.*;
 import java.util.*;
 import java.text.*;
 import java.awt.Color;
 
-
-public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<MouseEvent> {
+public class EmployeesAtAGlanceFrame extends JFrame implements MouseListener,
+		ActionListener {
 
 	private State state;
 
-	private ContextMenu popup;
+	private JPopupMenu popup;
 	private PopupListener popupListener;
-	private TableView softwareengineerTable;
+	private JTable softwareengineerTable;
 	private SoftwareEngineerTableModel softwareengineerModel;
-	private TitledPane softwareengineerTitlePane;
-	private Pane mainPane;
+	private JPanel softwareengineerTitlePane;
+	private JPanel mainPane;
 
 	private int realColumnIndex; // index of selected column
-	private TableView selectedTable; // selected table
+	private JTable selectedTable; // selected table
 
 	public EmployeesAtAGlanceFrame(State s, SimSEGUI gui) {
 		state = s;
@@ -49,253 +39,204 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 		int numCols;
 
 		softwareengineerModel = new SoftwareEngineerTableModel(s);
-		softwareengineerTable = softwareengineerModel.createTable();
-//		softwareengineerTable.setColumnSelectionAllowed(false);
-//		softwareengineerTable.setRowSelectionAllowed(false);
-		softwareengineerTable.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-//		softwareengineerTable.getTableHeader().setReorderingAllowed(false);
+		softwareengineerTable = new JTable(softwareengineerModel);
+		softwareengineerTable.setColumnSelectionAllowed(false);
+		softwareengineerTable.setRowSelectionAllowed(false);
+		softwareengineerTable.addMouseListener(this);
+		softwareengineerTable.getTableHeader().setReorderingAllowed(false);
 		// make it so that the user can make each column disappear if they want:
-//		numCols = softwareengineerModel.getColumnCount();
-//		for (int i = 0; i < numCols; i++) {
-//			softwareengineerModel.getColumn(i).setMinWidth(0);
-//		}
+		numCols = softwareengineerTable.getColumnCount();
+		for (int i = 0; i < numCols; i++) {
+			softwareengineerTable.getColumnModel().getColumn(i).setMinWidth(0);
+		}
 
 		// right click menu:
-		popup = new ContextMenu();
+		popup = new JPopupMenu();
 		popupListener = new PopupListener(popup, gui);
 
 		// Create panes:
-		Pane softwareengineerPane = new Pane(
+		JScrollPane softwareengineerPane = new JScrollPane(
 				softwareengineerTable);
-		
+
 		// Table headers:
-		softwareengineerTitlePane = new TitledPane("SoftwareEngineers:", softwareengineerPane);
-		
-        
+		softwareengineerTitlePane = new JPanel();
+		softwareengineerTitlePane.add(new JLabel("SoftwareEngineers:"));
 
 		// Create main pane:
-		mainPane = new VBox(softwareengineerTitlePane);
+		mainPane = new JPanel();
+		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
 
-		softwareengineerTable.prefWidthProperty().bind(mainPane.widthProperty());
-		
 		// Add panes to main pane:
-//		mainPane.add(softwareengineerTitlePane);
-//		mainPane.add(softwareengineerPane);
+		mainPane.add(softwareengineerTitlePane);
+		mainPane.add(softwareengineerPane);
 
 		// Set main window frame properties:
-		setScene(new Scene(mainPane, 800, 500));
-//		setBackground(Color.white);
-//		setContentPane(mainPane);
-//		setVisible(false);
-//		pack();
-//		validate();
+		setBackground(Color.white);
+		setContentPane(mainPane);
+		setVisible(false);
+		pack();
+		validate();
 
-//		resetHeight();
-
+		resetHeight();
 	}
 
-//	public void mousePressed(MouseEvent me) {
-//	}
-//
-//	public void mouseClicked(MouseEvent me) {
-//	}
-//
-//	public void mouseEntered(MouseEvent me) {
-//	}
-//
-//	public void mouseExited(MouseEvent me) {
-//	}
-//
-//	public void mouseReleased(MouseEvent me) {
-//		Point p = me.getPoint();
-//
-//		if (me.isPopupTrigger()) {
-//			if (me.getSource().equals(softwareengineerTable)) // correct
-//																	// table
-//			{
-//				createPopupMenu(softwareengineerTable, p);
-//			}
-//		}
-//	}
-//
-//	public void actionPerformed(ActionEvent e) // dealing with actions generated
-//												// by popup menus
-//	{
-//		Object source = e.getSource();
-//		if (source instanceof MenuItem) {
-//			String itemText = ((MenuItem) source).getText();
-//			if (itemText.equals("Hide")) {
-//				if (selectedTable != null) {
-//					selectedTable.getColumnModel().getColumn(realColumnIndex)
-//							.setMaxWidth(0);
-//				}
-//			} else // an item on the "Unhide" menu
-//			{
-//				if (selectedTable != null) {
-//					TableModel model = selectedTable.getModel();
-//					TableColumn column = null;
-//					if (model instanceof SoftwareEngineerTableModel) {
-//						column = selectedTable.getColumnModel().getColumn(
-//								((SoftwareEngineerTableModel) selectedTable
-//										.getModel()).getColumnIndex(itemText));
-//					}
-//					if (column != null) {
-//						column.setMinWidth(0);
-//						column.setMaxWidth(2147483647);
-//						column.setPreferredWidth(selectedTable.getWidth()
-//								/ (selectedTable.getColumnCount()
-//										- getAllHiddenColumnIndices(
-//												selectedTable).size() + 1));
-//					}
-//				}
-//			}
-//		}
-//	}
-	
-	@Override
-	public void handle(MouseEvent me) {
-//		Object source = me.getSource();
-//		if (source instanceof MenuItem) {
-//			String itemText = ((MenuItem) source).getText();
-//			if (itemText.equals("Hide")) {
-//				if (selectedTable != null) {
-//					selectedTable.getColumnModel().getColumn(realColumnIndex)
-//							.setMaxWidth(0);
-//				}
-//			} else // an item on the "Unhide" menu
-//			{
-//				if (selectedTable != null) {
-//					TableModel model = selectedTable.getModel();
-//					TableColumn column = null;
-//					if (model instanceof SoftwareEngineerTableModel) {
-//						column = selectedTable.getColumnModel().getColumn(
-//								((SoftwareEngineerTableModel) selectedTable
-//										.getModel()).getColumnIndex(itemText));
-//					}
-//					if (column != null) {
-//						column.setMinWidth(0);
-//						column.setMaxWidth(2147483647);
-//						column.setPreferredWidth(selectedTable.getWidth()
-//								/ (selectedTable.getColumnCount()
-//										- getAllHiddenColumnIndices(
-//												selectedTable).size() + 1));
-//					}
-//				}
-//			}
-//		} else {
-//			Point2D p = new Point2D(me.getScreenX(), me.getScreenY());
-//
-//			if (me.isPopupTrigger()) {
-//				if (me.getSource().equals(softwareengineerTable)) // correct
-//																		// table
-//				{
-//					createPopupMenu(softwareengineerTable, p);
-//				}
-//			}
-//		}
+	public void mousePressed(MouseEvent me) {
 	}
 
-	public void createPopupMenu(TableView table, Point2D p) {
-//		popup.getItems().removeAll();
-//
-//		int colIndex = table.columnAtPoint(p);
-//		realColumnIndex = table.convertColumnIndexToModel(colIndex);
-//
-//		Vector<Integer> hiddenCols = getAllHiddenColumnIndices(table);
-//
-//		if ((realColumnIndex >= 0) || (hiddenCols.size() > 0)) // user clicked
-//																// on a column
-//																// and/or there
-//																// is at least
-//																// one hidden
-//																// column
-//		{
-//			if (realColumnIndex >= 0) {
-//				MenuItem hideItem = new MenuItem("Hide");
-//				hideItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-//				popup.getItems().add(hideItem);
-//			}
-//
-//			if (hiddenCols.size() > 0) // there is at least one hidden column
-//			{
-//				Menu unhideMenu = new Menu("Unhide");
-//				for (int i = 0; i < hiddenCols.size(); i++) {
-//					int index = hiddenCols.elementAt(i).intValue();
-//					MenuItem tempItem = new MenuItem(
-//							softwareengineerModel.getColumnName(index));
-//					tempItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-//					unhideMenu.getItems().add(tempItem);
-//				}
-//				if (popup.getItems().size() > 0) // already has the hide
-//														// menu item
-//				{
-//					popup.getItems().add(new SeparatorMenuItem());
-//				}
-//				popup.getItems().add(unhideMenu);
-//			}
-//
-//			addEventHandler(MouseEvent.MOUSE_CLICKED, popupListener);
-//			popup.show(table, (int) p.getX(), (int) p.getY());
-//			selectedTable = table;
-////			repaint();
-//		}
+	public void mouseClicked(MouseEvent me) {
+	}
+
+	public void mouseEntered(MouseEvent me) {
+	}
+
+	public void mouseExited(MouseEvent me) {
+	}
+
+	public void mouseReleased(MouseEvent me) {
+		Point p = me.getPoint();
+
+		if (me.isPopupTrigger()) {
+			if (me.getComponent().equals(softwareengineerTable)) // correct
+																	// table
+			{
+				createPopupMenu(softwareengineerTable, p);
+			}
+		}
+	}
+
+	public void actionPerformed(ActionEvent e) // dealing with actions generated
+												// by popup menus
+	{
+		Object source = e.getSource();
+		if (source instanceof JMenuItem) {
+			String itemText = ((JMenuItem) source).getText();
+			if (itemText.equals("Hide")) {
+				if (selectedTable != null) {
+					selectedTable.getColumnModel().getColumn(realColumnIndex)
+							.setMaxWidth(0);
+				}
+			} else // an item on the "Unhide" menu
+			{
+				if (selectedTable != null) {
+					TableModel model = selectedTable.getModel();
+					TableColumn column = null;
+					if (model instanceof SoftwareEngineerTableModel) {
+						column = selectedTable.getColumnModel().getColumn(
+								((SoftwareEngineerTableModel) selectedTable
+										.getModel()).getColumnIndex(itemText));
+					}
+					if (column != null) {
+						column.setMinWidth(0);
+						column.setMaxWidth(2147483647);
+						column.setPreferredWidth(selectedTable.getWidth()
+								/ (selectedTable.getColumnCount()
+										- getAllHiddenColumnIndices(
+												selectedTable).size() + 1));
+					}
+				}
+			}
+		}
+	}
+
+	public void createPopupMenu(JTable table, Point p) {
+		popup.removeAll();
+
+		int colIndex = table.columnAtPoint(p);
+		realColumnIndex = table.convertColumnIndexToModel(colIndex);
+
+		Vector<Integer> hiddenCols = getAllHiddenColumnIndices(table);
+
+		if ((realColumnIndex >= 0) || (hiddenCols.size() > 0)) // user clicked
+																// on a column
+																// and/or there
+																// is at least
+																// one hidden
+																// column
+		{
+			if (realColumnIndex >= 0) {
+				JMenuItem hideItem = new JMenuItem("Hide");
+				hideItem.addActionListener(this);
+				popup.add(hideItem);
+			}
+
+			if (hiddenCols.size() > 0) // there is at least one hidden column
+			{
+				JMenu unhideMenu = new JMenu("Unhide");
+				for (int i = 0; i < hiddenCols.size(); i++) {
+					int index = hiddenCols.elementAt(i).intValue();
+					JMenuItem tempItem = new JMenuItem(
+							table.getColumnName(index));
+					tempItem.addActionListener(this);
+					unhideMenu.add(tempItem);
+				}
+				if (popup.getComponents().length > 0) // already has the hide
+														// menu item
+				{
+					popup.addSeparator();
+				}
+				popup.add(unhideMenu);
+			}
+
+			addMouseListener(popupListener);
+			popup.show(table, (int) p.getX(), (int) p.getY());
+			selectedTable = table;
+			repaint();
+		}
 	}
 
 	public void update() {
-//		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
-//		rightAlignRenderer.setHorizontalAlignment(Label.RIGHT);
-//		softwareengineerModel.update();
-//		if (!state.getClock().isStopped()) { // game not over
-//			softwareengineerTable.getColumnModel()
-//					.getColumn(softwareengineerModel.getColumnIndex("Energy"))
-//					.setCellRenderer(rightAlignRenderer);
-//			softwareengineerTable.getColumnModel()
-//					.getColumn(softwareengineerModel.getColumnIndex("Mood"))
-//					.setCellRenderer(rightAlignRenderer);
-//			softwareengineerTable.getColumnModel()
-//					.getColumn(softwareengineerModel.getColumnIndex("PayRate"))
-//					.setCellRenderer(rightAlignRenderer);
-//		} else { // game over
-//			softwareengineerTable.getColumnModel()
-//					.getColumn(softwareengineerModel.getColumnIndex("Energy"))
-//					.setCellRenderer(rightAlignRenderer);
-//			softwareengineerTable.getColumnModel()
-//					.getColumn(softwareengineerModel.getColumnIndex("Mood"))
-//					.setCellRenderer(rightAlignRenderer);
-//			softwareengineerTable.getColumnModel()
-//					.getColumn(softwareengineerModel.getColumnIndex("PayRate"))
-//					.setCellRenderer(rightAlignRenderer);
-//		}
-//		softwareengineerTable.update(softwareengineerTable.getGraphics());
-//		resetHeight();
+		DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
+		rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
 		softwareengineerModel.update();
-		softwareengineerTable = softwareengineerModel.createTable();
+		if (!state.getClock().isStopped()) { // game not over
+			softwareengineerTable.getColumnModel()
+					.getColumn(softwareengineerModel.getColumnIndex("Energy"))
+					.setCellRenderer(rightAlignRenderer);
+			softwareengineerTable.getColumnModel()
+					.getColumn(softwareengineerModel.getColumnIndex("Mood"))
+					.setCellRenderer(rightAlignRenderer);
+			softwareengineerTable.getColumnModel()
+					.getColumn(softwareengineerModel.getColumnIndex("PayRate"))
+					.setCellRenderer(rightAlignRenderer);
+		} else { // game over
+			softwareengineerTable.getColumnModel()
+					.getColumn(softwareengineerModel.getColumnIndex("Energy"))
+					.setCellRenderer(rightAlignRenderer);
+			softwareengineerTable.getColumnModel()
+					.getColumn(softwareengineerModel.getColumnIndex("Mood"))
+					.setCellRenderer(rightAlignRenderer);
+			softwareengineerTable.getColumnModel()
+					.getColumn(softwareengineerModel.getColumnIndex("PayRate"))
+					.setCellRenderer(rightAlignRenderer);
+		}
+		softwareengineerTable.update(softwareengineerTable.getGraphics());
+		resetHeight();
 	}
 
-//	private void resetHeight() {
-//		// Set appropriate height:
-//		double height = 0;
-//		height += ((softwareengineerTable.getRowHeight() + (softwareengineerTable
-//				.getRowMargin() * 2)) * (softwareengineerTable.getRowCount() + 1));
-//		height += softwareengineerTitlePane.getSize().getHeight();
-//
-//		mainPane.setPreferredSize(new Dimension((int) (mainPane.getSize()
-//				.getWidth()), (int) height));
-//		pack();
-//		validate();
-//		repaint();
-//	}
+	private void resetHeight() {
+		// Set appropriate height:
+		double height = 0;
+		height += ((softwareengineerTable.getRowHeight() + (softwareengineerTable
+				.getRowMargin() * 2)) * (softwareengineerTable.getRowCount() + 1));
+		height += softwareengineerTitlePane.getSize().getHeight();
 
-	private Vector<Integer> getAllHiddenColumnIndices(TableView table) {
+		mainPane.setPreferredSize(new Dimension((int) (mainPane.getSize()
+				.getWidth()), (int) height));
+		pack();
+		validate();
+		repaint();
+	}
+
+	private Vector<Integer> getAllHiddenColumnIndices(JTable table) {
 		Vector<Integer> hiddenCols = new Vector<Integer>();
-//		int numCols = table.getColumnModel().getColumnCount();
-//		for (int i = 0; i < numCols; i++) {
-//			TableColumn col = table.getColumnModel().getColumn(i);
-//			if (col.getWidth() == 0) // hidden
-//			{
-//				hiddenCols.add(new Integer(i));
-//			}
-//		}
+		int numCols = table.getColumnModel().getColumnCount();
+		for (int i = 0; i < numCols; i++) {
+			TableColumn col = table.getColumnModel().getColumn(i);
+			if (col.getWidth() == 0) // hidden
+			{
+				hiddenCols.add(new Integer(i));
+			}
+		}
 		return hiddenCols;
 	}
 }

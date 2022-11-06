@@ -7,26 +7,14 @@ import simse.state.*;
 import simse.adts.objects.*;
 import simse.adts.actions.*;
 import java.util.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 
-import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
-public class EmployeeParticipantSelectionDialog extends Dialog implements EventHandler<MouseEvent> {
+public class EmployeeParticipantSelectionDialog extends JDialog implements
+		ActionListener {
 	private String partName;
 	private Vector<SSObject> participants;
 	private simse.adts.actions.Action action;
@@ -34,16 +22,17 @@ public class EmployeeParticipantSelectionDialog extends Dialog implements EventH
 	private Employee selectedEmp;
 	private int minNumParts;
 	private int maxNumParts;
-	private Vector<CheckBox> checkBoxes;
-	private Button checkAllButton;
-	private Button clearAllButton;
-	private Button okButton;
-	private Button cancelButton;
+	private Vector<JCheckBox> checkBoxes;
+	private JButton checkAllButton;
+	private JButton clearAllButton;
+	private JButton okButton;
+	private JButton cancelButton;
 	private boolean actionCancelled;
 
-	public EmployeeParticipantSelectionDialog(Stage owner, String pName,
+	public EmployeeParticipantSelectionDialog(JFrame owner, String pName,
 			Vector<SSObject> parts, simse.adts.actions.Action act, State s,
 			Employee emp) {
+		super(owner, true);
 		partName = pName;
 		participants = parts;
 		action = act;
@@ -53,10 +42,10 @@ public class EmployeeParticipantSelectionDialog extends Dialog implements EventH
 		setMinAndMax();
 		if (((selectedEmp != null) && (maxNumParts > 0) && (participants.size() > 0))
 				|| ((selectedEmp == null) && (participants.size() > minNumParts))) {
-			checkBoxes = new Vector<CheckBox>();
+			checkBoxes = new Vector<JCheckBox>();
 			setTitle("Participant Selection");
-			VBox mainPane = new VBox();
-			Pane topPane = new Pane();
+			Box mainPane = Box.createVerticalBox();
+			JPanel topPane = new JPanel();
 			String title = "Choose ";
 			if (selectedEmp != null) // selected emp already added in this
 										// participant role
@@ -74,8 +63,8 @@ public class EmployeeParticipantSelectionDialog extends Dialog implements EventH
 				}
 			}
 			title = title.concat("):");
-			topPane.getChildren().add(new Label(title));
-			GridPane middlePane = new GridPane();
+			topPane.add(new JLabel(title));
+			JPanel middlePane = new JPanel(new GridLayout(0, 1));
 			for (int i = 0; i < participants.size(); i++) {
 				SSObject tempObj = participants.elementAt(i);
 				String label = new String();
@@ -110,47 +99,55 @@ public class EmployeeParticipantSelectionDialog extends Dialog implements EventH
 				} else if (tempObj instanceof ACustomer) {
 					label = ("ACustomer (" + ((ACustomer) tempObj).getName() + ")");
 				}
-				BorderPane tempPane = new BorderPane();
-				CheckBox tempCheckBox = new CheckBox(label);
-				tempPane.setLeft(tempCheckBox);
+				JPanel tempPane = new JPanel(new BorderLayout());
+				JCheckBox tempCheckBox = new JCheckBox(label);
+				tempPane.add(tempCheckBox, BorderLayout.WEST);
 				checkBoxes.add(tempCheckBox);
-				ImageView icon = ImageLoader.getImageFromURL(TabPanel.getImage(tempObj));
-				tempPane.setRight(new Label("", icon));
-				middlePane.getChildren().add(tempPane);
+				ImageIcon icon = new ImageIcon(ImageLoader.getImageFromURL(
+						TabPanel.getImage(tempObj)).getScaledInstance(30, 30,
+						Image.SCALE_AREA_AVERAGING));
+				tempPane.add(new JLabel(icon), BorderLayout.EAST);
+				middlePane.add(tempPane);
 			}
-			Pane checkPane = new Pane();
-			checkAllButton = new Button("Check All");
-			checkAllButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-			checkPane.getChildren().add(checkAllButton);
-			clearAllButton = new Button("Clear All");
-			clearAllButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-			checkPane.getChildren().add(clearAllButton);
-			Pane bottomPane = new Pane();
-			okButton = new Button("OK");
-			okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-			bottomPane.getChildren().add(okButton);
-			cancelButton = new Button("Cancel");
-			cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-			bottomPane.getChildren().add(cancelButton);
-			mainPane.getChildren().addAll(topPane, middlePane);
-			Separator separator1 = new Separator();
-			separator1.setMaxSize(900, 1);
-			mainPane.getChildren().addAll(separator1, checkPane);
-			Separator separator2 = new Separator();
-			separator2.setMaxSize(900, 1);
-			mainPane.getChildren().addAll(separator2, bottomPane);
-			this.setOnCloseRequest(new ExitListener());
-//			setContentPane(mainPane);
-//			validate();
-//			pack();
-//			repaint();
-//			toFront();
-			Point2D ownerLoc = new Point2D(owner.getX(), owner.getY());
-			Point2D thisLoc = new Point2D((ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
-					(ownerLoc.getY() + (owner.getHeight() / 2) - (this.getHeight() / 2)));
-			this.setX(thisLoc.getX());
-			this.setY(thisLoc.getY());
-			show();
+			JPanel checkPane = new JPanel();
+			checkAllButton = new JButton("Check All");
+			checkAllButton.addActionListener(this);
+			checkPane.add(checkAllButton);
+			clearAllButton = new JButton("Clear All");
+			clearAllButton.addActionListener(this);
+			checkPane.add(clearAllButton);
+			JPanel bottomPane = new JPanel();
+			okButton = new JButton("OK");
+			okButton.addActionListener(this);
+			bottomPane.add(okButton);
+			cancelButton = new JButton("Cancel");
+			cancelButton.addActionListener(this);
+			bottomPane.add(cancelButton);
+			mainPane.add(topPane);
+			mainPane.add(middlePane);
+			JSeparator separator1 = new JSeparator();
+			separator1.setMaximumSize(new Dimension(900, 1));
+			mainPane.add(separator1);
+			mainPane.add(checkPane);
+			JSeparator separator2 = new JSeparator();
+			separator2.setMaximumSize(new Dimension(900, 1));
+			mainPane.add(separator2);
+			mainPane.add(bottomPane);
+			addWindowListener(new ExitListener());
+			setContentPane(mainPane);
+			validate();
+			pack();
+			repaint();
+			toFront();
+			Point ownerLoc = owner.getLocationOnScreen();
+			Point thisLoc = new Point();
+			thisLoc.setLocation(
+					(ownerLoc.getX() + (owner.getWidth() / 2) - (this
+							.getWidth() / 2)),
+					(ownerLoc.getY() + (owner.getHeight() / 2) - (this
+							.getHeight() / 2)));
+			setLocation(thisLoc);
+			setVisible(true);
 		} else if ((selectedEmp == null)
 				&& (participants.size() == minNumParts)) {
 			for (int i = 0; i < participants.size(); i++) {
@@ -317,31 +314,34 @@ public class EmployeeParticipantSelectionDialog extends Dialog implements EventH
 		}
 	}
 
-	@Override
-	public void handle(MouseEvent evt) {
+	public void actionPerformed(ActionEvent evt) {
 		Object source = evt.getSource();
 		if (source == cancelButton) {
 			actionCancelled = true;
-			close();
+			setVisible(false);
+			dispose();
 		} else if (source == okButton) {
-			Vector<CheckBox> checkedBoxes = new Vector<CheckBox>();
+			Vector<JCheckBox> checkedBoxes = new Vector<JCheckBox>();
 			for (int i = 0; i < checkBoxes.size(); i++) {
-				CheckBox tempCBox = checkBoxes.elementAt(i);
+				JCheckBox tempCBox = checkBoxes.elementAt(i);
 				if (tempCBox.isSelected()) {
 					checkedBoxes.add(tempCBox);
 				}
 			}
 			if (checkedBoxes.size() < minNumParts) {
-				Alert alert = new Alert(AlertType.WARNING, "You must choose at least one action");
-				alert.setTitle("Invalid Input");
-				alert.show();
+				JOptionPane
+						.showMessageDialog(null, ("You must choose at least "
+								+ minNumParts + " participants"),
+								"Invalid Input", JOptionPane.ERROR_MESSAGE);
 			} else if (checkedBoxes.size() > maxNumParts) {
-				Alert alert = new Alert(AlertType.WARNING, "You may only choose at most " + maxNumParts + " participants");
-				alert.setTitle("Invalid Input");
-				alert.show();
+				JOptionPane
+						.showMessageDialog(
+								null,
+								("You may only choose at most " + maxNumParts + " participants"),
+								"Invalid Input", JOptionPane.ERROR_MESSAGE);
 			} else {
 				for (int i = 0; i < checkedBoxes.size(); i++) {
-					CheckBox checkedBox = checkedBoxes.elementAt(i);
+					JCheckBox checkedBox = checkedBoxes.elementAt(i);
 					String cBoxText = checkedBox.getText();
 					String objTypeName = cBoxText.substring(0,
 							(cBoxText.indexOf('(') - 1));
@@ -351,7 +351,8 @@ public class EmployeeParticipantSelectionDialog extends Dialog implements EventH
 
 					addParticipant(objTypeName, keyValStr);
 				}
-				close();
+				setVisible(false);
+				dispose();
 			}
 		} else if (source == checkAllButton) {
 			for (int i = 0; i < checkBoxes.size(); i++) {
@@ -995,11 +996,9 @@ public class EmployeeParticipantSelectionDialog extends Dialog implements EventH
 		return actionCancelled;
 	}
 
-	public class ExitListener implements EventHandler<WindowEvent> {
-		@Override
-		public void handle(WindowEvent evt) {
+	public class ExitListener extends WindowAdapter {
+		public void windowClosing(WindowEvent event) {
 			actionCancelled = true;
 		}
 	}
-
 }
