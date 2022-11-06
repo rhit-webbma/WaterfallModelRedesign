@@ -437,19 +437,19 @@ public class SimSEMap extends JPanel implements MouseListener, ActionListener {
 		if (e instanceof SoftwareEngineer) {
 			SoftwareEngineer p = (SoftwareEngineer) e;
 			if (p.getName().equals("Mimi")) {
-				return "/simse/gui/icons/bev.gif";
+				return "src/simse/gui/icons/bev.gif";
 			} else if (p.getName().equals("Roger")) {
-				return "/simse/gui/icons/ping.gif";
+				return "src/simse/gui/icons/ping.gif";
 			} else if (p.getName().equals("Calvin")) {
-				return "/simse/gui/icons/calvin.gif";
+				return "src/simse/gui/icons/calvin.gif";
 			} else if (p.getName().equals("Anita")) {
-				return "/simse/gui/icons/anita2.png";
+				return "src/simse/gui/icons/anita2.png";
 			} else if (p.getName().equals("Emily")) {
-				return "/simse/gui/icons/emily.gif";
+				return "src/simse/gui/icons/emily.gif";
 			} else if (p.getName().equals("Pedro")) {
-				return "/simse/gui/icons/chris2.gif";
+				return "src/simse/gui/icons/chris2.gif";
 			} else if (p.getName().equals("Andre")) {
-				return "/simse/gui/icons/andre2.png";
+				return "src/simse/gui/icons/andre2.png";
 			}
 		}
 		return null;
