@@ -188,7 +188,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		addButton(projectButton, 0, 7, 1, 1, buttonGPane);
 		addButton(toolButton, 0, 8, 1, 1, buttonGPane);
 		
-		gridPane.add(buttonGPane, 1, 0);
+//		gridPane.add(buttonGPane, 1, 0);
 //		buttonGPane.setGridLinesVisible(true);
 		
 //		gridPane.getChildren().add(buttonGPane);
