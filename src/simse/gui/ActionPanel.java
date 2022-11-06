@@ -110,7 +110,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 				String item = menuItems.elementAt(i);
 				MenuItem tempItem = new MenuItem(item);
 				tempItem.setOnAction(menuItemEvent);
-				popup.getItems().add(tempItem);
+				popup.getItems().addAll(tempItem);
 			}
 			if (menuItems.size() >= 1) {
 				popup.show(node, x, y);

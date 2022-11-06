@@ -4,10 +4,6 @@ package simse.explanatorytool;
 import simse.adts.actions.*;
 import simse.adts.objects.*;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -23,7 +19,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-import java.awt.Dimension;
 import java.util.Vector;
 
 public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
