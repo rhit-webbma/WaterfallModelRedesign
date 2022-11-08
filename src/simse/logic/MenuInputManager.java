@@ -63,19 +63,18 @@ public class MenuInputManager {
 		ruleExec = r;
 	}
 
-	public void menuItemSelected(Employee e, String s, Stage parent) {
+	public void menuItemSelected(Employee selectedEmp, String itemText, Stage parent) {
 		boolean hasStr = false;
-		Vector<String> menu = e.getMenu();
+		Vector<String> menu = selectedEmp.getMenu();
 		for (int i = 0; i < menu.size(); i++) {
 			String menuItem = menu.elementAt(i);
-			if (menuItem.equals(s)) {
+			if (menuItem.equals(itemText)) {
 				hasStr = true;
 				break;
 			}
 		}
-		if (!hasStr) {
-		} else {
-			if (s.equals("Everyone stop what you're doing")) {
+		if (hasStr) {
+			if (itemText.equals("Everyone stop what you're doing")) {
 				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 				alert.setTitle("Confirm Activities Ending");
 				alert.setContentText("Are you sure you want everyone to stop what they're doing?");
@@ -138,7 +137,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b0, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop reviewing the requirements document:
 							Vector<ReviewRequirementsAction> allActions1 = state
@@ -190,7 +189,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b1, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop correcting the requirements doc:
 							Vector<CorrectRequirementsAction> allActions2 = state
@@ -242,7 +241,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b2, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop creating the design:
 							Vector<CreateDesignAction> allActions3 = state
@@ -293,7 +292,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b3, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop reviewing the design document:
 							Vector<ReviewDesignAction> allActions4 = state
@@ -344,7 +343,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b4, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop correcting the design document:
 							Vector<CorrectDesignAction> allActions5 = state
@@ -395,7 +394,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b5, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop creating code:
 							Vector<CreateCodeAction> allActions6 = state
@@ -445,7 +444,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b6, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop inspecting code:
 							Vector<InspectCodeAction> allActions7 = state
@@ -495,7 +494,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b7, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop correcting code:
 							Vector<CorrectCodeAction> allActions8 = state
@@ -545,7 +544,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b8, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop integrating code:
 							Vector<IntegrateCodeAction> allActions9 = state
@@ -596,7 +595,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b9, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop doing the system test:
 							Vector<SystemTestAction> allActions10 = state
@@ -647,7 +646,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b10, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop creating the system test plan:
 							Vector<CreateSystemTestPlanAction> allActions11 = state
@@ -699,7 +698,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b11, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop reviewing the system test plan:
 							Vector<ReviewSystemTestPlanAction> allActions12 = state
@@ -751,7 +750,7 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b12, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 							// Stop correcting the system test plan:
 							Vector<CorrectSystemTestPlanAction> allActions13 = state
@@ -803,34 +802,34 @@ public class MenuInputManager {
 									}
 								}
 								new ChooseActionToDestroyDialog(parent, b13, state,
-										emp, ruleExec, s);
+										emp, ruleExec, itemText);
 							}
 						}
 					}
 				});
 			}
-			if (s.equals("Create Requirements Document")) {
+			if (itemText.equals("Create Requirements Document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
 						.getSoftwareEngineerStateRepository().getAll();
 				for (int i = 0; i < softwareengineers.size(); i++) {
-					SoftwareEngineer a = softwareengineers.elementAt(i);
+					SoftwareEngineer sEngineer = softwareengineers.elementAt(i);
 					boolean alreadyInAction = false;
 					Vector<CreateRequirementsAction> allActions = state
 							.getActionStateRepository()
 							.getCreateRequirementsActionStateRepository()
-							.getAllActions(a);
+							.getAllActions(sEngineer);
 					for (int j = 0; j < allActions.size(); j++) {
 						CreateRequirementsAction b = allActions.elementAt(j);
-						if (b.getAllEmps().contains(a)) {
+						if (b.getAllEmps().contains(sEngineer)) {
 							alreadyInAction = true;
 							break;
 						}
 					}
-					if ((alreadyInAction == false) && (a.getHealth() >= 1.0)
-							&& (a.getOnBreak() == false)) {
-						emps0.add(a);
+					if ((alreadyInAction == false) && (sEngineer.getHealth() >= 1.0)
+							&& (sEngineer.getOnBreak() == false)) {
+						emps0.add(sEngineer);
 					}
 				}
 				Vector<Artifact> reqdocs1 = new Vector<Artifact>();
@@ -969,9 +968,9 @@ public class MenuInputManager {
 					d.add(associatedsystemtestplans6);
 					CreateRequirementsAction f = new CreateRequirementsAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Create Requirements Document")) {
+			} else if (itemText.equals("JOIN Create Requirements Document")) {
 				Vector<CreateRequirementsAction> a = state
 						.getActionStateRepository()
 						.getCreateRequirementsActionStateRepository()
@@ -979,14 +978,14 @@ public class MenuInputManager {
 				Vector<CreateRequirementsAction> b = new Vector<CreateRequirementsAction>();
 				for (int i = 0; i < a.size(); i++) {
 					CreateRequirementsAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Create Requirements Document", ruleExec);
-			} else if (s.equals("Review requirements document")) {
+			} else if (itemText.equals("Review requirements document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -1056,9 +1055,9 @@ public class MenuInputManager {
 					d.add(projs2);
 					ReviewRequirementsAction f = new ReviewRequirementsAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Review requirements document")) {
+			} else if (itemText.equals("JOIN Review requirements document")) {
 				Vector<ReviewRequirementsAction> a = state
 						.getActionStateRepository()
 						.getReviewRequirementsActionStateRepository()
@@ -1066,14 +1065,14 @@ public class MenuInputManager {
 				Vector<ReviewRequirementsAction> b = new Vector<ReviewRequirementsAction>();
 				for (int i = 0; i < a.size(); i++) {
 					ReviewRequirementsAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Review requirements document", ruleExec);
-			} else if (s.equals("Correct the requirements document")) {
+			} else if (itemText.equals("Correct the requirements document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -1159,9 +1158,9 @@ public class MenuInputManager {
 					d.add(requirementscapturetools3);
 					CorrectRequirementsAction f = new CorrectRequirementsAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Correct the requirements document")) {
+			} else if (itemText.equals("JOIN Correct the requirements document")) {
 				Vector<CorrectRequirementsAction> a = state
 						.getActionStateRepository()
 						.getCorrectRequirementsActionStateRepository()
@@ -1169,14 +1168,14 @@ public class MenuInputManager {
 				Vector<CorrectRequirementsAction> b = new Vector<CorrectRequirementsAction>();
 				for (int i = 0; i < a.size(); i++) {
 					CorrectRequirementsAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Correct the requirements document", ruleExec);
-			} else if (s.equals("Create the design document")) {
+			} else if (itemText.equals("Create the design document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -1310,22 +1309,22 @@ public class MenuInputManager {
 					d.add(associatedcodedocs5);
 					CreateDesignAction f = new CreateDesignAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Create the design document")) {
+			} else if (itemText.equals("JOIN Create the design document")) {
 				Vector<CreateDesignAction> a = state.getActionStateRepository()
 						.getCreateDesignActionStateRepository().getAllActions();
 				Vector<CreateDesignAction> b = new Vector<CreateDesignAction>();
 				for (int i = 0; i < a.size(); i++) {
 					CreateDesignAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Create the design document", ruleExec);
-			} else if (s.equals("Review the design document")) {
+			} else if (itemText.equals("Review the design document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -1420,22 +1419,22 @@ public class MenuInputManager {
 					d.add(associatedrequirementsdocs3);
 					ReviewDesignAction f = new ReviewDesignAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Review the design document")) {
+			} else if (itemText.equals("JOIN Review the design document")) {
 				Vector<ReviewDesignAction> a = state.getActionStateRepository()
 						.getReviewDesignActionStateRepository().getAllActions();
 				Vector<ReviewDesignAction> b = new Vector<ReviewDesignAction>();
 				for (int i = 0; i < a.size(); i++) {
 					ReviewDesignAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Review the design document", ruleExec);
-			} else if (s.equals("Correct the design document")) {
+			} else if (itemText.equals("Correct the design document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -1545,9 +1544,9 @@ public class MenuInputManager {
 					d.add(designenvironments4);
 					CorrectDesignAction f = new CorrectDesignAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Correct the design document")) {
+			} else if (itemText.equals("JOIN Correct the design document")) {
 				Vector<CorrectDesignAction> a = state
 						.getActionStateRepository()
 						.getCorrectDesignActionStateRepository()
@@ -1555,14 +1554,14 @@ public class MenuInputManager {
 				Vector<CorrectDesignAction> b = new Vector<CorrectDesignAction>();
 				for (int i = 0; i < a.size(); i++) {
 					CorrectDesignAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Correct the design document", ruleExec);
-			} else if (s.equals("Create code")) {
+			} else if (itemText.equals("Create code")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -1720,22 +1719,22 @@ public class MenuInputManager {
 					d.add(associatedsystemtestplans6);
 					CreateCodeAction f = new CreateCodeAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Create code")) {
+			} else if (itemText.equals("JOIN Create code")) {
 				Vector<CreateCodeAction> a = state.getActionStateRepository()
 						.getCreateCodeActionStateRepository().getAllActions();
 				Vector<CreateCodeAction> b = new Vector<CreateCodeAction>();
 				for (int i = 0; i < a.size(); i++) {
 					CreateCodeAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Create code", ruleExec);
-			} else if (s.equals("Inspect the code")) {
+			} else if (itemText.equals("Inspect the code")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -1853,22 +1852,22 @@ public class MenuInputManager {
 					d.add(associateddesigndocs4);
 					InspectCodeAction f = new InspectCodeAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Inspect the code")) {
+			} else if (itemText.equals("JOIN Inspect the code")) {
 				Vector<InspectCodeAction> a = state.getActionStateRepository()
 						.getInspectCodeActionStateRepository().getAllActions();
 				Vector<InspectCodeAction> b = new Vector<InspectCodeAction>();
 				for (int i = 0; i < a.size(); i++) {
 					InspectCodeAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Inspect the code", ruleExec);
-			} else if (s.equals("Correct code")) {
+			} else if (itemText.equals("Correct code")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -2001,22 +2000,22 @@ public class MenuInputManager {
 					d.add(developmentenvironments5);
 					CorrectCodeAction f = new CorrectCodeAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Correct code")) {
+			} else if (itemText.equals("JOIN Correct code")) {
 				Vector<CorrectCodeAction> a = state.getActionStateRepository()
 						.getCorrectCodeActionStateRepository().getAllActions();
 				Vector<CorrectCodeAction> b = new Vector<CorrectCodeAction>();
 				for (int i = 0; i < a.size(); i++) {
 					CorrectCodeAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Correct code", ruleExec);
-			} else if (s.equals("Integrate code")) {
+			} else if (itemText.equals("Integrate code")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -2149,9 +2148,9 @@ public class MenuInputManager {
 					d.add(developmentenvironments5);
 					IntegrateCodeAction f = new IntegrateCodeAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Integrate code")) {
+			} else if (itemText.equals("JOIN Integrate code")) {
 				Vector<IntegrateCodeAction> a = state
 						.getActionStateRepository()
 						.getIntegrateCodeActionStateRepository()
@@ -2159,14 +2158,14 @@ public class MenuInputManager {
 				Vector<IntegrateCodeAction> b = new Vector<IntegrateCodeAction>();
 				for (int i = 0; i < a.size(); i++) {
 					IntegrateCodeAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Integrate code", ruleExec);
-			} else if (s.equals("Do system test")) {
+			} else if (itemText.equals("Do system test")) {
 				Vector<Artifact> codedocs0 = new Vector<Artifact>();
 				Vector<Code> codes = state.getArtifactStateRepository()
 						.getCodeStateRepository().getAll();
@@ -2275,22 +2274,22 @@ public class MenuInputManager {
 					d.add(testingtools4);
 					SystemTestAction f = new SystemTestAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Do system test")) {
+			} else if (itemText.equals("JOIN Do system test")) {
 				Vector<SystemTestAction> a = state.getActionStateRepository()
 						.getSystemTestActionStateRepository().getAllActions();
 				Vector<SystemTestAction> b = new Vector<SystemTestAction>();
 				for (int i = 0; i < a.size(); i++) {
 					SystemTestAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Do system test", ruleExec);
-			} else if (s.equals("Create the system test plan")) {
+			} else if (itemText.equals("Create the system test plan")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -2424,9 +2423,9 @@ public class MenuInputManager {
 					d.add(testingtools5);
 					CreateSystemTestPlanAction f = new CreateSystemTestPlanAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Create the system test plan")) {
+			} else if (itemText.equals("JOIN Create the system test plan")) {
 				Vector<CreateSystemTestPlanAction> a = state
 						.getActionStateRepository()
 						.getCreateSystemTestPlanActionStateRepository()
@@ -2434,14 +2433,14 @@ public class MenuInputManager {
 				Vector<CreateSystemTestPlanAction> b = new Vector<CreateSystemTestPlanAction>();
 				for (int i = 0; i < a.size(); i++) {
 					CreateSystemTestPlanAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Create the system test plan", ruleExec);
-			} else if (s.equals("Review the system test plan")) {
+			} else if (itemText.equals("Review the system test plan")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -2535,9 +2534,9 @@ public class MenuInputManager {
 					d.add(projs3);
 					ReviewSystemTestPlanAction f = new ReviewSystemTestPlanAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Review the system test plan")) {
+			} else if (itemText.equals("JOIN Review the system test plan")) {
 				Vector<ReviewSystemTestPlanAction> a = state
 						.getActionStateRepository()
 						.getReviewSystemTestPlanActionStateRepository()
@@ -2545,14 +2544,14 @@ public class MenuInputManager {
 				Vector<ReviewSystemTestPlanAction> b = new Vector<ReviewSystemTestPlanAction>();
 				for (int i = 0; i < a.size(); i++) {
 					ReviewSystemTestPlanAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Review the system test plan", ruleExec);
-			} else if (s.equals("Correct the system test plan")) {
+			} else if (itemText.equals("Correct the system test plan")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -2661,9 +2660,9 @@ public class MenuInputManager {
 					d.add(testingtools4);
 					CorrectSystemTestPlanAction f = new CorrectSystemTestPlanAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Correct the system test plan")) {
+			} else if (itemText.equals("JOIN Correct the system test plan")) {
 				Vector<CorrectSystemTestPlanAction> a = state
 						.getActionStateRepository()
 						.getCorrectSystemTestPlanActionStateRepository()
@@ -2671,17 +2670,18 @@ public class MenuInputManager {
 				Vector<CorrectSystemTestPlanAction> b = new Vector<CorrectSystemTestPlanAction>();
 				for (int i = 0; i < a.size(); i++) {
 					CorrectSystemTestPlanAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Correct the system test plan", ruleExec);
-			} else if (s.equals("Deliver product to customer")) {
+			} else if (itemText.equals("Deliver product to customer")) {
 				Alert a2 = new Alert(Alert.AlertType.CONFIRMATION);
 				a2.setTitle("Confirm Game Ending");
 				a2.setContentText("Are you sure you want to end the game?");
+				a2.setHeaderText(null);
 				ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
 				ButtonType noButton = new ButtonType("Yes", ButtonBar.ButtonData.NO);
 				a2.getButtonTypes().setAll(okButton, noButton);
@@ -2767,11 +2767,11 @@ public class MenuInputManager {
 							d.add(custs3);
 							DeliverProductAction f = new DeliverProductAction();
 							new ParticipantSelectionDialogsDriver(parent, c, d, f,
-									state, ruleExec, destChecker, e, s);
+									state, ruleExec, destChecker, selectedEmp, itemText);
 						}
 					}
 				});
-			} else if (s.equals("JOIN Deliver product to customer")) {
+			} else if (itemText.equals("JOIN Deliver product to customer")) {
 				Vector<DeliverProductAction> a = state
 						.getActionStateRepository()
 						.getDeliverProductActionStateRepository()
@@ -2779,14 +2779,14 @@ public class MenuInputManager {
 				Vector<DeliverProductAction> b = new Vector<DeliverProductAction>();
 				for (int i = 0; i < a.size(); i++) {
 					DeliverProductAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Deliver product to customer", ruleExec);
-			} else if (s.equals("Change pay rate")) {
+			} else if (itemText.equals("Change pay rate")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -2816,9 +2816,9 @@ public class MenuInputManager {
 					d.add(emps0);
 					ChangePayRateAction f = new ChangePayRateAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Change pay rate")) {
+			} else if (itemText.equals("JOIN Change pay rate")) {
 				Vector<ChangePayRateAction> a = state
 						.getActionStateRepository()
 						.getChangePayRateActionStateRepository()
@@ -2826,14 +2826,14 @@ public class MenuInputManager {
 				Vector<ChangePayRateAction> b = new Vector<ChangePayRateAction>();
 				for (int i = 0; i < a.size(); i++) {
 					ChangePayRateAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Change pay rate", ruleExec);
-			} else if (s.equals("Give bonus")) {
+			} else if (itemText.equals("Give bonus")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -2876,22 +2876,22 @@ public class MenuInputManager {
 					d.add(projectwithbudgets1);
 					GiveBonusAction f = new GiveBonusAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Give bonus")) {
+			} else if (itemText.equals("JOIN Give bonus")) {
 				Vector<GiveBonusAction> a = state.getActionStateRepository()
 						.getGiveBonusActionStateRepository().getAllActions();
 				Vector<GiveBonusAction> b = new Vector<GiveBonusAction>();
 				for (int i = 0; i < a.size(); i++) {
 					GiveBonusAction c = a.elementAt(i);
-					if ((c.getAllEmps().contains(e) == false)
+					if ((c.getAllEmps().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state, "Give bonus",
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state, "Give bonus",
 						ruleExec);
-			} else if (s.equals("Fire")) {
+			} else if (itemText.equals("Fire")) {
 				Vector<Employee> firedpersons0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -2920,22 +2920,22 @@ public class MenuInputManager {
 					d.add(firedpersons0);
 					FireAction f = new FireAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Fire")) {
+			} else if (itemText.equals("JOIN Fire")) {
 				Vector<FireAction> a = state.getActionStateRepository()
 						.getFireActionStateRepository().getAllActions();
 				Vector<FireAction> b = new Vector<FireAction>();
 				for (int i = 0; i < a.size(); i++) {
 					FireAction c = a.elementAt(i);
-					if ((c.getAllFiredPersons().contains(e) == false)
+					if ((c.getAllFiredPersons().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state, "Fire",
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state, "Fire",
 						ruleExec);
-			} else if (s.equals("Purchase tool(s)")) {
+			} else if (itemText.equals("Purchase tool(s)")) {
 				Vector<Employee> empwhosemenuclickedons0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
 						.getEmployeeStateRepository()
@@ -3026,22 +3026,22 @@ public class MenuInputManager {
 					d.add(projs2);
 					PurchaseToolAction f = new PurchaseToolAction();
 					new ParticipantSelectionDialogsDriver(parent, c, d, f,
-							state, ruleExec, destChecker, e, s);
+							state, ruleExec, destChecker, selectedEmp, itemText);
 				}
-			} else if (s.equals("JOIN Purchase tool(s)")) {
+			} else if (itemText.equals("JOIN Purchase tool(s)")) {
 				Vector<PurchaseToolAction> a = state.getActionStateRepository()
 						.getPurchaseToolActionStateRepository().getAllActions();
 				Vector<PurchaseToolAction> b = new Vector<PurchaseToolAction>();
 				for (int i = 0; i < a.size(); i++) {
 					PurchaseToolAction c = a.elementAt(i);
-					if ((c.getAllEmpWhoseMenuClickedOns().contains(e) == false)
+					if ((c.getAllEmpWhoseMenuClickedOns().contains(selectedEmp) == false)
 							&& (b.contains(c) == false)) {
 						b.add(c);
 					}
 				}
-				new ChooseActionToJoinDialog(parent, b, e, state,
+				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Purchase tool(s)", ruleExec);
-			} else if (s.equals("Stop creating the requirements document")) {
+			} else if (itemText.equals("Stop creating the requirements document")) {
 				Vector<CreateRequirementsAction> allActions = state
 						.getActionStateRepository()
 						.getCreateRequirementsActionStateRepository()
@@ -3049,16 +3049,16 @@ public class MenuInputManager {
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					CreateRequirementsAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateRequirementsAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped creating the requirements document");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped creating the requirements document");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3082,14 +3082,14 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateRequirementsAction c = (CreateRequirementsAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop reviewing the requirements document")) {
+			} else if (itemText.equals("Stop reviewing the requirements document")) {
 				Vector<ReviewRequirementsAction> allActions = state
 						.getActionStateRepository()
 						.getReviewRequirementsActionStateRepository()
@@ -3097,16 +3097,16 @@ public class MenuInputManager {
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					ReviewRequirementsAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						ReviewRequirementsAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I'm done reviewing the requirements document");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I'm done reviewing the requirements document");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3130,14 +3130,14 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						ReviewRequirementsAction c = (ReviewRequirementsAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop correcting the requirements doc")) {
+			} else if (itemText.equals("Stop correcting the requirements doc")) {
 				Vector<CorrectRequirementsAction> allActions = state
 						.getActionStateRepository()
 						.getCorrectRequirementsActionStateRepository()
@@ -3145,16 +3145,16 @@ public class MenuInputManager {
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					CorrectRequirementsAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectRequirementsAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped correcting the requirements document");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped correcting the requirements document");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3178,30 +3178,30 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectRequirementsAction c = (CorrectRequirementsAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop creating the design")) {
+			} else if (itemText.equals("Stop creating the design")) {
 				Vector<CreateDesignAction> allActions = state
 						.getActionStateRepository()
 						.getCreateDesignActionStateRepository().getAllActions();
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					CreateDesignAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateDesignAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped creating the design document");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped creating the design document");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3225,30 +3225,30 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateDesignAction c = (CreateDesignAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop reviewing the design document")) {
+			} else if (itemText.equals("Stop reviewing the design document")) {
 				Vector<ReviewDesignAction> allActions = state
 						.getActionStateRepository()
 						.getReviewDesignActionStateRepository().getAllActions();
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					ReviewDesignAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						ReviewDesignAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped reviewing the design document");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped reviewing the design document");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3272,14 +3272,14 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						ReviewDesignAction c = (ReviewDesignAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop correcting the design document")) {
+			} else if (itemText.equals("Stop correcting the design document")) {
 				Vector<CorrectDesignAction> allActions = state
 						.getActionStateRepository()
 						.getCorrectDesignActionStateRepository()
@@ -3287,16 +3287,16 @@ public class MenuInputManager {
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					CorrectDesignAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectDesignAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped correcting the design document");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped correcting the design document");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3320,30 +3320,30 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectDesignAction c = (CorrectDesignAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop creating code")) {
+			} else if (itemText.equals("Stop creating code")) {
 				Vector<CreateCodeAction> allActions = state
 						.getActionStateRepository()
 						.getCreateCodeActionStateRepository().getAllActions();
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					CreateCodeAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateCodeAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped creating code");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped creating code");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3367,30 +3367,30 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateCodeAction c = (CreateCodeAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop inspecting code")) {
+			} else if (itemText.equals("Stop inspecting code")) {
 				Vector<InspectCodeAction> allActions = state
 						.getActionStateRepository()
 						.getInspectCodeActionStateRepository().getAllActions();
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					InspectCodeAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						InspectCodeAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped inspecting the code");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped inspecting the code");
 							if (b.getAllEmps().size() < 3) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3414,30 +3414,30 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						InspectCodeAction c = (InspectCodeAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop correcting code")) {
+			} else if (itemText.equals("Stop correcting code")) {
 				Vector<CorrectCodeAction> allActions = state
 						.getActionStateRepository()
 						.getCorrectCodeActionStateRepository().getAllActions();
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					CorrectCodeAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectCodeAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped correcting code");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped correcting code");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3461,14 +3461,14 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectCodeAction c = (CorrectCodeAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop integrating code")) {
+			} else if (itemText.equals("Stop integrating code")) {
 				Vector<IntegrateCodeAction> allActions = state
 						.getActionStateRepository()
 						.getIntegrateCodeActionStateRepository()
@@ -3476,16 +3476,16 @@ public class MenuInputManager {
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					IntegrateCodeAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						IntegrateCodeAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped integrating code");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped integrating code");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3509,30 +3509,30 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						IntegrateCodeAction c = (IntegrateCodeAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop doing the system test")) {
+			} else if (itemText.equals("Stop doing the system test")) {
 				Vector<SystemTestAction> allActions = state
 						.getActionStateRepository()
 						.getSystemTestActionStateRepository().getAllActions();
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					SystemTestAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						SystemTestAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped doing the system test");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped doing the system test");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3556,14 +3556,14 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						SystemTestAction c = (SystemTestAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop creating the system test plan")) {
+			} else if (itemText.equals("Stop creating the system test plan")) {
 				Vector<CreateSystemTestPlanAction> allActions = state
 						.getActionStateRepository()
 						.getCreateSystemTestPlanActionStateRepository()
@@ -3571,16 +3571,16 @@ public class MenuInputManager {
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					CreateSystemTestPlanAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateSystemTestPlanAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped creating the system test plan");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped creating the system test plan");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3604,14 +3604,14 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateSystemTestPlanAction c = (CreateSystemTestPlanAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop reviewing the system test plan")) {
+			} else if (itemText.equals("Stop reviewing the system test plan")) {
 				Vector<ReviewSystemTestPlanAction> allActions = state
 						.getActionStateRepository()
 						.getReviewSystemTestPlanActionStateRepository()
@@ -3619,16 +3619,16 @@ public class MenuInputManager {
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					ReviewSystemTestPlanAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						ReviewSystemTestPlanAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped reviewing the system test plan");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped reviewing the system test plan");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3652,14 +3652,14 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						ReviewSystemTestPlanAction c = (ReviewSystemTestPlanAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
-			} else if (s.equals("Stop correcting the system test plan")) {
+			} else if (itemText.equals("Stop correcting the system test plan")) {
 				Vector<CorrectSystemTestPlanAction> allActions = state
 						.getActionStateRepository()
 						.getCorrectSystemTestPlanActionStateRepository()
@@ -3667,16 +3667,16 @@ public class MenuInputManager {
 				int a = 0;
 				for (int i = 0; i < allActions.size(); i++) {
 					CorrectSystemTestPlanAction b = allActions.elementAt(i);
-					if (b.getAllParticipants().contains(e)) {
+					if (b.getAllParticipants().contains(selectedEmp)) {
 						a++;
 					}
 				}
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectSystemTestPlanAction b = allActions.elementAt(i);
-						if (b.getAllEmps().contains(e)) {
-							b.removeEmp(e);
-							e.setOverheadText("I've stopped correcting the system test plan");
+						if (b.getAllEmps().contains(selectedEmp)) {
+							b.removeEmp(selectedEmp);
+							selectedEmp.setOverheadText("I've stopped correcting the system test plan");
 							if (b.getAllEmps().size() < 1) {
 								Vector<SSObject> c = b.getAllParticipants();
 								for (int j = 0; j < c.size(); j++) {
@@ -3700,12 +3700,12 @@ public class MenuInputManager {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectSystemTestPlanAction c = (CorrectSystemTestPlanAction) allActions
 								.elementAt(i);
-						if ((c.getAllEmps().contains(e)) && (!(b.contains(c)))) {
+						if ((c.getAllEmps().contains(selectedEmp)) && (!(b.contains(c)))) {
 							b.add(c);
 						}
 					}
-					new ChooseActionToDestroyDialog(parent, b, state, e,
-							ruleExec, s);
+					new ChooseActionToDestroyDialog(parent, b, state, selectedEmp,
+							ruleExec, itemText);
 				}
 			}
 		}

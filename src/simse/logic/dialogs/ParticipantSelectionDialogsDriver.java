@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import simse.adts.actions.ChangePayRateAction;
 import simse.adts.actions.CorrectCodeAction;
@@ -94,20 +96,7 @@ public class ParticipantSelectionDialogsDriver {
 					}
 				}
 
-				if ((selectedEmp != null) && (participantsContainsSelEmp)) // selectedEmp
-																			// needs
-																			// to
-																			// be
-																			// added
-																			// to
-																			// the
-																			// action
-																			// as
-																			// one
-																			// of
-																			// these
-																			// participants
-				{
+				if ((selectedEmp != null) && (participantsContainsSelEmp)) {
 					participants.remove(selectedEmp);
 					EmployeeParticipantSelectionDialog psd = new EmployeeParticipantSelectionDialog(
 							parent, participantName, new Vector<SSObject>(
@@ -443,10 +432,11 @@ public class ParticipantSelectionDialogsDriver {
 							state.getClock().stop();
 							state.setScore(v);
 							((SimSEGUI) parent).update();
-							Dialog d = new Dialog();
+							Alert d = new Alert(AlertType.INFORMATION);
 							d.setContentText(("Your score is " + v));
 							d.setTitle("Game over!");
-							d.show();
+							d.setHeaderText(null);
+							d.showAndWait();
 						}
 					}
 				}

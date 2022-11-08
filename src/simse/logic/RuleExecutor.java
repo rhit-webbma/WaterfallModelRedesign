@@ -794,9 +794,10 @@ public class RuleExecutor {
 						boolean cancel = false;
 						if (!cancel) {
 							while (!gotValidInput0) {
-								Dialog<String> dialog = new Dialog<>();
+								TextInputDialog dialog = new TextInputDialog();
 								dialog.setTitle("Input");
 								dialog.setContentText("Please enter bonus amount: (Double > 0.0)");
+								dialog.setHeaderText(null);
 								dialog.showAndWait();
 								String response = dialog.getResult();
 								if (response != null) {
@@ -1614,6 +1615,7 @@ public class RuleExecutor {
 								TextInputDialog dialog = new TextInputDialog();
 								dialog.setTitle("Input");
 								dialog.setContentText("Please enter the new pay rate: Double >= 0.0");
+								dialog.setHeaderText(null);
 								dialog.showAndWait();
 								String response = dialog.getResult();
 								if (response != null) {

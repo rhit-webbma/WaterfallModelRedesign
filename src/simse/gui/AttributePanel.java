@@ -725,13 +725,10 @@ public class AttributePanel extends Pane {
 		} else {
 			this.setIcon(JavaFXHelpers.createImageView("src/simse/gui/images/grid.gif"));
 		}
-
-//		attributeListLeft.setUserData(attributes);
 		
 		for(String data : attributes) {
 			attributeListLeft.getItems().add(data);
 		}
-//		attributeListRight.setUserData(new Vector());
 
 		// distribute attributes to both sides, if needed:
 		Vector<String> rightHandAtts = new Vector<String>();
@@ -745,19 +742,9 @@ public class AttributePanel extends Pane {
 			for(String data : rightHandAtts) {
 				attributeListRight.getItems().add(data);
 			}
-//			attributeListRight.setUserData(rightHandAtts);
 			for(String data : attributes) {
 				attributeListLeft.getItems().add(data);
 			}
-//			attributeListLeft.setUserData(attributes);
-
-//				if (attributePaneLeft.) // need to move one more over to account
-//																			// for extra space that scrollbar takes up
-//				{
-//					rightHandAtts.add(0, attributes.remove(attributes.size() - 1)); // move
-//					attributeListRight.setUserData(rightHandAtts);
-//					attributeListLeft.setUserData(attributes);
-//				}
 		}
 	}
 

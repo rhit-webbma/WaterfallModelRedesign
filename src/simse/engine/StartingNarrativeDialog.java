@@ -13,6 +13,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -25,6 +26,7 @@ public class StartingNarrativeDialog extends Stage implements EventHandler<Mouse
 	
 	public StartingNarrativeDialog() {
 		// TODO Auto-generated method stub
+		this.initModality(Modality.APPLICATION_MODAL);
 		this.setTitle("Welcome!");
 		
 		textArea = new TextArea();

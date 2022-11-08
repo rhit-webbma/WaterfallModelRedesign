@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
@@ -346,7 +347,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 				Label label = (Label) event.getSource();
 				Employee emp = getEmpFromPicLabel(label);
 				if (emp != null) {
-					if (event.isPrimaryButtonDown()) // left button clicked
+					if (event.getButton().equals(MouseButton.PRIMARY)) // left button clicked
 					{
 						mainGUIFrame.getTabPanel().setGUIChanged();
 						mainGUIFrame.getTabPanel().setObjectInFocus(emp);
