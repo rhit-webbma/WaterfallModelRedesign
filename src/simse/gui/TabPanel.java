@@ -29,6 +29,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
@@ -46,9 +47,11 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private AttributePanel attributePane;
 	private EmployeesOverviewScreen employeeFrame;
 //	private EmployeesAtAGlanceFrame employeeFrame;
-	private ArtifactsAtAGlanceFrame artifactFrame;
+	private ArtifactsOverviewScreen artifactFrame;
+//	private ArtifactsAtAGlanceFrame artifactFrame;
 	private ToolsAtAGlanceFrame toolFrame;
-	private ProjectsAtAGlanceFrame projectFrame;
+//	private ProjectsAtAGlanceFrame projectFrame;
+	private ProjectOverviewScreen projectFrame;
 	private CustomersAtAGlanceFrame customerFrame;
 
 	private GridPane gridPane;
@@ -103,10 +106,12 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		objsToImages = new Hashtable<SSObject, ImageView>();
 		buttonsToObjs = new Hashtable<Button, SSObject>();
 //		employeeFrame = new EmployeesAtAGlanceFrame(state, gui);
+		artifactFrame = new ArtifactsOverviewScreen(state, gui, l);
 		employeeFrame = new EmployeesOverviewScreen(state, gui, logic);
-		artifactFrame = new ArtifactsAtAGlanceFrame(state, gui);
+
 		toolFrame = new ToolsAtAGlanceFrame(state, gui);
-		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
+//		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
+		projectFrame = new ProjectOverviewScreen(state);
 		customerFrame = new CustomersAtAGlanceFrame(state, gui);
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
@@ -154,12 +159,60 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		// Add panes and labels to main pane
 		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
 				Priority.NEVER, new Insets(10, 0, 0, 0));
-		gridPane.add(buttonsScrollPane, 2, 0);
-//
+//		gridPane.add(buttonsScrollPane, 2, 0);
+		
+		HBox buttons = new HBox();
+		
+		Button projectButton = new Button("Project");
+		projectButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (projectFrame.isIconified()) {
+					projectFrame.setIconified(false);
+				}
+				projectFrame.show();
+			}
+		});
+		buttons.getChildren().add(projectButton);
+		
+		Button peopleButton = new Button("People");
+		peopleButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (employeeFrame.isIconified()) {
+					employeeFrame.setIconified(false);
+				}
+				employeeFrame.show();
+			}
+		});
+		buttons.getChildren().add(peopleButton);
+		
+		Button artifactsButton = new Button("Artifacts");
+		artifactsButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (artifactFrame.isIconified()) {
+					artifactFrame.setIconified(false);
+				}
+				artifactFrame.show();
+			}
+		});
+		buttons.getChildren().add(artifactsButton);
+		
+		Button analyzeButton = new Button("Analyze");
+		buttons.getChildren().add(analyzeButton);
+		
+		Button windowsButton = new Button("Windows");
+		buttons.getChildren().add(windowsButton);
+		
+		gridPane.add(buttons, 2, 0);
+				
+
 		setPrefSize(1920, 100);
 		updateImages(EMPLOYEE);
 		
 		this.getChildren().add(gridPane);
+		
 		this.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 	}
 
