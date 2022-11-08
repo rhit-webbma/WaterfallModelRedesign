@@ -85,7 +85,6 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		analyzeSimItem.setOnAction(menuEvent);
 		menuBar.getMenus().add(analyzeMenu);
 		
-
 		// Create main panel:
         BorderPane bPane = new BorderPane();
 		bPane.setTop(tabPanel);
