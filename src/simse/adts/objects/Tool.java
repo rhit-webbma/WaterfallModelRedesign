@@ -2,11 +2,80 @@
 package simse.adts.objects;
 
 public abstract class Tool extends SSObject implements Cloneable {
-	public Tool() {
+	private String name;
+	private double cost;
+	private double productivityincreasefactor;
+	private double errorratedecreasefactor;
+	private boolean purchased;
+	
+	public Tool(String n0, double c1, double p2, double e3, boolean p4) {
+		setName(n0);
+		setCost(c1);
+		setProductivityIncreaseFactor(p2);
+		setErrorRateDecreaseFactor(e3);
+		setPurchased(p4);
 	}
+	
+	public abstract String getDescription();
 
 	public Object clone() {
 		Tool cl = (Tool) (super.clone());
 		return cl;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String a) {
+		name = a;
+	}
+
+	public double getCost() {
+		return cost;
+	}
+
+	public void setCost(double a) {
+		if (a < 0.0) {
+			cost = 0.0;
+		} else {
+			cost = a;
+		}
+	}
+
+	public double getProductivityIncreaseFactor() {
+		return productivityincreasefactor;
+	}
+
+	public void setProductivityIncreaseFactor(double a) {
+		if (a < 0.0) {
+			productivityincreasefactor = 0.0;
+		} else if (a > 1.0) {
+			productivityincreasefactor = 1.0;
+		} else {
+			productivityincreasefactor = a;
+		}
+	}
+
+	public double getErrorRateDecreaseFactor() {
+		return errorratedecreasefactor;
+	}
+
+	public void setErrorRateDecreaseFactor(double a) {
+		if (a < 0.0) {
+			errorratedecreasefactor = 0.0;
+		} else if (a > 1.0) {
+			errorratedecreasefactor = 1.0;
+		} else {
+			errorratedecreasefactor = a;
+		}
+	}
+
+	public boolean getPurchased() {
+		return purchased;
+	}
+
+	public void setPurchased(boolean a) {
+		purchased = a;
 	}
 }

@@ -2,11 +2,110 @@
 package simse.adts.objects;
 
 public abstract class Artifact extends SSObject implements Cloneable {
-	public Artifact() {
+	private String name;
+	private double size;
+	private double numknownerrors;
+	private double numunknownerrors;
+	private double percenterroneous;
+	private double percentcomplete;
+	private double numunknowntemp;
+	
+	public Artifact(String name, double size, double numKnownErrors, double numUnknownErrors, double percentErroneous, double percentComplete, double numUnknownTemp) {
+		setName(name);
+		setSize(size);
+		setNumKnownErrors(numKnownErrors);
+		setNumUnknownErrors(numUnknownErrors);
+		setPercentErroneous(percentErroneous);
+		setPercentComplete(percentComplete);
+		setNumUnknownTemp(numUnknownTemp);
 	}
 
 	public Object clone() {
 		Artifact cl = (Artifact) (super.clone());
 		return cl;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String a) {
+		name = a;
+	}
+
+	public double getSize() {
+		return size;
+	}
+
+	public void setSize(double a) {
+		if (a < 0.0) {
+			size = 0.0;
+		} else {
+			size = a;
+		}
+	}
+
+	public double getPercentComplete() {
+		return percentcomplete;
+	}
+
+	public void setPercentComplete(double a) {
+		if (a < 0.0) {
+			percentcomplete = 0.0;
+		} else if (a > 100.0) {
+			percentcomplete = 100.0;
+		} else {
+			percentcomplete = a;
+		}
+	}
+	
+	public double getNumKnownErrors() {
+		return numknownerrors;
+	}
+
+	public void setNumKnownErrors(double a) {
+		if (a < 0.0) {
+			numknownerrors = 0.0;
+		} else {
+			numknownerrors = a;
+		}
+	}
+
+	public double getNumUnknownErrors() {
+		return numunknownerrors;
+	}
+
+	public void setNumUnknownErrors(double a) {
+		if (a < 0.0) {
+			numunknownerrors = 0.0;
+		} else {
+			numunknownerrors = a;
+		}
+	}
+
+	public double getPercentErroneous() {
+		return percenterroneous;
+	}
+
+	public void setPercentErroneous(double a) {
+		if (a < 0.0) {
+			percenterroneous = 0.0;
+		} else if (a > 100.0) {
+			percenterroneous = 100.0;
+		} else {
+			percenterroneous = a;
+		}
+	}
+
+	public double getNumUnknownTemp() {
+		return numunknowntemp;
+	}
+
+	public void setNumUnknownTemp(double a) {
+		if (a < 0.0) {
+			numunknowntemp = 0.0;
+		} else {
+			numunknowntemp = a;
+		}
 	}
 }

@@ -20,16 +20,10 @@ public class Code extends Artifact implements Cloneable {
 	public Code(String n0, double s1, double p2, double a3, double p4, int n5,
 			double n6, double n7, double p8, double n9, int c10, int c11,
 			int c12, int p13) {
-		setName(n0);
-		setSize(s1);
-		setPercentComplete(p2);
+		super(n0, s1, p2, n6, n7, p8, n9);
 		setAmountIntegrated(a3);
 		setPercentIntegrated(p4);
 		setNumAuthors(n5);
-		setNumKnownErrors(n6);
-		setNumUnknownErrors(n7);
-		setPercentErroneous(p8);
-		setNumUnknownTemp(n9);
 		setCompletenessDiffReqDoc(c10);
 		setCompletenessDiffDesDoc(c11);
 		setCompletenessDiffTestPlan(c12);
@@ -55,39 +49,6 @@ public class Code extends Artifact implements Cloneable {
 		return cl;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String a) {
-		name = a;
-	}
-
-	public double getSize() {
-		return size;
-	}
-
-	public void setSize(double a) {
-		if (a < 0.0) {
-			size = 0.0;
-		} else {
-			size = a;
-		}
-	}
-
-	public double getPercentComplete() {
-		return percentcomplete;
-	}
-
-	public void setPercentComplete(double a) {
-		if (a < 0.0) {
-			percentcomplete = 0.0;
-		} else if (a > 100.0) {
-			percentcomplete = 100.0;
-		} else {
-			percentcomplete = a;
-		}
-	}
 
 	public double getAmountIntegrated() {
 		return amountintegrated;
@@ -124,56 +85,6 @@ public class Code extends Artifact implements Cloneable {
 			numauthors = 0;
 		} else {
 			numauthors = a;
-		}
-	}
-
-	public double getNumKnownErrors() {
-		return numknownerrors;
-	}
-
-	public void setNumKnownErrors(double a) {
-		if (a < 0.0) {
-			numknownerrors = 0.0;
-		} else {
-			numknownerrors = a;
-		}
-	}
-
-	public double getNumUnknownErrors() {
-		return numunknownerrors;
-	}
-
-	public void setNumUnknownErrors(double a) {
-		if (a < 0.0) {
-			numunknownerrors = 0.0;
-		} else {
-			numunknownerrors = a;
-		}
-	}
-
-	public double getPercentErroneous() {
-		return percenterroneous;
-	}
-
-	public void setPercentErroneous(double a) {
-		if (a < 0.0) {
-			percenterroneous = 0.0;
-		} else if (a > 100.0) {
-			percenterroneous = 100.0;
-		} else {
-			percenterroneous = a;
-		}
-	}
-
-	public double getNumUnknownTemp() {
-		return numunknowntemp;
-	}
-
-	public void setNumUnknownTemp(double a) {
-		if (a < 0.0) {
-			numunknowntemp = 0.0;
-		} else {
-			numunknowntemp = a;
 		}
 	}
 

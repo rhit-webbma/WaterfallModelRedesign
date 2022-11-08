@@ -47,9 +47,11 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private AttributePanel attributePane;
 	private EmployeesOverviewScreen employeeFrame;
 //	private EmployeesAtAGlanceFrame employeeFrame;
-	private ArtifactsAtAGlanceFrame artifactFrame;
+	private ArtifactsOverviewScreen artifactFrame;
+//	private ArtifactsAtAGlanceFrame artifactFrame;
 	private ToolsAtAGlanceFrame toolFrame;
-	private ProjectsAtAGlanceFrame projectFrame;
+//	private ProjectsAtAGlanceFrame projectFrame;
+	private ProjectOverviewScreen projectFrame;
 	private CustomersAtAGlanceFrame customerFrame;
 
 	private GridPane gridPane;
@@ -105,9 +107,11 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		buttonsToObjs = new Hashtable<Button, SSObject>();
 //		employeeFrame = new EmployeesAtAGlanceFrame(state, gui);
 		employeeFrame = new EmployeesOverviewScreen(state);
-		artifactFrame = new ArtifactsAtAGlanceFrame(state, gui);
+//		artifactFrame = new ArtifactsAtAGlanceFrame(state, gui);
+		artifactFrame = new ArtifactsOverviewScreen(state, gui, l);
 		toolFrame = new ToolsAtAGlanceFrame(state, gui);
-		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
+//		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
+		projectFrame = new ProjectOverviewScreen(state);
 		customerFrame = new CustomersAtAGlanceFrame(state, gui);
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
@@ -159,12 +163,39 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		HBox buttons = new HBox();
 		
 		Button projectButton = new Button("Project");
+		projectButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (projectFrame.isIconified()) {
+					projectFrame.setIconified(false);
+				}
+				projectFrame.show();
+			}
+		});
 		buttons.getChildren().add(projectButton);
 		
 		Button peopleButton = new Button("People");
+		peopleButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (employeeFrame.isIconified()) {
+					employeeFrame.setIconified(false);
+				}
+				employeeFrame.show();
+			}
+		});
 		buttons.getChildren().add(peopleButton);
 		
 		Button artifactsButton = new Button("Artifacts");
+		artifactsButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (artifactFrame.isIconified()) {
+					artifactFrame.setIconified(false);
+				}
+				artifactFrame.show();
+			}
+		});
 		buttons.getChildren().add(artifactsButton);
 		
 		Button analyzeButton = new Button("Analyze");
