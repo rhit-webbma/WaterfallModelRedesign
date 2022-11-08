@@ -77,11 +77,14 @@ public class AttributePanel extends Pane {
 		attributePaneLeft = new ScrollPane(attributeListLeft);
 		attributePaneLeft.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		attributePaneLeft.setPrefSize(300, 95);
+		attributeListLeft.prefWidthProperty().bind(attributePaneLeft.widthProperty());
 
 		attributeListRight = new ListView();
 		attributePaneRight = new ScrollPane(attributeListRight);
 		attributePaneRight.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		attributePaneRight.setPrefSize(300, 95);
+		attributeListRight.prefWidthProperty().bind(attributePaneRight.widthProperty());
+
 
 		HBox attributePane = new HBox(5);
 		attributePane.getChildren().add(attributePaneLeft);
@@ -758,7 +761,8 @@ public class AttributePanel extends Pane {
 	}
 
 	public void setIcon(ImageView img) {
-		selectedIcon.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
+//		selectedIcon.setBackground(JavaFXHelpers.createBackgroundColor(Color.BLACK));
+		selectedIcon.setId("Icon");
 		selectedIcon.setGraphic(img);
 	}
 }
