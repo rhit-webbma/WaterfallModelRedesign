@@ -175,8 +175,12 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //		gridPane.add(buttonsScrollPane, 2, 0);
 		
 		HBox buttons = new HBox();
+		buttons.setSpacing(40);
 		
 		Button projectButton = new Button("Project");
+		projectButton.setId("TabButton");
+		projectButton.setPrefHeight(40);
+		HBox.setMargin(projectButton, new Insets(15, 0, 0, 0));
 		projectButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -189,6 +193,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		buttons.getChildren().add(projectButton);
 		
 		Button peopleButton = new Button("People");
+		peopleButton.setId("TabButton");
+		peopleButton.setPrefHeight(40);
+		HBox.setMargin(peopleButton, new Insets(15, 0, 0, 0));
 		peopleButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -201,6 +208,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		buttons.getChildren().add(peopleButton);
 		
 		Button artifactsButton = new Button("Artifacts");
+		artifactsButton.setId("TabButton");
+		artifactsButton.setPrefHeight(40);
+		HBox.setMargin(artifactsButton, new Insets(15, 0, 0, 0));
 		artifactsButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -213,9 +223,15 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		buttons.getChildren().add(artifactsButton);
 		
 		Button analyzeButton = new Button("Analyze");
+		analyzeButton.setId("TabButton");
+		analyzeButton.setPrefHeight(40);
+		HBox.setMargin(analyzeButton, new Insets(15, 0, 0, 0));
 		buttons.getChildren().add(analyzeButton);
 		
 		Button windowsButton = new Button("Windows");
+		windowsButton.setId("TabButton");
+		windowsButton.setPrefHeight(40);
+		HBox.setMargin(windowsButton, new Insets(15, 0, 0, 0));
 		buttons.getChildren().add(windowsButton);
 		
 		gridPane.add(buttons, 2, 0);
