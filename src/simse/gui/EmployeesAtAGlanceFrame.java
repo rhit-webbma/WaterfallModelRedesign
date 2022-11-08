@@ -83,7 +83,9 @@ public class EmployeesAtAGlanceFrame extends Stage implements EventHandler<Mouse
 //		mainPane.add(softwareengineerPane);
 
 		// Set main window frame properties:
-		setScene(new Scene(mainPane, 800, 500));
+		Scene scene = new Scene(mainPane, 800, 500);
+		scene.getStylesheets().add("style.css");
+		setScene(scene);
 //		setBackground(Color.white);
 //		setContentPane(mainPane);
 //		setVisible(false);
