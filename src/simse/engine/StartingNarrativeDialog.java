@@ -26,37 +26,21 @@ public class StartingNarrativeDialog extends Stage implements EventHandler<Mouse
 	public StartingNarrativeDialog() {
 		// TODO Auto-generated method stub
 		this.setTitle("Welcome!");
-//		Box mainPane = new Box(300, 300, 1);
-//		VBox vBox = new VBox();
-//		vBox.setSpacing(5);
-//		Scene mainScene = new Scene(new Group(mainPane), 300, 300);
 		
 		textArea = new TextArea();
 		textArea.setWrapText(true);
-//		textArea.setWrapStyleWord(true);
 		textArea.setEditable(false);
 		textArea.setText("     Welcome to SimSE! Your task is to create Groceries@Home, a Web-based system that will allow people to place orders over the Internet for groceries to be delivered to their homes. The customer is the Grocery Home Delivery Service, a company who, up until now, has taken orders for groceries solely by telephone, but now wants to step into the information age. \n     Your budget is $280,000, and you have 1,350 clock ticks to complete the project. However, you should keep checking your project info to monitor this information -- the customer has the tendency to introduce new requirements, and will sometimes give you more time and/or money along with those new requirements. \n     Your final score will be out of 100 points, and it will be calculated based on how complete and error-free your code is, whether your code is integrated or not, and how well you stick to your budget and schedule. \n\nTwo notes:\n* Each hired employee is always paid every clock tick regardless of whether they're busy or not. So use them wisely!\n* If you want to use a tool that you have purchased in a task, you must specify that when you assign the task. If you have already started the task without the tool, you must stop and restart the task with the tool if you want it to be used.\n\nGood luck!"
 				+ "");
-//		textArea.setCaretPosition(0);
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.hbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.NEVER);
-//		ScrollPane scrollPane = new JScrollPane(textArea,
-//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-//				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setContent(textArea);
-//		mainPane.add(scrollPane);
 
 		// Create okButton pane and button:
-//		Scene okButtonPane = new Scene();
 		okButton = new Button("OK");
-//		okButton.addActionListener(this);
 		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-//		okButtonPane.add(okButton);
-//		mainPane.add(okButtonPane);
 
 		this.root = new BorderPane();
-//		root.getChildren().add(scrollPane);
-//		root.getChildren().add(okButton);
 		root.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
 		root.setCenter(scrollPane);
 		root.setBottom(okButton);
@@ -65,90 +49,15 @@ public class StartingNarrativeDialog extends Stage implements EventHandler<Mouse
 		Scene scene = new Scene(root);
 		this.setScene(scene);
 		this.show();
-		// Set main window frame properties:
 		
-//		setBackground(Color.black);
-//		setContentPane(mainPane);
-//		validate();
-//		pack();
-//		repaint();
-//		toFront();
+		// Set main window frame properties:
 		
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         this.setX((primScreenBounds.getWidth() - this.getWidth()) / 2);
         this.setY((primScreenBounds.getHeight() - this.getHeight()) / 2);
-		
-		// Make it show up in the center of the screen:
-//		Point ownerLoc = owner.getLocationOnScreen();
-//		Point thisLoc = new Point();
-//		thisLoc.setLocation(
-//				(ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
-//				(ownerLoc.getY() + (owner.getHeight() / 2) - (this.getHeight() / 2)));
-//		setLocation(thisLoc);
-//		setVisible(true);
-
+        
+        this.toFront();
 	}
-
-//	public StartingNarrativeDialog(JFrame owner) {
-////		super(owner, true);
-//		
-//	}
-
-//		setTitle("Welcome!");
-//
-//		// Create main panel (box):
-//		Box mainPane = new Box(300, 300, 1);
-//		mainPane.setMaximumSize(new Dimension(300, 300));
-//
-////		// Create text area panel:
-//		textArea = new TextArea();
-//		textArea.setWrapText(true);
-//		textArea.setWrapStyleWord(true);
-//		textArea.setEditable(false);
-//		textArea.setText("     Welcome to SimSE! Your task is to create Groceries@Home, a Web-based system that will allow people to place orders over the Internet for groceries to be delivered to their homes. The customer is the Grocery Home Delivery Service, a company who, up until now, has taken orders for groceries solely by telephone, but now wants to step into the information age. \n     Your budget is $280,000, and you have 1,350 clock ticks to complete the project. However, you should keep checking your project info to monitor this information -- the customer has the tendency to introduce new requirements, and will sometimes give you more time and/or money along with those new requirements. \n     Your final score will be out of 100 points, and it will be calculated based on how complete and error-free your code is, whether your code is integrated or not, and how well you stick to your budget and schedule. \n\nTwo notes:\n* Each hired employee is always paid every clock tick regardless of whether they're busy or not. So use them wisely!\n* If you want to use a tool that you have purchased in a task, you must specify that when you assign the task. If you have already started the task without the tool, you must stop and restart the task with the tool if you want it to be used.\n\nGood luck!"
-//				+ "");
-//		textArea.setCaretPosition(0);
-//		ScrollPane scrollPane = new ScrollPane();
-//		ScrollPane scrollPane = new JScrollPane(textArea,
-//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-//				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//		scrollPane.setContent(textArea);
-//		mainPane.add(scrollPane);
-//
-//
-//		// Create okButton pane and button:
-//		Scene okButtonPane = new Scene();
-//		okButton = new Button("OK");
-////		okButton.addActionListener(this);
-//		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-//		okButtonPane.add(okButton);
-//		mainPane.add(okButtonPane);
-//
-//		// Set main window frame properties:
-//		setBackground(Color.black);
-//		setContentPane(mainPane);
-//		validate();
-//		pack();
-//		repaint();
-//		toFront();
-//		// Make it show up in the center of the screen:
-//		Point ownerLoc = owner.getLocationOnScreen();
-//		Point thisLoc = new Point();
-//		thisLoc.setLocation(
-//				(ownerLoc.getX() + (owner.getWidth() / 2) - (this.getWidth() / 2)),
-//				(ownerLoc.getY() + (owner.getHeight() / 2) - (this.getHeight() / 2)));
-//		setLocation(thisLoc);
-//		setVisible(true);
-//	}
-
-//	public void actionPerformed(ActionEvent evt) // handles user actions
-//	{
-//		Object source = evt.getSource();
-//		if (source == okButton) {
-//			setVisible(false);
-//			dispose();
-//		}
-//	}
 
 	@Override
 	public void handle(MouseEvent event) {

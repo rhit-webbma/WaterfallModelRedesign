@@ -80,36 +80,24 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 
 		// Create main panel (box):
 		VBox mainPane = new VBox();
-//		mainPane.setPreferredSize(new Dimension(900, 550));
 
 		// Create actionDescription pane and components:
 		VBox actionDescriptionPane = new VBox();
 		TitledPane actionDescriptionTitlePane = new TitledPane("ActionDescription: ", actionDescriptionPane);
-//		JPanel actionDescriptionTitlePane = new JPanel();
-//		actionDescriptionTitlePane.add(new JLabel("ActionDescription:"));
-//		actionDescriptionPane.add(actionDescriptionTitlePane);
 		actionDescriptionArea = new TextArea();
 		actionDescriptionArea.setWrapText(true);
 		actionDescriptionArea.setPrefRowCount(1);
 		actionDescriptionArea.setPrefColumnCount(50);
-//		actionDescriptionArea.setWrapStyleWord(true);
 		actionDescriptionArea.setEditable(false);
 		ScrollPane actionDescriptionScrollPane = new ScrollPane(actionDescriptionArea);
 		actionDescriptionScrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		actionDescriptionScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-//		JScrollPane actionDescriptionScrollPane = new JScrollPane(
-//				actionDescriptionArea,
-//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-//				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		initializeActionDescription();
-//		actionDescriptionPane.add(actionDescriptionScrollPane);
 		actionDescriptionPane.getChildren().add(actionDescriptionScrollPane);
 		
 		// Create participants pane and components:
 		VBox participantsPane = new VBox();
 		TitledPane participantsTitlePane = new TitledPane("Participants:", participantsPane);
-//		participantsTitlePane.add(new JLabel("Participants:"));
-//		participantsPane.add(participantsTitlePane);
 
 		// participants table:
 		ScrollPane participantsTablePane = new ScrollPane(
@@ -127,110 +115,58 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 
 		// trigger list:
 		TitledPane triggerListTitlePane = new TitledPane("Triggers:", listPane);
-//		triggerListTitlePane.add(new JLabel("Triggers:"));
-//		listPane.add(triggerListTitlePane);
 		triggerList = new ListView();
 		triggerList.setFixedCellSize(3);
-//		triggerList.s
-		//TODO: Set Width on Columns
-//		triggerList.setFixedCellWidth(400);
-//		triggerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		triggerList.addListSelectionListener(this);
 		triggerList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		
 		triggerList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		
 		initializeTriggerList();
 		ScrollPane triggerListPane = new ScrollPane(triggerList);
-//		listPane.add(triggerListPane);
 		listPane.getChildren().add(triggerListPane);
 
 		// destroyer list:
 		TitledPane destroyerListTitlePane = new TitledPane("Destroyers: ", listPane);
-//		destroyerListTitlePane.add(new JLabel("Destroyers:"));
-//		listPane.add(destroyerListTitlePane);
 		destroyerList = new ListView();
 		destroyerList.setFixedCellSize(3);
 		destroyerList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		destroyerList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-//		destroyerList.setVisibleRowCount(3);
-//		destroyerList.setFixedCellWidth(400);
-//		destroyerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		destroyerList.addListSelectionListener(this);
 		initializeDestroyerList();
 		ScrollPane destroyerListPane = new ScrollPane(destroyerList);
-//		listPane.add(destroyerListPane);
 		listPane.getChildren().add(destroyerListPane);
-
-//		triggerDestroyerPane.add(listPane);
 
 		// description pane:
 		VBox descriptionPane = new VBox();
 		TitledPane descriptionTitlePane = new TitledPane("Description: ", descriptionPane);
-//		descriptionTitlePane.add(new JLabel("Description:"));
-//		descriptionPane.add(descriptionTitlePane);
 
 		// description text area:
 		descriptionArea = new TextArea();
 		descriptionArea.setWrapText(true);
 		descriptionArea.setPrefRowCount(9);
 		descriptionArea.setPrefColumnCount(30);
-//		actionDescriptionArea.setWrapStyleWord(true);
 		descriptionArea.setEditable(false);
 		
-//		descriptionArea = new TextArea(9, 30);
-//		descriptionArea.setLineWrap(true);
-//		descriptionArea.setWrapStyleWord(true);
-//		descriptionArea.setEditable(false);
 		ScrollPane descriptionScrollPane = new ScrollPane();
 		descriptionScrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		descriptionScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		descriptionScrollPane.setContent(descriptionArea);
-//		JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea,
-//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-//				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//		descriptionPane.add(descriptionScrollPane);
 		descriptionPane.getChildren().add(descriptionScrollPane);
 
-//		triggerDestroyerPane.add(descriptionPane);
 		triggerDestroyerPane.getChildren().add(descriptionPane);
 
-		// Add panes to main pane:
-//		mainPane.add(actionDescriptionPane);
-//		mainPane.add(participantsPane);
-//		mainPane.add(triggerDestroyerPane);
-		
+		// Add panes to main pane:		
 		mainPane.getChildren().add(actionDescriptionPane);
 		mainPane.getChildren().add(participantsPane);
 		mainPane.getChildren().add(triggerDestroyerPane);
 		
-//		add(mainPane);
-		
 		this.getChildren().add(mainPane);
 		this.setPrefSize(900, 550);
-
-		// Set main window frame properties:
-//		setOpaque(true);
-//		validate();
-//		repaint();
 	}
 
 	// responds to list selections
-	public void valueChanged(ListSelectionEvent e) {
-		if (e.getSource() == triggerList && triggerList.getSelectionModel().getSelectedIndex() >= 0) {
-			refreshDescriptionArea(TRIGGER);
-
-			// clear selection for destroyer list:
-			destroyerList.getSelectionModel().clearSelection();
-
-		} else if (e.getSource() == destroyerList
-				&& destroyerList.getSelectionModel().getSelectedIndex() >= 0) {
-			refreshDescriptionArea(DESTROYER);
-
-			// clear selection for trigger list:
-			triggerList.getSelectionModel().clearSelection();
-		}
-	}
+//	public void valueChanged(ListSelectionEvent e) {
+//		
+//	}
 
 	// initializes the action description
 	private void initializeActionDescription() {
@@ -292,7 +228,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		}
 		actionDescriptionArea.setText(text);
 		actionDescriptionArea.positionCaret(0);
-//		actionDescriptionArea.setCaretPosition(0);
 	}
 
 	// initializes the JList of triggers
@@ -300,110 +235,83 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		if (action instanceof CreateRequirementsAction) {
 			String[] list = { "TrigA", };
 			triggerList.getItems().add(list);
-//			triggerList.setListData(list);
 		} else if (action instanceof ReviewRequirementsAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof CorrectRequirementsAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof CreateDesignAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof ReviewDesignAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof CorrectDesignAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof CreateCodeAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof InspectCodeAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof CorrectCodeAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof IntegrateCodeAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof SystemTestAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof CreateSystemTestPlanAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof ReviewSystemTestPlanAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof CorrectSystemTestPlanAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof DeliverProductAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof BreakAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof GetSickAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof QuitAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof IntroduceNewRequirementsAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof ChangePayRateAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof GiveBonusAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof FireAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof PurchaseToolAction) {
 			String[] list = { "TrigA", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
 			String[] list = { "AutoTrig", };
-//			triggerList.setListData(list);
 			triggerList.getItems().add(list);
 		}
 	}
@@ -412,111 +320,84 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	private void initializeDestroyerList() {
 		if (action instanceof CreateRequirementsAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof ReviewRequirementsAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof CorrectRequirementsAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof CreateDesignAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof ReviewDesignAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof CorrectDesignAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof CreateCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof InspectCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof CorrectCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof IntegrateCodeAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof SystemTestAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof CreateSystemTestPlanAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof ReviewSystemTestPlanAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof CorrectSystemTestPlanAction) {
 			String[] list = { "UserDest", "AutoDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof DeliverProductAction) {
 			String[] list = {};
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof BreakAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof GetSickAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof QuitAction) {
 			String[] list = { "DestO", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof IntroduceNewRequirementsAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof ChangePayRateAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof GiveBonusAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof FireAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof PurchaseToolAction) {
 			String[] list = { "DestA", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-//			destroyerList.setListData(list);/
 			destroyerList.getItems().add(list);
 		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
 			String[] list = { "TimedDest", };
-//			destroyerList.setListData(list);
 			destroyerList.getItems().add(list);
 		}
 	}
@@ -526,8 +407,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		TableColumn name = new TableColumn("Participant Name");
 		TableColumn participant = new TableColumn("Participant");
 		TableColumn status = new TableColumn("Status");
-//		String[] columnNames = { "Participant Name", "Participant", "Status" };
-//		Object[][] data = new Object[action.getAllParticipants().size()][3];
 		ObservableList<Participant> data = FXCollections.observableArrayList();
 		int index = 0;
 		if (action instanceof CreateRequirementsAction) {
@@ -539,7 +418,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
-//				TableColumn empColumn = new TableColumn("Emp");
 				String title = "Emp";
 				String title1 = "";
 				if (emp instanceof SoftwareEngineer) {
@@ -559,7 +437,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -621,7 +498,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -655,7 +531,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("RequirementsCaptureTool", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -687,7 +562,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("AssociatedCodeDoc", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -720,7 +594,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("AssociatedDesignDoc", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -754,7 +627,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("AssociatedSystemTestPlan", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -787,7 +659,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -820,7 +691,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("RequirementsDoc", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -850,7 +720,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -883,7 +752,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -916,7 +784,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("RequirementsDoc", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -946,7 +813,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -980,7 +846,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant("RequirementsCaptureTool", title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -1012,7 +877,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -1042,7 +906,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
 				index++;
@@ -4038,13 +3901,23 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 			}
 			descriptionArea.setText(text);
 			descriptionArea.positionCaret(0);
-//			descriptionArea.setCaretPosition(0);
 		}
 	}
 
 	@Override
 	public void handle(MouseEvent event) {
-		// TODO Auto-generated method stub
-		
+		if (event.getSource() == triggerList && triggerList.getSelectionModel().getSelectedIndex() >= 0) {
+			refreshDescriptionArea(TRIGGER);
+
+			// clear selection for destroyer list:
+			destroyerList.getSelectionModel().clearSelection();
+
+		} else if (event.getSource() == destroyerList
+				&& destroyerList.getSelectionModel().getSelectedIndex() >= 0) {
+			refreshDescriptionArea(DESTROYER);
+
+			// clear selection for trigger list:
+			triggerList.getSelectionModel().clearSelection();
+		}
 	}
 }
