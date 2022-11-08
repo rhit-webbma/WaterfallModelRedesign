@@ -1,8 +1,5 @@
 package simse;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import javafx.application.Application;
 import javafx.stage.Modality;
 import javafx.stage.Stage;

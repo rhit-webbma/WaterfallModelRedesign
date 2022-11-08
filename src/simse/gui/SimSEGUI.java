@@ -26,10 +26,17 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import simse.SimSE;
+import simse.engine.Engine;
+import simse.explanatorytool.Branch;
+import simse.explanatorytool.ExplanatoryTool;
+import simse.explanatorytool.MultipleTimelinesBrowser;
+import simse.logic.Logic;
+import simse.state.State;
 
 public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private TabPanel tabPanel;

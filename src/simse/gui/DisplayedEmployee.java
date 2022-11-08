@@ -3,10 +3,8 @@ package simse.gui;
 
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import simse.adts.objects.*;
+import simse.adts.objects.Employee;
 import simse.gui.util.JavaFXHelpers;
-
-import javafx.scene.control.MenuItem;
 
 public class DisplayedEmployee {
 	private Employee userObject;
