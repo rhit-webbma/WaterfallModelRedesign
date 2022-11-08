@@ -29,6 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import simse.adts.actions.Action;
 import simse.adts.actions.BreakAction;
 import simse.adts.actions.CorrectCodeAction;
 import simse.adts.actions.CorrectDesignAction;
@@ -63,7 +64,6 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 	private ScrollPane actionPane;
 	private Hashtable<Employee, VBox> empsToEmpPanels;
 	private Hashtable<Employee, VBox> empsToPicPanels;
-	// private Hashtable empsToActPanels;
 	private Hashtable<Employee, Label> empsToPicLabels;
 	private Hashtable<Employee, Label> empsToKeyLabels;
 
@@ -91,7 +91,6 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 
 		empsToEmpPanels = new Hashtable<Employee, VBox>();
 		empsToPicPanels = new Hashtable<Employee, VBox>();
-		// empsToActPanels = new Hashtable();
 		empsToPicLabels = new Hashtable<Employee, Label>();
 		empsToKeyLabels = new Hashtable<Employee, Label>();
 
@@ -138,6 +137,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 
 	public void update() {
 		actionPane.setContent(null);
+		empsToEmpPanels.clear();
 		VBox employees = new VBox();
 		Vector<Employee> allEmps = state.getEmployeeStateRepository().getAll();
 		for (int i = 0; i < allEmps.size(); i++) {
@@ -152,22 +152,12 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 				tempPanel.addEventHandler(MouseEvent.ANY, this);
 				empsToPicPanels.put(emp, tempPanel);
 			}
-			/*
-			 * if(empsToActPanels.get(emp) == null) { JPanel temp = new JPanel();
-			 * temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
-			 * temp.setMinimumSize(new Dimension(150, 10)); empsToActPanels.put(emp, temp);
-			 * }
-			 */
 			VBox empPanel = empsToEmpPanels.get(emp);
 			empPanel.getChildren().removeAll();
 			VBox picPanel = (VBox) empsToPicPanels.get(emp);
 			picPanel.getChildren().removeAll();
 
 			GridPane gpLayout = new GridPane();
-//			GridBagConstraints gbc = new GridBagConstraints();
-//			gpLayout.fill = GridBagConstraints.NONE;
-//			gpLayout.gridwidth = 3;
-//			gpLayout.gridheight = 1;
 			gpLayout.getChildren().add(empPanel);
 
 			empPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
@@ -192,7 +182,6 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 					temp.setTextFill(Color.WHITE);
 					temp.setAlignment(Pos.BASELINE_LEFT);
 					temp.setTextAlignment(TextAlignment.LEFT);
-					System.out.println("Adding " + temp.getText());
 					empsToKeyLabels.put(e, temp);
 				}
 				Label keyLabel = empsToKeyLabels.get(e);
@@ -200,22 +189,17 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 					picPanel.getChildren().add(keyLabel);
 				}
 			}
-//			picPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 			picPanel.setBorder(Border.EMPTY);
-//			gbc.weightx = 1;
-//			gbc.weighty = 1;
-//			gbc.anchor = GridBagConstraints.WEST;
 			if(!empPanel.getChildren().contains(picPanel)) {
 				empPanel.getChildren().add(picPanel);
 			}
 			VBox actsPanel = new VBox();
-			// actsPanel.removeAll();
 
 			actsPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 			empPanel.setBorder(new Border(new BorderStroke(Color.rgb(102, 102, 102, 1), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
-			Vector<simse.adts.actions.Action> acts = state.getActionStateRepository().getAllActions(emp);
+			Vector<Action> acts = state.getActionStateRepository().getAllActions(emp);
 			for (int j = 0; j < acts.size(); j++) {
-				simse.adts.actions.Action tempAct = acts.elementAt(j);
+				Action tempAct = acts.elementAt(j);
 				if (tempAct instanceof CreateRequirementsAction) {
 					Label tempLabel = new Label("Creating requirements");
 					tempLabel.setFont(new Font(tempLabel.getFont().getName(), 10));
@@ -298,11 +282,8 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 					actsPanel.getChildren().add(tempLabel);
 				}
 			}
-//			gbc.weightx = 2;
-//			gbc.anchor = GridBagConstraints.EAST;
 			actsPanel.setPrefSize(150, (int) (actsPanel.getPrefHeight()));
 			empPanel.getChildren().add(actsPanel);
-//			empPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			employees.getChildren().add(empPanel);
 		}
 		actionPane.setContent(employees);
