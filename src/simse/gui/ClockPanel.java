@@ -61,6 +61,7 @@ public class ClockPanel extends Pane implements EventHandler<MouseEvent> {
 		state = s;
 		engine = e;
 		stackPane = new StackPane();
+		canvas = new Canvas(250,250);
 		update();
 		buildGUI();
 		this.getChildren().add(stackPane);
@@ -68,23 +69,17 @@ public class ClockPanel extends Pane implements EventHandler<MouseEvent> {
 
 	private void buildGUI() {
 		GridPane buttonGridPane = new GridPane();
-
-//		stackPane.setGridLinesVisible(true);
 		
 		btnNextEvent = new Label();
 		btnNextEvent.setBackground(JavaFXHelpers.createBackgroundColor(Color.DARKGRAY));
 		btnNextEvent.setGraphic(icoNextEvent);
 		btnNextEvent.addEventHandler(MouseEvent.ANY, this);
 		buttonGridPane.add(btnNextEvent, 0, 0);
-//		stackPane.setConstraints(btnNextEvent, 0, 0, 1, 1, HPos.RIGHT, VPos.TOP, Priority.NEVER, 
-//				Priority.NEVER, new Insets(12, 0, 0, 25));
 
 		btnAdvClock = new Label();
 		btnAdvClock.setGraphic(icoAdvClock);
 		btnAdvClock.addEventHandler(MouseEvent.ANY, this);
 		buttonGridPane.add(btnAdvClock, 0, 1);
-//		stackPane.setConstraints(btnAdvClock, 0, 0, 1, 1, HPos.RIGHT, VPos.TOP, Priority.NEVER, 
-//				Priority.NEVER, new Insets(2, 0, 0, 25));
 
 		stopCBox = new CheckBox();
 		stopCBox.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
@@ -92,9 +87,6 @@ public class ClockPanel extends Pane implements EventHandler<MouseEvent> {
 		stopCBox.addEventHandler(MouseEvent.ANY, this);
 		stopCBox.setPrefSize(1, 1);
 		buttonGridPane.add(stopCBox, 0, 2);
-//		stackPane.setConstraints(stopCBox, 0, 2, 1, 1, HPos.RIGHT, VPos.TOP, Priority.NEVER, 
-//				Priority.NEVER, new Insets(-3, 0, 0, 100));
-
 
 		txtAdvClock = new TextField("1");
 		txtAdvClock.setBackground(JavaFXHelpers.createBackgroundColor(Color.DARKGRAY));
@@ -105,8 +97,6 @@ public class ClockPanel extends Pane implements EventHandler<MouseEvent> {
 		txtAdvClock.setPadding(new Insets(10,10,10,10));
 		buttonGridPane.add(txtAdvClock, 0, 3);
 		buttonGridPane.setPadding(new Insets(12,0,100,130));
-//		stackPane.setConstraints(txtAdvClock, 0, 3, 1, 1, HPos.RIGHT, VPos.TOP, Priority.NEVER, 
-//				Priority.NEVER, new Insets(-5, 0, 0, 30));
 		stackPane.getChildren().addAll(canvas, buttonGridPane);
 	}
 
@@ -119,13 +109,9 @@ public class ClockPanel extends Pane implements EventHandler<MouseEvent> {
 		btnAdvClock.setGraphic(icoStopClock);
 	}
 
-	public void mouseClicked(MouseEvent me) {
-		
-	}
-
 	public void repaint() {
-		canvas = new Canvas(250,250);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
 		Image img = JavaFXHelpers.createImage("src/simse/gui/images/layout/clock.gif");
 
