@@ -7,6 +7,7 @@ import java.util.Vector;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
+import simse.adts.actions.Action;
 import simse.adts.actions.BreakAction;
 import simse.adts.actions.ChangePayRateAction;
 import simse.adts.actions.CorrectCodeAction;
@@ -78,8 +79,7 @@ public class RuleExecutor {
 		destroyerChecker = d;
 	}
 
-	public void update(Stage gui, int updateInstructions, String ruleName,
-			simse.adts.actions.Action action) {
+	public void update(Stage gui, int updateInstructions, String ruleName, Action action) {
 		updateProjAttsEffectRuleA(gui, updateInstructions, ruleName, action);
 		quitDestroyObjectsRuleA(gui, updateInstructions, ruleName, action);
 		fireDestroyObjectsRuleA(gui, updateInstructions, ruleName, action);
