@@ -16,6 +16,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderImage;
+import javafx.scene.layout.BorderRepeat;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -71,7 +74,7 @@ public class AttributePanel extends Pane {
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
 		iconBorder = JavaFXHelpers.createImage("src/simse/gui/images/layout/iconBorder.gif");
-		this.setBorder(new Border(new BorderImage(border, null, null, null, true, null, null)));
+		this.setBorder(new Border(new BorderImage(border, BorderWidths.FULL, Insets.EMPTY, BorderWidths.FULL, true, BorderRepeat.REPEAT, BorderRepeat.REPEAT)));
 
 		state = s;
 		clockPane = new ClockPanel(g, s, e);
@@ -85,11 +88,14 @@ public class AttributePanel extends Pane {
 		attributePaneLeft = new ScrollPane(attributeListLeft);
 		attributePaneLeft.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		attributePaneLeft.setPrefSize(300, 95);
+		attributeListLeft.prefWidthProperty().bind(attributePaneLeft.widthProperty());
 
 		attributeListRight = new ListView();
 		attributePaneRight = new ScrollPane(attributeListRight);
 		attributePaneRight.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		attributePaneRight.setPrefSize(300, 95);
+		attributeListRight.prefWidthProperty().bind(attributePaneRight.widthProperty());
+
 
 		HBox attributePane = new HBox(5);
 		attributePane.getChildren().add(attributePaneLeft);
@@ -753,7 +759,8 @@ public class AttributePanel extends Pane {
 	}
 
 	public void setIcon(ImageView img) {
-		selectedIcon.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
+//		selectedIcon.setBackground(JavaFXHelpers.createBackgroundColor(Color.BLACK));
+		selectedIcon.setId("Icon");
 		selectedIcon.setGraphic(img);
 	}
 }

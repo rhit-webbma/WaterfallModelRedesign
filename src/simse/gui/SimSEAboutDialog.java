@@ -148,6 +148,7 @@ public class SimSEAboutDialog extends Stage implements EventHandler<MouseEvent> 
 		mid.setAlignment(Pos.CENTER);
 		con.setAlignment(Pos.CENTER);
 		Scene scene = new Scene(con, 400, 400);
+		scene.getStylesheets().add("style.css");
 		this.setScene(scene);
 	}
 

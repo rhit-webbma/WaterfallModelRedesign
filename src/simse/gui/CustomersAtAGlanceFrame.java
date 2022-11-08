@@ -3,6 +3,9 @@ package simse.gui;
 
 import java.util.Vector;
 
+import simse.adts.objects.ACustomer;
+import simse.adts.objects.Customer;
+import simse.state.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -15,7 +18,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import simse.state.State;
+
+import java.util.*;
+import java.text.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.net.URL;
+import java.nio.file.Paths;
 
 public class CustomersAtAGlanceFrame extends Stage implements EventHandler<MouseEvent> {
 
@@ -23,7 +33,7 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 
 	private ContextMenu popup;
 	private PopupListener popupListener;
-	private TableView acustomerTable;
+	private TableView<ACustomer> acustomerTable;
 	private ACustomerTableModel acustomerModel;
 	private TitledPane acustomerTitlePane;
 	private Pane mainPane;
@@ -66,10 +76,14 @@ public class CustomersAtAGlanceFrame extends Stage implements EventHandler<Mouse
 		mainPane = new VBox();
 		
 		acustomerTable.prefWidthProperty().bind(mainPane.widthProperty());
+//		acustomerTable.setId("table");
 
 		// Add panes to main pane:
 		mainPane.getChildren().add(acustomerTitlePane);
 		Scene scene = new Scene(mainPane, 800, 500);
+		
+		scene.getStylesheets().add("style.css");
+
 		this.setScene(scene);
 
 		// Set main window frame properties:

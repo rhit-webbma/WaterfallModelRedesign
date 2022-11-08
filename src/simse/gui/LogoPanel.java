@@ -75,26 +75,26 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		aboutButton.setPadding(new Insets(0,0,0,5));
 		aboutButton.addEventHandler(MouseEvent.ANY, this);
 		
-		infoButton = new Button("Info");
-		infoButton.setPadding(new Insets(0,0,0,0));
-		infoButton.addEventHandler(MouseEvent.ANY, this);
-		
-		resetButton = new Button("Reset");
-		resetButton.setPadding(new Insets(0,1,0,0));
-		resetButton.addEventHandler(MouseEvent.ANY, this);
-		
-		GridPane extraButtonPane = new GridPane();
-		extraButtonPane.add(infoButton, 0, 0);
-		extraButtonPane.add(resetButton, 0, 1);
-		extraButtonPane.setPrefWidth(40);
-		extraButtonPane.setVgap(50);
-		extraButtonPane.setOpacity(1);
-		extraButtonPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(1,0,0,0)));
+//		infoButton = new Button("Info");
+//		infoButton.setPadding(new Insets(0,0,0,0));
+//		infoButton.addEventHandler(MouseEvent.ANY, this);
+//		
+//		resetButton = new Button("Reset");
+//		resetButton.setPadding(new Insets(0,1,0,0));
+//		resetButton.addEventHandler(MouseEvent.ANY, this);
+//		
+//		GridPane extraButtonPane = new GridPane();
+//		extraButtonPane.add(infoButton, 0, 0);
+//		extraButtonPane.add(resetButton, 0, 1);
+//		extraButtonPane.setPrefWidth(40);
+//		extraButtonPane.setVgap(50);
+//		extraButtonPane.setOpacity(1);
+//		extraButtonPane.setBackground(JavaFXHelpers.createBackgroundColor(new Color(1,0,0,0)));
 	
 		
 		logoPane = new StackPane();
-		logoPane.getChildren().addAll(aboutButton, extraButtonPane);
-		StackPane.setAlignment(extraButtonPane, Pos.TOP_LEFT);
+		logoPane.getChildren().addAll(aboutButton);
+//		StackPane.setAlignment(extraButtonPane, Pos.TOP_LEFT);
 		
 		// create the layout:
 		createLayout();
@@ -181,7 +181,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 		addButton(projectButton, 0, 7, 1, 1, buttonGPane);
 		addButton(toolButton, 0, 8, 1, 1, buttonGPane);
 		
-		gridPane.add(buttonGPane, 1, 0);
+//		gridPane.add(buttonGPane, 1, 0);
 //		buttonGPane.setGridLinesVisible(true);
 		
 //		gridPane.getChildren().add(buttonGPane);
@@ -228,7 +228,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 				about.setY(300);
 				about.show();
 			} else if (source.equals(infoButton)) {
-				new StartingNarrativeDialog();
+//				new StartingNarrativeDialog();
 			} else if (source.equals(resetButton)) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Reset Game?");

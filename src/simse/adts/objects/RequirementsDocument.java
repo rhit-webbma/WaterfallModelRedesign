@@ -12,13 +12,7 @@ public class RequirementsDocument extends Artifact implements Cloneable {
 
 	public RequirementsDocument(String n0, double s1, double n2, double n3,
 			double p4, double p5, double n6) {
-		setName(n0);
-		setSize(s1);
-		setNumKnownErrors(n2);
-		setNumUnknownErrors(n3);
-		setPercentErroneous(p4);
-		setPercentComplete(p5);
-		setNumUnknownTemp(n6);
+		super(n0, s1, n2, n3, p4, p5, n6);
 	}
 
 	public Object clone() {

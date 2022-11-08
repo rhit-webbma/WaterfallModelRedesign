@@ -14,6 +14,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -24,6 +25,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -63,7 +65,8 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 
 	private ScrollPane actionPane;
 	private Hashtable<Employee, VBox> empsToEmpPanels;
-	private Hashtable<Employee, VBox> empsToPicPanels;
+	private Hashtable<Employee, HBox> empsToPicPanels;
+	// private Hashtable empsToActPanels;
 	private Hashtable<Employee, Label> empsToPicLabels;
 	private Hashtable<Employee, Label> empsToKeyLabels;
 
@@ -84,31 +87,50 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 		mainGUIFrame = gui;
 
 		layout = new VBox();
+		layout.setId("actionPanelVBox");
 
 		actionPane = new ScrollPane();
+		actionPane.setId("scrollPaneActionPanel");
 		actionPane.setPrefSize(225, 425);
-		actionPane.setStyle("-fx-background: rgb(102, 102, 102, 1);\n -fx-background-color: rgb(102, 102, 102, 1)");
+		actionPane.setId("ActionPanelMain");
+//		actionPane.setStyle("-fx-background: rgb(102, 102, 102, 1);\n -fx-background-color: rgb(102, 102, 102, 1)");
 
 		empsToEmpPanels = new Hashtable<Employee, VBox>();
-		empsToPicPanels = new Hashtable<Employee, VBox>();
+		empsToPicPanels = new Hashtable<Employee, HBox>();
+		// empsToActPanels = new Hashtable();
 		empsToPicLabels = new Hashtable<Employee, Label>();
 		empsToKeyLabels = new Hashtable<Employee, Label>();
 
-		BorderPane titlePanel = new BorderPane();
+//		BorderPane titlePanel = new BorderPane();
+		
+		
+		VBox actionPanelLayout = new VBox();
+		
+	
+//		Label titleLabel = new Label("Current Activities:");
+//		Font f = titleLabel.getFont();
+//		Font newFont = new Font(f.getName(), 15);
+//		titleLabel.setFont(newFont);
+//		titleLabel.setTextFill(Color.BLACK);
+		
+//		actionPanelLayout.getChildren().add(titleLabel);
+//		actionPanelLayout.getChildren().add(actionPane);
+//		actionPanelLayout.setId("ActionPanelLayout");
+		
+		TitledPane titlePanel = new TitledPane("Employee Panel", actionPane);
 		titlePanel.setBorder(Border.EMPTY);
+		titlePanel.setId("ActionTitlePanel");
 		titlePanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
-		Label titleLabel = new Label("Current Activities:");
-		Font f = titleLabel.getFont();
-		Font newFont = new Font(f.getName(), 15);
-		titleLabel.setFont(newFont);
-		titleLabel.setTextFill(Color.WHITE);
-		titlePanel.setLeft(titleLabel);
+		
+		
+//		titlePanel.setLeft(titleLabel);
 
 		selectedEmp = null;
 		popup = new ContextMenu();
 
+//		layout.getChildren().add(titlePanel);
+//		layout.getChildren().add(actionPane);
 		layout.getChildren().add(titlePanel);
-		layout.getChildren().add(actionPane);
 		
 		update();
 		this.getChildren().add(layout);		
@@ -137,8 +159,18 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 
 	public void update() {
 		actionPane.setContent(null);
+
 		empsToEmpPanels.clear();
+		
+		Label titleLabel = new Label("Current Activities:");
+		Font f = titleLabel.getFont();
+		Font newFont = new Font(f.getName(), 15);
+		titleLabel.setFont(newFont);
+		titleLabel.setTextFill(Color.BLACK);
+	
 		VBox employees = new VBox();
+		employees.getChildren().add(titleLabel);
+		employees.setSpacing(2);
 		Vector<Employee> allEmps = state.getEmployeeStateRepository().getAll();
 		for (int i = 0; i < allEmps.size(); i++) {
 			Employee emp = allEmps.elementAt(i);
@@ -148,22 +180,31 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 				empsToEmpPanels.put(emp, tempPanel);
 			}
 			if (empsToPicPanels.get(emp) == null) {
-				VBox tempPanel = new VBox();
+				HBox tempPanel = new HBox();
 				tempPanel.addEventHandler(MouseEvent.ANY, this);
 				empsToPicPanels.put(emp, tempPanel);
 			}
 			VBox empPanel = empsToEmpPanels.get(emp);
 			empPanel.getChildren().removeAll();
-			VBox picPanel = (VBox) empsToPicPanels.get(emp);
+			HBox picPanel = (HBox) empsToPicPanels.get(emp);
+			picPanel.setSpacing(5);
+			picPanel.setAlignment(Pos.BASELINE_LEFT);
 			picPanel.getChildren().removeAll();
 
 			GridPane gpLayout = new GridPane();
 			gpLayout.getChildren().add(empPanel);
 
-			empPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
-			picPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
+//			empPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
+			empPanel.setId("ActionPanelEmployee");
+			picPanel.setId("ActionPanelEmployeeBox");
+			picPanel.prefWidthProperty().bind(actionPane.widthProperty());
+			empPanel.prefWidthProperty().bind(actionPane.widthProperty());
+//			empPanel.setId("ActionPanelEmployee");
+//			picPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 			if (empsToPicLabels.get(emp) == null) {
 				ImageView ico = JavaFXHelpers.createImageView(TabPanel.getImage(emp));
+				ico.setFitHeight(40);
+				ico.setFitWidth(40);
 				Label temp = new Label();
 				temp.setGraphic(ico);
 				temp.addEventHandler(MouseEvent.ANY, this);
@@ -172,19 +213,21 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 
 			Label picLabel = empsToPicLabels.get(emp);
 			picLabel.setAlignment(Pos.BASELINE_LEFT);
+			picLabel.setId("EmployeePic");
 			if(!picPanel.getChildren().contains(picLabel)) {
 				picPanel.getChildren().add(picLabel);
 			}
 			if (emp instanceof SoftwareEngineer) {
 				SoftwareEngineer e = (SoftwareEngineer) emp;
 				if (empsToKeyLabels.get(e) == null) {
-					Label temp = new Label("" + e.getName());
-					temp.setTextFill(Color.WHITE);
+					Label temp = new Label("" + e.getName() + " - Software Engineer");
+					temp.setTextFill(Color.BLACK);
 					temp.setAlignment(Pos.BASELINE_LEFT);
 					temp.setTextAlignment(TextAlignment.LEFT);
 					empsToKeyLabels.put(e, temp);
 				}
 				Label keyLabel = empsToKeyLabels.get(e);
+				keyLabel.setId("EmployeeName");
 				if(!picPanel.getChildren().contains(keyLabel)) {
 					picPanel.getChildren().add(keyLabel);
 				}

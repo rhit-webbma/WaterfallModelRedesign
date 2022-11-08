@@ -139,6 +139,7 @@ public class ToolsAtAGlanceFrame extends Stage implements EventHandler<MouseEven
 		automatedtestingtoolTable.prefWidthProperty().bind(mainPane.widthProperty());
 		
 		Scene scene = new Scene(mainPane, 800, 500);
+		scene.getStylesheets().add("style.css");
 		this.setScene(scene);
 //
 //		// Set main window frame properties:
