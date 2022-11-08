@@ -22,6 +22,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderImage;
+import javafx.scene.layout.BorderRepeat;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -63,7 +65,7 @@ public class AttributePanel extends Pane {
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
 		iconBorder = JavaFXHelpers.createImage("src/simse/gui/images/layout/iconBorder.gif");
-		this.setBorder(new Border(new BorderImage(border, null, null, null, true, null, null)));
+		this.setBorder(new Border(new BorderImage(border, BorderWidths.FULL, Insets.EMPTY, BorderWidths.FULL, true, BorderRepeat.REPEAT, BorderRepeat.REPEAT)));
 
 		state = s;
 		clockPane = new ClockPanel(g, s, e);
