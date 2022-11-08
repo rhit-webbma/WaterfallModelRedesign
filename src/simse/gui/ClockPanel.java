@@ -27,6 +27,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import simse.engine.Engine;
 import simse.gui.util.JavaFXHelpers;
 import simse.state.State;
@@ -85,16 +86,17 @@ public class ClockPanel extends Pane implements EventHandler<MouseEvent> {
 		stopCBox.setBackground(JavaFXHelpers.createBackgroundColor(Color.WHITE));
 		stopCBox.setOpacity(1);
 		stopCBox.addEventHandler(MouseEvent.ANY, this);
-		stopCBox.setPrefSize(1, 1);
+		stopCBox.setPrefSize(0.5, 0.5);
 		buttonGridPane.add(stopCBox, 0, 2);
 
 		txtAdvClock = new TextField("1");
-		txtAdvClock.setBackground(JavaFXHelpers.createBackgroundColor(Color.DARKGRAY));
-		txtAdvClock.setOpacity(0);
-		txtAdvClock.setPrefSize(90, 18);
-		txtAdvClock.setBorder(new Border(new BorderStroke(new Color(0, 0, 0, 0), 
-	            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-		txtAdvClock.setPadding(new Insets(10,10,10,10));
+		txtAdvClock.setBackground(JavaFXHelpers.createBackgroundColor(Color.TRANSPARENT));
+		txtAdvClock.setOpacity(1);
+		txtAdvClock.setPrefSize(90, 2);
+		txtAdvClock.setFont(new Font(10));
+		txtAdvClock.setBorder(new Border(new BorderStroke(new Color(0, 0, 0, 1), 
+	            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY)));
+		txtAdvClock.setPadding(new Insets(0,0,0,0));
 		buttonGridPane.add(txtAdvClock, 0, 3);
 		buttonGridPane.setPadding(new Insets(12,0,100,130));
 		stackPane.getChildren().addAll(canvas, buttonGridPane);
