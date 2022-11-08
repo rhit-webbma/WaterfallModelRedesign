@@ -103,7 +103,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		objsToImages = new Hashtable<SSObject, ImageView>();
 		buttonsToObjs = new Hashtable<Button, SSObject>();
 //		employeeFrame = new EmployeesAtAGlanceFrame(state, gui);
-		employeeFrame = new EmployeesOverviewScreen(state);
+		employeeFrame = new EmployeesOverviewScreen(state, gui, logic);
 		artifactFrame = new ArtifactsAtAGlanceFrame(state, gui);
 		toolFrame = new ToolsAtAGlanceFrame(state, gui);
 		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
