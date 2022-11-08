@@ -90,7 +90,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 			 
 			if (result.get() == ButtonType.OK) {
 				if (engine.getTimer() != null) {
-					engine.getTimer().stop();
+//					engine.getTimer().stop();
 				}
 				close();
 				SimSE.main(new String[] {});
