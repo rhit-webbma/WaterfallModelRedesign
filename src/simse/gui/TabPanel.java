@@ -44,7 +44,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 	private LogoPanel logoPane;
 	private AttributePanel attributePane;
-	private EmployeesAtAGlanceFrame employeeFrame;
+	private EmployeesOverviewScreen employeeFrame;
+//	private EmployeesAtAGlanceFrame employeeFrame;
 	private ArtifactsAtAGlanceFrame artifactFrame;
 	private ToolsAtAGlanceFrame toolFrame;
 	private ProjectsAtAGlanceFrame projectFrame;
@@ -101,7 +102,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		attributePane = a;
 		objsToImages = new Hashtable<SSObject, ImageView>();
 		buttonsToObjs = new Hashtable<Button, SSObject>();
-		employeeFrame = new EmployeesAtAGlanceFrame(state, gui);
+//		employeeFrame = new EmployeesAtAGlanceFrame(state, gui);
+		employeeFrame = new EmployeesOverviewScreen(state, gui, logic);
 		artifactFrame = new ArtifactsAtAGlanceFrame(state, gui);
 		toolFrame = new ToolsAtAGlanceFrame(state, gui);
 		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
