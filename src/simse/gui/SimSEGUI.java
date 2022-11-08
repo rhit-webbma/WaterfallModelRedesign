@@ -10,6 +10,7 @@ import simse.explanatorytool.ExplanatoryTool;
 import simse.explanatorytool.MultipleTimelinesBrowser;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -18,9 +19,12 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -36,6 +40,10 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private MenuBar menuBar; // menu bar at top of window
 	private Menu analyzeMenu; // analyze menu
 	private MenuItem analyzeSimItem; // menu item in "Analyze" menu
+	private Menu extrasMenu;
+	private MenuItem infoSimItem;
+	private Menu resetMenu;
+	private MenuItem resetSimItem;
 
 	private State state;
 	private Logic logic;
@@ -56,6 +64,31 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 			expTool.show();
 			}
         }
+    };
+    
+    private EventHandler<ActionEvent> infoEvent = new EventHandler<ActionEvent>() {
+    	public void handle(ActionEvent event) {
+    		new StartingNarrativeDialog();
+    	}
+    };
+    
+    private EventHandler<ActionEvent> resetEvent = new EventHandler<ActionEvent>() {
+    	public void handle(ActionEvent event) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Reset Game?");
+			String s = "Are You Sure You Want To Reset?";
+			alert.setContentText(s);
+			 
+			Optional<ButtonType> result = alert.showAndWait();
+			 
+			if (result.get() == ButtonType.OK) {
+				if (engine.getTimer() != null) {
+					engine.getTimer().stop();
+				}
+				close();
+				SimSE.main(new String[] {});
+			}
+    	}
     };
 	
 	public SimSEGUI(Engine e, State s, Logic l, Branch branch,
@@ -86,10 +119,19 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		menuBar = new MenuBar();
 		// Analyze menu:
 		analyzeMenu = new Menu("Analyze"); // "Analyze" menu
+		extrasMenu = new Menu("Extra");
+		infoSimItem = new MenuItem("Info");
+		resetSimItem = new MenuItem("Reset");
 		analyzeSimItem = new MenuItem("Analyze Simulation");
+		
 		analyzeMenu.getItems().add(analyzeSimItem);
+		extrasMenu.getItems().add(infoSimItem);
+		extrasMenu.getItems().add(resetSimItem);
 		analyzeSimItem.setOnAction(menuEvent);
+		infoSimItem.setOnAction(infoEvent);
+		resetSimItem.setOnAction(resetEvent);
 		menuBar.getMenus().add(analyzeMenu);
+		menuBar.getMenus().add(extrasMenu);
 		
 
 		// Create main panel:
@@ -107,6 +149,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 
 		// Set main window frame properties:
 		mainPane.setFill(Color.WHITE);
+		mainPane.getStylesheets().add("style.css");
 		this.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this);
 		this.setScene(mainPane);
 //		this.setSize(bPane.getLayout().preferredLayoutSize(this));

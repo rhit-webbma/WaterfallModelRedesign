@@ -106,9 +106,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		objsToImages = new Hashtable<SSObject, ImageView>();
 		buttonsToObjs = new Hashtable<Button, SSObject>();
 //		employeeFrame = new EmployeesAtAGlanceFrame(state, gui);
-		employeeFrame = new EmployeesOverviewScreen(state);
-//		artifactFrame = new ArtifactsAtAGlanceFrame(state, gui);
 		artifactFrame = new ArtifactsOverviewScreen(state, gui, l);
+		employeeFrame = new EmployeesOverviewScreen(state, gui, logic);
+
 		toolFrame = new ToolsAtAGlanceFrame(state, gui);
 //		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
 		projectFrame = new ProjectOverviewScreen(state);
@@ -126,8 +126,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		// Create main panel:
 		gridPane = new GridPane();
-		gridPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1.0)));
+//		gridPane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1.0)));
 		gridPane.setPrefWidth(1024);
+//		gridPane.getStylesheets().add("grid");
 //		gridPane.setGridLinesVisible(true);
 
 		logoPane = new LogoPanel(gui);
