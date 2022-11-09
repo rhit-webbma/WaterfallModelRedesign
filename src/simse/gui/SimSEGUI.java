@@ -28,13 +28,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import simse.SimSE;
 import simse.engine.Engine;
-import simse.explanatorytool.Branch;
-import simse.explanatorytool.ExplanatoryTool;
-import simse.explanatorytool.MultipleTimelinesBrowser;
 import simse.logic.Logic;
 import simse.state.State;
 
@@ -90,7 +84,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 			 
 			if (result.get() == ButtonType.OK) {
 				if (engine.getTimer() != null) {
-//					engine.getTimer().stop();
+					engine.stopTimer();
 				}
 				close();
 				SimSE.main(new String[] {});
@@ -140,7 +134,6 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		menuBar.getMenus().add(analyzeMenu);
 		menuBar.getMenus().add(extrasMenu);
 		
-
 		// Create main panel:
         BorderPane bPane = new BorderPane();
 		bPane.setTop(tabPanel);
