@@ -32,6 +32,7 @@ public class ArtifactsOverviewScreen extends Stage implements EventHandler<Mouse
 	TableModel tableModel;
 	TableView table;
 	
+	BorderPane tablePane;
 	VBox mainPane;
 	
 	public ArtifactsOverviewScreen(State s, SimSEGUI gui, Logic l) {
@@ -58,7 +59,7 @@ public class ArtifactsOverviewScreen extends Stage implements EventHandler<Mouse
 		table.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 
 		// Create panes:
-		BorderPane tablePane = new BorderPane(table);
+		tablePane = new BorderPane(table);
 		tablePane.setCenter(table);
 		mainPane.getChildren().add(tablePane);
 		
@@ -68,6 +69,15 @@ public class ArtifactsOverviewScreen extends Stage implements EventHandler<Mouse
 		
 		Scene scene = new Scene(mainPane, 900, 500);
 		this.setScene(scene);
+	}
+	
+	public void update() {
+		mainPane.getChildren().remove(tablePane);
+		tableModel = new ArtifactTableModel(state);
+		table = tableModel.createTable();
+		tablePane = new BorderPane(table);
+		tablePane.setCenter(table);
+		mainPane.getChildren().add(2, tablePane);
 	}
 
 	@Override

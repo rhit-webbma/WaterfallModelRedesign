@@ -28,6 +28,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 	TableModel tableModel2;
 	TableView table2;
 	
+	BorderPane tablePane, tablePane2;
 	VBox mainPane;
 	
 	
@@ -52,7 +53,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 	table.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 
 	// Create panes:
-	BorderPane tablePane = new BorderPane(table);
+	tablePane = new BorderPane(table);
 	tablePane.setCenter(table);
 	mainPane.getChildren().add(tablePane);
 	
@@ -70,7 +71,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 	table2 = tableModel2.createTable();
 	table2.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 	
-	BorderPane tablePane2 = new BorderPane(table2);
+	tablePane2 = new BorderPane(table2);
 	tablePane2.setCenter(table2);
 	mainPane.getChildren().add(tablePane2);
 	
@@ -79,6 +80,22 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 	this.setScene(scene);
 	}
 
+	public void update() {
+		mainPane.getChildren().remove(tablePane);
+		tableModel = new SEProjectTableModel(state);
+		table = tableModel.createTable();
+		tablePane = new BorderPane(table);
+		tablePane.setCenter(table);
+		mainPane.getChildren().add(2, tablePane);
+		
+		mainPane.getChildren().remove(tablePane2);
+		tableModel2 = new ToolTableModel(state);
+		table2 = tableModel2.createTable();
+		tablePane2 = new BorderPane(table2);
+		tablePane2.setCenter(table2);
+		mainPane.getChildren().add(5, tablePane2);
+	}
+	
 	@Override
 	public void handle(MouseEvent arg0) {
 		// TODO Auto-generated method stub
