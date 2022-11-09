@@ -53,6 +53,7 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		this.logic = l;
 		this.mainPane = new VBox();
 		this.actions = new ContextMenu();
+		this.engineer = engineer;
 		
 		this.setTitle(engineer.getName());
 		

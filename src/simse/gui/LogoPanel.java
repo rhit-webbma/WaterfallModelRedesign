@@ -239,7 +239,7 @@ public class LogoPanel extends Pane implements EventHandler<MouseEvent> {
 				 
 				if (result.get() == ButtonType.OK) {
 					if (gui.getEngine().getTimer() != null) {
-						gui.getEngine().getTimer().cancel();
+						gui.getEngine().getTimer().stop();
 					}
 					gui.close();
 					SimSE.main(new String[] {});

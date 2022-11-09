@@ -2683,7 +2683,7 @@ public class MenuInputManager {
 				a2.setContentText("Are you sure you want to end the game?");
 				a2.setHeaderText(null);
 				ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-				ButtonType noButton = new ButtonType("Yes", ButtonBar.ButtonData.NO);
+				ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
 				a2.getButtonTypes().setAll(okButton, noButton);
 				a2.showAndWait().ifPresent(type -> {
 					if (type == okButton) {

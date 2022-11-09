@@ -195,6 +195,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				if (employeeFrame.isIconified()) {
 					employeeFrame.setIconified(false);
 				}
+				employeeFrame.update(true);
 				employeeFrame.show();
 			}
 		});
@@ -378,6 +379,10 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 	public void update() {
 		update(logoPane.getSelectedTabIndex());
+		employeeFrame.update(false);
+		employeeFrame.update(true);
+		projectFrame.update();
+		artifactFrame.update();
 	}
 
 	public void update(int index) {
