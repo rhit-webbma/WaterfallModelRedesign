@@ -195,6 +195,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				if (employeeFrame.isIconified()) {
 					employeeFrame.setIconified(false);
 				}
+				employeeFrame.update(true);
 				employeeFrame.show();
 			}
 		});

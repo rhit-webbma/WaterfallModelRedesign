@@ -87,21 +87,11 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 	public void handle(MouseEvent evt) {
 		Object source = evt.getSource();
 		if (source == employeeTab) {
-			mainPane.getChildren().remove(tablePane);
-			tableModel = new SoftwareEngineerTableModel(state);
-			table = tableModel.createTable();
-			tablePane = new BorderPane(table);
-			tablePane.setCenter(table);
+			update(true);
 			if (mainPane.getChildren().contains(moreDetail)) mainPane.getChildren().remove(moreDetail);
-			mainPane.getChildren().add(tablePane);
 			mainPane.getChildren().add(moreDetail);
 		} else if (source == customerTab) {
-			mainPane.getChildren().remove(tablePane);
-			tableModel = new ACustomerTableModel(state);
-			table = tableModel.createTable();
-			tablePane = new BorderPane(table);
-			tablePane.setCenter(table);
-			mainPane.getChildren().add(tablePane);
+			update(false);
 			mainPane.getChildren().remove(moreDetail);
 		} else if (source == moreDetail) {
 			SoftwareEngineer selected = (SoftwareEngineer) table.getSelectionModel().getSelectedItem();
@@ -113,6 +103,19 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 				info.show();
 			}
 		}
+	}
+	
+	public void update(boolean isEmployee) {
+		mainPane.getChildren().remove(tablePane);
+		if (isEmployee) {
+			tableModel = new SoftwareEngineerTableModel(state);
+		} else {
+			tableModel = new ACustomerTableModel(state);
+		}
+		table = tableModel.createTable();
+		tablePane = new BorderPane(table);
+		tablePane.setCenter(table);
+		mainPane.getChildren().add(3, tablePane);
 	}
 
 }
