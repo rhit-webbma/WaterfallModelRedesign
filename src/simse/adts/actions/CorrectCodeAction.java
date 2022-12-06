@@ -39,6 +39,7 @@ public class CorrectCodeAction extends Action implements Cloneable {
 		associatedrequirementsdocs = new Hashtable<Artifact, Boolean>();
 		associateddesigndocs = new Hashtable<Artifact, Boolean>();
 		developmentenvironments = new Hashtable<Tool, Boolean>();
+		actionName = Action.CORRECTCODE;
 	}
 
 	public Object clone() {

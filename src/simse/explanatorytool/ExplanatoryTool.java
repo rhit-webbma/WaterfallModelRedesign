@@ -28,6 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import simse.adts.actions.Action;
 import simse.state.State;
 import simse.util.RuleCategories;
 import simse.util.RuleDescriptions;
@@ -137,17 +138,16 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 
 		// action list:
 		ObservableList<String> actions = FXCollections.observableArrayList(
-				"CreateRequirements", "ReviewRequirements",
-				"CorrectRequirements", "CreateDesign", "ReviewDesign",
-				"CorrectDesign", "CreateCode", "InspectCode", "CorrectCode",
-				"IntegrateCode", "SystemTest", "CreateSystemTestPlan",
-				"ReviewSystemTestPlan", "CorrectSystemTestPlan",
-				"DeliverProduct", "Break", "GetSick", "Quit",
-				"IntroduceNewRequirements", "ChangePayRate", "GiveBonus",
-				"Fire", "PurchaseTool", "SuggestedRequirementsPhaseDuration",
-				"SuggestedDesignPhaseDuration",
-				"SuggestedImplIntegrationPhaseDuration",
-				"SuggestedTestingPhaseDuration");
+				Action.CREATEREQUIREMENTS, Action.REVIEWREQUIREMENTS,
+				Action.CORRECTREQUIREMENTS, Action.CREATEDESIGN, Action.REVIEWDESIGN,
+				Action.CORRECTDESIGN, Action.CREATECODE, Action.INSPECTCODE, Action.CORRECTCODE,
+				Action.INTEGRATECODE, Action.SYSTEMTEST, Action.CREATESYSTEMTESTPLAN,
+				Action.REVIEWSYSTEMTESTPLAN, Action.CORRECTSYSTEMTESTPLAN,
+				Action.DELIVERPRODUCT, Action.BREAK, Action.GETSICK, Action.QUIT,
+				Action.INTRODUCENEWREQUIREMENTS, Action.CHANGEPAYRATE, Action.GIVEBONUS,
+				Action.FIRE, Action.PURCHASETOOL, Action.SUGGESTEDREQUIREMENTSPHASEDURATION,
+				Action.SUGGESTEDDESIGNPHASEDURATION, Action.SUGGESTEDIMPLINTEGRATIONPHASEDURATION,
+				Action.SUGGESTEDTESTINGPHASEDURATION);
 		actionList = new ListView<String>(actions);
 		attributeList.setFixedCellSize(24);
 		actionList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

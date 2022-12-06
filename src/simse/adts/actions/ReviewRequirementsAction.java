@@ -29,6 +29,7 @@ public class ReviewRequirementsAction extends Action implements Cloneable {
 		emps = new Hashtable<Employee, Boolean>();
 		requirementsdocs = new Hashtable<Artifact, Boolean>();
 		projs = new Hashtable<Project, Boolean>();
+		actionName = Action.REVIEWREQUIREMENTS;
 	}
 
 	public Object clone() {

@@ -35,6 +35,7 @@ public class InspectCodeAction extends Action implements Cloneable {
 		projs = new Hashtable<Project, Boolean>();
 		associatedrequirementsdocs = new Hashtable<Artifact, Boolean>();
 		associateddesigndocs = new Hashtable<Artifact, Boolean>();
+		actionName = Action.INSPECTCODE;
 	}
 
 	public Object clone() {

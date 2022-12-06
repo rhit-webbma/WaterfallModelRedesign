@@ -42,6 +42,7 @@ public class CreateCodeAction extends Action implements Cloneable {
 		associateddesigndocuments = new Hashtable<Artifact, Boolean>();
 		developmentenvironments = new Hashtable<Tool, Boolean>();
 		associatedsystemtestplans = new Hashtable<Artifact, Boolean>();
+		actionName = Action.CREATECODE;
 	}
 
 	public Object clone() {

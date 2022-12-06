@@ -33,6 +33,7 @@ public class DeliverProductAction extends Action implements Cloneable {
 		projs = new Hashtable<Project, Boolean>();
 		codedocs = new Hashtable<Artifact, Boolean>();
 		custs = new Hashtable<Customer, Boolean>();
+		actionName = Action.DELIVERPRODUCT;
 	}
 
 	public Object clone() {

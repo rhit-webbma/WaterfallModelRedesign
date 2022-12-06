@@ -23,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import simse.adts.actions.Action;
 import simse.state.State;
 import simse.util.RuleCategories;
 import simse.util.RuleType;
@@ -41,7 +42,7 @@ public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
 	private ListView<String> destroyerRuleList;
 	private ListView<String> intermediateRuleList;
 	private TextArea descriptionArea;
-	private String lastSelectedAction;
+	private String lastSelectedAction = "";
 	private CheckBox advRulesCheck;
 	private boolean advRulesOn;
 
@@ -90,6 +91,7 @@ public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
         advRulesCheck.setOnAction(event);
         
         HBox selections = new HBox();
+        selections.setPadding(new Insets(10));
         selections.getChildren().add(ruleSelectorPane);
         selections.getChildren().add(advancedRulesPane);
         mainPane.getChildren().add(selections);
@@ -171,40 +173,40 @@ public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
 		switch(ruleType) {
 		case ARTIFACT:
 			actions = FXCollections.observableArrayList(
-					"CreateRequirements", "ReviewRequirements",
-					"CorrectRequirements", "CreateDesign", "ReviewDesign",
-					"CorrectDesign", "CreateCode", "InspectCode", "CorrectCode",
-					"IntegrateCode", "SystemTest", "CreateSystemTestPlan",
-					"ReviewSystemTestPlan", "CorrectSystemTestPlan",
-					"DeliverProduct", "IntroduceNewRequirements");
+					Action.CREATEREQUIREMENTS, Action.REVIEWREQUIREMENTS,
+					Action.CORRECTREQUIREMENTS, Action.CREATEDESIGN, Action.REVIEWDESIGN,
+					Action.CORRECTDESIGN, Action.CREATECODE, Action.INSPECTCODE, Action.CORRECTCODE,
+					Action.INTEGRATECODE, Action.SYSTEMTEST, Action.CREATESYSTEMTESTPLAN,
+					Action.REVIEWSYSTEMTESTPLAN, Action.CORRECTSYSTEMTESTPLAN,
+					Action.DELIVERPRODUCT, Action.INTRODUCENEWREQUIREMENTS);
 			break;
 		case PROJECT:
-			actions = FXCollections.observableArrayList("DeliverProduct", "Quit",
-					"IntroduceNewRequirements", "GiveBonus", "Fire", "PurchaseTool", "SuggestedRequirementsPhaseDuration",
-					"SuggestedDesignPhaseDuration", "SuggestedImplIntegrationPhaseDuration", "SuggestedTestingPhaseDuration");
+			actions = FXCollections.observableArrayList( Action.DELIVERPRODUCT, Action.QUIT, 
+					Action.INTRODUCENEWREQUIREMENTS, Action.GIVEBONUS, Action.FIRE, Action.PURCHASETOOL, 
+					Action.SUGGESTEDREQUIREMENTSPHASEDURATION, Action.SUGGESTEDDESIGNPHASEDURATION, 
+					Action.SUGGESTEDIMPLINTEGRATIONPHASEDURATION, Action.SUGGESTEDTESTINGPHASEDURATION);
 			break;
 		case PEOPLE:
 			actions = FXCollections.observableArrayList(
-					"CreateRequirements", "ReviewRequirements",
-					"CorrectRequirements", "CreateDesign", "ReviewDesign",
-					"CorrectDesign", "CreateCode", "InspectCode", "CorrectCode",
-					"IntegrateCode", "SystemTest", "CreateSystemTestPlan",
-					"ReviewSystemTestPlan", "CorrectSystemTestPlan", "DeliverProduct", 
-					"Break", "GetSick", "Quit", "ChangePayRate", "GiveBonus", "Fire");
+					Action.CREATEREQUIREMENTS, Action.REVIEWREQUIREMENTS,
+					Action.CORRECTREQUIREMENTS, Action.CREATEDESIGN, Action.REVIEWDESIGN,
+					Action.CORRECTDESIGN, Action.CREATECODE, Action.INSPECTCODE, Action.CORRECTCODE,
+					Action.INTEGRATECODE, Action.SYSTEMTEST, Action.CREATESYSTEMTESTPLAN,
+					Action.REVIEWSYSTEMTESTPLAN, Action.CORRECTSYSTEMTESTPLAN, Action.DELIVERPRODUCT, 
+					Action.BREAK, Action.GETSICK, Action.QUIT, Action.CHANGEPAYRATE, Action.GIVEBONUS);
 			break;
 		default:
 			actions = FXCollections.observableArrayList(
-					"CreateRequirements", "ReviewRequirements",
-					"CorrectRequirements", "CreateDesign", "ReviewDesign",
-					"CorrectDesign", "CreateCode", "InspectCode", "CorrectCode",
-					"IntegrateCode", "SystemTest", "CreateSystemTestPlan",
-					"ReviewSystemTestPlan", "CorrectSystemTestPlan",
-					"DeliverProduct", "Break", "GetSick", "Quit",
-					"IntroduceNewRequirements", "ChangePayRate", "GiveBonus",
-					"Fire", "PurchaseTool", "SuggestedRequirementsPhaseDuration",
-					"SuggestedDesignPhaseDuration",
-					"SuggestedImplIntegrationPhaseDuration",
-					"SuggestedTestingPhaseDuration");
+					Action.CREATEREQUIREMENTS, Action.REVIEWREQUIREMENTS,
+					Action.CORRECTREQUIREMENTS, Action.CREATEDESIGN, Action.REVIEWDESIGN,
+					Action.CORRECTDESIGN, Action.CREATECODE, Action.INSPECTCODE, Action.CORRECTCODE,
+					Action.INTEGRATECODE, Action.SYSTEMTEST, Action.CREATESYSTEMTESTPLAN,
+					Action.REVIEWSYSTEMTESTPLAN, Action.CORRECTSYSTEMTESTPLAN,
+					Action.DELIVERPRODUCT, Action.BREAK, Action.GETSICK, Action.QUIT,
+					Action.INTRODUCENEWREQUIREMENTS, Action.CHANGEPAYRATE, Action.GIVEBONUS,
+					Action.FIRE, Action.PURCHASETOOL, Action.SUGGESTEDREQUIREMENTSPHASEDURATION,
+					Action.SUGGESTEDDESIGNPHASEDURATION, Action.SUGGESTEDIMPLINTEGRATIONPHASEDURATION,
+					Action.SUGGESTEDTESTINGPHASEDURATION);
 		}
 		return actions;
 	}

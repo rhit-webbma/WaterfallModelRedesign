@@ -32,6 +32,7 @@ public class ReviewDesignAction extends Action implements Cloneable {
 		designdocs = new Hashtable<Artifact, Boolean>();
 		projs = new Hashtable<Project, Boolean>();
 		associatedrequirementsdocs = new Hashtable<Artifact, Boolean>();
+		actionName = Action.REVIEWDESIGN;
 	}
 
 	public Object clone() {

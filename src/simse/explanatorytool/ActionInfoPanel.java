@@ -166,11 +166,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		this.setPrefSize(900, 550);
 	}
 
-	// responds to list selections
-//	public void valueChanged(ListSelectionEvent e) {
-//		
-//	}
-
 	// initializes the action description
 	private void initializeActionDescription() {
 		String text = "";
@@ -235,174 +230,14 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 
 	// initializes the JList of triggers
 	private void initializeTriggerList() {
-		if (action instanceof CreateRequirementsAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof ReviewRequirementsAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof CorrectRequirementsAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof CreateDesignAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof ReviewDesignAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof CorrectDesignAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof CreateCodeAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof InspectCodeAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof CorrectCodeAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof IntegrateCodeAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof SystemTestAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof CreateSystemTestPlanAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof ReviewSystemTestPlanAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof CorrectSystemTestPlanAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof DeliverProductAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof BreakAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof GetSickAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof QuitAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof IntroduceNewRequirementsAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof ChangePayRateAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof GiveBonusAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof FireAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof PurchaseToolAction) {
-			String[] list = { "TrigA", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
-			String[] list = { "AutoTrig", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
-			String[] list = { "AutoTrig", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
-			String[] list = { "AutoTrig", };
-			triggerList.getItems().add(list);
-		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
-			String[] list = { "AutoTrig", };
-			triggerList.getItems().add(list);
-		}
+		String actionName = action.getActionName();
+		triggerList.getItems().setAll(RuleCategories.getBackendTrigRulesForAction(actionName));
 	}
 
 	// initializes the JList of destroyers
 	private void initializeDestroyerList() {
-		if (action instanceof CreateRequirementsAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof ReviewRequirementsAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof CorrectRequirementsAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof CreateDesignAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof ReviewDesignAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof CorrectDesignAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof CreateCodeAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof InspectCodeAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof CorrectCodeAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof IntegrateCodeAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof SystemTestAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof CreateSystemTestPlanAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof ReviewSystemTestPlanAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof CorrectSystemTestPlanAction) {
-			String[] list = { "UserDest", "AutoDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof DeliverProductAction) {
-			String[] list = {};
-			destroyerList.getItems().add(list);
-		} else if (action instanceof BreakAction) {
-			String[] list = { "DestA", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof GetSickAction) {
-			String[] list = { "DestA", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof QuitAction) {
-			String[] list = { "DestO", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof IntroduceNewRequirementsAction) {
-			String[] list = { "DestA", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof ChangePayRateAction) {
-			String[] list = { "DestA", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof GiveBonusAction) {
-			String[] list = { "DestA", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof FireAction) {
-			String[] list = { "DestA", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof PurchaseToolAction) {
-			String[] list = { "DestA", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
-			String[] list = { "TimedDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
-			String[] list = { "TimedDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
-			String[] list = { "TimedDest", };
-			destroyerList.getItems().add(list);
-		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
-			String[] list = { "TimedDest", };
-			destroyerList.getItems().add(list);
-		}
+		String actionName = action.getActionName();
+		destroyerList.getItems().setAll(RuleCategories.getBackendDestRulesForAction(actionName));
 	}
 
 	private TableView createParticipantsTable() {
@@ -3658,62 +3493,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		String name = trigOrDest == TRIGGER ? (String) triggerList
 				.getSelectionModel().getSelectedItem() : (String) destroyerList.getSelectionModel().getSelectedItem();
 		if (name != null) {
-			String actionName = "";
-			if (action instanceof CreateRequirementsAction) {
-				actionName = "CreateRequirements";
-			} else if (action instanceof ReviewRequirementsAction) {
-				actionName = "ReviewRequirements";
-			} else if (action instanceof CorrectRequirementsAction) {
-				actionName = "CorrectRequirements";
-			} else if (action instanceof CreateDesignAction) {
-				actionName = "CreateDesign";
-			} else if (action instanceof ReviewDesignAction) {
-				actionName = "ReviewDesign";
-			} else if (action instanceof CorrectDesignAction) {
-				actionName = "CorrectDesign";
-			} else if (action instanceof CreateCodeAction) {
-				actionName = "CreateCode";
-			} else if (action instanceof InspectCodeAction) {
-				actionName = "InspectCode";
-			} else if (action instanceof CorrectCodeAction) {
-				actionName = "CorrectCode";
-			} else if (action instanceof IntegrateCodeAction) {
-				actionName = "IntegrateCode";
-			} else if (action instanceof SystemTestAction) {
-				actionName = "SystemTest";
-			} else if (action instanceof CreateSystemTestPlanAction) {
-				actionName = "CreateSystemTestPlan";
-			} else if (action instanceof ReviewSystemTestPlanAction) {
-				actionName = "ReviewSystemTestPlan";
-			} else if (action instanceof CorrectSystemTestPlanAction) {
-				actionName = "CorrectSystemTestPlan";
-			} else if (action instanceof DeliverProductAction) {
-				actionName = "DeliverProduct";
-			} else if (action instanceof BreakAction) {
-				actionName = "Break";
-			} else if (action instanceof GetSickAction) {
-				actionName = "GetSick";
-			} else if (action instanceof QuitAction) {
-				actionName = "Quit";
-			} else if (action instanceof IntroduceNewRequirementsAction) {
-				actionName = "IntroduceNewRequirements";
-			} else if (action instanceof ChangePayRateAction) {
-				actionName = "ChangePayRate";
-			} else if (action instanceof GiveBonusAction) {
-				actionName = "GiveBonus";
-			} else if (action instanceof FireAction) {
-				actionName = "Fire";
-			} else if (action instanceof PurchaseToolAction) {
-				actionName = "PurchaseTool";
-			} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
-				actionName = "SuggestedRequirementsPhaseDuration";
-			} else if (action instanceof SuggestedDesignPhaseDurationAction) {
-				actionName = "SuggestedDesignPhaseDuration";
-			} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
-				actionName = "SuggestedImplIntegrationPhaseDuration";
-			} else if (action instanceof SuggestedTestingPhaseDurationAction) {
-				actionName = "SuggestedTestingPhaseDuration";
-			}
+			String actionName = action.getActionName();
 			descriptionArea.setText(RuleCategories.getBackendRuleMappings(actionName, name));
 			descriptionArea.positionCaret(0);
 		}

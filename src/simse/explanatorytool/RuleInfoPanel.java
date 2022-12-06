@@ -121,66 +121,11 @@ public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	}
 
 	private void initializeRuleLists() {
-		String actionName = "";
-		if (action instanceof CreateRequirementsAction) {
-			actionName = "CreateRequirements";
-		} else if (action instanceof ReviewRequirementsAction) {
-			actionName = "ReviewRequirements";
-		} else if (action instanceof CorrectRequirementsAction) {
-			actionName = "CorrectRequirements";
-		} else if (action instanceof CreateDesignAction) {
-			actionName = "CreateDesign";
-		} else if (action instanceof ReviewDesignAction) {
-			actionName = "ReviewDesign";
-		} else if (action instanceof CorrectDesignAction) {
-			actionName = "CorrectDesign";
-		} else if (action instanceof CreateCodeAction) {
-			actionName = "CreateCode";
-		} else if (action instanceof InspectCodeAction) {
-			actionName = "InspectCode";
-		} else if (action instanceof CorrectCodeAction) {
-			actionName = "CorrectCode";
-		} else if (action instanceof IntegrateCodeAction) {
-			actionName = "IntegrateCode";
-		} else if (action instanceof SystemTestAction) {
-			actionName = "SystemTest";
-		} else if (action instanceof CreateSystemTestPlanAction) {
-			actionName = "CreateSystemTestPlan";
-		} else if (action instanceof ReviewSystemTestPlanAction) {
-			actionName = "ReviewSystemTestPlan";
-		} else if (action instanceof CorrectSystemTestPlanAction) {
-			actionName = "CorrectSystemTestPlan";
-		} else if (action instanceof DeliverProductAction) {
-			actionName = "DeliverProduct";
-		} else if (action instanceof BreakAction) {
-			actionName = "Break";
-		} else if (action instanceof GetSickAction) {
-			actionName = "GetSick";
-		} else if (action instanceof QuitAction) {
-			actionName = "Quit";
-		} else if (action instanceof IntroduceNewRequirementsAction) {
-			actionName = "IntroduceNewRequirements";
-		} else if (action instanceof ChangePayRateAction) {
-			actionName = "ChangePayRate";
-		} else if (action instanceof GiveBonusAction) {
-			actionName = "GiveBonus";
-		} else if (action instanceof FireAction) {
-			actionName = "Fire";
-		} else if (action instanceof PurchaseToolAction) {
-			actionName = "PurchaseTool";
-		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
-			actionName = "SuggestedRequirementsPhaseDuration";
-		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
-			actionName = "SuggestedDesignPhaseDuration";
-		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
-			actionName = "SuggestedImplIntegrationPhaseDuration";
-		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
-			actionName = "SuggestedTestingPhaseDuration";
-		}
+		String actionName = action.getActionName();
 		
 		String[] intList = RuleCategories.getIntRulesForAction(actionName);
-		String[] trigList = RuleCategories.getAllTrigRulesForAction(actionName);
-		String[] destList = RuleCategories.getAllDestRulesForAction(actionName);
+		String[] trigList = RuleCategories.getTrigRulesForAction(actionName);
+		String[] destList = RuleCategories.getDestRulesForAction(actionName);
 		
 		intermediateRuleList.getItems().setAll(intList);
 		triggerRuleList.getItems().setAll(trigList);

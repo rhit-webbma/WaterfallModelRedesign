@@ -23,6 +23,7 @@ public class QuitAction extends Action implements Cloneable {
 	public QuitAction() {
 		quitters = new Hashtable<Employee, Boolean>();
 		timeToLive = 1;
+		actionName = Action.QUIT;
 	}
 
 	public Object clone() {
