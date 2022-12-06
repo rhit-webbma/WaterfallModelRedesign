@@ -43,6 +43,9 @@ import simse.adts.objects.SEProject;
 import simse.adts.objects.SSObject;
 import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.SystemTestPlan;
+import simse.explanatorytool.Branch;
+import simse.explanatorytool.ExplanatoryTool;
+import simse.explanatorytool.MultipleTimelinesBrowser;
 import simse.gui.util.JavaFXHelpers;
 import simse.logic.Logic;
 import simse.state.State;
@@ -65,6 +68,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private ToolsAtAGlanceFrame toolFrame;
 //	private ProjectsAtAGlanceFrame projectFrame;
 	private ProjectOverviewScreen projectFrame;
+	private WindowsScreen windowsFrame;
 	private CustomersAtAGlanceFrame customerFrame;
 
 	private GridPane gridPane;
@@ -81,6 +85,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private State state;
 	private Logic logic;
 	private SimSEGUI gui;
+	private ExplanatoryTool expTool;
 	private Hashtable<SSObject, ImageView> objsToImages; // maps Objects (keys)
 															// to ImageIcons
 															// (values)
@@ -110,12 +115,14 @@ public class TabPanel extends Pane implements EventHandler<Event> {
         }
     };
 
-	public TabPanel(SimSEGUI g, State s, Logic l, AttributePanel a) {
+	public TabPanel(SimSEGUI g, State s, Logic l, AttributePanel a,
+			ExplanatoryTool expTool) {
 		logic = l;
 		gui = g;
 		state = s;
 		guiChanged = true;
 		attributePane = a;
+		this.expTool = expTool;
 		objsToImages = new Hashtable<SSObject, ImageView>();
 		buttonsToObjs = new Hashtable<Button, SSObject>();
 //		employeeFrame = new EmployeesAtAGlanceFrame(state, gui);
@@ -126,6 +133,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
 		projectFrame = new ProjectOverviewScreen(state);
 		customerFrame = new CustomersAtAGlanceFrame(state, gui);
+		
+		windowsFrame = new WindowsScreen(state, gui, logic);
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
 		allIcon = JavaFXHelpers.createImage("src/simse/gui/images/all.GIF");
@@ -228,11 +237,29 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		analyzeButton.setPrefHeight(40);
 		HBox.setMargin(analyzeButton, new Insets(15, 0, 0, 0));
 		buttons.getChildren().add(analyzeButton);
+		analyzeButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (expTool.isIconified()) {
+					expTool.setIconified(false);
+				}
+				expTool.show();
+			}
+		});
 		
 		Button windowsButton = new Button("Windows");
 		windowsButton.setId("TabButton");
 		windowsButton.setPrefHeight(40);
 		HBox.setMargin(windowsButton, new Insets(15, 0, 0, 0));
+		windowsButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (windowsFrame.isIconified()) {
+					windowsFrame.setIconified(false);
+				}
+				windowsFrame.show();
+			}
+		});
 		buttons.getChildren().add(windowsButton);
 		
 		gridPane.add(buttons, 2, 0);
