@@ -121,106 +121,70 @@ public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	}
 
 	private void initializeRuleLists() {
+		String actionName = "";
 		if (action instanceof CreateRequirementsAction) {
-			String[] intList = { "CreateRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "CreateRequirements";
 		} else if (action instanceof ReviewRequirementsAction) {
-			String[] intList = { "ReviewRequirementsEffectRuleC", "ReviewRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "ReviewRequirements";
 		} else if (action instanceof CorrectRequirementsAction) {
-			String[] intList = { "CorrectRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "CorrectRequirements";
 		} else if (action instanceof CreateDesignAction) {
-			String[] intList = { "CreateDesignEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "CreateDesign";
 		} else if (action instanceof ReviewDesignAction) {
-			String[] intList = { "ReviewDesignEffectRuleA", "ReviewDesignEffectRuleC", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "ReviewDesign";
 		} else if (action instanceof CorrectDesignAction) {
-			String[] intList = { "CorrectDesignEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "CorrectDesign";
 		} else if (action instanceof CreateCodeAction) {
-			String[] trigList = {};
-			intermediateRuleList.getItems().add(trigList);
-			String[] intList = { "CreateCodeEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "CreateCode";
 		} else if (action instanceof InspectCodeAction) {
-			String[] intList = { "InspectCodeEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "InspectCode";
 		} else if (action instanceof CorrectCodeAction) {
-			String[] intList = { "CorrectCodeEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "CorrectCode";
 		} else if (action instanceof IntegrateCodeAction) {
-			String[] intList = { "IntegrateCodeEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "IntegrateCode";
 		} else if (action instanceof SystemTestAction) {
-			String[] intList = { "SystemTestEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "SystemTest";
 		} else if (action instanceof CreateSystemTestPlanAction) {
-			String[] intList = { "CreateSystemTestPlanEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "CreateSystemTestPlan";
 		} else if (action instanceof ReviewSystemTestPlanAction) {
-			String[] intList = { "ReviewTestPlanEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "ReviewSystemTestPlan";
 		} else if (action instanceof CorrectSystemTestPlanAction) {
-			String[] intList = { "CorrectTestPlanEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "CorrectSystemTestPlan";
 		} else if (action instanceof DeliverProductAction) {
-			String[] trigList = { "CalculateScore", };
-			intermediateRuleList.getItems().add(trigList);
+			actionName = "DeliverProduct";
 		} else if (action instanceof BreakAction) {
-			String[] trigList = { "BreakTrigRule", };
-			intermediateRuleList.getItems().add(trigList);
-			String[] destList = { "BreakDestRule", };
-			intermediateRuleList.getItems().add(destList);
-			String[] intList = { "BreakEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "Break";
 		} else if (action instanceof GetSickAction) {
-			String[] trigList = { "GetSickTrigRule", };
-			intermediateRuleList.getItems().add(trigList);
-			String[] destList = { "GetSickDestRule", };
-			intermediateRuleList.getItems().add(destList);
-			String[] intList = { "GetSickEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "GetSick";
 		} else if (action instanceof QuitAction) {
-			String[] trigList = { "QuitDestroyObjectsRuleA", };
-			intermediateRuleList.getItems().add(trigList);
+			actionName = "Quit";
 		} else if (action instanceof IntroduceNewRequirementsAction) {
-			String[] intList = { "IntroduceNewRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().add(intList);
+			actionName = "IntroduceNewRequirements";
 		} else if (action instanceof ChangePayRateAction) {
-			String[] trigList = { "ChangePayRateEffectRuleA", };
-			intermediateRuleList.getItems().add(trigList);
+			actionName = "ChangePayRate";
 		} else if (action instanceof GiveBonusAction) {
-			String[] trigList = { "GiveBonusEffectRuleA", };
-			intermediateRuleList.getItems().add(trigList);
+			actionName = "GiveBonus";
 		} else if (action instanceof FireAction) {
-			String[] trigList = { "FireDestroyObjectsRuleA", };
-			intermediateRuleList.getItems().add(trigList);
+			actionName = "Fire";
 		} else if (action instanceof PurchaseToolAction) {
-			String[] trigList = { "PurchaseToolEffectRuleA", };
-			intermediateRuleList.getItems().add(trigList);
+			actionName = "PurchaseTool";
 		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
-			String[] trigList = {};
-			intermediateRuleList.getItems().add(trigList);
-			String[] destList = {};
-			intermediateRuleList.getItems().add(destList);
+			actionName = "SuggestedRequirementsPhaseDuration";
 		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
-			String[] trigList = {};
-			intermediateRuleList.getItems().add(trigList);
-			String[] destList = {};
-			intermediateRuleList.getItems().add(destList);
+			actionName = "SuggestedDesignPhaseDuration";
 		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
-			String[] trigList = {};
-			intermediateRuleList.getItems().add(trigList);
-			String[] destList = {};
-			intermediateRuleList.getItems().add(destList);
+			actionName = "SuggestedImplIntegrationPhaseDuration";
 		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
-			String[] trigList = {};
-			intermediateRuleList.getItems().add(trigList);
-			String[] destList = {};
-			intermediateRuleList.getItems().add(destList);
+			actionName = "SuggestedTestingPhaseDuration";
 		}
+		
+		String[] intList = RuleCategories.getIntRulesForAction(actionName);
+		String[] trigList = RuleCategories.getAllTrigRulesForAction(actionName);
+		String[] destList = RuleCategories.getAllDestRulesForAction(actionName);
+		
+		intermediateRuleList.getItems().setAll(intList);
+		triggerRuleList.getItems().setAll(trigList);
+		destroyerRuleList.getItems().setAll(destList);
 	}
 
 	// refreshes the description area with the selected rule description
@@ -235,9 +199,6 @@ public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		}
 		if (name != null) {
 			String text = RuleCategories.getRuleMapping(name);
-			if (text == null) {
-				text = "";
-			}
 			descriptionArea.setText(text);
 			descriptionArea.positionCaret(0);
 		}

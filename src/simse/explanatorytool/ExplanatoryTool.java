@@ -557,9 +557,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 	private void refreshDescriptionArea(String ruleName) {
 		if (ruleName != null) {
 			String text = RuleCategories.getRuleMapping(ruleName);
-			if (text == null) {
-				text = "";
-			}
 			descriptionArea.setText(text);
 			descriptionArea.positionCaret(0);
 		}

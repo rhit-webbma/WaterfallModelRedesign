@@ -61,6 +61,7 @@ import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.SystemTestPlan;
 import simse.adts.objects.Tool;
 import simse.util.DestroyerDescriptions;
+import simse.util.RuleCategories;
 import simse.util.TriggerDescriptions;
 
 public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
@@ -3650,7 +3651,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		newView.getColumns().addAll(name, participant, status);
 		newView.setItems(data);
 		return newView;
-//		return new TableView(data, columnNames);
 	}
 
 	// refreshes the description area with the selected trigger/destroyer
@@ -3658,250 +3658,63 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		String name = trigOrDest == TRIGGER ? (String) triggerList
 				.getSelectionModel().getSelectedItem() : (String) destroyerList.getSelectionModel().getSelectedItem();
 		if (name != null) {
-			String text = "";
+			String actionName = "";
 			if (action instanceof CreateRequirementsAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.CREATEREQUIREMENTS_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.CREATEREQUIREMENTS_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.CREATEREQUIREMENTS_AUTODEST;
-				}
+				actionName = "CreateRequirements";
 			} else if (action instanceof ReviewRequirementsAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.REVIEWREQUIREMENTS_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.REVIEWREQUIREMENTS_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.REVIEWREQUIREMENTS_AUTODEST;
-				}
+				actionName = "ReviewRequirements";
 			} else if (action instanceof CorrectRequirementsAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.CORRECTREQUIREMENTS_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.CORRECTREQUIREMENTS_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.CORRECTREQUIREMENTS_AUTODEST;
-				}
+				actionName = "CorrectRequirements";
 			} else if (action instanceof CreateDesignAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.CREATEDESIGN_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.CREATEDESIGN_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.CREATEDESIGN_AUTODEST;
-				}
+				actionName = "CreateDesign";
 			} else if (action instanceof ReviewDesignAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.REVIEWDESIGN_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.REVIEWDESIGN_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.REVIEWDESIGN_AUTODEST;
-				}
+				actionName = "ReviewDesign";
 			} else if (action instanceof CorrectDesignAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.CORRECTDESIGN_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.CORRECTDESIGN_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.CORRECTDESIGN_AUTODEST;
-				}
+				actionName = "CorrectDesign";
 			} else if (action instanceof CreateCodeAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.CREATECODE_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.CREATECODE_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.CREATECODE_AUTODEST;
-				}
+				actionName = "CreateCode";
 			} else if (action instanceof InspectCodeAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.INSPECTCODE_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.INSPECTCODE_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.INSPECTCODE_AUTODEST;
-				}
+				actionName = "InspectCode";
 			} else if (action instanceof CorrectCodeAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.CORRECTCODE_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.CORRECTCODE_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.CORRECTCODE_AUTODEST;
-				}
+				actionName = "CorrectCode";
 			} else if (action instanceof IntegrateCodeAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.INTEGRATECODE_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.INTEGRATECODE_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.INTEGRATECODE_AUTODEST;
-				}
+				actionName = "IntegrateCode";
 			} else if (action instanceof SystemTestAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.SYSTEMTEST_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.SYSTEMTEST_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.SYSTEMTEST_AUTODEST;
-				}
+				actionName = "SystemTest";
 			} else if (action instanceof CreateSystemTestPlanAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.CREATESYSTEMTESTPLAN_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.CREATESYSTEMTESTPLAN_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.CREATESYSTEMTESTPLAN_AUTODEST;
-				}
+				actionName = "CreateSystemTestPlan";
 			} else if (action instanceof ReviewSystemTestPlanAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.REVIEWSYSTEMTESTPLAN_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.REVIEWSYSTEMTESTPLAN_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.REVIEWSYSTEMTESTPLAN_AUTODEST;
-				}
+				actionName = "ReviewSystemTestPlan";
 			} else if (action instanceof CorrectSystemTestPlanAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.CORRECTSYSTEMTESTPLAN_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("UserDest")) {
-					text = DestroyerDescriptions.CORRECTSYSTEMTESTPLAN_USERDEST;
-				} else if (trigOrDest == DESTROYER && name.equals("AutoDest")) {
-					text = DestroyerDescriptions.CORRECTSYSTEMTESTPLAN_AUTODEST;
-				}
+				actionName = "CorrectSystemTestPlan";
 			} else if (action instanceof DeliverProductAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.DELIVERPRODUCT_TRIGA;
-				}
+				actionName = "DeliverProduct";
 			} else if (action instanceof BreakAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.BREAK_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("DestA")) {
-					text = DestroyerDescriptions.BREAK_DESTA;
-				}
+				actionName = "Break";
 			} else if (action instanceof GetSickAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.GETSICK_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("DestA")) {
-					text = DestroyerDescriptions.GETSICK_DESTA;
-				}
+				actionName = "GetSick";
 			} else if (action instanceof QuitAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.QUIT_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("DestO")) {
-					text = DestroyerDescriptions.QUIT_DESTO;
-				}
+				actionName = "Quit";
 			} else if (action instanceof IntroduceNewRequirementsAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.INTRODUCENEWREQUIREMENTS_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("DestA")) {
-					text = DestroyerDescriptions.INTRODUCENEWREQUIREMENTS_DESTA;
-				}
+				actionName = "IntroduceNewRequirements";
 			} else if (action instanceof ChangePayRateAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.CHANGEPAYRATE_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("DestA")) {
-					text = DestroyerDescriptions.CHANGEPAYRATE_DESTA;
-				}
+				actionName = "ChangePayRate";
 			} else if (action instanceof GiveBonusAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.GIVEBONUS_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("DestA")) {
-					text = DestroyerDescriptions.GIVEBONUS_DESTA;
-				}
+				actionName = "GiveBonus";
 			} else if (action instanceof FireAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.FIRE_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("DestA")) {
-					text = DestroyerDescriptions.FIRE_DESTA;
-				}
+				actionName = "Fire";
 			} else if (action instanceof PurchaseToolAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("TrigA")) {
-					text = TriggerDescriptions.PURCHASETOOL_TRIGA;
-				}
-				if (trigOrDest == DESTROYER && name.equals("DestA")) {
-					text = DestroyerDescriptions.PURCHASETOOL_DESTA;
-				}
+				actionName = "PurchaseTool";
 			} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("AutoTrig")) {
-					text = TriggerDescriptions.SUGGESTEDREQUIREMENTSPHASEDURATION_AUTOTRIG;
-				}
-				if (trigOrDest == DESTROYER && name.equals("TimedDest")) {
-					text = DestroyerDescriptions.SUGGESTEDREQUIREMENTSPHASEDURATION_TIMEDDEST;
-				}
+				actionName = "SuggestedRequirementsPhaseDuration";
 			} else if (action instanceof SuggestedDesignPhaseDurationAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("AutoTrig")) {
-					text = TriggerDescriptions.SUGGESTEDDESIGNPHASEDURATION_AUTOTRIG;
-				}
-				if (trigOrDest == DESTROYER && name.equals("TimedDest")) {
-					text = DestroyerDescriptions.SUGGESTEDDESIGNPHASEDURATION_TIMEDDEST;
-				}
+				actionName = "SuggestedDesignPhaseDuration";
 			} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("AutoTrig")) {
-					text = TriggerDescriptions.SUGGESTEDIMPLINTEGRATIONPHASEDURATION_AUTOTRIG;
-				}
-				if (trigOrDest == DESTROYER && name.equals("TimedDest")) {
-					text = DestroyerDescriptions.SUGGESTEDIMPLINTEGRATIONPHASEDURATION_TIMEDDEST;
-				}
+				actionName = "SuggestedImplIntegrationPhaseDuration";
 			} else if (action instanceof SuggestedTestingPhaseDurationAction) {
-				// triggers:
-				if (trigOrDest == TRIGGER && name.equals("AutoTrig")) {
-					text = TriggerDescriptions.SUGGESTEDTESTINGPHASEDURATION_AUTOTRIG;
-				}
-				if (trigOrDest == DESTROYER && name.equals("TimedDest")) {
-					text = DestroyerDescriptions.SUGGESTEDTESTINGPHASEDURATION_TIMEDDEST;
-				}
+				actionName = "SuggestedTestingPhaseDuration";
 			}
-			descriptionArea.setText(text);
+			descriptionArea.setText(RuleCategories.getBackendRuleMappings(actionName, name));
 			descriptionArea.positionCaret(0);
 		}
 	}

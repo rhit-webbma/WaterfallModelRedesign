@@ -1,9 +1,6 @@
 package simse.util;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
-
-import javafx.util.Pair;
 
 public final class RuleCategories {
 
@@ -12,6 +9,16 @@ public final class RuleCategories {
 	private static Hashtable<String, Hashtable<String, String>> backendRuleMapping;
 	
 	public static void initializeRuleCategories() {
+		initializeRuleMapping();
+		initializeIntRules();
+		initializeTrigRules();
+		initializeDestRules();
+		initializeBackendRuleMapping();
+		initializeBackendTrigRules();
+		initializeBackendDestRules();
+	}
+	
+	public static void initializeRuleMapping() {
 		ruleMapping = new Hashtable<>();
 		ruleMapping.put("CreateRequirementsEffectRuleA", RuleDescriptions.CREATEREQUIREMENTS_CREATEREQUIREMENTSEFFECTRULEA);
 		ruleMapping.put("ReviewRequirementsEffectRuleA", RuleDescriptions.REVIEWREQUIREMENTS_REVIEWREQUIREMENTSEFFECTRULEA);
@@ -42,7 +49,9 @@ public final class RuleCategories {
 		ruleMapping.put("GiveBonusEffectRuleA", RuleDescriptions.GIVEBONUS_GIVEBONUSEFFECTRULEA);
 		ruleMapping.put("FireDestroyObjectsRuleA", RuleDescriptions.FIRE_FIREDESTROYOBJECTSRULEA);
 		ruleMapping.put("PurchaseToolEffectRuleA", RuleDescriptions.PURCHASETOOL_PURCHASETOOLEFFECTRULEA);
-		
+	}
+	
+	public static void initializeIntRules() {
 		intRules = new Hashtable<>();
 		intRules.put("CreateRequirements", new String[]{"CreateRequirementsEffectRuleA"});
 		intRules.put("ReviewRequirements", new String[]{"ReviewRequirementsEffectRuleC", "ReviewRequirementsEffectRuleA"});
@@ -71,7 +80,9 @@ public final class RuleCategories {
 		intRules.put("SuggestedDesignPhaseDuration", new String[]{});
 		intRules.put("SuggestedImplIntegrationPhaseDuration", new String[]{});
 		intRules.put("SuggestedTestingPhaseDuration", new String[]{});
-		
+	}
+	
+	public static void initializeTrigRules() {
 		trigRules = new Hashtable<>();
 		trigRules.put("CreateRequirements", new String[]{});
 		trigRules.put("ReviewRequirements", new String[]{});
@@ -100,7 +111,9 @@ public final class RuleCategories {
 		trigRules.put("SuggestedDesignPhaseDuration", new String[]{});
 		trigRules.put("SuggestedImplIntegrationPhaseDuration", new String[]{});
 		trigRules.put("SuggestedTestingPhaseDuration", new String[]{});
-		
+	}
+	
+	public static void initializeDestRules() {
 		destRules = new Hashtable<>();
 		destRules.put("CreateRequirements", new String[]{});
 		destRules.put("ReviewRequirements", new String[]{});
@@ -129,7 +142,9 @@ public final class RuleCategories {
 		destRules.put("SuggestedDesignPhaseDuration", new String[]{});
 		destRules.put("SuggestedImplIntegrationPhaseDuration", new String[]{});
 		destRules.put("SuggestedTestingPhaseDuration", new String[]{});
-		
+	}
+	
+	public static void initializeBackendRuleMapping() {
 		backendRuleMapping = new Hashtable<>();
 		backendRuleMapping.put("CreateRequirements", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
 						new String[]{TriggerDescriptions.CREATEREQUIREMENTS_TRIGA, DestroyerDescriptions.CREATEREQUIREMENTS_USERDEST, 
@@ -202,7 +217,9 @@ public final class RuleCategories {
 		backendRuleMapping.put("SuggestedTestingPhaseDuration", makeRuleMappingTable(new String[]{"AutoTrig", "TimedDest"}, 
 				new String[]{TriggerDescriptions.SUGGESTEDTESTINGPHASEDURATION_AUTOTRIG, 
 						DestroyerDescriptions.SUGGESTEDTESTINGPHASEDURATION_TIMEDDEST}));
-		
+	}
+	
+	public static void initializeBackendTrigRules() {
 		trigBackendRules = new Hashtable<>();
 		trigBackendRules.put("CreateRequirements", new String[]{ "TrigA", });
 		trigBackendRules.put("ReviewRequirements", new String[]{"TrigA"});
@@ -231,7 +248,9 @@ public final class RuleCategories {
 		trigBackendRules.put("SuggestedDesignPhaseDuration", new String[]{"AutoTrig"});
 		trigBackendRules.put("SuggestedImplIntegrationPhaseDuration", new String[]{"AutoTrig"});
 		trigBackendRules.put("SuggestedTestingPhaseDuration", new String[]{"AutoTrig"});
-		
+	}
+	
+	public static void initializeBackendDestRules() {
 		destBackendRules = new Hashtable<>();
 		destBackendRules.put("CreateRequirements", new String[]{ "UserDest", "AutoDest", });
 		destBackendRules.put("ReviewRequirements", new String[]{"UserDest", "AutoDest",});
@@ -326,6 +345,14 @@ public final class RuleCategories {
 			rules = new String[]{};
 		} 
 		return rules;
+	}
+	
+	public static String getAllRuleMappings(String actionName, String ruleName) {
+		String text = getRuleMapping(ruleName);
+		if (text == "") {
+			text = getBackendRuleMappings(actionName, ruleName);
+		}
+		return text;
 	}
 	
 	public static String[] getAllTrigRulesForAction(String actionName) {

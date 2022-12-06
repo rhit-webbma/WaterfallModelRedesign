@@ -141,7 +141,7 @@ public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
 		// Add panes to main pane:
 		mainPane.getChildren().add(rulesMainPane);
 		
-		Scene scene = new Scene(mainPane, 900, 550);
+		Scene scene = new Scene(mainPane, 800, 400);
 		this.setScene(scene);
 	}
 
