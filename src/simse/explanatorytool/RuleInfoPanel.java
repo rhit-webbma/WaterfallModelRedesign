@@ -40,6 +40,7 @@ import simse.adts.actions.SuggestedImplIntegrationPhaseDurationAction;
 import simse.adts.actions.SuggestedRequirementsPhaseDurationAction;
 import simse.adts.actions.SuggestedTestingPhaseDurationAction;
 import simse.adts.actions.SystemTestAction;
+import simse.util.RuleDescriptions;
 
 public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	private simse.adts.actions.Action action; // action in focus

@@ -60,6 +60,8 @@ import simse.adts.objects.SEProject;
 import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.SystemTestPlan;
 import simse.adts.objects.Tool;
+import simse.util.DestroyerDescriptions;
+import simse.util.TriggerDescriptions;
 
 public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	private simse.adts.actions.Action action; // action in focus
