@@ -30,8 +30,6 @@ import simse.util.RuleType;
 
 public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
 	State state;
-	SimSEGUI gui;
-	Logic logic;
 
 	Label titleLabel;
 	Label toolsLabel;
@@ -46,10 +44,8 @@ public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
 	private TextArea descriptionArea;
 	private String lastSelectedAction;
 
-	public RulesInfoScreen(State s, SimSEGUI gui, Logic l, RuleType ruleType) {
+	public RulesInfoScreen(State s, RuleType ruleType) {
 		this.state = s;
-		this.gui = gui;
-		this.logic = l;
 
 		this.setTitle("Rules Screen");
 		mainPane = new VBox();

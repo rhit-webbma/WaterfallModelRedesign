@@ -102,7 +102,7 @@ public class ArtifactsOverviewScreen extends Stage implements EventHandler<Mouse
 				info.show();
 			}
 		} else if (source == rules) {
-			RulesInfoScreen info = new RulesInfoScreen(state, gui, logic, RuleType.ARTIFACT);
+			RulesInfoScreen info = new RulesInfoScreen(state, RuleType.ARTIFACT);
 			info.show();
 		}
 	}
