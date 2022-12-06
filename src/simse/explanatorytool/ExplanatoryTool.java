@@ -29,6 +29,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import simse.state.State;
+import simse.util.RuleCategories;
 import simse.util.RuleDescriptions;
 
 public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
@@ -543,172 +544,21 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		destroyerRuleList.getItems().setAll(new Vector<String>());
 		intermediateRuleList.getItems().setAll(new Vector<String>());
 
-		if (actionName.equals("CreateRequirements")) {
-			String[] intList = { "CreateRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("ReviewRequirements")) {
-			String[] intList = { "ReviewRequirementsEffectRuleC",
-					"ReviewRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CorrectRequirements")) {
-			String[] intList = { "CorrectRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CreateDesign")) {
-			String[] intList = { "CreateDesignEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("ReviewDesign")) {
-			String[] intList = { "ReviewDesignEffectRuleA",
-					"ReviewDesignEffectRuleC", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CorrectDesign")) {
-			String[] intList = { "CorrectDesignEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CreateCode")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] intList = { "CreateCodeEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("InspectCode")) {
-			String[] intList = { "InspectCodeEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CorrectCode")) {
-			String[] intList = { "CorrectCodeEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("IntegrateCode")) {
-			String[] intList = { "IntegrateCodeEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("SystemTest")) {
-			String[] intList = { "SystemTestEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CreateSystemTestPlan")) {
-			String[] intList = { "CreateSystemTestPlanEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("ReviewSystemTestPlan")) {
-			String[] intList = { "ReviewTestPlanEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CorrectSystemTestPlan")) {
-			String[] intList = { "CorrectTestPlanEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("DeliverProduct")) {
-			String[] trigList = { "CalculateScore", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("Break")) {
-			String[] trigList = { "BreakTrigRule", };
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = { "BreakDestRule", };
-			destroyerRuleList.getItems().setAll(destList);
-			String[] intList = { "BreakEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("GetSick")) {
-			String[] trigList = { "GetSickTrigRule", };
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = { "GetSickDestRule", };
-			destroyerRuleList.getItems().setAll(destList);
-			String[] intList = { "GetSickEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("Quit")) {
-			String[] trigList = { "QuitDestroyObjectsRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("IntroduceNewRequirements")) {
-			String[] intList = { "IntroduceNewRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("ChangePayRate")) {
-			String[] trigList = { "ChangePayRateEffectRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("GiveBonus")) {
-			String[] trigList = { "GiveBonusEffectRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("Fire")) {
-			String[] trigList = { "FireDestroyObjectsRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("PurchaseTool")) {
-			String[] trigList = { "PurchaseToolEffectRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("SuggestedRequirementsPhaseDuration")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = {};
-			destroyerRuleList.getItems().setAll(destList);
-		} else if (actionName.equals("SuggestedDesignPhaseDuration")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = {};
-			destroyerRuleList.getItems().setAll(destList);
-		} else if (actionName.equals("SuggestedImplIntegrationPhaseDuration")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = {};
-			destroyerRuleList.getItems().setAll(destList);
-		} else if (actionName.equals("SuggestedTestingPhaseDuration")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = {};
-			destroyerRuleList.getItems().setAll(destList);
-		}
+		String[] intList = RuleCategories.getIntRulesForAction(actionName);
+		String[] trigList = RuleCategories.getTrigRulesForAction(actionName);
+		String[] destList = RuleCategories.getDestRulesForAction(actionName);
+		
+		intermediateRuleList.getItems().setAll(intList);
+		triggerRuleList.getItems().setAll(trigList);
+		destroyerRuleList.getItems().setAll(destList);
 	}
 
 	// refreshes the description area with the selected rule description
 	private void refreshDescriptionArea(String ruleName) {
 		if (ruleName != null) {
-			String text = "";
-			if (ruleName.equals("CreateRequirementsEffectRuleA")) {
-				text = RuleDescriptions.CREATEREQUIREMENTS_CREATEREQUIREMENTSEFFECTRULEA;
-			} else if (ruleName.equals("ReviewRequirementsEffectRuleA")) {
-				text = RuleDescriptions.REVIEWREQUIREMENTS_REVIEWREQUIREMENTSEFFECTRULEA;
-			} else if (ruleName.equals("ReviewRequirementsEffectRuleC")) {
-				text = RuleDescriptions.REVIEWREQUIREMENTS_REVIEWREQUIREMENTSEFFECTRULEC;
-			} else if (ruleName.equals("CorrectRequirementsEffectRuleA")) {
-				text = RuleDescriptions.CORRECTREQUIREMENTS_CORRECTREQUIREMENTSEFFECTRULEA;
-			} else if (ruleName.equals("CreateDesignEffectRuleA")) {
-				text = RuleDescriptions.CREATEDESIGN_CREATEDESIGNEFFECTRULEA;
-			} else if (ruleName.equals("ReviewDesignEffectRuleA")) {
-				text = RuleDescriptions.REVIEWDESIGN_REVIEWDESIGNEFFECTRULEA;
-			} else if (ruleName.equals("ReviewDesignEffectRuleC")) {
-				text = RuleDescriptions.REVIEWDESIGN_REVIEWDESIGNEFFECTRULEC;
-			} else if (ruleName.equals("CorrectDesignEffectRuleA")) {
-				text = RuleDescriptions.CORRECTDESIGN_CORRECTDESIGNEFFECTRULEA;
-			} else if (ruleName.equals("CreateCodeEffectRuleA")) {
-				text = RuleDescriptions.CREATECODE_CREATECODEEFFECTRULEA;
-			} else if (ruleName.equals("InspectCodeEffectRuleA")) {
-				text = RuleDescriptions.INSPECTCODE_INSPECTCODEEFFECTRULEA;
-			} else if (ruleName.equals("CorrectCodeEffectRuleA")) {
-				text = RuleDescriptions.CORRECTCODE_CORRECTCODEEFFECTRULEA;
-			} else if (ruleName.equals("IntegrateCodeEffectRuleA")) {
-				text = RuleDescriptions.INTEGRATECODE_INTEGRATECODEEFFECTRULEA;
-			} else if (ruleName.equals("SystemTestEffectRuleA")) {
-				text = RuleDescriptions.SYSTEMTEST_SYSTEMTESTEFFECTRULEA;
-			} else if (ruleName.equals("CreateSystemTestPlanEffectRuleA")) {
-				text = RuleDescriptions.CREATESYSTEMTESTPLAN_CREATESYSTEMTESTPLANEFFECTRULEA;
-			} else if (ruleName.equals("ReviewTestPlanEffectRuleA")) {
-				text = RuleDescriptions.REVIEWSYSTEMTESTPLAN_REVIEWTESTPLANEFFECTRULEA;
-			} else if (ruleName.equals("CorrectTestPlanEffectRuleA")) {
-				text = RuleDescriptions.CORRECTSYSTEMTESTPLAN_CORRECTTESTPLANEFFECTRULEA;
-			} else if (ruleName.equals("CalculateScore")) {
-				text = RuleDescriptions.DELIVERPRODUCT_CALCULATESCORE;
-			} else if (ruleName.equals("BreakEffectRuleA")) {
-				text = RuleDescriptions.BREAK_BREAKEFFECTRULEA;
-			} else if (ruleName.equals("BreakTrigRule")) {
-				text = RuleDescriptions.BREAK_BREAKTRIGRULE;
-			} else if (ruleName.equals("BreakDestRule")) {
-				text = RuleDescriptions.BREAK_BREAKDESTRULE;
-			} else if (ruleName.equals("GetSickEffectRuleA")) {
-				text = RuleDescriptions.GETSICK_GETSICKEFFECTRULEA;
-			} else if (ruleName.equals("GetSickTrigRule")) {
-				text = RuleDescriptions.GETSICK_GETSICKTRIGRULE;
-			} else if (ruleName.equals("GetSickDestRule")) {
-				text = RuleDescriptions.GETSICK_GETSICKDESTRULE;
-			} else if (ruleName.equals("QuitDestroyObjectsRuleA")) {
-				text = RuleDescriptions.QUIT_QUITDESTROYOBJECTSRULEA;
-			} else if (ruleName.equals("IntroduceNewRequirementsEffectRuleA")) {
-				text = RuleDescriptions.INTRODUCENEWREQUIREMENTS_INTRODUCENEWREQUIREMENTSEFFECTRULEA;
-			} else if (ruleName.equals("ChangePayRateEffectRuleA")) {
-				text = RuleDescriptions.CHANGEPAYRATE_CHANGEPAYRATEEFFECTRULEA;
-			} else if (ruleName.equals("GiveBonusEffectRuleA")) {
-				text = RuleDescriptions.GIVEBONUS_GIVEBONUSEFFECTRULEA;
-			} else if (ruleName.equals("FireDestroyObjectsRuleA")) {
-				text = RuleDescriptions.FIRE_FIREDESTROYOBJECTSRULEA;
-			} else if (ruleName.equals("PurchaseToolEffectRuleA")) {
-				text = RuleDescriptions.PURCHASETOOL_PURCHASETOOLEFFECTRULEA;
+			String text = RuleCategories.getRuleMapping(ruleName);
+			if (text == null) {
+				text = "";
 			}
 			descriptionArea.setText(text);
 			descriptionArea.positionCaret(0);

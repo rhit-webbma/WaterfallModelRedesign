@@ -11,6 +11,7 @@ import simse.explanatorytool.MultipleTimelinesBrowser;
 import simse.gui.SimSEGUI;
 import simse.logic.Logic;
 import simse.state.State;
+import simse.util.RuleCategories;
 
 public class SimSE extends Application{
 	private static ArrayList<Branch> branches = new ArrayList<Branch>();
@@ -63,6 +64,7 @@ public class SimSE extends Application{
 		ArrayList<SimSEGUI> guis = this.getGUIs();
 		arg0 = guis.get(0);
 		arg0.show();
+		RuleCategories.initializeRuleCategories();
 		engine.giveGUI(gui);
 	}
 }
