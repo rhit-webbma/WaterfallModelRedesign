@@ -160,7 +160,8 @@ public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
 			break;
 		case PROJECT:
 			actions = FXCollections.observableArrayList("DeliverProduct", "Quit",
-					"IntroduceNewRequirements", "GiveBonus", "Fire", "PurchaseTool");
+					"IntroduceNewRequirements", "GiveBonus", "Fire", "PurchaseTool", "SuggestedRequirementsPhaseDuration",
+					"SuggestedDesignPhaseDuration", "SuggestedImplIntegrationPhaseDuration", "SuggestedTestingPhaseDuration");
 			break;
 		case PEOPLE:
 			actions = FXCollections.observableArrayList(

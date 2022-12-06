@@ -134,12 +134,132 @@ public final class RuleCategories {
 		backendRuleMapping.put("CreateRequirements", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
 						new String[]{TriggerDescriptions.CREATEREQUIREMENTS_TRIGA, DestroyerDescriptions.CREATEREQUIREMENTS_USERDEST, 
 								DestroyerDescriptions.CREATEREQUIREMENTS_AUTODEST}));
+		backendRuleMapping.put("ReviewRequirements", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.REVIEWREQUIREMENTS_TRIGA, DestroyerDescriptions.REVIEWREQUIREMENTS_USERDEST, 
+						DestroyerDescriptions.REVIEWREQUIREMENTS_AUTODEST}));
+		backendRuleMapping.put("CorrectRequirements", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.CORRECTREQUIREMENTS_TRIGA, DestroyerDescriptions.CORRECTREQUIREMENTS_USERDEST, 
+						DestroyerDescriptions.CORRECTREQUIREMENTS_AUTODEST}));
+		backendRuleMapping.put("CreateDesign", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.CREATEDESIGN_TRIGA, DestroyerDescriptions.CREATEDESIGN_USERDEST, 
+						DestroyerDescriptions.CREATEDESIGN_AUTODEST}));
+		backendRuleMapping.put("ReviewDesign", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.REVIEWDESIGN_TRIGA, DestroyerDescriptions.REVIEWDESIGN_USERDEST, 
+						DestroyerDescriptions.REVIEWDESIGN_AUTODEST}));
+		backendRuleMapping.put("CorrectDesign", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.CORRECTDESIGN_TRIGA, DestroyerDescriptions.CORRECTDESIGN_USERDEST, 
+						DestroyerDescriptions.CORRECTDESIGN_AUTODEST}));
+		backendRuleMapping.put("CreateCode", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.CREATECODE_TRIGA, DestroyerDescriptions.CREATECODE_USERDEST, 
+						DestroyerDescriptions.CREATECODE_AUTODEST}));
+		backendRuleMapping.put("InspectCode", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.INSPECTCODE_TRIGA, DestroyerDescriptions.INSPECTCODE_USERDEST, 
+						DestroyerDescriptions.INSPECTCODE_AUTODEST}));
+		backendRuleMapping.put("CorrectCode", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.CORRECTCODE_TRIGA, DestroyerDescriptions.CORRECTCODE_USERDEST, 
+						DestroyerDescriptions.CORRECTCODE_AUTODEST}));
+		backendRuleMapping.put("IntegrateCode", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.INTEGRATECODE_TRIGA, DestroyerDescriptions.INTEGRATECODE_USERDEST, 
+						DestroyerDescriptions.INTEGRATECODE_AUTODEST}));
+		backendRuleMapping.put("SystemTest", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.SYSTEMTEST_TRIGA, DestroyerDescriptions.SYSTEMTEST_USERDEST, 
+						DestroyerDescriptions.SYSTEMTEST_AUTODEST}));
+		backendRuleMapping.put("CreateSystemTestPlan", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.CREATESYSTEMTESTPLAN_TRIGA, DestroyerDescriptions.CREATESYSTEMTESTPLAN_USERDEST, 
+						DestroyerDescriptions.CREATESYSTEMTESTPLAN_AUTODEST}));
+		backendRuleMapping.put("ReviewSystemTestPlan", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.REVIEWSYSTEMTESTPLAN_TRIGA, DestroyerDescriptions.REVIEWSYSTEMTESTPLAN_USERDEST, 
+						DestroyerDescriptions.REVIEWSYSTEMTESTPLAN_AUTODEST}));
+		backendRuleMapping.put("CorrectSystemTestPlan", makeRuleMappingTable(new String[]{"TrigA", "UserDest", "AutoDest"}, 
+				new String[]{TriggerDescriptions.CORRECTSYSTEMTESTPLAN_TRIGA, DestroyerDescriptions.CORRECTSYSTEMTESTPLAN_USERDEST, 
+						DestroyerDescriptions.CORRECTSYSTEMTESTPLAN_AUTODEST}));
+		backendRuleMapping.put("DeliverProduct", makeRuleMappingTable(new String[]{"TrigA"}, new String[]{TriggerDescriptions.DELIVERPRODUCT_TRIGA}));
+		backendRuleMapping.put("Break", makeRuleMappingTable(new String[]{"TrigA", "DestA"}, 
+				new String[]{TriggerDescriptions.BREAK_TRIGA, DestroyerDescriptions.BREAK_DESTA}));
+		backendRuleMapping.put("GetSick", makeRuleMappingTable(new String[]{"TrigA", "DestA"}, 
+				new String[]{TriggerDescriptions.GETSICK_TRIGA, DestroyerDescriptions.GETSICK_DESTA}));
+		backendRuleMapping.put("Quit", makeRuleMappingTable(new String[]{"TrigA", "DestO"}, 
+				new String[]{TriggerDescriptions.QUIT_TRIGA, DestroyerDescriptions.QUIT_DESTO}));
+		backendRuleMapping.put("IntroduceNewRequirements", makeRuleMappingTable(new String[]{"TrigA", "DestA"}, 
+				new String[]{TriggerDescriptions.INTRODUCENEWREQUIREMENTS_TRIGA, DestroyerDescriptions.INTRODUCENEWREQUIREMENTS_DESTA}));
+		backendRuleMapping.put("ChangePayRate", makeRuleMappingTable(new String[]{"TrigA", "DestA"}, 
+				new String[]{TriggerDescriptions.CHANGEPAYRATE_TRIGA, DestroyerDescriptions.CHANGEPAYRATE_DESTA}));
+		backendRuleMapping.put("GiveBonus", makeRuleMappingTable(new String[]{"TrigA", "DestA"}, 
+				new String[]{TriggerDescriptions.GIVEBONUS_TRIGA, DestroyerDescriptions.GIVEBONUS_DESTA}));
+		backendRuleMapping.put("Fire", makeRuleMappingTable(new String[]{"TrigA", "DestA"}, 
+				new String[]{TriggerDescriptions.FIRE_TRIGA, DestroyerDescriptions.FIRE_DESTA}));
+		backendRuleMapping.put("PurchaseTool", makeRuleMappingTable(new String[]{"TrigA", "DestA"}, 
+				new String[]{TriggerDescriptions.PURCHASETOOL_TRIGA, DestroyerDescriptions.PURCHASETOOL_DESTA}));
+		backendRuleMapping.put("SuggestedRequirementsPhaseDuration", makeRuleMappingTable(new String[]{"AutoTrig", "TimedDest"}, 
+				new String[]{TriggerDescriptions.SUGGESTEDREQUIREMENTSPHASEDURATION_AUTOTRIG, 
+						DestroyerDescriptions.SUGGESTEDREQUIREMENTSPHASEDURATION_TIMEDDEST}));
+		backendRuleMapping.put("SuggestedDesignPhaseDuration", makeRuleMappingTable(new String[]{"AutoTrig", "TimedDest"}, 
+				new String[]{TriggerDescriptions.SUGGESTEDDESIGNPHASEDURATION_AUTOTRIG, 
+						DestroyerDescriptions.SUGGESTEDDESIGNPHASEDURATION_TIMEDDEST}));
+		backendRuleMapping.put("SuggestedImplIntegrationPhaseDuration", makeRuleMappingTable(new String[]{"AutoTrig", "TimedDest"}, 
+				new String[]{TriggerDescriptions.SUGGESTEDIMPLINTEGRATIONPHASEDURATION_AUTOTRIG, 
+						DestroyerDescriptions.SUGGESTEDIMPLINTEGRATIONPHASEDURATION_TIMEDDEST}));
+		backendRuleMapping.put("SuggestedTestingPhaseDuration", makeRuleMappingTable(new String[]{"AutoTrig", "TimedDest"}, 
+				new String[]{TriggerDescriptions.SUGGESTEDTESTINGPHASEDURATION_AUTOTRIG, 
+						DestroyerDescriptions.SUGGESTEDTESTINGPHASEDURATION_TIMEDDEST}));
 		
 		trigBackendRules = new Hashtable<>();
 		trigBackendRules.put("CreateRequirements", new String[]{ "TrigA", });
+		trigBackendRules.put("ReviewRequirements", new String[]{"TrigA"});
+		trigBackendRules.put("CorrectRequirements", new String[]{"TrigA"});
+		trigBackendRules.put("CreateDesign", new String[]{"TrigA"});
+		trigBackendRules.put("ReviewDesign", new String[]{"TrigA"});
+		trigBackendRules.put("CorrectDesign", new String[]{"TrigA"});
+		trigBackendRules.put("CreateCode", new String[]{"TrigA"});
+		trigBackendRules.put("InspectCode", new String[]{"TrigA"});
+		trigBackendRules.put("CorrectCode", new String[]{"TrigA"});
+		trigBackendRules.put("IntegrateCode", new String[]{"TrigA"});
+		trigBackendRules.put("SystemTest", new String[]{"TrigA"});
+		trigBackendRules.put("CreateSystemTestPlan", new String[]{"TrigA"});
+		trigBackendRules.put("ReviewSystemTestPlan", new String[]{"TrigA"});
+		trigBackendRules.put("CorrectSystemTestPlan", new String[]{"TrigA"});
+		trigBackendRules.put("DeliverProduct", new String[]{"TrigA"});
+		trigBackendRules.put("Break", new String[]{"TrigA"});
+		trigBackendRules.put("GetSick", new String[]{"TrigA"});
+		trigBackendRules.put("Quit", new String[]{"TrigA"});
+		trigBackendRules.put("IntroduceNewRequirements", new String[]{"TrigA"});
+		trigBackendRules.put("ChangePayRate", new String[]{"TrigA"});
+		trigBackendRules.put("GiveBonus", new String[]{"TrigA"});
+		trigBackendRules.put("Fire", new String[]{"TrigA"});
+		trigBackendRules.put("PurchaseTool", new String[]{"TrigA"});
+		trigBackendRules.put("SuggestedRequirementsPhaseDuration", new String[]{"AutoTrig"});
+		trigBackendRules.put("SuggestedDesignPhaseDuration", new String[]{"AutoTrig"});
+		trigBackendRules.put("SuggestedImplIntegrationPhaseDuration", new String[]{"AutoTrig"});
+		trigBackendRules.put("SuggestedTestingPhaseDuration", new String[]{"AutoTrig"});
 		
 		destBackendRules = new Hashtable<>();
 		destBackendRules.put("CreateRequirements", new String[]{ "UserDest", "AutoDest", });
+		destBackendRules.put("ReviewRequirements", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("CorrectRequirements", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("CreateDesign", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("ReviewDesign", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("CorrectDesign", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("CreateCode", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("InspectCode", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("CorrectCode", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("IntegrateCode", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("SystemTest", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("CreateSystemTestPlan", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("ReviewSystemTestPlan", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("CorrectSystemTestPlan", new String[]{"UserDest", "AutoDest",});
+		destBackendRules.put("DeliverProduct", new String[]{});
+		destBackendRules.put("Break", new String[]{"DestA"});
+		destBackendRules.put("GetSick", new String[]{"DestA"});
+		destBackendRules.put("Quit", new String[]{"DestO"});
+		destBackendRules.put("IntroduceNewRequirements", new String[]{"DestA"});
+		destBackendRules.put("ChangePayRate", new String[]{"DestA"});
+		destBackendRules.put("GiveBonus", new String[]{"DestA"});
+		destBackendRules.put("Fire", new String[]{"DestA"});
+		destBackendRules.put("PurchaseTool", new String[]{"DestA"});
+		destBackendRules.put("SuggestedRequirementsPhaseDuration", new String[]{"TimedDest"});
+		destBackendRules.put("SuggestedDesignPhaseDuration", new String[]{"TimedDest"});
+		destBackendRules.put("SuggestedImplIntegrationPhaseDuration", new String[]{"TimedDest"});
+		destBackendRules.put("SuggestedTestingPhaseDuration", new String[]{"TimedDest"});
 	}
 	
 	public static Hashtable<String, String> makeRuleMappingTable(String[] rules, String[] ruleDesc) {
@@ -209,14 +329,8 @@ public final class RuleCategories {
 	}
 	
 	public static String[] getAllTrigRulesForAction(String actionName) {
-		String[] rules = trigRules.get(actionName);
-		String[] backendRules = trigBackendRules.get(actionName);
-		if (rules == null) {
-			rules = new String[]{};
-		}
-		if (backendRules == null) {
-			backendRules = new String[]{};
-		}
+		String[] rules = getTrigRulesForAction(actionName);
+		String[] backendRules = getBackendTrigRulesForAction(actionName);
 		int rulesLen = rules.length;
 		int bRulesLen = backendRules.length;
 		String[] result = new String[rulesLen + bRulesLen];
@@ -226,14 +340,8 @@ public final class RuleCategories {
 	}
 	
 	public static String[] getAllDestRulesForAction(String actionName) {
-		String[] rules = destRules.get(actionName);
-		String[] backendRules = destBackendRules.get(actionName);
-		if (rules == null) {
-			rules = new String[]{};
-		}
-		if (backendRules == null) {
-			backendRules = new String[]{};
-		}
+		String[] rules = getDestRulesForAction(actionName);
+		String[] backendRules = getBackendDestRulesForAction(actionName);
 		int rulesLen = rules.length;
 		int bRulesLen = backendRules.length;
 		String[] result = new String[rulesLen + bRulesLen];
