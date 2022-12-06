@@ -1,6 +1,5 @@
 package simse.gui;
 
-import java.util.Hashtable;
 import java.util.Vector;
 
 import javafx.collections.FXCollections;
@@ -9,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -18,14 +18,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import simse.logic.Logic;
 import simse.state.State;
 import simse.util.RuleCategories;
-import simse.util.RuleDescriptions;
 import simse.util.RuleType;
 
 public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
@@ -38,12 +37,30 @@ public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
 	VBox mainPane;
 	
 	private ComboBox<String> actionComboBox;
-	private ListView triggerRuleList;
-	private ListView destroyerRuleList;
-	private ListView intermediateRuleList;
+	private ListView<String> triggerRuleList;
+	private ListView<String> destroyerRuleList;
+	private ListView<String> intermediateRuleList;
 	private TextArea descriptionArea;
 	private String lastSelectedAction;
+	private CheckBox advRulesCheck;
+	private boolean advRulesOn;
 
+	EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent e) {
+            if (e.getSource() == advRulesCheck) {
+            	advRulesOn = advRulesCheck.isSelected();
+            	refreshRuleLists(lastSelectedAction);
+                descriptionArea.setText("");
+            } else if (e.getSource() == actionComboBox) {
+            	if (actionComboBox.getItems().size() > 0) {
+    				lastSelectedAction = (String) actionComboBox.getSelectionModel().getSelectedItem();
+    				refreshRuleLists(lastSelectedAction);
+    				descriptionArea.setText("");
+    			}
+            }
+        }
+    };
+	
 	public RulesInfoScreen(State s, RuleType ruleType) {
 		this.state = s;
 
@@ -53,26 +70,29 @@ public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
 		ObservableList<String> actions = setActionsByType(ruleType);
 		
 		// Create viewRuleTitlePane and label:
+		VBox ruleSelectorPane = new VBox();
 		Pane viewRulesTitlePane = new Pane();
 		viewRulesTitlePane.getChildren().add(new Label("View Rules:"));
-		mainPane.getChildren().add(viewRulesTitlePane);
+		ruleSelectorPane.getChildren().add(viewRulesTitlePane);
 
 		// Create actionsComboBoxPane:
 		Pane actionComboBoxPane = new Pane();
 		actionComboBoxPane.getChildren().add(new Label("Actions:"));
 		actionComboBox = new ComboBox<String>(actions);
-		actionComboBox.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				if (actionComboBox.getItems().size() > 0) {
-					lastSelectedAction = (String) actionComboBox.getSelectionModel().getSelectedItem();
-					refreshRuleLists(lastSelectedAction);
-					descriptionArea.setText("");
-				}
-			}
-		});
+		actionComboBox.setOnAction(event);
 		actionComboBoxPane.getChildren().add(actionComboBox);
-		mainPane.getChildren().add(actionComboBoxPane);
+		ruleSelectorPane.getChildren().add(actionComboBoxPane);
+		
+        TilePane advancedRulesPane = new TilePane();
+        advRulesCheck = new CheckBox("View Advanced Rules");
+        advancedRulesPane.getChildren().add(advRulesCheck);
+        advRulesCheck.setIndeterminate(true);
+        advRulesCheck.setOnAction(event);
+        
+        HBox selections = new HBox();
+        selections.getChildren().add(ruleSelectorPane);
+        selections.getChildren().add(advancedRulesPane);
+        mainPane.getChildren().add(selections);
 
 		// Create rulesMainPane:
 		TilePane rulesMainPane = new TilePane();
@@ -194,20 +214,21 @@ public class RulesInfoScreen  extends Stage implements EventHandler<MouseEvent>{
 		destroyerRuleList.getItems().setAll(new Vector<String>());
 		intermediateRuleList.getItems().setAll(new Vector<String>());
 		
-		String[] intList = RuleCategories.getIntRulesForAction(actionName);
-		String[] trigList = RuleCategories.getAllTrigRulesForAction(actionName);
-		String[] destList = RuleCategories.getAllDestRulesForAction(actionName);
-		
-		intermediateRuleList.getItems().setAll(intList);
-		triggerRuleList.getItems().setAll(trigList);
-		destroyerRuleList.getItems().setAll(destList);
+		intermediateRuleList.getItems().setAll(RuleCategories.getIntRulesForAction(actionName));
+		if (advRulesOn) {
+			triggerRuleList.getItems().setAll(RuleCategories.getAllTrigRulesForAction(actionName));
+			destroyerRuleList.getItems().setAll(RuleCategories.getAllDestRulesForAction(actionName));
+		} else {
+			triggerRuleList.getItems().setAll(RuleCategories.getTrigRulesForAction(actionName));
+			destroyerRuleList.getItems().setAll(RuleCategories.getDestRulesForAction(actionName));
+		}
 	}
 
 	// refreshes the description area with the selected rule description
 	private void refreshDescriptionArea(String ruleName) {
 		if (ruleName != null) {
 			String text = RuleCategories.getRuleMapping(ruleName);
-			if (text == "") {
+			if (text == "" && advRulesOn) {
 				text = RuleCategories.getBackendRuleMappings(lastSelectedAction, ruleName);
 			}
 			descriptionArea.setText(text);
