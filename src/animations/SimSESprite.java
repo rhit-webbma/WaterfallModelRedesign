@@ -43,12 +43,16 @@ abstract class SimSESprite extends ImageView{
                 offsetX, offsetY,
                 width, height
         );
+        spriteAnimation.setCycleCount(Animation.INDEFINITE);
 	}
 	
 	
 	public void startAnim() {
-        spriteAnimation.setCycleCount(Animation.INDEFINITE);
         spriteAnimation.play();
+	}
+	
+	public void stopAnim() {
+		spriteAnimation.stop();
 	}
 	
 	public void setSpeed(int speed) {
