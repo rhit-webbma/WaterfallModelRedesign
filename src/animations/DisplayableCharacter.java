@@ -7,6 +7,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Circle;
@@ -20,14 +21,13 @@ public abstract class DisplayableCharacter extends Group{
 	
 	private SimSESprite displayedCharacter;
 	protected int velocity;
-	private int direction;
-	private double translateX, translateY;
+	private double previousX, previousY;
 	private PathTransition transition;
 	protected ArrayList<SimSESprite> animationList;
 	
 	public DisplayableCharacter() {	
 		this.velocity = 2;
-		this.direction = 0;
+
 		this.directionCheck();
 		animationList = new ArrayList<>();
 		initalizeAnimationList();
@@ -81,11 +81,11 @@ public abstract class DisplayableCharacter extends Group{
 //		});
 		
         Path path = new Path();
-        path.getElements().add(new MoveTo(0.0, 50.0));
+        path.getElements().add(new MoveTo(50.0, 50.0));
         path.getElements().add(new LineTo(200.0, 50.0));
         path.getElements().add(new LineTo(200.0, 200.0));
-        path.getElements().add(new LineTo(0.0, 200.0));
-        path.getElements().add(new LineTo(0.0, 50.0));
+        path.getElements().add(new LineTo(50.0, 200.0));
+        path.getElements().add(new LineTo(50.0, 50.0));
 		
 		this.transition = new PathTransition();
 		transition.setNode(this);
@@ -98,50 +98,46 @@ public abstract class DisplayableCharacter extends Group{
 	public void directionCheck(){
 		
 		Timeline directionTimer = new Timeline(
-                new KeyFrame(Duration.seconds(0.3), 
+                new KeyFrame(Duration.seconds(0.1), 
                 new EventHandler<ActionEvent>() {
 
 	   @Override
 	   public void handle(ActionEvent event) {
 		   
-		   double currentX = getTranslateX();
-		   double currentY = getTranslateY();
+           Point2D pointOfSprite = displayedCharacter.localToParent(getTranslateX(), getTranslateY());
+
 		   
-		   System.out.println("------------------------");
-		   System.out.println(currentX + "," + currentY);
-		   System.out.println(translateX + "," + translateY);
-		   System.out.println("------------------------");
+		   double currentX = pointOfSprite.getX();
+		   double currentY = pointOfSprite.getY();
+		   
 		   //Right Anim
-		   if(currentX > translateX) {
-			   System.out.println("Right");
+		   if(currentX > previousX && currentY == previousY) {
 			   displayedCharacter = animationList.get(4);
 		   }
 		   
 		   //Left Anim
-		   if(currentX < translateX) {
-			   System.out.println("Left");
+		   if(currentX < previousX && currentY == previousY) {
 			   displayedCharacter = animationList.get(3);
 		   }
 		   
 		   //Down Anim
-		   if(currentY > translateY) {
-			   System.out.println("Down");
+		   if(currentX == previousX && currentY > previousY) {
 			   displayedCharacter = animationList.get(1);
 		   }
 		   
 		   //Up Anim
-		   if(currentY < translateY) {
-			   System.out.println("Up");
+		   if(currentX == previousX && currentY < previousY) {
 			   displayedCharacter = animationList.get(2);
 		   }
-		   
-		   translateX = getTranslateX();
-		   translateY = getTranslateY();
+//
+		   pointOfSprite = displayedCharacter.localToParent(getTranslateX(), getTranslateY());
+		   previousX = pointOfSprite.getX();
+		   previousY = pointOfSprite.getY();
 		   		   
-		   updateAnimationListLocation(translateX, translateY);
+//		   updateAnimationListLocation(translateX, translateY);
  		   displayedCharacter.startAnim();
  		   updateDisplayedCharacter();
-		   
+//		   
 		   
 		   
 	   }
