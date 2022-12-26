@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Path;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -43,7 +44,8 @@ public class TestAnimation extends Application {
 //		displayedCharacter = animationList.get(0);
 //		displayedCharacter.startAnim();
 		
-		DisplayableCharacter char1 = new Character1();
+        Path newPath = new Path1();
+		DisplayableCharacter char1 = new Character1(newPath, 100, 100);
         
         
 //        Character1WalkForward anim = new Character1WalkForward();

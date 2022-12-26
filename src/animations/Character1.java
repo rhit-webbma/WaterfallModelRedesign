@@ -1,9 +1,11 @@
 package animations;
 
+import javafx.scene.shape.Path;
+
 public class Character1 extends DisplayableCharacter{
 	
-	public Character1() {
-		super();
+	public Character1(Path pathToFollow, int height, int width) {
+		super(pathToFollow, height, width);
 	}
 
 	@Override

@@ -9,55 +9,35 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.input.KeyCode;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.Polyline;
 import javafx.util.Duration;
 
 public abstract class DisplayableCharacter extends Group{
 	
 	private SimSESprite displayedCharacter;
-	protected int velocity;
+	protected int velocity, height, width;
 	private double previousX, previousY;
 	private PathTransition transition;
+	private Path pathToFollow;
 	protected ArrayList<SimSESprite> animationList;
 	
-	public DisplayableCharacter() {	
+	public DisplayableCharacter(Path pathToFollow, int width, int height) {	
 		this.velocity = 2;
-
+		this.pathToFollow = pathToFollow;
+		this.height = height;
+		this.width = width;
 		this.directionCheck();
 		animationList = new ArrayList<>();
 		initalizeAnimationList();
 		displayedCharacter = animationList.get(0);
+		displayedCharacter.setFitHeight(height);
+		displayedCharacter.setFitWidth(width);
 		this.getChildren().add(displayedCharacter);
 		displayedCharacter.startAnim();
 		
 		this.beginPathing();
-		
-//        this.setOnKeyPressed(e -> {
-//            if (e.getCode() == KeyCode.LEFT) {
-//            	displayedCharacter = animationList.get(3);
-//            	displayedCharacter.setX(displayedCharacter.getX() - velocity);
-//            }
-//            if (e.getCode() == KeyCode.RIGHT) {
-//            	displayedCharacter = animationList.get(4);
-//            	displayedCharacter.setX(displayedCharacter.getX() + velocity);
-//            }
-//            if (e.getCode() == KeyCode.UP) {
-//            	displayedCharacter = animationList.get(2);
-//            	displayedCharacter.setY(displayedCharacter.getY() - velocity);
-//            }
-//            if (e.getCode() == KeyCode.DOWN) {
-//            	displayedCharacter = animationList.get(1);
-//            	displayedCharacter.setY(displayedCharacter.getY() + velocity);
-//            }
-//            this.updateAnimationListLocation(displayedCharacter.getX(), displayedCharacter.getY());
-//    		displayedCharacter.startAnim();
-//    		this.getChildren().setAll(displayedCharacter);
-//        });
 	}
 	
 	public void updateAnimationListLocation(double x, double y) {
@@ -68,29 +48,16 @@ public abstract class DisplayableCharacter extends Group{
 	}
 	
 	public void updateDisplayedCharacter() {
+		displayedCharacter.setFitHeight(height);
+		displayedCharacter.setFitWidth(width);
 		this.getChildren().setAll(displayedCharacter);
 	}
 	
 	public void beginPathing() {
-//		Polyline newLine = new Polyline();
-//		newLine.getPoints().addAll(new Double[] {
-//				0.0, 0.0,
-//				100.0, 0.0,
-//				500.0, 0.0,
-//				0.0, 0.0
-//		});
-		
-        Path path = new Path();
-        path.getElements().add(new MoveTo(50.0, 50.0));
-        path.getElements().add(new LineTo(200.0, 50.0));
-        path.getElements().add(new LineTo(200.0, 200.0));
-        path.getElements().add(new LineTo(50.0, 200.0));
-        path.getElements().add(new LineTo(50.0, 50.0));
-		
 		this.transition = new PathTransition();
 		transition.setNode(this);
-		transition.setDuration(Duration.seconds(10));
-		transition.setPath(path);
+		transition.setDuration(Duration.seconds(13));
+		transition.setPath(pathToFollow);
 		transition.setCycleCount(PathTransition.INDEFINITE);
 		transition.play();
 	}
@@ -129,15 +96,13 @@ public abstract class DisplayableCharacter extends Group{
 		   if(currentX == previousX && currentY < previousY) {
 			   displayedCharacter = animationList.get(2);
 		   }
-//
+		   
 		   pointOfSprite = displayedCharacter.localToParent(getTranslateX(), getTranslateY());
 		   previousX = pointOfSprite.getX();
 		   previousY = pointOfSprite.getY();
 		   		   
-//		   updateAnimationListLocation(translateX, translateY);
  		   displayedCharacter.startAnim();
- 		   updateDisplayedCharacter();
-//		   
+ 		   updateDisplayedCharacter();	   
 		   
 		   
 	   }

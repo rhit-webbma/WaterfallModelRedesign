@@ -4,6 +4,9 @@ package simse.gui;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import animations.Character1;
+import animations.DisplayableCharacter;
+import animations.Path1;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -15,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
 import simse.adts.objects.Employee;
 import simse.gui.util.JavaFXHelpers;
@@ -76,7 +80,14 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		final Canvas canvas = new Canvas(width, height);
 		dbGraphics = canvas.getGraphicsContext2D();
 		
+		Path newPath = new Path1();
+		DisplayableCharacter char1 = new Character1(newPath, 40, 75);
+		
+		
+		
 		this.getChildren().add(canvas);
+		this.getChildren().add(char1);
+		char1.requestFocus();
 		
 		loadDefaultSettings();
 		update();
