@@ -12,16 +12,29 @@ import javafx.scene.shape.Path;
  *
  */
 public class Path1 extends Path {
+	
+	private int x, y;
 
-	public Path1() {        
-        this.getElements().add(new MoveTo(281, 70));
-        this.getElements().add(new LineTo(281, 160));
-        this.getElements().add(new LineTo(217, 160));
-        this.getElements().add(new LineTo(217, 106));
-        this.getElements().add(new LineTo(179, 106));
-        this.getElements().add(new LineTo(179, 55));
-        this.getElements().add(new LineTo(179, 70));
-        this.getElements().add(new LineTo(281, 70));      
+	public Path1(int x, int y) {
+		
+//		int xPos = x;
+//		int yPos = y;
+		
+        this.getElements().add(new MoveTo(x, y));
+        y += 90;
+        this.getElements().add(new LineTo(x, y));
+        x -= 64;
+        this.getElements().add(new LineTo(x, y));
+        y -= 54;
+        this.getElements().add(new LineTo(x, y));
+        x -= 38;
+        this.getElements().add(new LineTo(x, y));
+        y -= 51;
+        this.getElements().add(new LineTo(x, y));
+        y += 15;
+        this.getElements().add(new LineTo(x, y));
+        x += 102;
+        this.getElements().add(new LineTo(x, y));    
 	}
 	
 }

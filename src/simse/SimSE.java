@@ -66,22 +66,6 @@ public class SimSE extends Application{
 
 	@Override
 	public void start(Stage arg0) throws Exception {
-		
-		
-		Timeline directionTimer = new Timeline(
-                new KeyFrame(Duration.seconds(1), 
-                new EventHandler<ActionEvent>() {
-
-					@Override
-					public void handle(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						Point mouseXY = MouseInfo.getPointerInfo().getLocation(); 
-						System.out.println("X: " + mouseXY.getX() + ", Y: " + mouseXY.getY());
-					}
-                	
-                }));
-		directionTimer.setCycleCount(Timeline.INDEFINITE);
-		directionTimer.play();
 		startNewBranch(new State(), new Branch(null, 0, 0, null, ""));
 		ArrayList<SimSEGUI> guis = this.getGUIs();
 		arg0 = guis.get(0);

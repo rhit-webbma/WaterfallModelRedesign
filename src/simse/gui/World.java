@@ -80,7 +80,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		final Canvas canvas = new Canvas(width, height);
 		dbGraphics = canvas.getGraphicsContext2D();
 		
-		Path newPath = new Path1();
+		Path newPath = new Path1(281, 91);
 		DisplayableCharacter char1 = new Character1(newPath, 40, 75);
 		
 		
