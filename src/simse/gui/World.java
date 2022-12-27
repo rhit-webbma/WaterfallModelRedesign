@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import animations.Character1;
+import animations.CreatablePath;
 import animations.DisplayableCharacter;
-import animations.Path1;
+import animations.PathData;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -80,15 +81,28 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		final Canvas canvas = new Canvas(width, height);
 		dbGraphics = canvas.getGraphicsContext2D();
 		
-		Path newPath = new Path1(281, 91);
-		DisplayableCharacter char1 = new Character1(newPath, 40, 75);
-		
-		
 		
 		this.getChildren().add(canvas);
-		this.getChildren().add(char1);
-		char1.requestFocus();
 		
+		xspacer = (width - MapData.X_MAPSIZE * MapData.TILE_SIZE) / 2;
+		yspacer = (height - MapData.Y_MAPSIZE * MapData.TILE_SIZE) / 2;
+
+		if (xspacer < 0)
+			xspacer = 0;
+		if (yspacer < 0)
+			yspacer = 0;
+		
+		for (int i = 0; i < sopUsers.size(); i++) {
+			DisplayedEmployee tmp = sopUsers.get(i);
+			double[][] pathDirections = PathData.getPath(i);
+			Path newPath = new CreatablePath(xspacer + tmp.getXLocation() * MapData.TILE_SIZE + 30, yspacer + tmp.getYLocation() * MapData.TILE_SIZE + 10, pathDirections);
+			DisplayableCharacter char1 = new Character1(newPath, 50, 75);
+			this.getChildren().add(char1);
+			char1.requestFocus();
+		}
+		
+
+
 		loadDefaultSettings();
 		update();
 		paint();
@@ -163,14 +177,6 @@ public class World extends SimSEMap implements EventHandler<Event> {
 //		int height = (int) getHeight();
 		GraphicsContext gc = dbGraphics;
 
-		xspacer = (width - MapData.X_MAPSIZE * MapData.TILE_SIZE) / 2;
-		yspacer = (height - MapData.Y_MAPSIZE * MapData.TILE_SIZE) / 2;
-
-		if (xspacer < 0)
-			xspacer = 0;
-		if (yspacer < 0)
-			yspacer = 0;
-
 		// draw the map:
 		for (int i = 0; i < MapData.Y_MAPSIZE; i++) {
 			for (int j = 0; j < MapData.X_MAPSIZE; j++) {
@@ -182,10 +188,11 @@ public class World extends SimSEMap implements EventHandler<Event> {
 
 		// draw employees:
 		for (int i = 0; i < sopUsers.size(); i++) {
+			
 			DisplayedEmployee tmp = sopUsers.get(i);
 			if (tmp.isDisplayed() && tmp.isActivated()) {
-				gc.drawImage(tmp.getUserIcon(), xspacer + tmp.getXLocation() * MapData.TILE_SIZE,
-						yspacer + tmp.getYLocation() * MapData.TILE_SIZE);
+//				gc.drawImage(tmp.getUserIcon(), xspacer + tmp.getXLocation() * MapData.TILE_SIZE,
+//						yspacer + tmp.getYLocation() * MapData.TILE_SIZE);
 			}
 		}
 
