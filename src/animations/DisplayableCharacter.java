@@ -56,7 +56,7 @@ public abstract class DisplayableCharacter extends Group{
 	public void beginPathing() {
 		this.transition = new PathTransition();
 		transition.setNode(this);
-		transition.setDuration(Duration.seconds(13));
+		transition.setDuration(Duration.seconds(16));
 		transition.setPath(pathToFollow);
 		transition.setCycleCount(PathTransition.INDEFINITE);
 		transition.play();
