@@ -3,6 +3,7 @@
  */
 package animations;
 
+import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -19,13 +20,14 @@ public class CreatablePath extends Path {
 //		int yPos = y;
 		
         this.getElements().add(new MoveTo(x, y));
-		
+		        
 		for(int i = 0; i < xyChanges.length; i++) {
 				x += xyChanges[i][0];
 				y += xyChanges[i][1];
 				this.getElements().add(new LineTo(x, y));
 		}
 		
+		this.getElements().add(new ClosePath());
 	
 //        y += 41;
 //        this.getElements().add(new LineTo(x, y));
