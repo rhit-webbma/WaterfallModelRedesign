@@ -47,7 +47,10 @@ abstract class SimSESprite extends ImageView{
         spriteAnimation.setCycleCount(Animation.INDEFINITE);
 	}
 	
-	
+	public static String getURL(int num) {
+		return "C:\\Users\\localmgr\\Documents\\Rose-Hulman\\Senior Year\\WaterfallRedesign\\WaterfallModelRedesign\\sprites\\character" + num + "cus_walk.png";
+	}
+
 	public void startAnim() {
         spriteAnimation.play();
 	}

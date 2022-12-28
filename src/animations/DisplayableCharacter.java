@@ -24,14 +24,14 @@ public abstract class DisplayableCharacter extends Group{
 	private Path pathToFollow;
 	protected ArrayList<SimSESprite> animationList;
 	
-	public DisplayableCharacter(Path pathToFollow, int width, int height) {	
+	public DisplayableCharacter(Path pathToFollow, int characterNum, int width, int height) {	
 		this.velocity = 2;
 		this.pathToFollow = pathToFollow;
 		this.height = height;
 		this.width = width;
 		this.directionCheck();
 		animationList = new ArrayList<>();
-		initalizeAnimationList();
+		initalizeAnimationList(characterNum);
 		displayedCharacter = animationList.get(0);
 		displayedCharacter.setFitHeight(height);
 		displayedCharacter.setFitWidth(width);
@@ -150,6 +150,6 @@ public abstract class DisplayableCharacter extends Group{
 	}
 	
 	
-	abstract void initalizeAnimationList();
+	abstract void initalizeAnimationList(int characterNum);
 
 }
