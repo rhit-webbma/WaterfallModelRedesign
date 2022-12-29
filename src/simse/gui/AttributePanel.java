@@ -47,7 +47,6 @@ public class AttributePanel extends Pane {
 													// list scrollable
 
 	private GridPane gridPane;
-	private ClockPanel clockPane;
 
 	private State state;
 	private NumberFormat numFormat;
@@ -77,8 +76,6 @@ public class AttributePanel extends Pane {
 		this.setBorder(new Border(new BorderImage(border, BorderWidths.FULL, Insets.EMPTY, BorderWidths.FULL, true, BorderRepeat.REPEAT, BorderRepeat.REPEAT)));
 
 		state = s;
-		clockPane = new ClockPanel(g, s, e);
-		clockPane.setPrefSize(250, 100);
 
 		numFormat = NumberFormat.getNumberInstance(Locale.US);
 
@@ -119,10 +116,6 @@ public class AttributePanel extends Pane {
 		GridPane.setConstraints(attributePane, 2, 0, 1, 1, HPos.CENTER, VPos.BOTTOM, Priority.NEVER, Priority.NEVER,
 				new Insets(0, 0, 0, 0));
 		gridPane.getChildren().add(attributePane);
-
-		GridPane.setConstraints(clockPane, 3, 0, 1, 1, HPos.RIGHT, VPos.BOTTOM, Priority.NEVER, Priority.NEVER,
-				new Insets(10, 0, 0, 0));
-		gridPane.getChildren().add(clockPane);
 	}
 
 	public void setObjectInFocus(SSObject obj, Image img) {
@@ -135,7 +128,6 @@ public class AttributePanel extends Pane {
 
 	public void update() {
 		updateAttributeList();
-		clockPane.update();
 	}
 
 	public void setGUIChanged() {
@@ -752,10 +744,6 @@ public class AttributePanel extends Pane {
 				attributeListLeft.getItems().add(data);
 			}
 		}
-	}
-
-	public ClockPanel getClockPanel() {
-		return clockPane;
 	}
 
 	public void setIcon(ImageView img) {

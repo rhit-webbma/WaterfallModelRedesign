@@ -26,6 +26,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import simse.engine.Engine;
@@ -36,6 +38,9 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private TabPanel tabPanel;
 	private AttributePanel attribPanel;
 	private ActionPanel actionPanel;
+	private Pane panel1;
+	private Pane panel2;
+	private Pane panel3;
 
 	// Analyze menu:
 	private MenuBar menuBar; // menu bar at top of window
@@ -107,8 +112,11 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		expTool = new ExplanatoryTool(state.getLogger().getLog(), branch, timelinesBrowser);
 
 		attribPanel = new AttributePanel(this, state, engine);
-		tabPanel = new TabPanel(this, state, logic, attribPanel, expTool);
+		tabPanel = new TabPanel(this, state, logic, engine, attribPanel, expTool);
 		actionPanel = new ActionPanel(this, state, logic);
+		panel1 = new Pane();
+		panel2 = new Pane();
+		panel3 = new Pane();
 
 		// Set window title:
 		String title = "SimSE";
@@ -137,10 +145,15 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		// Create main panel:
         BorderPane bPane = new BorderPane();
 		bPane.setTop(tabPanel);
-		bPane.setBottom(attribPanel);
+		HBox panelContainer = new HBox(panel1, panel2);
+		panel1.getChildren().add(attribPanel);
+		bPane.setBottom(panelContainer);
+//		bPane.setBottom(attribPanel);
 		world = new World(state, logic, this);
 		bPane.setCenter(world);
-		bPane.setRight(actionPanel);
+//		bPane.setRight(actionPanel);
+		panel3.getChildren().add(actionPanel);
+		bPane.setRight(panel3);
 		
 		bPane.setPrefSize(1024, 710);
 		VBox panes = new VBox();

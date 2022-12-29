@@ -43,6 +43,7 @@ import simse.adts.objects.SEProject;
 import simse.adts.objects.SSObject;
 import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.SystemTestPlan;
+import simse.engine.Engine;
 import simse.explanatorytool.Branch;
 import simse.explanatorytool.ExplanatoryTool;
 import simse.explanatorytool.MultipleTimelinesBrowser;
@@ -70,6 +71,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private ProjectOverviewScreen projectFrame;
 	private WindowsScreen windowsFrame;
 	private CustomersAtAGlanceFrame customerFrame;
+	private ClockPanel clockPane;
 
 	private GridPane gridPane;
 	private boolean guiChanged;
@@ -115,8 +117,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
         }
     };
 
-	public TabPanel(SimSEGUI g, State s, Logic l, AttributePanel a,
-			ExplanatoryTool expTool) {
+	public TabPanel(SimSEGUI g, State s, Logic l, Engine e, AttributePanel a,
+			 ExplanatoryTool expTool) {
 		logic = l;
 		gui = g;
 		state = s;
@@ -166,9 +168,12 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		generateButtons();
 
+		clockPane = new ClockPanel(gui, s, e);
+		clockPane.setPrefSize(250, 100);
+
 		// Add panes and labels to main pane:
 		
-		gridPane.setHgap(200);
+		gridPane.setHgap(10);
 	    gridPane.setVgap(10);
 	    gridPane.setPadding(new Insets(0, 0, 0, 0));
 	    gridPane.getColumnConstraints().add(new ColumnConstraints(logoPane.getWidth() + 100));
@@ -179,9 +184,6 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		gridPane.add(logoPane, 0, 0);
 
 		// Add panes and labels to main pane
-		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
-				Priority.NEVER, new Insets(10, 0, 0, 0));
-//		gridPane.add(buttonsScrollPane, 2, 0);
 		
 		HBox buttons = new HBox();
 		buttons.setSpacing(40);
@@ -264,6 +266,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		
 		gridPane.add(buttons, 2, 0);
 				
+		
+		gridPane.add(clockPane, 4, 0);
 
 		setPrefSize(1920, 100);
 		updateImages(EMPLOYEE);
@@ -426,6 +430,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		employeeFrame.update(true);
 		projectFrame.update();
 		artifactFrame.update();
+		clockPane.update();
 	}
 
 	public void update(int index) {
@@ -647,5 +652,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			}
 		}
 		return url;
+	}
+	
+	public ClockPanel getClockPanel() {
+		return clockPane;
 	}
 }
