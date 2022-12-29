@@ -36,8 +36,8 @@ import simse.state.State;
 
 public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private TabPanel tabPanel;
-	private AttributePanel attribPanel;
-	private ActionPanel actionPanel;
+	private InformationPanel attribPanel;
+	private EmployeesPanel actionPanel;
 	private Pane panel1;
 	private Pane panel2;
 	private Pane panel3;
@@ -111,9 +111,9 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 
 		expTool = new ExplanatoryTool(state.getLogger().getLog(), branch, timelinesBrowser);
 
-		attribPanel = new AttributePanel(this, state, engine);
+		attribPanel = new InformationPanel(this, state, engine);
 		tabPanel = new TabPanel(this, state, logic, engine, attribPanel, expTool);
-		actionPanel = new ActionPanel(this, state, logic);
+		actionPanel = new EmployeesPanel(this, state, logic);
 		panel1 = new Pane();
 		panel2 = new Pane();
 		panel3 = new Pane();
@@ -145,14 +145,14 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		// Create main panel:
         BorderPane bPane = new BorderPane();
 		bPane.setTop(tabPanel);
-		HBox panelContainer = new HBox(panel1, panel2);
-		panel1.getChildren().add(attribPanel);
-		bPane.setBottom(panelContainer);
-//		bPane.setBottom(attribPanel);
 		world = new World(state, logic, this);
 		bPane.setCenter(world);
-//		bPane.setRight(actionPanel);
+		HBox panelContainer = new HBox(panel1, panel2);
+		panel1.getChildren().add(attribPanel);
+		panelContainer.setPrefWidth(bPane.getWidth());
+		bPane.setBottom(panelContainer);
 		panel3.getChildren().add(actionPanel);
+		panel3.setPrefHeight(450);
 		bPane.setRight(panel3);
 		
 		bPane.setPrefSize(1024, 710);
@@ -184,7 +184,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		return world;
 	}
 
-	public AttributePanel getAttributePanel() {
+	public InformationPanel getAttributePanel() {
 		return attribPanel;
 	}
 

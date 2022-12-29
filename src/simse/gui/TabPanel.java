@@ -61,7 +61,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	public static final int MAXBUTTONS = 32;
 
 	private LogoPanel logoPane;
-	private AttributePanel attributePane;
+	private InformationPanel attributePane;
 	private EmployeesOverviewScreen employeeFrame;
 //	private EmployeesAtAGlanceFrame employeeFrame;
 	private ArtifactsOverviewScreen artifactFrame;
@@ -69,7 +69,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private ToolsAtAGlanceFrame toolFrame;
 //	private ProjectsAtAGlanceFrame projectFrame;
 	private ProjectOverviewScreen projectFrame;
-	private WindowsScreen windowsFrame;
+	private PanelsScreen panelsFrame;
 	private CustomersAtAGlanceFrame customerFrame;
 	private ClockPanel clockPane;
 
@@ -117,7 +117,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
         }
     };
 
-	public TabPanel(SimSEGUI g, State s, Logic l, Engine e, AttributePanel a,
+	public TabPanel(SimSEGUI g, State s, Logic l, Engine e, InformationPanel a,
 			 ExplanatoryTool expTool) {
 		logic = l;
 		gui = g;
@@ -136,7 +136,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		projectFrame = new ProjectOverviewScreen(state);
 		customerFrame = new CustomersAtAGlanceFrame(state, gui);
 		
-		windowsFrame = new WindowsScreen(state, gui, logic);
+		panelsFrame = new PanelsScreen(state, gui, logic);
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
 		allIcon = JavaFXHelpers.createImage("src/simse/gui/images/all.GIF");
@@ -256,10 +256,10 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		windowsButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				if (windowsFrame.isIconified()) {
-					windowsFrame.setIconified(false);
+				if (panelsFrame.isIconified()) {
+					panelsFrame.setIconified(false);
 				}
-				windowsFrame.show();
+				panelsFrame.show();
 			}
 		});
 		buttons.getChildren().add(windowsButton);

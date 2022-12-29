@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import simse.logic.Logic;
 import simse.state.State;
 
-public class WindowsScreen extends Stage implements EventHandler<MouseEvent> {
+public class PanelsScreen extends Stage implements EventHandler<MouseEvent> {
 	State state;
 	SimSEGUI gui;
 	Logic logic;
@@ -25,7 +25,7 @@ public class WindowsScreen extends Stage implements EventHandler<MouseEvent> {
 		
 	}
 
-	public WindowsScreen(State state, SimSEGUI gui, Logic logic) {
+	public PanelsScreen(State state, SimSEGUI gui, Logic logic) {
 		super();
 		this.state = state;
 		this.gui = gui;
