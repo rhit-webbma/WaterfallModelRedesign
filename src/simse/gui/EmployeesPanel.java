@@ -54,7 +54,7 @@ import simse.gui.util.JavaFXHelpers;
 import simse.logic.Logic;
 import simse.state.State;
 
-public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
+public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, SimSEPanel {
 	private State state;
 	private Logic logic;
 	private SimSEGUI mainGUIFrame;
@@ -66,7 +66,6 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
 	private ScrollPane actionPane;
 	private Hashtable<Employee, VBox> empsToEmpPanels;
 	private Hashtable<Employee, HBox> empsToPicPanels;
-	// private Hashtable empsToActPanels;
 	private Hashtable<Employee, Label> empsToPicLabels;
 	private Hashtable<Employee, Label> empsToKeyLabels;
 
@@ -93,43 +92,24 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
 		actionPane.setId("scrollPaneActionPanel");
 		actionPane.setPrefSize(225, 425);
 		actionPane.setId("ActionPanelMain");
-//		actionPane.setStyle("-fx-background: rgb(102, 102, 102, 1);\n -fx-background-color: rgb(102, 102, 102, 1)");
 
 		empsToEmpPanels = new Hashtable<Employee, VBox>();
 		empsToPicPanels = new Hashtable<Employee, HBox>();
-		// empsToActPanels = new Hashtable();
 		empsToPicLabels = new Hashtable<Employee, Label>();
 		empsToKeyLabels = new Hashtable<Employee, Label>();
 
-//		BorderPane titlePanel = new BorderPane();
 		
 		
 		VBox actionPanelLayout = new VBox();
-		
-	
-//		Label titleLabel = new Label("Current Activities:");
-//		Font f = titleLabel.getFont();
-//		Font newFont = new Font(f.getName(), 15);
-//		titleLabel.setFont(newFont);
-//		titleLabel.setTextFill(Color.BLACK);
-		
-//		actionPanelLayout.getChildren().add(titleLabel);
-//		actionPanelLayout.getChildren().add(actionPane);
-//		actionPanelLayout.setId("ActionPanelLayout");
 		
 		TitledPane titlePanel = new TitledPane("Employee Panel", actionPane);
 		titlePanel.setBorder(Border.EMPTY);
 		titlePanel.setId("ActionTitlePanel");
 		titlePanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
-		
-		
-//		titlePanel.setLeft(titleLabel);
 
 		selectedEmp = null;
 		popup = new ContextMenu();
 
-//		layout.getChildren().add(titlePanel);
-//		layout.getChildren().add(actionPane);
 		layout.getChildren().add(titlePanel);
 		
 		update();
@@ -401,5 +381,10 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
 				}
 			}
 		}
+	}
+
+	@Override
+	public Panels getPanelType() {
+		return Panels.EMPLOYEES;
 	}
 }

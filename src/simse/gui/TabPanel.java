@@ -249,20 +249,21 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			}
 		});
 		
-		Button windowsButton = new Button("Windows");
-		windowsButton.setId("TabButton");
-		windowsButton.setPrefHeight(40);
-		HBox.setMargin(windowsButton, new Insets(15, 0, 0, 0));
-		windowsButton.setOnAction(new EventHandler<ActionEvent>() {
+		Button panelsButton = new Button("Panels");
+		panelsButton.setId("TabButton");
+		panelsButton.setPrefHeight(40);
+		HBox.setMargin(panelsButton, new Insets(15, 0, 0, 0));
+		panelsButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				if (panelsFrame.isIconified()) {
 					panelsFrame.setIconified(false);
 				}
+				panelsFrame.update();
 				panelsFrame.show();
 			}
 		});
-		buttons.getChildren().add(windowsButton);
+		buttons.getChildren().add(panelsButton);
 		
 		gridPane.add(buttons, 2, 0);
 				

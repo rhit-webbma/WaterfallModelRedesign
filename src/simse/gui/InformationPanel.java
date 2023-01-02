@@ -40,7 +40,7 @@ import simse.engine.Engine;
 import simse.gui.util.JavaFXHelpers;
 import simse.state.State;
 
-public class InformationPanel extends Pane {
+public class InformationPanel extends Pane implements SimSEPanel {
 	private final int ATTRIBUTE_LIST_CAPACITY = 5; // number of attributes that
 													// can be displayed in a
 													// list without making the
@@ -731,5 +731,10 @@ public class InformationPanel extends Pane {
 //		selectedIcon.setBackground(JavaFXHelpers.createBackgroundColor(Color.BLACK));
 //		selectedIcon.setId("Icon");
 //		selectedIcon.setGraphic(img);
+	}
+
+	@Override
+	public Panels getPanelType() {
+		return Panels.INFORMATION;
 	}
 }

@@ -10,6 +10,7 @@ import simse.explanatorytool.ExplanatoryTool;
 import simse.explanatorytool.MultipleTimelinesBrowser;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.stage.Stage;
@@ -38,9 +39,9 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private TabPanel tabPanel;
 	private InformationPanel attribPanel;
 	private EmployeesPanel actionPanel;
-	private Pane panel1;
-	private Pane panel2;
-	private Pane panel3;
+	private Pane panel1 = new Pane();
+	private Pane panel2 = new Pane();
+	private Pane panel3 = new Pane();
 
 	// Analyze menu:
 	private MenuBar menuBar; // menu bar at top of window
@@ -114,9 +115,6 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		attribPanel = new InformationPanel(this, state, engine);
 		tabPanel = new TabPanel(this, state, logic, engine, attribPanel, expTool);
 		actionPanel = new EmployeesPanel(this, state, logic);
-		panel1 = new Pane();
-		panel2 = new Pane();
-		panel3 = new Pane();
 
 		// Set window title:
 		String title = "SimSE";
@@ -232,5 +230,22 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 			}
 		}
 		
+	}
+
+	public List<Panels> getPresentPanels() {
+		List<Panels> panels = new ArrayList<>();
+		if (panel1.getChildren().size() != 0) {
+			SimSEPanel subPanel1= (SimSEPanel) panel1.getChildren().get(0);
+			panels.add(subPanel1.getPanelType());
+		}
+		if (panel2.getChildren().size() != 0) {
+			SimSEPanel subPanel2= (SimSEPanel) panel2.getChildren().get(0);
+			panels.add(subPanel2.getPanelType());
+		}
+		if (panel3.getChildren().size() != 0) {
+			SimSEPanel subPanel3= (SimSEPanel) panel3.getChildren().get(0);
+			panels.add(subPanel3.getPanelType());
+		}
+		return panels;
 	}
 }
