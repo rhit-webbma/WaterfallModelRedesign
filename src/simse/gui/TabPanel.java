@@ -431,6 +431,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		employeeFrame.update(true);
 		projectFrame.update();
 		artifactFrame.update();
+		panelsFrame.update();
 		clockPane.update();
 	}
 

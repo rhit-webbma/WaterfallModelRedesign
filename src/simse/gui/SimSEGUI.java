@@ -22,10 +22,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -37,8 +39,10 @@ import simse.state.State;
 
 public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private TabPanel tabPanel;
-	private InformationPanel attribPanel;
-	private EmployeesPanel actionPanel;
+	private InformationPanel infoPanel;
+	private EmployeesPanel employeesPanel;
+	private TrackPanel trackPanel;
+	private MelloPanel melloPanel;
 	private Pane panel1 = new Pane();
 	private Pane panel2 = new Pane();
 	private Pane panel3 = new Pane();
@@ -112,9 +116,11 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 
 		expTool = new ExplanatoryTool(state.getLogger().getLog(), branch, timelinesBrowser);
 
-		attribPanel = new InformationPanel(this, state, engine);
-		tabPanel = new TabPanel(this, state, logic, engine, attribPanel, expTool);
-		actionPanel = new EmployeesPanel(this, state, logic);
+		infoPanel = new InformationPanel(this, state, engine);
+		tabPanel = new TabPanel(this, state, logic, engine, infoPanel, expTool);
+		employeesPanel = new EmployeesPanel(this, state, logic);
+		trackPanel = new TrackPanel();
+		melloPanel = new MelloPanel();
 
 		// Set window title:
 		String title = "SimSE";
@@ -146,10 +152,10 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		world = new World(state, logic, this);
 		bPane.setCenter(world);
 		HBox panelContainer = new HBox(panel1, panel2);
-		panel1.getChildren().add(attribPanel);
+		panel1.getChildren().add(infoPanel);
 		panelContainer.setPrefWidth(bPane.getWidth());
 		bPane.setBottom(panelContainer);
-		panel3.getChildren().add(actionPanel);
+		panel3.getChildren().add(employeesPanel);
 		panel3.setPrefHeight(450);
 		bPane.setRight(panel3);
 		
@@ -183,7 +189,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 	}
 
 	public InformationPanel getAttributePanel() {
-		return attribPanel;
+		return infoPanel;
 	}
 
 	public TabPanel getTabPanel() {
@@ -193,16 +199,16 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 	// forces gui to update, used when the game ends
 	public void forceGUIUpdate() {
 		tabPanel.setGUIChanged();
-		attribPanel.setGUIChanged();
+		infoPanel.setGUIChanged();
 		update();
 	}
 
 	// Update the GUI to reflect the current state:
 	public void update() {
 		tabPanel.update();
-		attribPanel.update();
+		infoPanel.update();
 		world.update();
-		actionPanel.update();
+		employeesPanel.update();
 		expTool.update();
 		branch.update(state);
 	}
@@ -247,5 +253,134 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 			panels.add(subPanel3.getPanelType());
 		}
 		return panels;
+	}
+	
+	public void addBottomPanel(Panels panelType) {
+		if (panel1.getChildren().size() == 0) {
+			switch (panelType) {
+			
+			case INFORMATION:
+				panel1.getChildren().add(infoPanel);
+				break;
+				
+			case TRACK:
+				panel1.getChildren().add(trackPanel);
+				break;
+				
+			case MELLO:
+				panel1.getChildren().add(melloPanel);
+				break;
+				
+			case GRAPH:
+				break;
+				
+			default:
+				break;
+			}
+		} else if (panel2.getChildren().size() == 0) {
+			switch (panelType) {
+			
+			case INFORMATION:
+				panel2.getChildren().add(infoPanel);
+				break;
+				
+			case TRACK:
+				panel2.getChildren().add(trackPanel);
+				break;
+				
+			case MELLO:
+				panel2.getChildren().add(melloPanel);
+				break;
+				
+			case GRAPH:
+				break;
+				
+			default:
+				break;
+			}
+		} else {
+			Dialog<String> dialog = new Dialog<String>();
+			dialog.setTitle("Panels Full");
+			ButtonType type = new ButtonType("Ok", ButtonData.OK_DONE);
+			Panels p1Type = ((SimSEPanel) panel1.getChildren().get(0)).getPanelType();
+			Panels p2Type = ((SimSEPanel) panel2.getChildren().get(0)).getPanelType();
+			dialog.setContentText("Bottom of GUI is full, remove either " + p1Type.toString() +
+					" or " + p2Type.toString() + " from the view to make space");
+			dialog.getDialogPane().getButtonTypes().add(type);
+			dialog.showAndWait();
+		}
+		
+		tabPanel.update();
+	}
+	
+	public void addSidePanel(Panels panelType) {
+		if (panel3.getChildren().size() == 0) {
+			switch (panelType) {
+			
+			case EMPLOYEES:
+				panel3.getChildren().add(employeesPanel);
+				break;
+				
+			default:
+				break;
+			}
+		} else {
+			Dialog<String> dialog = new Dialog<String>();
+			dialog.setTitle("Panels Full");
+			ButtonType type = new ButtonType("Ok", ButtonData.OK_DONE);
+			Panels p3Type = ((SimSEPanel) panel1.getChildren().get(0)).getPanelType();
+			dialog.setContentText("Side of GUI is full, remove " + p3Type.toString() +
+					" from the view to make space");
+			dialog.getDialogPane().getButtonTypes().add(type);
+			dialog.showAndWait();
+		}
+		
+		tabPanel.update();
+	}
+	
+	public void removePanel(Panels panelType) {
+		boolean p1Empty = (panel1.getChildren().size() == 0);
+		boolean p2Empty = (panel2.getChildren().size() == 0);
+		boolean p3Empty = (panel3.getChildren().size() == 0);
+		switch (panelType) {
+		
+		case INFORMATION:
+			if (!p1Empty && panel1.getChildren().get(0) instanceof InformationPanel) {
+				panel1.getChildren().clear();
+			} else if (!p2Empty && panel2.getChildren().get(0) instanceof InformationPanel) {
+				panel2.getChildren().clear();
+			}
+			break;
+			
+		case EMPLOYEES:
+			if (!p3Empty&& panel3.getChildren().get(0) instanceof EmployeesPanel) {
+				panel3.getChildren().clear();
+			}
+			break;
+			
+		case TRACK:
+			if (!p1Empty && panel1.getChildren().get(0) instanceof TrackPanel) {
+				panel1.getChildren().clear();
+			} else if (!p2Empty && panel2.getChildren().get(0) instanceof TrackPanel) {
+				panel2.getChildren().clear();
+			}
+			break;
+			
+		case MELLO:
+			if (!p1Empty && panel1.getChildren().get(0) instanceof MelloPanel) {
+				panel1.getChildren().clear();
+			} else if (!p2Empty && panel2.getChildren().get(0) instanceof MelloPanel) {
+				panel2.getChildren().clear();
+			}
+			break;
+			
+		case GRAPH:
+			break;
+			
+		default:
+			break;
+		}
+		
+		tabPanel.update();
 	}
 }

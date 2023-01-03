@@ -30,8 +30,37 @@ public class PanelsScreen extends Stage implements EventHandler<MouseEvent> {
 	Button progGraphButton;
 
 	@Override
-	public void handle(MouseEvent arg0) {
-		
+	public void handle(MouseEvent e) {
+		Object src = e.getSource();
+		if (src == infoButton) {
+			if (infoButton.getText().equals("Add")) {
+				gui.addBottomPanel(Panels.INFORMATION);
+			} else {
+				gui.removePanel(Panels.INFORMATION);
+				infoButton.setText("Add");
+			}
+		} else if (src == employeeButton) {
+			if (employeeButton.getText().equals("Add")) {
+				gui.addSidePanel(Panels.EMPLOYEES);
+			} else {
+				gui.removePanel(Panels.EMPLOYEES);
+				employeeButton.setText("Add");
+			}
+		} else if (src == trackButton) {
+			if (trackButton.getText().equals("Add")) {
+				gui.addBottomPanel(Panels.TRACK);
+			} else {
+				gui.removePanel(Panels.TRACK);
+				trackButton.setText("Add");
+			}
+		} else if (src == melloButton) {
+			if (melloButton.getText().equals("Add")) {
+				gui.addBottomPanel(Panels.MELLO);
+			} else {
+				gui.removePanel(Panels.MELLO);
+				melloButton.setText("Add");
+			}
+		}
 	}
 
 	public PanelsScreen(State state, SimSEGUI gui, Logic logic) {
@@ -75,7 +104,7 @@ public class PanelsScreen extends Stage implements EventHandler<MouseEvent> {
 		employeeLabel.setWrapText(true);
 		GridPane.setMargin(employeeLabel, new Insets(5));
 		mainPane.add(employeeLabel, 1, 2);
-		mainPane.add(new Label("Right"), 2, 2);
+		mainPane.add(new Label("Side"), 2, 2);
 		employeeButton = new Button("Add");
 		employeeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		mainPane.add(employeeButton, 3, 2);
