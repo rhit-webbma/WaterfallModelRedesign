@@ -419,5 +419,10 @@ public class SoftwareEngineer extends Employee implements Cloneable {
 			payrate = a;
 		}
 	}
+	
+	@Override
+	public void setOverheadText(String s) {
+		super.setOverheadText(s, this.name);
+	}
 
 }
