@@ -43,6 +43,10 @@ import simse.adts.objects.SEProject;
 import simse.adts.objects.SSObject;
 import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.SystemTestPlan;
+import simse.engine.Engine;
+import simse.explanatorytool.Branch;
+import simse.explanatorytool.ExplanatoryTool;
+import simse.explanatorytool.MultipleTimelinesBrowser;
 import simse.gui.util.JavaFXHelpers;
 import simse.logic.Logic;
 import simse.state.State;
@@ -57,7 +61,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	public static final int MAXBUTTONS = 32;
 
 	private LogoPanel logoPane;
-	private AttributePanel attributePane;
+	private InformationPanel attributePane;
 	private EmployeesOverviewScreen employeeFrame;
 //	private EmployeesAtAGlanceFrame employeeFrame;
 	private ArtifactsOverviewScreen artifactFrame;
@@ -65,7 +69,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private ToolsAtAGlanceFrame toolFrame;
 //	private ProjectsAtAGlanceFrame projectFrame;
 	private ProjectOverviewScreen projectFrame;
+	private PanelsScreen panelsFrame;
 	private CustomersAtAGlanceFrame customerFrame;
+	private ClockPanel clockPane;
 
 	private GridPane gridPane;
 	private boolean guiChanged;
@@ -81,6 +87,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private State state;
 	private Logic logic;
 	private SimSEGUI gui;
+	private ExplanatoryTool expTool;
 	private Hashtable<SSObject, ImageView> objsToImages; // maps Objects (keys)
 															// to ImageIcons
 															// (values)
@@ -110,12 +117,14 @@ public class TabPanel extends Pane implements EventHandler<Event> {
         }
     };
 
-	public TabPanel(SimSEGUI g, State s, Logic l, AttributePanel a) {
+	public TabPanel(SimSEGUI g, State s, Logic l, Engine e, InformationPanel a,
+			 ExplanatoryTool expTool) {
 		logic = l;
 		gui = g;
 		state = s;
 		guiChanged = true;
 		attributePane = a;
+		this.expTool = expTool;
 		objsToImages = new Hashtable<SSObject, ImageView>();
 		buttonsToObjs = new Hashtable<Button, SSObject>();
 //		employeeFrame = new EmployeesAtAGlanceFrame(state, gui);
@@ -126,6 +135,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 //		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
 		projectFrame = new ProjectOverviewScreen(state);
 		customerFrame = new CustomersAtAGlanceFrame(state, gui);
+		
+		panelsFrame = new PanelsScreen(state, gui, logic);
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
 		allIcon = JavaFXHelpers.createImage("src/simse/gui/images/all.GIF");
@@ -157,9 +168,12 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		generateButtons();
 
+		clockPane = new ClockPanel(gui, s, e);
+		clockPane.setPrefSize(250, 100);
+
 		// Add panes and labels to main pane:
 		
-		gridPane.setHgap(200);
+		gridPane.setHgap(10);
 	    gridPane.setVgap(10);
 	    gridPane.setPadding(new Insets(0, 0, 0, 0));
 	    gridPane.getColumnConstraints().add(new ColumnConstraints(logoPane.getWidth() + 100));
@@ -170,9 +184,6 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		gridPane.add(logoPane, 0, 0);
 
 		// Add panes and labels to main pane
-		GridPane.setConstraints(buttonsScrollPane, 1, 0, 1, 1, HPos.LEFT, VPos.BOTTOM, Priority.NEVER, 
-				Priority.NEVER, new Insets(10, 0, 0, 0));
-//		gridPane.add(buttonsScrollPane, 2, 0);
 		
 		HBox buttons = new HBox();
 		buttons.setSpacing(40);
@@ -228,15 +239,36 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		analyzeButton.setPrefHeight(40);
 		HBox.setMargin(analyzeButton, new Insets(15, 0, 0, 0));
 		buttons.getChildren().add(analyzeButton);
+		analyzeButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (expTool.isIconified()) {
+					expTool.setIconified(false);
+				}
+				expTool.show();
+			}
+		});
 		
-		Button windowsButton = new Button("Windows");
-		windowsButton.setId("TabButton");
-		windowsButton.setPrefHeight(40);
-		HBox.setMargin(windowsButton, new Insets(15, 0, 0, 0));
-		buttons.getChildren().add(windowsButton);
+		Button panelsButton = new Button("Panels");
+		panelsButton.setId("TabButton");
+		panelsButton.setPrefHeight(40);
+		HBox.setMargin(panelsButton, new Insets(15, 0, 0, 0));
+		panelsButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (panelsFrame.isIconified()) {
+					panelsFrame.setIconified(false);
+				}
+				panelsFrame.update();
+				panelsFrame.show();
+			}
+		});
+		buttons.getChildren().add(panelsButton);
 		
 		gridPane.add(buttons, 2, 0);
 				
+		
+		gridPane.add(clockPane, 4, 0);
 
 		setPrefSize(1920, 100);
 		updateImages(EMPLOYEE);
@@ -399,6 +431,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		employeeFrame.update(true);
 		projectFrame.update();
 		artifactFrame.update();
+		panelsFrame.update();
+		clockPane.update();
 	}
 
 	public void update(int index) {
@@ -620,5 +654,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			}
 		}
 		return url;
+	}
+	
+	public ClockPanel getClockPanel() {
+		return clockPane;
 	}
 }
