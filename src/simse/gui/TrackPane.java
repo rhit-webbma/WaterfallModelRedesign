@@ -34,7 +34,8 @@ public class TrackPane extends Pane {
 		scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 		scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		scroll.setPrefHeight(400);
-		scroll.setMaxHeight(400);
+		scroll.setFitToHeight(true);
+		scroll.setFitToWidth(true);
 		scroll.setVvalue(1.0);
 		
 		pane.getChildren().add(top);
