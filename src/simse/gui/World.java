@@ -95,6 +95,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		
 		for (int i = 0; i < sopUsers.size(); i++) {
 			DisplayedEmployee tmp = sopUsers.get(i);
+			
 			double[][] pathDirections = PathData.getPath(i);
 			Path newPath = new CreatablePath(xspacer + tmp.getXLocation() * MapData.TILE_SIZE + 30, yspacer + tmp.getYLocation() * MapData.TILE_SIZE + 10, pathDirections);
 			DisplayableCharacter char1 = new SimSECharacter(newPath, i, 50, 75);

@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -41,6 +42,18 @@ public abstract class DisplayableCharacter extends Group{
 		this.beginPathing();
 	}
 	
+	public DisplayableCharacter(int characterNum, int width, int height) {
+		this.height = height;
+		this.width = width;
+		animationList = new ArrayList<>();
+		initalizeAnimationList(characterNum);
+		displayedCharacter = animationList.get(0);
+		displayedCharacter.setFitHeight(height);
+		displayedCharacter.setFitWidth(width);
+		this.getChildren().add(displayedCharacter);
+		displayedCharacter.startAnim();	
+	}
+	
 	public void updateAnimationListLocation(double x, double y) {
 		for(SimSESprite sprite : animationList) {
 			sprite.setX(x);
@@ -52,6 +65,10 @@ public abstract class DisplayableCharacter extends Group{
 		displayedCharacter.setFitHeight(height);
 		displayedCharacter.setFitWidth(width);
 		this.getChildren().setAll(displayedCharacter);
+	}
+	
+	public ImageView getStaticImage() {
+		return this.displayedCharacter;
 	}
 	
 	public void beginPathing() {

@@ -8,6 +8,10 @@ public class SimSECharacter extends DisplayableCharacter{
 		super(pathToFollow, characterNum, height, width);
 	}
 
+	public SimSECharacter(int characterNum, int height, int width) {
+		super(characterNum, height, width);
+	}
+	
 	@Override
 	void initalizeAnimationList(int characterNum) {
 		// TODO Auto-generated method stub
