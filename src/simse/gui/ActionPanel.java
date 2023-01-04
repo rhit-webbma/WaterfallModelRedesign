@@ -54,7 +54,7 @@ import simse.gui.util.JavaFXHelpers;
 import simse.logic.Logic;
 import simse.state.State;
 
-public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, SimSEPanel {
+public class ActionPanel extends Pane implements EventHandler<MouseEvent>, SimSEPanel {
 	private State state;
 	private Logic logic;
 	private SimSEGUI mainGUIFrame;
@@ -80,7 +80,7 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, Si
 		}
 	};
 
-	public EmployeesPanel(SimSEGUI gui, State s, Logic l) {
+	public ActionPanel(SimSEGUI gui, State s, Logic l) {
 		state = s;
 		logic = l;
 		mainGUIFrame = gui;
