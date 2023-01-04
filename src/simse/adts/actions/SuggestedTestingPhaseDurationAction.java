@@ -28,6 +28,7 @@ public class SuggestedTestingPhaseDurationAction extends Action implements
 		projs = new Hashtable<Project, Boolean>();
 		emps = new Hashtable<Employee, Boolean>();
 		timeToLive = 218;
+		actionName = Action.SUGGESTEDTESTINGPHASEDURATION;
 	}
 
 	public Object clone() {

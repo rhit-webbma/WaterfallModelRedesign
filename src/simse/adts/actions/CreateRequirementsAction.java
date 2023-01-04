@@ -42,6 +42,7 @@ public class CreateRequirementsAction extends Action implements Cloneable {
 		associatedcodedocs = new Hashtable<Artifact, Boolean>();
 		associateddesigndocs = new Hashtable<Artifact, Boolean>();
 		associatedsystemtestplans = new Hashtable<Artifact, Boolean>();
+		actionName = Action.CREATEREQUIREMENTS;
 	}
 
 	public Object clone() {

@@ -28,6 +28,7 @@ public class SuggestedDesignPhaseDurationAction extends Action implements
 		projs = new Hashtable<Project, Boolean>();
 		emps = new Hashtable<Employee, Boolean>();
 		timeToLive = 411;
+		actionName = Action.SUGGESTEDDESIGNPHASEDURATION;
 	}
 
 	public Object clone() {

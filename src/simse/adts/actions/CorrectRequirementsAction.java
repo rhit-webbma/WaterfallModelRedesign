@@ -33,6 +33,7 @@ public class CorrectRequirementsAction extends Action implements Cloneable {
 		requirementsdocs = new Hashtable<Artifact, Boolean>();
 		projs = new Hashtable<Project, Boolean>();
 		requirementscapturetools = new Hashtable<Tool, Boolean>();
+		actionName = Action.CORRECTREQUIREMENTS;
 	}
 
 	public Object clone() {

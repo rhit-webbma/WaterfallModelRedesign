@@ -44,6 +44,7 @@ public class IntroduceNewRequirementsAction extends Action implements Cloneable 
 		associateddesigndocuments = new Hashtable<Artifact, Boolean>();
 		associatedsystemtestplans = new Hashtable<Artifact, Boolean>();
 		timeToLive = 1;
+		actionName = Action.INTRODUCENEWREQUIREMENTS;
 	}
 
 	public Object clone() {
