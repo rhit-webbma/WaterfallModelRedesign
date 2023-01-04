@@ -143,7 +143,8 @@ public class CompositeGraph extends Stage implements EventHandler<MouseEvent> {
 					}
 				}
 			} else {
-				actGraph.chartMouseClicked(me);
+				//TODO: Double check this still works
+				actGraph.handle(me);
 			}
 		}
 	}
