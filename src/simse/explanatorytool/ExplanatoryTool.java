@@ -28,7 +28,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import simse.adts.actions.Action;
 import simse.state.State;
+import simse.util.RuleCategories;
+import simse.util.RuleDescriptions;
 
 public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 	private ArrayList<State> log; // log for current simulation
@@ -111,8 +114,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		attributeListTitlePane.setMinHeight(20);
 		objectPane.getChildren().add(attributeListTitlePane);
 		attributeList = new ListView<String>();
-//		attributeList.setVisibleRowCount(5); // make 5 items visible at a time
-//		attributeList.setFixedCellWidth(250);
 		attributeList.setFixedCellSize(24);
 		attributeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		attributeList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
@@ -137,20 +138,17 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 
 		// action list:
 		ObservableList<String> actions = FXCollections.observableArrayList(
-				"CreateRequirements", "ReviewRequirements",
-				"CorrectRequirements", "CreateDesign", "ReviewDesign",
-				"CorrectDesign", "CreateCode", "InspectCode", "CorrectCode",
-				"IntegrateCode", "SystemTest", "CreateSystemTestPlan",
-				"ReviewSystemTestPlan", "CorrectSystemTestPlan",
-				"DeliverProduct", "Break", "GetSick", "Quit",
-				"IntroduceNewRequirements", "ChangePayRate", "GiveBonus",
-				"Fire", "PurchaseTool", "SuggestedRequirementsPhaseDuration",
-				"SuggestedDesignPhaseDuration",
-				"SuggestedImplIntegrationPhaseDuration",
-				"SuggestedTestingPhaseDuration");
+				Action.CREATEREQUIREMENTS, Action.REVIEWREQUIREMENTS,
+				Action.CORRECTREQUIREMENTS, Action.CREATEDESIGN, Action.REVIEWDESIGN,
+				Action.CORRECTDESIGN, Action.CREATECODE, Action.INSPECTCODE, Action.CORRECTCODE,
+				Action.INTEGRATECODE, Action.SYSTEMTEST, Action.CREATESYSTEMTESTPLAN,
+				Action.REVIEWSYSTEMTESTPLAN, Action.CORRECTSYSTEMTESTPLAN,
+				Action.DELIVERPRODUCT, Action.BREAK, Action.GETSICK, Action.QUIT,
+				Action.INTRODUCENEWREQUIREMENTS, Action.CHANGEPAYRATE, Action.GIVEBONUS,
+				Action.FIRE, Action.PURCHASETOOL, Action.SUGGESTEDREQUIREMENTSPHASEDURATION,
+				Action.SUGGESTEDDESIGNPHASEDURATION, Action.SUGGESTEDIMPLINTEGRATIONPHASEDURATION,
+				Action.SUGGESTEDTESTINGPHASEDURATION);
 		actionList = new ListView<String>(actions);
-//		actionList.setVisibleRowCount(5); // make 5 items visible at a time
-//		actionList.setFixedCellWidth(250);
 		attributeList.setFixedCellSize(24);
 		actionList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		actionList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
@@ -171,7 +169,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 
 		refreshAttributeList();
 		if (actions.size() > 0) {
-//			actionList.setSelectedIndex(0);
 			actionList.scrollTo(0);
 			actionList.getSelectionModel().select(0);
 			actionList.getFocusModel().focus(0);
@@ -208,8 +205,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		trigRuleTitlePane.getChildren().add(new Label("Trigger Rules:"));
 		ruleListsPane.getChildren().add(trigRuleTitlePane);
 		triggerRuleList = new ListView<String>();
-//		triggerRuleList.setVisibleRowCount(4);
-//		triggerRuleList.setFixedCellWidth(250);
 		triggerRuleList.setFixedCellSize(24);
 		triggerRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		triggerRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
@@ -222,8 +217,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		destRuleTitlePane.getChildren().add(new Label("Destroyer Rules:"));
 		ruleListsPane.getChildren().add(destRuleTitlePane);
 		destroyerRuleList = new ListView<String>();
-//		destroyerRuleList.setVisibleRowCount(4);
-//		destroyerRuleList.setFixedCellWidth(250);
 		destroyerRuleList.setFixedCellSize(24);
 		destroyerRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		destroyerRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
@@ -236,8 +229,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		intRuleTitlePane.getChildren().add(new Label("Intermediate Rules:"));
 		ruleListsPane.getChildren().add(intRuleTitlePane);
 		intermediateRuleList = new ListView<String>();
-//		intermediateRuleList.setVisibleRowCount(4);
-//		intermediateRuleList.setFixedCellWidth(250);
 		intermediateRuleList.setFixedCellSize(24);
 		intermediateRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		intermediateRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
@@ -259,7 +250,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		descriptionArea.setWrapText(true);
 		descriptionArea.setPrefRowCount(16);
 		descriptionArea.setPrefColumnCount(30);
-//		descriptionArea.setWrapStyleWord(true);
 		descriptionArea.setEditable(false);
 		ScrollPane descriptionScrollPane = new ScrollPane(descriptionArea);
 		descriptionScrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -275,7 +265,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		closeButtonPane.getChildren().add(closeButton);
 
 		if (actions.size() > 0) { // at least one action in list
-//			actionComboBox.setSelectedIndex(0);
 			actionComboBox.getSelectionModel().select(0);
 		}
 
@@ -292,26 +281,11 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 	    spacerPane.setMinWidth(300);
 	    mainPane.add(spacerPane, 0, 0);
 		mainPane.add(multipleTimelinesPanel, 1, 0);
-//		Separator separator0 = new Separator();
-//		separator0.setMaxSize(2900, 1);
-//		mainPane.add(separator0, 0, 1, 3, 1);
 		mainPane.add(generateGraphsTitlePane, 1, 1);
-//		Separator separator1 = new Separator();
-//		separator1.setMaxSize(2900, 1);
-//		mainPane.add(separator1, 0, 3, 3, 1);
 		mainPane.add(objectPane, 0, 2, 2, 1);
 		mainPane.add(actionPane, 2, 2);
-//		Separator separator2 = new Separator();
-//		separator2.setMaxSize(2900, 1);
-//		mainPane.add(separator2, 0, 5, 3, 1);
 		mainPane.add(generateCompGraphPane, 1, 3);
-//		Separator separator3 = new Separator();
-//		separator3.setMaxSize(2900, 1);
-//		mainPane.add(separator3, 0, 7, 3, 1);
 		mainPane.add(viewRulesTitlePane, 1, 4);
-//		Separator separator4 = new Separator();
-//		separator4.setMaxSize(2900, 1);
-//		mainPane.add(separator4, 0, 9, 3, 1);
 		mainPane.add(actionComboBoxPane, 1, 5);
 		mainPane.add(rulesMainPane, 0, 6, 3, 1);
 		mainPane.add(closeButtonPane, 1, 7);
@@ -321,18 +295,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		Scene scene = new Scene(mainPane, 900, 720);
 		scene.getStylesheets().add("style.css");
 		this.setScene(scene);
-
-		// Set main window frame properties:
-//		setBackground(Color.black);
-//		setContentPane(mainPane);
-//		validate();
-//		pack();
-//		repaint();
-		toFront();
-		// Make it show up in the center of the screen:
-//		RefineryUtilities.centerFrameOnScreen(this);
-//		setVisible(false);
-//		mainPane.setPrefSize(100, 70);
 		hide();
 	}
 	
@@ -345,8 +307,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 				timelinesBrowser.setIconified(false);
 			}
 			timelinesBrowser.show();
-		} else if (source == generateObjGraphButton) { // generateObjGraphButton
-														// has been pressed
+		} else if (source == generateObjGraphButton) { 
 			String selectedObj = (String) objectList.getSelectionModel().getSelectedItem();
 			String[] words = selectedObj.split("\\s");
 			String title = selectedObj + " Attributes";
@@ -362,30 +323,26 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 			for (int i = 0; i < selectedAtts.length; i++) {
 				attributes[i] = new String((String) selectedAtts[i]);
 			}
-			if (attributes.length > 0) { // at least one attribute is selected
+			if (attributes.length > 0) { 
 				ObjectGraph graph = new ObjectGraph(title, log, objTypeType,
 						objType, keyAttVal, attributes, true, branch);
-//				visibleGraphs.add(graph);
 			} else {
 				Alert alert = new Alert(AlertType.WARNING, "Please select at least one attribute");
 				alert.show();
 			}
-		} else if (source == generateActGraphButton) { // generateActGraphButton
-														// has been pressed
+		} else if (source == generateActGraphButton) { 
 			Object[] selectedActions = actionList.getSelectionModel().getSelectedItems().toArray();
 			String[] actions = new String[selectedActions.length];
 			for (int i = 0; i < selectedActions.length; i++) {
 				actions[i] = new String((String) selectedActions[i]);
 			}
-			if (actions.length > 0) { // at least one attribute is selected
+			if (actions.length > 0) { 
 				ActionGraph graph = new ActionGraph(log, actions, true, branch);
-//				visibleGraphs.add(graph);
 			} else {
 				Alert alert = new Alert(AlertType.WARNING, "Please select at least one action");
 				alert.show();
 			}
-		} else if (source == generateCompGraphButton) { // generateCompGraphButton
-														// has been pressed
+		} else if (source == generateCompGraphButton) { 
 			String selectedObj = (String) objectList.getSelectionModel().getSelectedItem();
 			String[] words = selectedObj.split("\\s");
 			String title = selectedObj + " Attributes";
@@ -401,7 +358,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 			for (int i = 0; i < selectedAtts.length; i++) {
 				attributes[i] = new String((String) selectedAtts[i]);
 			}
-			if (attributes.length > 0) { // at least one attribute is selected
+			if (attributes.length > 0) { 
 				ObjectGraph objGraph = new ObjectGraph(title, log, objTypeType,
 						objType, keyAttVal, attributes, false, branch);
 
@@ -410,14 +367,12 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 				for (int i = 0; i < selectedActions.length; i++) {
 					actions[i] = new String((String) selectedActions[i]);
 				}
-				if (actions.length > 0) { // at least one attribute is selected
+				if (actions.length > 0) { 
 					ActionGraph actGraph = new ActionGraph(log, actions, false,
 							branch);
 
 					// generate composite graph:
-					CompositeGraph compGraph = new CompositeGraph(objGraph,
-							actGraph, branch);
-//					visibleGraphs.add(compGraph);
+					CompositeGraph compGraph = new CompositeGraph(objGraph, actGraph, branch);
 				} else {
 					Alert alert = new Alert(AlertType.WARNING, "Please select at least one action");
 					alert.show();
@@ -441,8 +396,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 			destroyerRuleList.getSelectionModel().clearSelection();
 			refreshDescriptionArea((String) intermediateRuleList.getSelectionModel().getSelectedItem());
 		}  else if (source == closeButton) {
-//			setVisible(false);
-//			dispose();
 			close();
 		}
 	}
@@ -455,13 +408,6 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 			if (!graph.isShowing()) {
 				visibleGraphs.remove(graph);
 			} 
-//				else if (graph instanceof ObjectGraph) {
-//				((ObjectGraph) graph).update();
-//			} else if (graph instanceof ActionGraph) {
-//				((ActionGraph) graph).update();
-//			} else if (graph instanceof CompositeGraph) {
-//				((CompositeGraph) graph).update();
-//			}
 		}
 
 		// update timelines browser:
@@ -598,173 +544,19 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		destroyerRuleList.getItems().setAll(new Vector<String>());
 		intermediateRuleList.getItems().setAll(new Vector<String>());
 
-		if (actionName.equals("CreateRequirements")) {
-			String[] intList = { "CreateRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("ReviewRequirements")) {
-			String[] intList = { "ReviewRequirementsEffectRuleC",
-					"ReviewRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CorrectRequirements")) {
-			String[] intList = { "CorrectRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CreateDesign")) {
-			String[] intList = { "CreateDesignEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("ReviewDesign")) {
-			String[] intList = { "ReviewDesignEffectRuleA",
-					"ReviewDesignEffectRuleC", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CorrectDesign")) {
-			String[] intList = { "CorrectDesignEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CreateCode")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] intList = { "CreateCodeEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("InspectCode")) {
-			String[] intList = { "InspectCodeEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CorrectCode")) {
-			String[] intList = { "CorrectCodeEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("IntegrateCode")) {
-			String[] intList = { "IntegrateCodeEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("SystemTest")) {
-			String[] intList = { "SystemTestEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CreateSystemTestPlan")) {
-			String[] intList = { "CreateSystemTestPlanEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("ReviewSystemTestPlan")) {
-			String[] intList = { "ReviewTestPlanEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("CorrectSystemTestPlan")) {
-			String[] intList = { "CorrectTestPlanEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("DeliverProduct")) {
-			String[] trigList = { "CalculateScore", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("Break")) {
-			String[] trigList = { "BreakTrigRule", };
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = { "BreakDestRule", };
-			destroyerRuleList.getItems().setAll(destList);
-			String[] intList = { "BreakEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("GetSick")) {
-			String[] trigList = { "GetSickTrigRule", };
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = { "GetSickDestRule", };
-			destroyerRuleList.getItems().setAll(destList);
-			String[] intList = { "GetSickEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("Quit")) {
-			String[] trigList = { "QuitDestroyObjectsRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("IntroduceNewRequirements")) {
-			String[] intList = { "IntroduceNewRequirementsEffectRuleA", };
-			intermediateRuleList.getItems().setAll(intList);
-		} else if (actionName.equals("ChangePayRate")) {
-			String[] trigList = { "ChangePayRateEffectRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("GiveBonus")) {
-			String[] trigList = { "GiveBonusEffectRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("Fire")) {
-			String[] trigList = { "FireDestroyObjectsRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("PurchaseTool")) {
-			String[] trigList = { "PurchaseToolEffectRuleA", };
-			triggerRuleList.getItems().setAll(trigList);
-		} else if (actionName.equals("SuggestedRequirementsPhaseDuration")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = {};
-			destroyerRuleList.getItems().setAll(destList);
-		} else if (actionName.equals("SuggestedDesignPhaseDuration")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = {};
-			destroyerRuleList.getItems().setAll(destList);
-		} else if (actionName.equals("SuggestedImplIntegrationPhaseDuration")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = {};
-			destroyerRuleList.getItems().setAll(destList);
-		} else if (actionName.equals("SuggestedTestingPhaseDuration")) {
-			String[] trigList = {};
-			triggerRuleList.getItems().setAll(trigList);
-			String[] destList = {};
-			destroyerRuleList.getItems().setAll(destList);
-		}
+		String[] intList = RuleCategories.getIntRulesForAction(actionName);
+		String[] trigList = RuleCategories.getTrigRulesForAction(actionName);
+		String[] destList = RuleCategories.getDestRulesForAction(actionName);
+		
+		intermediateRuleList.getItems().setAll(intList);
+		triggerRuleList.getItems().setAll(trigList);
+		destroyerRuleList.getItems().setAll(destList);
 	}
 
 	// refreshes the description area with the selected rule description
 	private void refreshDescriptionArea(String ruleName) {
 		if (ruleName != null) {
-			String text = "";
-			if (ruleName.equals("CreateRequirementsEffectRuleA")) {
-				text = RuleDescriptions.CREATEREQUIREMENTS_CREATEREQUIREMENTSEFFECTRULEA;
-			} else if (ruleName.equals("ReviewRequirementsEffectRuleA")) {
-				text = RuleDescriptions.REVIEWREQUIREMENTS_REVIEWREQUIREMENTSEFFECTRULEA;
-			} else if (ruleName.equals("ReviewRequirementsEffectRuleC")) {
-				text = RuleDescriptions.REVIEWREQUIREMENTS_REVIEWREQUIREMENTSEFFECTRULEC;
-			} else if (ruleName.equals("CorrectRequirementsEffectRuleA")) {
-				text = RuleDescriptions.CORRECTREQUIREMENTS_CORRECTREQUIREMENTSEFFECTRULEA;
-			} else if (ruleName.equals("CreateDesignEffectRuleA")) {
-				text = RuleDescriptions.CREATEDESIGN_CREATEDESIGNEFFECTRULEA;
-			} else if (ruleName.equals("ReviewDesignEffectRuleA")) {
-				text = RuleDescriptions.REVIEWDESIGN_REVIEWDESIGNEFFECTRULEA;
-			} else if (ruleName.equals("ReviewDesignEffectRuleC")) {
-				text = RuleDescriptions.REVIEWDESIGN_REVIEWDESIGNEFFECTRULEC;
-			} else if (ruleName.equals("CorrectDesignEffectRuleA")) {
-				text = RuleDescriptions.CORRECTDESIGN_CORRECTDESIGNEFFECTRULEA;
-			} else if (ruleName.equals("CreateCodeEffectRuleA")) {
-				text = RuleDescriptions.CREATECODE_CREATECODEEFFECTRULEA;
-			} else if (ruleName.equals("InspectCodeEffectRuleA")) {
-				text = RuleDescriptions.INSPECTCODE_INSPECTCODEEFFECTRULEA;
-			} else if (ruleName.equals("CorrectCodeEffectRuleA")) {
-				text = RuleDescriptions.CORRECTCODE_CORRECTCODEEFFECTRULEA;
-			} else if (ruleName.equals("IntegrateCodeEffectRuleA")) {
-				text = RuleDescriptions.INTEGRATECODE_INTEGRATECODEEFFECTRULEA;
-			} else if (ruleName.equals("SystemTestEffectRuleA")) {
-				text = RuleDescriptions.SYSTEMTEST_SYSTEMTESTEFFECTRULEA;
-			} else if (ruleName.equals("CreateSystemTestPlanEffectRuleA")) {
-				text = RuleDescriptions.CREATESYSTEMTESTPLAN_CREATESYSTEMTESTPLANEFFECTRULEA;
-			} else if (ruleName.equals("ReviewTestPlanEffectRuleA")) {
-				text = RuleDescriptions.REVIEWSYSTEMTESTPLAN_REVIEWTESTPLANEFFECTRULEA;
-			} else if (ruleName.equals("CorrectTestPlanEffectRuleA")) {
-				text = RuleDescriptions.CORRECTSYSTEMTESTPLAN_CORRECTTESTPLANEFFECTRULEA;
-			} else if (ruleName.equals("CalculateScore")) {
-				text = RuleDescriptions.DELIVERPRODUCT_CALCULATESCORE;
-			} else if (ruleName.equals("BreakEffectRuleA")) {
-				text = RuleDescriptions.BREAK_BREAKEFFECTRULEA;
-			} else if (ruleName.equals("BreakTrigRule")) {
-				text = RuleDescriptions.BREAK_BREAKTRIGRULE;
-			} else if (ruleName.equals("BreakDestRule")) {
-				text = RuleDescriptions.BREAK_BREAKDESTRULE;
-			} else if (ruleName.equals("GetSickEffectRuleA")) {
-				text = RuleDescriptions.GETSICK_GETSICKEFFECTRULEA;
-			} else if (ruleName.equals("GetSickTrigRule")) {
-				text = RuleDescriptions.GETSICK_GETSICKTRIGRULE;
-			} else if (ruleName.equals("GetSickDestRule")) {
-				text = RuleDescriptions.GETSICK_GETSICKDESTRULE;
-			} else if (ruleName.equals("QuitDestroyObjectsRuleA")) {
-				text = RuleDescriptions.QUIT_QUITDESTROYOBJECTSRULEA;
-			} else if (ruleName.equals("IntroduceNewRequirementsEffectRuleA")) {
-				text = RuleDescriptions.INTRODUCENEWREQUIREMENTS_INTRODUCENEWREQUIREMENTSEFFECTRULEA;
-			} else if (ruleName.equals("ChangePayRateEffectRuleA")) {
-				text = RuleDescriptions.CHANGEPAYRATE_CHANGEPAYRATEEFFECTRULEA;
-			} else if (ruleName.equals("GiveBonusEffectRuleA")) {
-				text = RuleDescriptions.GIVEBONUS_GIVEBONUSEFFECTRULEA;
-			} else if (ruleName.equals("FireDestroyObjectsRuleA")) {
-				text = RuleDescriptions.FIRE_FIREDESTROYOBJECTSRULEA;
-			} else if (ruleName.equals("PurchaseToolEffectRuleA")) {
-				text = RuleDescriptions.PURCHASETOOL_PURCHASETOOLEFFECTRULEA;
-			}
+			String text = RuleCategories.getRuleMapping(ruleName);
 			descriptionArea.setText(text);
 			descriptionArea.positionCaret(0);
 		}

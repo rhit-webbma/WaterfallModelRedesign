@@ -22,6 +22,7 @@ import simse.adts.objects.Employee;
 import simse.adts.objects.SoftwareEngineer;
 import simse.logic.Logic;
 import simse.state.State;
+import simse.util.RuleType;
 
 public class EmployeesOverviewScreen extends Stage implements EventHandler<MouseEvent> {
 	State state;
@@ -31,7 +32,7 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 	Label titleLabel;
 	Button employeeTab;
 	Button customerTab;
-	Button moreDetail;
+	Button moreDetail, rules;
 	BorderPane tablePane;
 	
 	TableModel tableModel;
@@ -75,9 +76,16 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 		tablePane.setCenter(table);
 		mainPane.getChildren().add(tablePane);
 		
+		HBox buttonPane = new HBox();
+		
 		moreDetail = new Button ("More Detail on Selected Employee");
 		moreDetail.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		mainPane.getChildren().add(moreDetail);
+		buttonPane.getChildren().add(moreDetail);
+		
+		rules = new Button("Rules for Employees");
+		rules.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		buttonPane.getChildren().add(rules);
+		mainPane.getChildren().add(buttonPane);
 		
 		Scene scene = new Scene(mainPane, 900, 500);
 		this.setScene(scene);
@@ -102,6 +110,9 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 				EmployeeInfoScreen info = new EmployeeInfoScreen(state, gui, logic, selected);
 				info.show();
 			}
+		} else if (source == rules) {
+			RulesInfoScreen info = new RulesInfoScreen(state, RuleType.PEOPLE);
+			info.show();
 		}
 	}
 	

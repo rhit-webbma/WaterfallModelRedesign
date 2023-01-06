@@ -21,6 +21,7 @@ public class GetSickAction extends Action implements Cloneable {
 
 	public GetSickAction() {
 		sickpersons = new Hashtable<Employee, Boolean>();
+		actionName = Action.GETSICK;
 	}
 
 	public Object clone() {

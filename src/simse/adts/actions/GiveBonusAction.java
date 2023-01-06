@@ -27,6 +27,7 @@ public class GiveBonusAction extends Action implements Cloneable {
 		emps = new Hashtable<Employee, Boolean>();
 		projectwithbudgets = new Hashtable<Project, Boolean>();
 		timeToLive = 1;
+		actionName = Action.GIVEBONUS;
 	}
 
 	public Object clone() {

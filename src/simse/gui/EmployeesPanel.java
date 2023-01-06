@@ -60,7 +60,7 @@ import simse.gui.util.JavaFXHelpers;
 import simse.logic.Logic;
 import simse.state.State;
 
-public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
+public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, SimSEPanel {
 	private State state;
 	private Logic logic;
 	private SimSEGUI mainGUIFrame;
@@ -113,7 +113,7 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
 		
 		
 		VBox actionPanelLayout = new VBox();
-		
+	
 	
 //		Label titleLabel = new Label("Current Activities:");
 //		Font f = titleLabel.getFont();
@@ -132,7 +132,6 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
 		
 		
 //		titlePanel.setLeft(titleLabel);
-
 		selectedEmp = null;
 		popup = new ContextMenu();
 
@@ -147,6 +146,8 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
 			DisplayableCharacter char1 = new SimSECharacter(i, 50, 75);
 			characters.add(char1);
 		}
+		
+		layout.getChildren().add(titlePanel);
 		
 		update();
 		this.getChildren().add(layout);		
@@ -219,7 +220,7 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
 //			picPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 			if (empsToPicLabels.get(emp) == null) {				
 				ImageView ico = characters.get(i).getStaticImage();
-				
+
 				ico.setFitHeight(40);
 				ico.setFitWidth(40);
 				Label temp = new Label();
@@ -418,5 +419,10 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
 				}
 			}
 		}
+	}
+
+	@Override
+	public Panels getPanelType() {
+		return Panels.EMPLOYEES;
 	}
 }

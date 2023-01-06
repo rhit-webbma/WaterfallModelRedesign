@@ -21,6 +21,7 @@ public class BreakAction extends Action implements Cloneable {
 
 	public BreakAction() {
 		breakers = new Hashtable<Employee, Boolean>();
+		actionName = Action.BREAK;
 	}
 
 	public Object clone() {

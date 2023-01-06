@@ -3,15 +3,19 @@ package simse.adts.objects;
 
 import java.util.Vector;
 
+import simse.gui.TrackPanel;
+
 public abstract class Employee extends SSObject implements Cloneable {
 	private Vector<String> menu;
 	private String overheadText;
 	public static final String IDLE_STRING = "I'm not doing anything right now";
+	private TrackPanel track;
 
 	public Employee() {
 		menu = new Vector<String>();
 		clearMenu();
 		overheadText = new String();
+		track = TrackPanel.getInstance();
 	}
 
 	public Object clone() {
@@ -69,7 +73,7 @@ public abstract class Employee extends SSObject implements Cloneable {
 	public String getOverheadText() {
 		return overheadText;
 	}
-
+	
 	public void setOverheadText(String s) {
 		if ((s != null) && (s.length() > 0)) {
 			if ((overheadText != null) && (overheadText.length() > 0)) {
@@ -84,6 +88,10 @@ public abstract class Employee extends SSObject implements Cloneable {
 				overheadText = s;
 			}
 		}
+	}
+
+	public void setOverheadText(String s, String name) {
+		track.addText(s, name);
 	}
 
 	public void clearOverheadText() {

@@ -21,5 +21,10 @@ public class ACustomer extends Customer implements Cloneable {
 	public void setName(String a) {
 		name = a;
 	}
+	
+	@Override
+	public void setOverheadText(String s) {
+		super.setOverheadText(s, this.name);
+	}
 
 }

@@ -175,7 +175,7 @@ public class Engine extends TimerTask implements EventHandler<ActionEvent> {
 	@Override
 	public void run() {
 		if (isRunning()) {
-			gui.getAttributePanel().getClockPanel().setAdvClockImage();
+			gui.getTabPanel().getClockPanel().setAdvClockImage();
 			if (state.getClock().isStopped()) {
 				numSteps = 0;
 			} else {
@@ -190,7 +190,7 @@ public class Engine extends TimerTask implements EventHandler<ActionEvent> {
 				}
 			}
 		} else {
-			gui.getAttributePanel().getClockPanel().resetAdvClockImage();
+			gui.getTabPanel().getClockPanel().resetAdvClockImage();
 		}
 	}
 }

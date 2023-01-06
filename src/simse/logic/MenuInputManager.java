@@ -43,6 +43,7 @@ import simse.adts.objects.SSObject;
 import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.SystemTestPlan;
 import simse.adts.objects.Tool;
+import simse.gui.MelloPanel;
 import simse.gui.SimSEGUI;
 import simse.logic.dialogs.ChooseActionToDestroyDialog;
 import simse.logic.dialogs.ChooseActionToJoinDialog;
@@ -54,6 +55,7 @@ public class MenuInputManager {
 	private TriggerChecker trigChecker;
 	private DestroyerChecker destChecker;
 	private RuleExecutor ruleExec;
+	private MelloPanel mello;
 
 	public MenuInputManager(State s, TriggerChecker t, DestroyerChecker d,
 			RuleExecutor r) {
@@ -61,6 +63,7 @@ public class MenuInputManager {
 		trigChecker = t;
 		destChecker = d;
 		ruleExec = r;
+		mello = MelloPanel.getInstance();
 	}
 
 	public void menuItemSelected(Employee selectedEmp, String itemText, Stage parent) {
@@ -83,6 +86,7 @@ public class MenuInputManager {
 				alert.getButtonTypes().setAll(okButton, noButton);
 				alert.showAndWait().ifPresent(type -> {
 					if (type == okButton) {
+						mello.stopEverything();
 						Vector<Employee> allEmps = state
 								.getEmployeeStateRepository().getAll();
 						for (int z = 0; z < allEmps.size(); z++) {
@@ -985,6 +989,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Create Requirements Document", ruleExec);
+				mello.addEmployeeToTask("Create Requirements Document", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Review requirements document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -1072,6 +1077,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Review requirements document", ruleExec);
+				mello.addEmployeeToTask("Review Requirements Document", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Correct the requirements document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -1175,6 +1181,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Correct the requirements document", ruleExec);
+				mello.addEmployeeToTask("Correct Requirements Document", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Create the design document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -1324,6 +1331,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Create the design document", ruleExec);
+				mello.addEmployeeToTask("Create Design Document", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Review the design document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -1434,6 +1442,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Review the design document", ruleExec);
+				mello.addEmployeeToTask("Review Design Document", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Correct the design document")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -1561,6 +1570,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Correct the design document", ruleExec);
+				mello.addEmployeeToTask("Correct Design Document", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Create code")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -1734,6 +1744,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Create code", ruleExec);
+				mello.addEmployeeToTask("Create Code", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Inspect the code")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -1867,6 +1878,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Inspect the code", ruleExec);
+				mello.addEmployeeToTask("Inspect Code", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Correct code")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -2015,6 +2027,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Correct code", ruleExec);
+				mello.addEmployeeToTask("Correct Code", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Integrate code")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -2165,6 +2178,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Integrate code", ruleExec);
+				mello.addEmployeeToTask("Integrate Code", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Do system test")) {
 				Vector<Artifact> codedocs0 = new Vector<Artifact>();
 				Vector<Code> codes = state.getArtifactStateRepository()
@@ -2289,6 +2303,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Do system test", ruleExec);
+				mello.addEmployeeToTask("Perform System Test", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Create the system test plan")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -2440,6 +2455,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Create the system test plan", ruleExec);
+				mello.addEmployeeToTask("Create System Test Plan", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Review the system test plan")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -2551,6 +2567,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Review the system test plan", ruleExec);
+				mello.addEmployeeToTask("Review System Test Plan", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Correct the system test plan")) {
 				Vector<Employee> emps0 = new Vector<Employee>();
 				Vector<SoftwareEngineer> softwareengineers = state
@@ -2677,6 +2694,7 @@ public class MenuInputManager {
 				}
 				new ChooseActionToJoinDialog(parent, b, selectedEmp, state,
 						"Correct the system test plan", ruleExec);
+				mello.addEmployeeToTask("Correct System Test Plan", ((SoftwareEngineer)selectedEmp).getName());
 			} else if (itemText.equals("Deliver product to customer")) {
 				Alert a2 = new Alert(Alert.AlertType.CONFIRMATION);
 				a2.setTitle("Confirm Game Ending");
@@ -3053,6 +3071,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Create Requirements Document", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateRequirementsAction b = allActions.elementAt(i);
@@ -3101,6 +3120,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Review Requirements Document", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						ReviewRequirementsAction b = allActions.elementAt(i);
@@ -3149,6 +3169,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Correct Requirements Document", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectRequirementsAction b = allActions.elementAt(i);
@@ -3196,6 +3217,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Create Design Document", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateDesignAction b = allActions.elementAt(i);
@@ -3243,6 +3265,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Review Design Document", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						ReviewDesignAction b = allActions.elementAt(i);
@@ -3291,6 +3314,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Correct Design Document", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectDesignAction b = allActions.elementAt(i);
@@ -3338,6 +3362,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Create Code", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateCodeAction b = allActions.elementAt(i);
@@ -3385,6 +3410,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Inspect Code", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						InspectCodeAction b = allActions.elementAt(i);
@@ -3432,6 +3458,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Correct Code", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectCodeAction b = allActions.elementAt(i);
@@ -3480,6 +3507,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Integrate Code", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						IntegrateCodeAction b = allActions.elementAt(i);
@@ -3527,6 +3555,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Perform System Test", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						SystemTestAction b = allActions.elementAt(i);
@@ -3575,6 +3604,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Create System Test Plan", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CreateSystemTestPlanAction b = allActions.elementAt(i);
@@ -3623,6 +3653,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Review System Test Plan", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						ReviewSystemTestPlanAction b = allActions.elementAt(i);
@@ -3671,6 +3702,7 @@ public class MenuInputManager {
 						a++;
 					}
 				}
+				mello.removeEmployeeFromTask("Correct System Test Plan", ((SoftwareEngineer)selectedEmp).getName());
 				if (a == 1) {
 					for (int i = 0; i < allActions.size(); i++) {
 						CorrectSystemTestPlanAction b = allActions.elementAt(i);

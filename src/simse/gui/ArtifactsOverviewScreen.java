@@ -11,12 +11,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import simse.adts.objects.Artifact;
 import simse.logic.Logic;
 import simse.state.State;
+import simse.util.RuleType;
 
 public class ArtifactsOverviewScreen extends Stage implements EventHandler<MouseEvent>{
 	
@@ -27,7 +29,7 @@ public class ArtifactsOverviewScreen extends Stage implements EventHandler<Mouse
 	Label titleLabel;
 	Label toolsLabel;
 	
-	Button moreDetail;
+	Button moreDetail, rules;
 	
 	TableModel tableModel;
 	TableView table;
@@ -63,9 +65,16 @@ public class ArtifactsOverviewScreen extends Stage implements EventHandler<Mouse
 		tablePane.setCenter(table);
 		mainPane.getChildren().add(tablePane);
 		
+		HBox buttonPane = new HBox();
+		
 		moreDetail = new Button("More Detail on Selected Artifact");
 		moreDetail.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		mainPane.getChildren().add(moreDetail);
+		buttonPane.getChildren().add(moreDetail);
+		
+		rules = new Button("Rules for Artifacts");
+		rules.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		buttonPane.getChildren().add(rules);
+		mainPane.getChildren().add(buttonPane);
 		
 		Scene scene = new Scene(mainPane, 900, 500);
 		this.setScene(scene);
@@ -92,6 +101,9 @@ public class ArtifactsOverviewScreen extends Stage implements EventHandler<Mouse
 				ArtifactInfoScreen info = new ArtifactInfoScreen(state, gui, logic, selected);
 				info.show();
 			}
+		} else if (source == rules) {
+			RulesInfoScreen info = new RulesInfoScreen(state, RuleType.ARTIFACT);
+			info.show();
 		}
 	}
 

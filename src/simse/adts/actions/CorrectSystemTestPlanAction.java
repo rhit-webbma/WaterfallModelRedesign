@@ -36,6 +36,7 @@ public class CorrectSystemTestPlanAction extends Action implements Cloneable {
 		associatedrequirementsdocs = new Hashtable<Artifact, Boolean>();
 		projs = new Hashtable<Project, Boolean>();
 		testingtools = new Hashtable<Tool, Boolean>();
+		actionName = Action.CORRECTSYSTEMTESTPLAN;
 	}
 
 	public Object clone() {

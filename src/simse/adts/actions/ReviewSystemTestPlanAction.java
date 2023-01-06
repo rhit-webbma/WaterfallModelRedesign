@@ -32,6 +32,7 @@ public class ReviewSystemTestPlanAction extends Action implements Cloneable {
 		testplans = new Hashtable<Artifact, Boolean>();
 		associatedrequirementsdocs = new Hashtable<Artifact, Boolean>();
 		projs = new Hashtable<Project, Boolean>();
+		actionName = Action.REVIEWSYSTEMTESTPLAN;
 	}
 
 	public Object clone() {
