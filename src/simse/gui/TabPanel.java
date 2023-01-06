@@ -57,7 +57,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	public static final int MAXBUTTONS = 32;
 
 	private LogoPanel logoPane;
-	private AttributePanel attributePane;
+	private InformationPanel attributePane;
 	private EmployeesOverviewScreen employeeFrame;
 //	private EmployeesAtAGlanceFrame employeeFrame;
 	private ArtifactsOverviewScreen artifactFrame;
@@ -110,7 +110,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
         }
     };
 
-	public TabPanel(SimSEGUI g, State s, Logic l, AttributePanel a) {
+	public TabPanel(SimSEGUI g, State s, Logic l, InformationPanel a) {
 		logic = l;
 		gui = g;
 		state = s;

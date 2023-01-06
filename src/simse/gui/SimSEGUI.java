@@ -34,8 +34,8 @@ import simse.state.State;
 
 public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private TabPanel tabPanel;
-	private AttributePanel attribPanel;
-	private ActionPanel actionPanel;
+	private InformationPanel attribPanel;
+	private EmployeesPanel actionPanel;
 
 	// Analyze menu:
 	private MenuBar menuBar; // menu bar at top of window
@@ -106,9 +106,9 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 
 		expTool = new ExplanatoryTool(state.getLogger().getLog(), branch, timelinesBrowser);
 
-		attribPanel = new AttributePanel(this, state, engine);
+		attribPanel = new InformationPanel(this, state, engine);
 		tabPanel = new TabPanel(this, state, logic, attribPanel);
-		actionPanel = new ActionPanel(this, state, logic);
+		actionPanel = new EmployeesPanel(this, state, logic);
 
 		// Set window title:
 		String title = "SimSE";
@@ -171,7 +171,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		return world;
 	}
 
-	public AttributePanel getAttributePanel() {
+	public InformationPanel getAttributePanel() {
 		return attribPanel;
 	}
 

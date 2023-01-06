@@ -60,7 +60,7 @@ import simse.gui.util.JavaFXHelpers;
 import simse.logic.Logic;
 import simse.state.State;
 
-public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
+public class EmployeesPanel extends Pane implements EventHandler<MouseEvent> {
 	private State state;
 	private Logic logic;
 	private SimSEGUI mainGUIFrame;
@@ -89,7 +89,7 @@ public class ActionPanel extends Pane implements EventHandler<MouseEvent> {
 		}
 	};
 
-	public ActionPanel(SimSEGUI gui, State s, Logic l) {
+	public EmployeesPanel(SimSEGUI gui, State s, Logic l) {
 		state = s;
 		logic = l;
 		mainGUIFrame = gui;

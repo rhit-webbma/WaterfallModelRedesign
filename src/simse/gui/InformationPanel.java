@@ -40,7 +40,7 @@ import simse.engine.Engine;
 import simse.gui.util.JavaFXHelpers;
 import simse.state.State;
 
-public class AttributePanel extends Pane {
+public class InformationPanel extends Pane {
 	private final int ATTRIBUTE_LIST_CAPACITY = 5; // number of attributes that
 													// can be displayed in a
 													// list without making the
@@ -65,7 +65,7 @@ public class AttributePanel extends Pane {
 	private Image border;
 	private Image iconBorder;
 
-	public AttributePanel(SimSEGUI g, State s, Engine e) {
+	public InformationPanel(SimSEGUI g, State s, Engine e) {
 		gridPane = new GridPane();
 		this.getChildren().add(gridPane);
 		this.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
