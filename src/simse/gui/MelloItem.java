@@ -61,6 +61,7 @@ public class MelloItem extends Pane{
 		return new MelloItem(task, employees);
 	}
 	
+
 	public boolean isTask(String task) {
 		return this.task.equals(task);
 	}
