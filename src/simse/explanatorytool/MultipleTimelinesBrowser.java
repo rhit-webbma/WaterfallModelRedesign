@@ -5,6 +5,7 @@ import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
@@ -25,6 +26,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
@@ -41,19 +43,58 @@ import simse.state.Clock;
 import simse.state.State;
 import simse.state.logger.Logger;
 
-
-public class MultipleTimelinesBrowser extends Stage implements EventHandler<MouseEvent>{
+public class MultipleTimelinesBrowser extends Stage implements EventHandler<MouseEvent> {
 	private static final String ROOT_GAME_NAME = "ROOT GAME";
 	private JFreeChart chart; // chart object
 	private ChartViewer chartViewer;
 	private MenuItem newBranchItem;
 	private SeparatorMenuItem separator;
-	private Branch lastRightClickedBranch; // last branch that was right-clicked
-											// on
+	private Branch lastRightClickedBranch; // last branch that was right-clicked on
 	private int lastRightClickedX; // last x-val that was right-clicked on
 	private XYSeriesCollection dataset;
 	private int unnamedBranchesIndex;
 
+	private EventHandler<ActionEvent> menuEvent = new EventHandler<ActionEvent>() {
+        private String newBranchName = null;
+        
+		public void handle(ActionEvent event) {
+        	Object source = event.getSource();
+        	if (source == newBranchItem) {
+    			TextInputDialog td = new TextInputDialog();
+    			td.setContentText("Name New Branch");
+    			td.setContentText("Please name this new game:");
+    			td.setHeaderText(null);
+    			Optional<String> result = td.showAndWait();
+    			result.ifPresent(name -> {
+    				this.newBranchName = name;
+    			});
+    			if (newBranchName != null) {
+    				if ((lastRightClickedBranch != null) && (lastRightClickedX >= 0)) {
+    					// find branch index:
+    					for (int i = 0; i < SimSE.getBranches().size(); i++) {
+    						Branch tempBranch = SimSE.getBranches().get(i);
+    						if (lastRightClickedBranch == tempBranch) {
+    							// bring up branch (if not closed):
+    							SimSEGUI g = SimSE.getGUIs().get(i);
+    							if (!lastRightClickedBranch.isClosed()) {
+    								ArrayList<State> log = g.getSimSEState().getLogger().getLog();
+    								State tempState = (State) log.get(lastRightClickedX).clone();
+    								Logger tempLogger = new Logger(tempState,
+    										new ArrayList<State>(log.subList(0, lastRightClickedX)));
+    								Clock tempClock = new Clock(tempLogger, lastRightClickedX);
+    								tempState.setClock(tempClock);
+    								tempState.setLogger(tempLogger);
+    								SimSE.startNewBranch(tempState, new Branch(newBranchName, lastRightClickedX,
+    										tempClock.getTime(), lastRightClickedBranch, null));
+    							}
+    						}
+    					}
+    				}
+    			}
+        	}
+        }
+    };
+	
 	public MultipleTimelinesBrowser() {
 		super();
 		setTitle("Multiple Timelines Browser");
@@ -69,13 +110,10 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 		chartViewer.setPrefSize(500, 270);
 		setScene(new Scene(chartViewer));
 		newBranchItem = new MenuItem("Start new game from here");
-		newBranchItem.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		newBranchItem.setOnAction(menuEvent);
 		separator = new SeparatorMenuItem();
 		lastRightClickedBranch = null;
 		lastRightClickedX = -1;
-//		pack();
-//		RefineryUtilities.centerFrameOnScreen(this);
-//		addWindowListener(new ExitListener());
 		unnamedBranchesIndex = 0;
 	}
 
@@ -276,7 +314,7 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 						}
 					}
 				}
-			} else if (e.getButton() != MouseButton.PRIMARY) { // not left-click
+			} else { // not left-click
 				Branch b = getBranchClickedOn(e);
 				boolean valid = true;
 				if ((b != null) && (!b.isClosed())
@@ -286,15 +324,12 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 					if (chartViewer.getContextMenu().getItems().indexOf(newBranchItem) == -1) { // no new branch item on menu currently
 						chartViewer.getContextMenu().getItems().add(separator);
 						chartViewer.getContextMenu().getItems().add(newBranchItem);
-	//					chartViewer.getPopupMenu().pack();
-	//					chartViewer.getPopupMenu().repaint();
 					}
 	
 					// set last right clicked X:
 					XYPlot plot = chart.getXYPlot();
 					Range domainRange = plot.getDataRange(plot.getDomainAxis());
 					if (domainRange != null) { // chart is not blank
-	//					Point2D pt = chartViewer.translateScreenToJava2D(new Point((int) e.getX(), (int) e.getY())); ignored this step because  can just get X later
 						ChartRenderingInfo info = this.chartViewer.getRenderingInfo();
 						Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 						NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
@@ -320,54 +355,16 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 							// has separator
 							chartViewer.getContextMenu().getItems().remove(separator);
 						}
-	//					chartViewer.getPopupMenu().pack();
-	//					chartViewer.getPopupMenu().repaint();
 					}
 				}
 			}
-		} else if (e.getSource() == newBranchItem) {
-			TextInputDialog td = new TextInputDialog("Name New Game");
-			td.setHeaderText("Please name this new game:");
-			td.showAndWait();
-			String newBranchName = td.getEditor().getText();
-			if (newBranchName != null) {
-				if ((lastRightClickedBranch != null)
-						&& (lastRightClickedX >= 0)) {
-					// find branch index:
-					for (int i = 0; i < SimSE.getBranches().size(); i++) {
-						Branch tempBranch = SimSE.getBranches().get(i);
-						if (lastRightClickedBranch == tempBranch) {
-							// bring up branch (if not closed):
-							SimSEGUI g = SimSE.getGUIs().get(i);
-							if (!lastRightClickedBranch.isClosed()) {
-								ArrayList<State> log = g.getSimSEState()
-										.getLogger().getLog();
-								State tempState = (State) log.get(
-										lastRightClickedX).clone();
-								Logger tempLogger = new Logger(tempState,
-										new ArrayList<State>(log.subList(0,
-												lastRightClickedX)));
-								Clock tempClock = new Clock(tempLogger,
-										lastRightClickedX);
-								tempState.setClock(tempClock);
-								tempState.setLogger(tempLogger);
-								SimSE.startNewBranch(tempState, new Branch(
-										newBranchName, lastRightClickedX,
-										tempClock.getTime(),
-										lastRightClickedBranch, null));
-							}
-						}
-					}
-				}
-			}
-		}
+		} 
 	}
 
 	private Branch getBranchClickedOn(MouseEvent me) {
 		XYPlot plot = chart.getXYPlot();
 		Range domainRange = plot.getDataRange(plot.getDomainAxis());
 		if (domainRange != null) { // chart is not blank
-//			Point2D pt = chartViewer.translateScreenToJava2D(new Point(me.getX(), me.getY()));
 			ChartRenderingInfo info = this.chartViewer.getRenderingInfo();
 			Rectangle2D dataArea = info.getPlotInfo().getDataArea();
 			NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();

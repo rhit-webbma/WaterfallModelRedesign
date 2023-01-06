@@ -5,22 +5,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import simse.adts.actions.Action;
 
 public class ActionInfoWindow extends Stage {
 	
 
-	public ActionInfoWindow(String actionName,
-			simse.adts.actions.Action action, int clockTick) {
-		
-		
-		
-//		this.setOnCloseRequest(new EventHandler<WindowEvent>() {
-//		    @Override
-//		    public void handle(WindowEvent e) {
-//		    	
-//		    }
-//		  });
-		
+	public ActionInfoWindow(String actionName, Action action, int clockTick) {	
 		this.setTitle(actionName + " Info for Clock Tick " + clockTick);
 		
 		TabPane mainPane = new TabPane();
@@ -34,74 +24,6 @@ public class ActionInfoWindow extends Stage {
 		
 		Scene newScene = new Scene(mainPane, 900, 550);
 		this.setScene(newScene);
-		
+		show();
 	}
-//		
-//		this.actionName = actionName;
-//		this.action = action;
-//		this.clockTick = clockTick;
-		
-//		super(actionName + " Info for Clock Tick " + clockTick);
-		// Create main panel:
-//		JTabbedPane mainPane = new JTabbedPane();
-//		mainPane.setPreferredSize(new Dimension(900, 550));
-//
-//		// add action info panel:
-//		ActionInfoPanel actionPanel = new ActionInfoPanel(action);
-//		mainPane.addTab("Action Info", actionPanel);
-//
-//		// add rule info panel:
-//		RuleInfoPanel rulePanel = new RuleInfoPanel(this, action);
-//		mainPane.addTab("Rule Info", rulePanel);
-//
-//		// Set main window frame properties:
-//		mainPane.setOpaque(true);
-//		addWindowListener(new ExitListener());
-//		setContentPane(mainPane);
-//		setVisible(true);
-//		setSize(getLayout().preferredLayoutSize(this));
-//
-//		// Make it show up in the center of the screen:
-//		setLocationRelativeTo(null);
-//		validate();
-//		pack();
-//		repaint();
-//	}
-
-//	public class ExitListener extends WindowAdapter {
-//		public void windowClosing(WindowEvent event) {
-//			setVisible(false);
-//			dispose();
-//		}
-//	}
-
-//	@Override
-//	public void start(Stage primaryStage) throws Exception {
-//		// TODO Auto-generated method stub
-//		
-//		SystemTestAction newAction = new SystemTestAction();
-//		new ActionInfoWindow("Test Action", newAction, 0);
-//		
-//		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-//		    @Override
-//		    public void handle(WindowEvent e) {
-//		    	primaryStage.hide();
-//		    }
-//		  });
-//		
-//		primaryStage.setTitle(actionName + " Info for Clock Tick " + clockTick);
-//		
-//		TabPane mainPane = new TabPane();
-//		
-//		ActionInfoPanel actionPanel = new ActionInfoPanel(action);
-//		RuleInfoPanel rulePanel = new RuleInfoPanel(primaryStage, action);
-//		Tab actionTab = new Tab("Action Info", actionPanel);
-//		Tab ruleTab = new Tab("Rule Info", rulePanel);
-//		mainPane.getTabs().add(actionTab);
-//		mainPane.getTabs().add(ruleTab);
-//		
-//		Scene newScene = new Scene(mainPane, 900, 550);
-//		primaryStage.setScene(newScene);
-//		
-//	}
 }

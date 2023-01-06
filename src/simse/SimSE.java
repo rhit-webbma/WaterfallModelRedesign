@@ -31,6 +31,8 @@ public class SimSE extends Application{
 		Logic logic = new Logic(state);
 		engine = new Engine(logic, state);
 		gui = new SimSEGUI(engine, state, logic, branch, timelinesBrowser);
+		RuleCategories.initializeRuleCategories();
+		engine.giveGUI(gui);
 		state.getClock().setGUI(gui);
 		gui.setX(0);
 		gui.setY(0);
