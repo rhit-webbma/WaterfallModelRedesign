@@ -3,19 +3,19 @@ package simse.adts.objects;
 
 import java.util.Vector;
 
-import simse.gui.TrackPane;
+import simse.gui.TrackPanel;
 
 public abstract class Employee extends SSObject implements Cloneable {
 	private Vector<String> menu;
 	private String overheadText;
 	public static final String IDLE_STRING = "I'm not doing anything right now";
-	private TrackPane track;
+	private TrackPanel track;
 
 	public Employee() {
 		menu = new Vector<String>();
 		clearMenu();
 		overheadText = new String();
-		track = TrackPane.getInstance();
+		track = TrackPanel.getInstance();
 	}
 
 	public Object clone() {

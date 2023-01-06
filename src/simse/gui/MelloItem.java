@@ -50,6 +50,17 @@ public class MelloItem extends Pane{
 		this.getChildren().add(box);
 	}
 	
+	public MelloItem addEmp(String emp) {
+		employees.add(emp);
+		return new MelloItem(task, employees);
+	}
+	
+	public MelloItem removeEmp(String emp) {
+		employees.remove(emp);
+		if (employees.isEmpty()) return null;
+		return new MelloItem(task, employees);
+	}
+	
 	public boolean isTask(String task) {
 		return this.task.equals(task);
 	}

@@ -79,15 +79,9 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private ProjectOverviewScreen projectFrame;
 	private PanelsScreen panelsFrame;
 	private CustomersAtAGlanceFrame customerFrame;
-<<<<<<< HEAD
 	private ClockPanel clockPane;
-=======
-	private TrackPane trackPane;
-<<<<<<< HEAD
->>>>>>> 165a542 (Added Track)
-=======
-	private MelloPane melloPane;
->>>>>>> 34a45cf (Mello base functionality)
+	private TrackPanel trackPane;
+	private MelloPanel melloPane;
 
 	private GridPane gridPane;
 	private boolean guiChanged;
@@ -152,8 +146,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		projectFrame = new ProjectOverviewScreen(state);
 		customerFrame = new CustomersAtAGlanceFrame(state, gui);
 		panelsFrame = new PanelsScreen(state, gui, logic);
-		trackPane = TrackPane.getInstance();
-		melloPane = new MelloPane();
+		trackPane = TrackPanel.getInstance();
+		melloPane = MelloPanel.getInstance();
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
 		allIcon = JavaFXHelpers.createImage("src/simse/gui/images/all.GIF");
@@ -276,7 +270,6 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			}
 		});
 		
-<<<<<<< HEAD
 		Button panelsButton = new Button("Panels");
 		panelsButton.setId("TabButton");
 		panelsButton.setPrefHeight(40);
@@ -292,27 +285,6 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			}
 		});
 		buttons.getChildren().add(panelsButton);
-=======
-		Button windowsButton = new Button("Windows");
-		windowsButton.setId("TabButton");
-		windowsButton.setPrefHeight(40);
-		HBox.setMargin(windowsButton, new Insets(15, 0, 0, 0));
-		windowsButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				final Stage dialog = new Stage();
-                dialog.initModality(Modality.NONE);
-                dialog.initOwner(gui);
-                VBox dialogVbox = new VBox(20);
-                dialogVbox.getChildren().add(melloPane);
-                Scene dialogScene = new Scene(dialogVbox);
-                dialog.setScene(dialogScene);
-                dialog.sizeToScene();
-                dialog.show();
-			}
-		});
-		buttons.getChildren().add(windowsButton);
->>>>>>> 165a542 (Added Track)
 		
 		gridPane.add(buttons, 2, 0);
 				

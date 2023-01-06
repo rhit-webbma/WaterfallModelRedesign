@@ -40,7 +40,7 @@ import simse.engine.Engine;
 import simse.gui.util.JavaFXHelpers;
 import simse.state.State;
 
-public class AttributePanel extends Pane implements SimSEPanel {
+public class InformationPanel extends Pane implements SimSEPanel {
 	private final int ATTRIBUTE_LIST_CAPACITY = 5; // number of attributes that
 													// can be displayed in a
 													// list without making the
