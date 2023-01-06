@@ -8,6 +8,7 @@ import animations.Character1;
 import animations.DisplayableCharacter;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Path;
 import simse.adts.objects.Employee;
 import simse.adts.objects.SoftwareEngineer;

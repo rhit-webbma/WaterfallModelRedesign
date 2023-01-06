@@ -2,7 +2,7 @@ package animations;
 
 public class CharacterIdle extends SimSESprite{
 	
-	public final static String URL = "C:\\Users\\localmgr\\Documents\\Rose-Hulman\\Senior Year\\WaterfallRedesign\\WaterfallModelRedesign\\sprites\\character1cus_walk.png";
+	public final static String URL = "sprites\\character1cus_walk.png";
 
 
 	public CharacterIdle(int characterNum) {
