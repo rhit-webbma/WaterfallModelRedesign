@@ -12,16 +12,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import simse.gui.util.JavaFXHelpers;
 
-public class MelloPanel extends Pane implements SimSEPanel{
+public class MelloPane extends Pane {
 	
 	private GridPane mello;
 	private ScrollPane inProgress;
 	private ScrollPane complete;
 	private VBox prog;
 	private VBox comp;
-	private static MelloPanel instance = null;
 	
-	private MelloPanel() {
+	public MelloPane() {
 		VBox pane = new VBox();
 		HBox top = new HBox();
 		top.getChildren().add(JavaFXHelpers.createImageView("src/simse/gui/icons/mello.png"));
@@ -37,6 +36,8 @@ public class MelloPanel extends Pane implements SimSEPanel{
 		inProgress.setContent(prog);
 		inProgress.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 		inProgress.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		inProgress.setPrefHeight(400);
+		inProgress.setMaxHeight(400);
 		inProgress.setVvalue(1.0);
 		inProgress.setFitToWidth(true);
 		
@@ -48,6 +49,8 @@ public class MelloPanel extends Pane implements SimSEPanel{
 		complete.setContent(comp);
 		complete.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 		complete.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		complete.setPrefHeight(400);
+		complete.setMaxHeight(400);
 		complete.setVvalue(1.0);
 		complete.setFitToWidth(true);
 		
@@ -71,42 +74,14 @@ public class MelloPanel extends Pane implements SimSEPanel{
 		this.getChildren().add(pane);
 	}
 	
-	public static MelloPanel getInstance() {
-		if (instance == null) instance = new MelloPanel();
-		return instance;
-	}
-	
 	public void addTaskInProgress(String task, Vector<String> employees) {
-		removeTask(task);
 		prog.getChildren().add(new MelloItem(task, employees));
-	}
-	
-	public void addEmployeeToTask(String task, String employee) {
-		MelloItem inProg = findTaskInProgress(task);
-		prog.getChildren().remove(inProg);
-		prog.getChildren().add(inProg.addEmp(employee));
-	}
-	
-	public void removeEmployeeFromTask(String task, String employee) {
-		MelloItem inProg = findTaskInProgress(task);
-		prog.getChildren().remove(inProg);
-		inProg = inProg.removeEmp(employee);
-		if (inProg != null) prog.getChildren().add(inProg);
-	}
-	
-	public void stopEverything() {
-		prog.getChildren().removeAll(prog.getChildren());
 	}
 	
 	public void completeTask(String task) {
 		MelloItem found = findTaskInProgress(task);
 		if (found != null) prog.getChildren().remove(found);
 		comp.getChildren().add(found);
-	}
-	
-	public void removeTask(String task) {
-		MelloItem inProg = findTaskInProgress(task);
-		if (findTaskInProgress(task) != null) prog.getChildren().remove(inProg);
 	}
 	
 	private MelloItem findTaskInProgress(String task) {
@@ -116,11 +91,6 @@ public class MelloPanel extends Pane implements SimSEPanel{
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public Panels getPanelType() {
-		return Panels.MELLO;
 	}
 
 }

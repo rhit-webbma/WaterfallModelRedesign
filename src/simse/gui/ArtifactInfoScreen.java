@@ -37,6 +37,7 @@ public class ArtifactInfoScreen extends Stage implements EventHandler<MouseEvent
 		this.gui = gui;
 		this.logic = l;
 		this.artifact = artifact;
+		this.actions = new ContextMenu();
 		this.mainPane = new VBox();
 		
 		this.setTitle(artifact.getName());
@@ -51,6 +52,9 @@ public class ArtifactInfoScreen extends Stage implements EventHandler<MouseEvent
 		img.setScaleY(3);
 		imagePane.getChildren().add(img);
 		
+		actionsButton = new Button("Assign Employees to work on Artifact");
+		actionsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		
 		attributes = new ListView<String>();
 		attributes.getItems().add("Size: " + Double.toString(artifact.getSize()));
 		attributes.getItems().add("Number of Errors: " + Double.toString(artifact.getNumKnownErrors()));
@@ -61,6 +65,7 @@ public class ArtifactInfoScreen extends Stage implements EventHandler<MouseEvent
 		name.setFont(new Font(30));
 		mainPane.getChildren().add(name);
 		mainPane.getChildren().add(imagePane);
+		mainPane.getChildren().add(actionsButton);
 		mainPane.getChildren().add(attributes);
 		mainPane.setAlignment(Pos.CENTER);
 		
@@ -71,6 +76,7 @@ public class ArtifactInfoScreen extends Stage implements EventHandler<MouseEvent
 
 	@Override
 	public void handle(MouseEvent e) {
+		System.out.println("click");
 		actions.show(mainPane, e.getScreenX(), e.getScreenY());
 	}
 

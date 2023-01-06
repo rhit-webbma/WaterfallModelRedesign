@@ -10,20 +10,19 @@ import javafx.scene.text.Text;
 import simse.gui.util.JavaFXHelpers;
 import simse.state.State;
 
-public class TrackPanel extends Pane implements SimSEPanel {
+public class TrackPane extends Pane {
 	
 	VBox track;
 	ScrollPane scroll;
-	static TrackPanel instance = null;
+	static TrackPane instance = null;
 	
-	private TrackPanel() {
+	private TrackPane() {
 		
 		VBox pane = new VBox();
 		HBox top = new HBox();
 		top.getChildren().add(JavaFXHelpers.createImageView("src/simse/gui/icons/track.png"));
 		top.getChildren().add(new Text("Track"));
-		top.setMaxHeight(50);
-		top.setPrefWidth(500);
+		top.setPrefWidth(600);
 		top.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(128, 128, 128)));
 		
 		scroll = new ScrollPane();
@@ -32,9 +31,11 @@ public class TrackPanel extends Pane implements SimSEPanel {
 		track.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(217, 217, 217)));
 		scroll.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(217, 217, 217)));
 		scroll.setContent(track);
-		scroll.setMaxHeight(100);
 		scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 		scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		scroll.setPrefHeight(400);
+		scroll.setFitToHeight(true);
+		scroll.setFitToWidth(true);
 		scroll.setVvalue(1.0);
 		
 		pane.getChildren().add(top);
@@ -45,20 +46,15 @@ public class TrackPanel extends Pane implements SimSEPanel {
 		this.getChildren().add(pane);
 	}
 	
-	public static TrackPanel getInstance() {
+	public static TrackPane getInstance() {
 		if (instance == null) {
-			instance = new TrackPanel();
+			instance = new TrackPane();
 		}
 		return instance;
 	}
 	
 	public void addText(String message, String name) {
 		track.getChildren().add(new TrackMessage(name, message));
-	}
-
-	@Override
-	public Panels getPanelType() {
-		return Panels.TRACK;
 	}
 
 }

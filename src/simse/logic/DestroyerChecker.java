@@ -48,6 +48,7 @@ import simse.adts.objects.SSObject;
 import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.SystemTestPlan;
 import simse.adts.objects.Tool;
+import simse.gui.MelloPanel;
 import simse.state.State;
 
 public class DestroyerChecker {
@@ -55,12 +56,14 @@ public class DestroyerChecker {
 	private RuleExecutor ruleExec;
 	private TriggerChecker trigCheck;
 	private Random ranNumGen;
+	private MelloPanel mello;
 
 	public DestroyerChecker(State s, RuleExecutor r, TriggerChecker t) {
 		state = s;
 		ruleExec = r;
 		trigCheck = t;
 		ranNumGen = new Random();
+		mello = MelloPanel.getInstance();
 	}
 
 	public void update(boolean updateUserDestsOnly, Stage gui) {
@@ -298,6 +301,7 @@ public class DestroyerChecker {
 								.remove(createrequirementsTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Create Requirements Document");
 					}
 				}
 			}
@@ -435,6 +439,7 @@ public class DestroyerChecker {
 								.remove(createdesignTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Create Design Document");
 					}
 				}
 			}
@@ -572,6 +577,7 @@ public class DestroyerChecker {
 								.remove(createcodeTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Create Code");
 					}
 				}
 			}
@@ -689,6 +695,7 @@ public class DestroyerChecker {
 								.remove(reviewrequirementsTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Review Requirements Document");
 					}
 				}
 			}
@@ -784,6 +791,7 @@ public class DestroyerChecker {
 								.remove(reviewdesignTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Review Design Document");
 					}
 				}
 			}
@@ -893,6 +901,7 @@ public class DestroyerChecker {
 								.remove(inspectcodeTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Inspect Code");
 					}
 				}
 			}
@@ -1003,6 +1012,7 @@ public class DestroyerChecker {
 								.remove(correctrequirementsTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Correct Requirements Document");
 					}
 				}
 			}
@@ -1113,6 +1123,7 @@ public class DestroyerChecker {
 								.remove(correctdesignTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Correct Design Document");
 					}
 				}
 			}
@@ -1236,6 +1247,7 @@ public class DestroyerChecker {
 								.remove(correctcodeTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Correct Code");
 					}
 				}
 			}
@@ -1364,6 +1376,7 @@ public class DestroyerChecker {
 								.remove(integratecodeTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Integrate Code");
 					}
 				}
 			}
@@ -1486,6 +1499,7 @@ public class DestroyerChecker {
 								.remove(systemtestTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Perform System Test");
 					}
 				}
 			}
@@ -1610,6 +1624,7 @@ public class DestroyerChecker {
 								.remove(createsystemtestplanTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Create System Test Plan");
 					}
 				}
 			}
@@ -1753,6 +1768,7 @@ public class DestroyerChecker {
 								.remove(reviewsystemtestplanTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Review System Test Plan");
 					}
 				}
 			}
@@ -1866,6 +1882,7 @@ public class DestroyerChecker {
 								.remove(correctsystemtestplanTempAct);
 						trigCheck.update(true, gui);
 						update(false, gui);
+						mello.completeTask("Correct System Test Plan");
 					}
 				}
 			}
