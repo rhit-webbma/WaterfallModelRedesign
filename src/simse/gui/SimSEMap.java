@@ -4,8 +4,12 @@ package simse.gui;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import animations.Character1;
+import animations.DisplayableCharacter;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Path;
 import simse.adts.objects.Employee;
 import simse.adts.objects.SoftwareEngineer;
 import simse.logic.Logic;
@@ -20,6 +24,8 @@ public class SimSEMap extends Pane {
 	protected ArrayList<DisplayedEmployee> sopUsers; // all of the
 														// DisplayedEmployees in
 														// the state
+
+	
 	protected int ssObjCount;
 
 	public SimSEMap(State s, Logic l) {

@@ -47,6 +47,7 @@ public class InformationPanel extends Pane implements SimSEPanel {
 													// list scrollable
 
 	private GridPane gridPane;
+	private ClockPanel clockPane;
 
 	private State state;
 	private NumberFormat numFormat;
@@ -58,8 +59,11 @@ public class InformationPanel extends Pane implements SimSEPanel {
 
 	private Vector<String> attributes;
 	private SSObject objInFocus = null;
+	private Label selectedIcon;
+	private HBox iconPanel;
 
 	private Image border;
+	private Image iconBorder;
 
 	public InformationPanel(SimSEGUI g, State s, Engine e) {
 		gridPane = new GridPane();
@@ -103,6 +107,7 @@ public class InformationPanel extends Pane implements SimSEPanel {
 		objInFocus = obj;
 		if (img != null) {
 //			this.setIcon(new ImageView(img));
+
 		}
 		updateAttributeList();
 	}
