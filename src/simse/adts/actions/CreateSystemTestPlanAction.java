@@ -39,6 +39,7 @@ public class CreateSystemTestPlanAction extends Action implements Cloneable {
 		systemtestplandocs = new Hashtable<Artifact, Boolean>();
 		associatedrequirementsdocs = new Hashtable<Artifact, Boolean>();
 		testingtools = new Hashtable<Tool, Boolean>();
+		actionName = Action.CREATESYSTEMTESTPLAN;
 	}
 
 	public Object clone() {

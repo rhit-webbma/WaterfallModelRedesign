@@ -40,7 +40,7 @@ import simse.engine.Engine;
 import simse.gui.util.JavaFXHelpers;
 import simse.state.State;
 
-public class InformationPanel extends Pane {
+public class InformationPanel extends Pane implements SimSEPanel {
 	private final int ATTRIBUTE_LIST_CAPACITY = 5; // number of attributes that
 													// can be displayed in a
 													// list without making the
@@ -73,12 +73,9 @@ public class InformationPanel extends Pane {
 		gridPane.setPadding(new Insets(10, 10, 10, 10));
 
 		border = JavaFXHelpers.createImage("src/simse/gui/images/layout/border.gif");
-		iconBorder = JavaFXHelpers.createImage("src/simse/gui/images/layout/iconBorder.gif");
 		this.setBorder(new Border(new BorderImage(border, BorderWidths.FULL, Insets.EMPTY, BorderWidths.FULL, true, BorderRepeat.REPEAT, BorderRepeat.REPEAT)));
 
 		state = s;
-		clockPane = new ClockPanel(g, s, e);
-		clockPane.setPrefSize(250, 100);
 
 		numFormat = NumberFormat.getNumberInstance(Locale.US);
 
@@ -87,55 +84,36 @@ public class InformationPanel extends Pane {
 		attributeListLeft = new ListView();
 		attributePaneLeft = new ScrollPane(attributeListLeft);
 		attributePaneLeft.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		attributePaneLeft.setPrefSize(300, 95);
+		attributePaneLeft.setPrefSize(250, 95);
 		attributeListLeft.prefWidthProperty().bind(attributePaneLeft.widthProperty());
 
 		attributeListRight = new ListView();
 		attributePaneRight = new ScrollPane(attributeListRight);
 		attributePaneRight.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		attributePaneRight.setPrefSize(300, 95);
+		attributePaneRight.setPrefSize(250, 95);
 		attributeListRight.prefWidthProperty().bind(attributePaneRight.widthProperty());
-
 
 		HBox attributePane = new HBox(5);
 		attributePane.getChildren().add(attributePaneLeft);
 		attributePane.getChildren().add(attributePaneRight);
 		attributePane.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 
-		iconPanel = new HBox();
-		iconPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(0, 0, 0, 0)));
-		iconPanel.setPrefSize(100, 100);
-		selectedIcon = new Label("", JavaFXHelpers.createImageView("src/simse/gui/images/grid.gif"));
-		selectedIcon.setOpacity(1);
-		selectedIcon.setPrefSize(50, 50);
-		selectedIcon.setMinSize(50, 50);
-
-		GridPane.setConstraints(iconPanel, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER,
-				new Insets(-3, 5, 0, 0));
-		iconPanel.getChildren().add(selectedIcon);
-		selectedIcon.setBorder(new Border(new BorderImage(iconBorder, null, null, null, true, null, null)));
-		gridPane.getChildren().add(iconPanel);
-
-		GridPane.setConstraints(attributePane, 2, 0, 1, 1, HPos.CENTER, VPos.BOTTOM, Priority.NEVER, Priority.NEVER,
+		GridPane.setConstraints(attributePane, 0, 0, 1, 1, HPos.CENTER, VPos.BOTTOM, Priority.NEVER, Priority.NEVER,
 				new Insets(0, 0, 0, 0));
 		gridPane.getChildren().add(attributePane);
-
-		GridPane.setConstraints(clockPane, 3, 0, 1, 1, HPos.RIGHT, VPos.BOTTOM, Priority.NEVER, Priority.NEVER,
-				new Insets(10, 0, 0, 0));
-		gridPane.getChildren().add(clockPane);
 	}
 
 	public void setObjectInFocus(SSObject obj, Image img) {
 		objInFocus = obj;
 		if (img != null) {
-			this.setIcon(new ImageView(img));
+//			this.setIcon(new ImageView(img));
+
 		}
 		updateAttributeList();
 	}
 
 	public void update() {
 		updateAttributeList();
-		clockPane.update();
 	}
 
 	public void setGUIChanged() {
@@ -729,7 +707,7 @@ public class InformationPanel extends Pane {
 				}
 			}
 		} else {
-			this.setIcon(JavaFXHelpers.createImageView("src/simse/gui/images/grid.gif"));
+//			this.setIcon(JavaFXHelpers.createImageView("src/simse/gui/images/grid.gif"));
 		}
 		
 		for(String data : attributes) {
@@ -754,13 +732,14 @@ public class InformationPanel extends Pane {
 		}
 	}
 
-	public ClockPanel getClockPanel() {
-		return clockPane;
-	}
-
 	public void setIcon(ImageView img) {
 //		selectedIcon.setBackground(JavaFXHelpers.createBackgroundColor(Color.BLACK));
-		selectedIcon.setId("Icon");
-		selectedIcon.setGraphic(img);
+//		selectedIcon.setId("Icon");
+//		selectedIcon.setGraphic(img);
+	}
+
+	@Override
+	public Panels getPanelType() {
+		return Panels.INFORMATION;
 	}
 }

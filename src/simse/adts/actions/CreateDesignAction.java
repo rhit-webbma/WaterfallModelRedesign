@@ -39,6 +39,7 @@ public class CreateDesignAction extends Action implements Cloneable {
 		associatedrequirementsdocs = new Hashtable<Artifact, Boolean>();
 		designenvironments = new Hashtable<Tool, Boolean>();
 		associatedcodedocs = new Hashtable<Artifact, Boolean>();
+		actionName = Action.CREATEDESIGN;
 	}
 
 	public Object clone() {

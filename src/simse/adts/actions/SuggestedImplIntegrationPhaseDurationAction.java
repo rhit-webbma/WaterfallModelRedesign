@@ -28,6 +28,7 @@ public class SuggestedImplIntegrationPhaseDurationAction extends Action
 		projs = new Hashtable<Project, Boolean>();
 		emps = new Hashtable<Employee, Boolean>();
 		timeToLive = 315;
+		actionName = Action.SUGGESTEDIMPLINTEGRATIONPHASEDURATION;
 	}
 
 	public Object clone() {

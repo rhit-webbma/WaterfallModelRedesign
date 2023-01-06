@@ -23,6 +23,7 @@ public class ChangePayRateAction extends Action implements Cloneable {
 	public ChangePayRateAction() {
 		emps = new Hashtable<Employee, Boolean>();
 		timeToLive = 1;
+		actionName = Action.CHANGEPAYRATE;
 	}
 
 	public Object clone() {

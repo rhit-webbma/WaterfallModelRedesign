@@ -34,6 +34,7 @@ public class PurchaseToolAction extends Action implements Cloneable {
 		setools = new Hashtable<Tool, Boolean>();
 		projs = new Hashtable<Project, Boolean>();
 		timeToLive = 1;
+		actionName = Action.PURCHASETOOL;
 	}
 
 	public Object clone() {

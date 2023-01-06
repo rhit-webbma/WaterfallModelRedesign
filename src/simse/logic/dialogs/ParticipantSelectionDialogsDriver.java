@@ -28,10 +28,13 @@ import simse.adts.actions.ReviewDesignAction;
 import simse.adts.actions.ReviewRequirementsAction;
 import simse.adts.actions.ReviewSystemTestPlanAction;
 import simse.adts.actions.SystemTestAction;
+import simse.adts.objects.ACustomer;
 import simse.adts.objects.Customer;
 import simse.adts.objects.Employee;
 import simse.adts.objects.SEProject;
 import simse.adts.objects.SSObject;
+import simse.adts.objects.SoftwareEngineer;
+import simse.gui.MelloPanel;
 import simse.gui.SimSEGUI;
 import simse.logic.DestroyerChecker;
 import simse.logic.RuleExecutor;
@@ -46,10 +49,10 @@ public class ParticipantSelectionDialogsDriver {
 	private RuleExecutor ruleExec;
 	private DestroyerChecker destChecker;
 	private String menuText;
+	private MelloPanel mello;
 
 	public ParticipantSelectionDialogsDriver(Stage parent, Vector<String> pNames,
-			Vector<Vector<? extends SSObject>> parts,
-			simse.adts.actions.Action act, State s, RuleExecutor re,
+			Vector<Vector<? extends SSObject>> parts, simse.adts.actions.Action act, State s, RuleExecutor re,
 			DestroyerChecker dc, Employee emp, String mText) {
 		partNames = pNames;
 		partsVector = parts;
@@ -59,6 +62,7 @@ public class ParticipantSelectionDialogsDriver {
 		ruleExec = re;
 		destChecker = dc;
 		menuText = mText;
+		mello = MelloPanel.getInstance();
 		boolean actionValid = true;
 		for (int i = 0; i < partNames.size(); i++) {
 			String participantName = partNames.elementAt(i);
@@ -77,8 +81,7 @@ public class ParticipantSelectionDialogsDriver {
 					}
 				}
 			}
-			if ((participants.size() == 0)
-					|| (participants.elementAt(0) instanceof Employee)) {
+			if ((participants.size() == 0) || (participants.elementAt(0) instanceof Employee)) {
 				for (int j = 0; j < allParts.size(); j++) {
 					SSObject tempObj = allParts.elementAt(j);
 					if ((selectedEmp != null) && (tempObj == selectedEmp)) {
@@ -98,27 +101,24 @@ public class ParticipantSelectionDialogsDriver {
 
 				if ((selectedEmp != null) && (participantsContainsSelEmp)) {
 					participants.remove(selectedEmp);
-					EmployeeParticipantSelectionDialog psd = new EmployeeParticipantSelectionDialog(
-							parent, participantName, new Vector<SSObject>(
-									participants), action, state, selectedEmp);
+					EmployeeParticipantSelectionDialog psd = new EmployeeParticipantSelectionDialog(parent,
+							participantName, new Vector<SSObject>(participants), action, state, selectedEmp);
 					if (psd.actionCancelled()) {
 						actionValid = false;
 						break;
 					}
 				} else // pass null in instead of selectedEmp
 				{
-					EmployeeParticipantSelectionDialog psd = new EmployeeParticipantSelectionDialog(
-							parent, participantName, new Vector<SSObject>(
-									participants), action, state, null);
+					EmployeeParticipantSelectionDialog psd = new EmployeeParticipantSelectionDialog(parent,
+							participantName, new Vector<SSObject>(participants), action, state, null);
 					if (psd.actionCancelled()) {
 						actionValid = false;
 						break;
 					}
 				}
 			} else {
-				NonEmployeeParticipantSelectionDialog psd = new NonEmployeeParticipantSelectionDialog(
-						parent, participantName,
-						new Vector<SSObject>(participants), action, state);
+				NonEmployeeParticipantSelectionDialog psd = new NonEmployeeParticipantSelectionDialog(parent,
+						participantName, new Vector<SSObject>(participants), action, state);
 				if (psd.actionCancelled()) {
 					actionValid = false;
 					break;
@@ -128,286 +128,329 @@ public class ParticipantSelectionDialogsDriver {
 		if (actionValid) {
 			if (action instanceof CreateRequirementsAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Create Requirements Document")) {
-							((Employee) obj)
-									.setOverheadText("I'm creating the requirements document now");
+							((Employee) obj).setOverheadText("I'm creating the requirements document now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Create Requirements Document")) {
-							((Customer) obj)
-									.setOverheadText("I'm creating the requirements document now");
+							((Customer) obj).setOverheadText("I'm creating the requirements document now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getCreateRequirementsActionStateRepository()
+				state.getActionStateRepository().getCreateRequirementsActionStateRepository()
 						.add((CreateRequirementsAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Create Requirements Document", names);
 			} else if (action instanceof ReviewRequirementsAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Review requirements document")) {
-							((Employee) obj)
-									.setOverheadText("I'm reviewing the requirements document now, to try to find any errors");
+							((Employee) obj).setOverheadText(
+									"I'm reviewing the requirements document now, to try to find any errors");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Review requirements document")) {
-							((Customer) obj)
-									.setOverheadText("I'm reviewing the requirements document now, to try to find any errors");
+							((Customer) obj).setOverheadText(
+									"I'm reviewing the requirements document now, to try to find any errors");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getReviewRequirementsActionStateRepository()
+				state.getActionStateRepository().getReviewRequirementsActionStateRepository()
 						.add((ReviewRequirementsAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Review Requirements Document", names);
 			} else if (action instanceof CorrectRequirementsAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
-						if (menuText
-								.equals("Correct the requirements document")) {
-							((Employee) obj)
-									.setOverheadText("I'm correcting the requirements document now");
+						if (menuText.equals("Correct the requirements document")) {
+							((Employee) obj).setOverheadText("I'm correcting the requirements document now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
-						if (menuText
-								.equals("Correct the requirements document")) {
-							((Customer) obj)
-									.setOverheadText("I'm correcting the requirements document now");
+						if (menuText.equals("Correct the requirements document")) {
+							((Customer) obj).setOverheadText("I'm correcting the requirements document now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getCorrectRequirementsActionStateRepository()
+				state.getActionStateRepository().getCorrectRequirementsActionStateRepository()
 						.add((CorrectRequirementsAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Correct Requirements Document", names);
 			} else if (action instanceof CreateDesignAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Create the design document")) {
-							((Employee) obj)
-									.setOverheadText("I'm creating the design document now");
+							((Employee) obj).setOverheadText("I'm creating the design document now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Create the design document")) {
-							((Customer) obj)
-									.setOverheadText("I'm creating the design document now");
+							((Customer) obj).setOverheadText("I'm creating the design document now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getCreateDesignActionStateRepository()
+				state.getActionStateRepository().getCreateDesignActionStateRepository()
 						.add((CreateDesignAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Create Design Document", names);
 			} else if (action instanceof ReviewDesignAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Review the design document")) {
-							((Employee) obj)
-									.setOverheadText("I'm reviewing the design document now, to try to find any errors");
+							((Employee) obj).setOverheadText(
+									"I'm reviewing the design document now, to try to find any errors");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Review the design document")) {
-							((Customer) obj)
-									.setOverheadText("I'm reviewing the design document now, to try to find any errors");
+							((Customer) obj).setOverheadText(
+									"I'm reviewing the design document now, to try to find any errors");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getReviewDesignActionStateRepository()
+				state.getActionStateRepository().getReviewDesignActionStateRepository()
 						.add((ReviewDesignAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Review Design Document", names);
 			} else if (action instanceof CorrectDesignAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Correct the design document")) {
-							((Employee) obj)
-									.setOverheadText("I'm correcting the design document now");
+							((Employee) obj).setOverheadText("I'm correcting the design document now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Correct the design document")) {
-							((Customer) obj)
-									.setOverheadText("I'm correcting the design document now");
+							((Customer) obj).setOverheadText("I'm correcting the design document now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getCorrectDesignActionStateRepository()
+				state.getActionStateRepository().getCorrectDesignActionStateRepository()
 						.add((CorrectDesignAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Corrct Design Document", names);
 			} else if (action instanceof CreateCodeAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Create code")) {
 							((Employee) obj).setOverheadText("I'm coding now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Create code")) {
 							((Customer) obj).setOverheadText("I'm coding now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getCreateCodeActionStateRepository()
-						.add((CreateCodeAction) action);
-				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
-						"CreateCodeTrigRule", action);
+				state.getActionStateRepository().getCreateCodeActionStateRepository().add((CreateCodeAction) action);
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE, "CreateCodeTrigRule", action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Create Code", names);
 			} else if (action instanceof InspectCodeAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Inspect the code")) {
-							((Employee) obj)
-									.setOverheadText("I'm inspecting the code now, to try to find any errors");
+							((Employee) obj).setOverheadText("I'm inspecting the code now, to try to find any errors");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Inspect the code")) {
-							((Customer) obj)
-									.setOverheadText("I'm inspecting the code now, to try to find any errors");
+							((Customer) obj).setOverheadText("I'm inspecting the code now, to try to find any errors");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getInspectCodeActionStateRepository()
-						.add((InspectCodeAction) action);
+				state.getActionStateRepository().getInspectCodeActionStateRepository().add((InspectCodeAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Inspect Code", names);
 			} else if (action instanceof CorrectCodeAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Correct code")) {
-							((Employee) obj)
-									.setOverheadText("I'm correcting code now");
+							((Employee) obj).setOverheadText("I'm correcting code now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Correct code")) {
-							((Customer) obj)
-									.setOverheadText("I'm correcting code now");
+							((Customer) obj).setOverheadText("I'm correcting code now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getCorrectCodeActionStateRepository()
-						.add((CorrectCodeAction) action);
+				state.getActionStateRepository().getCorrectCodeActionStateRepository().add((CorrectCodeAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Correct Code", names);
 			} else if (action instanceof IntegrateCodeAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Integrate code")) {
-							((Employee) obj)
-									.setOverheadText("I'm integrating code now");
+							((Employee) obj).setOverheadText("I'm integrating code now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Integrate code")) {
-							((Customer) obj)
-									.setOverheadText("I'm integrating code now");
+							((Customer) obj).setOverheadText("I'm integrating code now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getIntegrateCodeActionStateRepository()
+				state.getActionStateRepository().getIntegrateCodeActionStateRepository()
 						.add((IntegrateCodeAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Integrate Code", names);
 			} else if (action instanceof SystemTestAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Do system test")) {
-							((Employee) obj)
-									.setOverheadText("I'm doing the system test now");
+							((Employee) obj).setOverheadText("I'm doing the system test now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Do system test")) {
-							((Customer) obj)
-									.setOverheadText("I'm doing the system test now");
+							((Customer) obj).setOverheadText("I'm doing the system test now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getSystemTestActionStateRepository()
-						.add((SystemTestAction) action);
+				state.getActionStateRepository().getSystemTestActionStateRepository().add((SystemTestAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Perform System Test", names);
 			} else if (action instanceof CreateSystemTestPlanAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Create the system test plan")) {
-							((Employee) obj)
-									.setOverheadText("I'm creating the system test plan now");
+							((Employee) obj).setOverheadText("I'm creating the system test plan now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Create the system test plan")) {
-							((Customer) obj)
-									.setOverheadText("I'm creating the system test plan now");
+							((Customer) obj).setOverheadText("I'm creating the system test plan now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getCreateSystemTestPlanActionStateRepository()
+				state.getActionStateRepository().getCreateSystemTestPlanActionStateRepository()
 						.add((CreateSystemTestPlanAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Create System Test Plan", names);
 			} else if (action instanceof ReviewSystemTestPlanAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Review the system test plan")) {
-							((Employee) obj)
-									.setOverheadText("I'm reviewing the system test plan now, to try to find any errors");
+							((Employee) obj).setOverheadText(
+									"I'm reviewing the system test plan now, to try to find any errors");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Review the system test plan")) {
-							((Customer) obj)
-									.setOverheadText("I'm reviewing the system test plan now, to try to find any errors");
+							((Customer) obj).setOverheadText(
+									"I'm reviewing the system test plan now, to try to find any errors");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getReviewSystemTestPlanActionStateRepository()
+				state.getActionStateRepository().getReviewSystemTestPlanActionStateRepository()
 						.add((ReviewSystemTestPlanAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Review System Test Plan", names);
 			} else if (action instanceof CorrectSystemTestPlanAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
+				Vector<String> names = new Vector<>();
 				for (int i = 0; i < participants.size(); i++) {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Correct the system test plan")) {
-							((Employee) obj)
-									.setOverheadText("I'm correcting the system test plan now");
+							((Employee) obj).setOverheadText("I'm correcting the system test plan now");
+							if (obj instanceof SoftwareEngineer)
+								names.add(((SoftwareEngineer) obj).getName());
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Correct the system test plan")) {
-							((Customer) obj)
-									.setOverheadText("I'm correcting the system test plan now");
+							((Customer) obj).setOverheadText("I'm correcting the system test plan now");
+							if (obj instanceof ACustomer)
+								names.add(((ACustomer) obj).getName());
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getCorrectSystemTestPlanActionStateRepository()
+				state.getActionStateRepository().getCorrectSystemTestPlanActionStateRepository()
 						.add((CorrectSystemTestPlanAction) action);
 				destChecker.update(false, parent);
+				mello.addTaskInProgress("Correct System Test Plan", names);
 			} else if (action instanceof DeliverProductAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
 				for (int i = 0; i < participants.size(); i++) {
@@ -416,11 +459,9 @@ public class ParticipantSelectionDialogsDriver {
 					} else if (obj instanceof Customer) {
 					}
 				}
-				state.getActionStateRepository()
-						.getDeliverProductActionStateRepository()
+				state.getActionStateRepository().getDeliverProductActionStateRepository()
 						.add((DeliverProductAction) action);
-				ruleExec.update(parent, RuleExecutor.UPDATE_ONE, "CalculateScore",
-						action);
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE, "CalculateScore", action);
 				destChecker.update(false, parent);
 				if (menuText.equals("Deliver product to customer")) {
 					// stop game and give score:
@@ -448,11 +489,9 @@ public class ParticipantSelectionDialogsDriver {
 					} else if (obj instanceof Customer) {
 					}
 				}
-				state.getActionStateRepository()
-						.getChangePayRateActionStateRepository()
+				state.getActionStateRepository().getChangePayRateActionStateRepository()
 						.add((ChangePayRateAction) action);
-				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
-						"ChangePayRateEffectRuleA", action);
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE, "ChangePayRateEffectRuleA", action);
 				destChecker.update(false, parent);
 			} else if (action instanceof GiveBonusAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
@@ -462,11 +501,8 @@ public class ParticipantSelectionDialogsDriver {
 					} else if (obj instanceof Customer) {
 					}
 				}
-				state.getActionStateRepository()
-						.getGiveBonusActionStateRepository()
-						.add((GiveBonusAction) action);
-				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
-						"GiveBonusEffectRuleA", action);
+				state.getActionStateRepository().getGiveBonusActionStateRepository().add((GiveBonusAction) action);
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE, "GiveBonusEffectRuleA", action);
 				destChecker.update(false, parent);
 			} else if (action instanceof FireAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
@@ -474,20 +510,16 @@ public class ParticipantSelectionDialogsDriver {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Fire")) {
-							((Employee) obj)
-									.setOverheadText("I'm fired?! Waaahhh!");
+							((Employee) obj).setOverheadText("I'm fired?! Waaahhh!");
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Fire")) {
-							((Customer) obj)
-									.setOverheadText("I'm fired?! Waaahhh!");
+							((Customer) obj).setOverheadText("I'm fired?! Waaahhh!");
 						}
 					}
 				}
-				state.getActionStateRepository().getFireActionStateRepository()
-						.add((FireAction) action);
-				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
-						"FireDestroyObjectsRuleA", action);
+				state.getActionStateRepository().getFireActionStateRepository().add((FireAction) action);
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE, "FireDestroyObjectsRuleA", action);
 				destChecker.update(false, parent);
 			} else if (action instanceof PurchaseToolAction) {
 				Vector<SSObject> participants = action.getAllParticipants();
@@ -495,21 +527,17 @@ public class ParticipantSelectionDialogsDriver {
 					SSObject obj = participants.elementAt(i);
 					if (obj instanceof Employee) {
 						if (menuText.equals("Purchase tool(s)")) {
-							((Employee) obj)
-									.setOverheadText("Tool(s) have been purchased!");
+							((Employee) obj).setOverheadText("Tool(s) have been purchased!");
 						}
 					} else if (obj instanceof Customer) {
 						if (menuText.equals("Purchase tool(s)")) {
-							((Customer) obj)
-									.setOverheadText("Tool(s) have been purchased!");
+							((Customer) obj).setOverheadText("Tool(s) have been purchased!");
 						}
 					}
 				}
-				state.getActionStateRepository()
-						.getPurchaseToolActionStateRepository()
+				state.getActionStateRepository().getPurchaseToolActionStateRepository()
 						.add((PurchaseToolAction) action);
-				ruleExec.update(parent, RuleExecutor.UPDATE_ONE,
-						"PurchaseToolEffectRuleA", action);
+				ruleExec.update(parent, RuleExecutor.UPDATE_ONE, "PurchaseToolEffectRuleA", action);
 				destChecker.update(false, parent);
 			}
 		}

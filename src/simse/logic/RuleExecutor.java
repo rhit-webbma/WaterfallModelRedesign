@@ -56,7 +56,6 @@ import simse.adts.objects.Tool;
 import simse.gui.SimSEGUI;
 import simse.state.State;
 
-
 public class RuleExecutor {
 	public static final int UPDATE_ALL_CONTINUOUS = 0;
 	public static final int UPDATE_ONE = 1;
@@ -97,12 +96,9 @@ public class RuleExecutor {
 		reviewRequirementsEffectRuleC(gui, updateInstructions, ruleName, action);
 		changePayRateEffectRuleA(gui, updateInstructions, ruleName, action);
 		reviewRequirementsEffectRuleA(gui, updateInstructions, ruleName, action);
-		introduceNewRequirementsEffectRuleA(gui, updateInstructions, ruleName,
-				action);
-		createSystemTestPlanEffectRuleFirst(gui, updateInstructions, ruleName,
-				action);
-		createSystemTestPlanEffectRuleA(gui, updateInstructions, ruleName,
-				action);
+		introduceNewRequirementsEffectRuleA(gui, updateInstructions, ruleName, action);
+		createSystemTestPlanEffectRuleFirst(gui, updateInstructions, ruleName, action);
+		createSystemTestPlanEffectRuleA(gui, updateInstructions, ruleName, action);
 		systemTestEffectRuleFirst(gui, updateInstructions, ruleName, action);
 		systemTestEffectRuleC(gui, updateInstructions, ruleName, action);
 		systemTestEffectRuleA(gui, updateInstructions, ruleName, action);
@@ -118,11 +114,9 @@ public class RuleExecutor {
 		reviewTestPlanEffectRuleC(gui, updateInstructions, ruleName, action);
 		createDesignEffectRuleFirst(gui, updateInstructions, ruleName, action);
 		createDesignEffectRuleA(gui, updateInstructions, ruleName, action);
-		createRequirementsEffectRuleFirst(gui, updateInstructions, ruleName,
-				action);
+		createRequirementsEffectRuleFirst(gui, updateInstructions, ruleName, action);
 		createRequirementsEffectRuleA(gui, updateInstructions, ruleName, action);
-		correctRequirementsEffectRuleA(gui, updateInstructions, ruleName,
-				action);
+		correctRequirementsEffectRuleA(gui, updateInstructions, ruleName, action);
 		correctDesignEffectRuleA(gui, updateInstructions, ruleName, action);
 		createCodeTrigRule(gui, updateInstructions, ruleName, action);
 		correctTestPlanEffectRuleA(gui, updateInstructions, ruleName, action);
@@ -142,43 +136,34 @@ public class RuleExecutor {
 	}
 
 	// UpdateProjAttsEffectRuleA rule (UpdateProjectAttributes Action):
-	private void updateProjAttsEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<UpdateProjectAttributesAction> updateprojectattributesActs = state
-				.getActionStateRepository()
-				.getUpdateProjectAttributesActionStateRepository()
-				.getAllActions();
+	private void updateProjAttsEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<UpdateProjectAttributesAction> updateprojectattributesActs = state.getActionStateRepository()
+				.getUpdateProjectAttributesActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < updateprojectattributesActs.size(); i++) {
-				UpdateProjectAttributesAction updateprojectattributesAct = updateprojectattributesActs
-						.elementAt(i);
+				UpdateProjectAttributesAction updateprojectattributesAct = updateprojectattributesActs.elementAt(i);
 				if ((updateprojectattributesAct.getAllProjs().size() >= 1)
 						&& (updateprojectattributesAct.getAllEmps().size() >= 1)) {
-					Vector<Project> projs = updateprojectattributesAct
-							.getAllActiveProjs();
+					Vector<Project> projs = updateprojectattributesAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
 							SEProject seproject = (SEProject) proj2;
 							double allEmpSoftwareEngineerPayRate = 0;
-							Vector allEmps = updateprojectattributesAct
-									.getAllEmps();
+							Vector allEmps = updateprojectattributesAct.getAllEmps();
 							for (int k = 0; k < allEmps.size(); k++) {
 								Object emp3 = allEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
-									allEmpSoftwareEngineerPayRate += (double) (((SoftwareEngineer) emp3)
-											.getPayRate());
+									allEmpSoftwareEngineerPayRate += (double) (((SoftwareEngineer) emp3).getPayRate());
 								}
 							}
-							seproject
-									.setMoneySpent((double) (((double) (seproject
-											.getMoneySpent())) + allEmpSoftwareEngineerPayRate));
-							seproject.setTimeUsed((int) (((double) (seproject
-									.getTimeUsed())) + 1));
+							seproject.setMoneySpent(
+									(double) (((double) (seproject.getMoneySpent())) + allEmpSoftwareEngineerPayRate));
+							seproject.setTimeUsed((int) (((double) (seproject.getTimeUsed())) + 1));
 						}
 					}
-					Vector<Employee> emps = updateprojectattributesAct
-							.getAllActiveEmps();
+					Vector<Employee> emps = updateprojectattributesAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
@@ -191,26 +176,21 @@ public class RuleExecutor {
 	}
 
 	// QuitDestroyObjectsRuleA rule (Quit Action):
-	private void quitDestroyObjectsRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<QuitAction> quitActs = state.getActionStateRepository()
-				.getQuitActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("QuitDestroyObjectsRuleA"))) {
+	private void quitDestroyObjectsRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<QuitAction> quitActs = state.getActionStateRepository().getQuitActionStateRepository().getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("QuitDestroyObjectsRuleA"))) {
 			for (int i = 0; i < quitActs.size(); i++) {
 				QuitAction quitAct = (QuitAction) quitActs.elementAt(i);
 				if (quitAct == action) {
 					if ((quitAct.getAllQuitters().size() >= 1)) {
-						Vector quitters = ((QuitAction) quitAct)
-								.getAllQuitters();
+						Vector quitters = ((QuitAction) quitAct).getAllQuitters();
 						for (int j = 0; j < quitters.size(); j++) {
 							Employee a = (Employee) quitters.elementAt(j);
 							if (a instanceof SoftwareEngineer) {
-								state.getEmployeeStateRepository()
-										.getSoftwareEngineerStateRepository()
+								state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
 										.remove((SoftwareEngineer) a);
-								state.getActionStateRepository()
-										.removeFromAllActions(a);
+								state.getActionStateRepository().removeFromAllActions(a);
 								checkAllMins(gui);
 								((SimSEGUI) gui).forceGUIUpdate();
 
@@ -223,26 +203,21 @@ public class RuleExecutor {
 	}
 
 	// FireDestroyObjectsRuleA rule (Fire Action):
-	private void fireDestroyObjectsRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<FireAction> fireActs = state.getActionStateRepository()
-				.getFireActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("FireDestroyObjectsRuleA"))) {
+	private void fireDestroyObjectsRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<FireAction> fireActs = state.getActionStateRepository().getFireActionStateRepository().getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("FireDestroyObjectsRuleA"))) {
 			for (int i = 0; i < fireActs.size(); i++) {
 				FireAction fireAct = (FireAction) fireActs.elementAt(i);
 				if (fireAct == action) {
 					if ((fireAct.getAllFiredPersons().size() >= 1)) {
-						Vector firedpersons = ((FireAction) fireAct)
-								.getAllFiredPersons();
+						Vector firedpersons = ((FireAction) fireAct).getAllFiredPersons();
 						for (int j = 0; j < firedpersons.size(); j++) {
 							Employee a = (Employee) firedpersons.elementAt(j);
 							if (a instanceof SoftwareEngineer) {
-								state.getEmployeeStateRepository()
-										.getSoftwareEngineerStateRepository()
+								state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
 										.remove((SoftwareEngineer) a);
-								state.getActionStateRepository()
-										.removeFromAllActions(a);
+								state.getActionStateRepository().removeFromAllActions(a);
 								checkAllMins(gui);
 								((SimSEGUI) gui).forceGUIUpdate();
 
@@ -255,29 +230,22 @@ public class RuleExecutor {
 	}
 
 	// GetSickEffectRuleA rule (GetSick Action):
-	private void getSickEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<GetSickAction> getsickActs = state.getActionStateRepository()
-				.getGetSickActionStateRepository().getAllActions();
+	private void getSickEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<GetSickAction> getsickActs = state.getActionStateRepository().getGetSickActionStateRepository()
+				.getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < getsickActs.size(); i++) {
 				GetSickAction getsickAct = getsickActs.elementAt(i);
 				if ((getsickAct.getAllSickPersons().size() >= 1)) {
-					Vector<Employee> sickpersons = getsickAct
-							.getAllActiveSickPersons();
+					Vector<Employee> sickpersons = getsickAct.getAllActiveSickPersons();
 					for (int j = 0; j < sickpersons.size(); j++) {
 						Employee sickperson2 = sickpersons.elementAt(j);
 						if (sickperson2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) sickperson2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) + .1));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) + .05));
-							softwareengineer
-									.setHealth((double) (((double) (softwareengineer
-											.getHealth())) + .05));
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) + .1));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) + .05));
+							softwareengineer.setHealth((double) (((double) (softwareengineer.getHealth())) + .05));
 						}
 					}
 				}
@@ -286,99 +254,72 @@ public class RuleExecutor {
 	}
 
 	// GetSickTrigRule rule (GetSick Action):
-	private void getSickTrigRule(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<GetSickAction> getsickActs = state.getActionStateRepository()
-				.getGetSickActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("GetSickTrigRule"))) {
+	private void getSickTrigRule(Stage gui, int updateInstructions, String ruleName, simse.adts.actions.Action action) {
+		Vector<GetSickAction> getsickActs = state.getActionStateRepository().getGetSickActionStateRepository()
+				.getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("GetSickTrigRule"))) {
 			for (int i = 0; i < getsickActs.size(); i++) {
 				GetSickAction getsickAct = getsickActs.elementAt(i);
 				if (getsickAct == action) {
 					if ((getsickAct.getAllSickPersons().size() >= 1)) {
-						Vector<Employee> sickpersons = getsickAct
-								.getAllActiveSickPersons();
+						Vector<Employee> sickpersons = getsickAct.getAllActiveSickPersons();
 						for (int j = 0; j < sickpersons.size(); j++) {
 							Employee sickperson2 = sickpersons.elementAt(j);
 							if (sickperson2 instanceof SoftwareEngineer) {
 								SoftwareEngineer softwareengineer = (SoftwareEngineer) sickperson2;
-								Vector<simse.adts.actions.Action> otherActs = state
-										.getActionStateRepository()
+								Vector<simse.adts.actions.Action> otherActs = state.getActionStateRepository()
 										.getAllActiveActions(softwareengineer);
 								for (int k = 0; k < otherActs.size(); k++) {
-									simse.adts.actions.Action tempAct = otherActs
-											.elementAt(k);
+									simse.adts.actions.Action tempAct = otherActs.elementAt(k);
 									if (tempAct instanceof CreateRequirementsAction) {
-										((CreateRequirementsAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((CreateRequirementsAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof ReviewRequirementsAction) {
-										((ReviewRequirementsAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((ReviewRequirementsAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof CorrectRequirementsAction) {
-										((CorrectRequirementsAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((CorrectRequirementsAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof CreateDesignAction) {
-										((CreateDesignAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((CreateDesignAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof ReviewDesignAction) {
-										((ReviewDesignAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((ReviewDesignAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof CorrectDesignAction) {
-										((CorrectDesignAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((CorrectDesignAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof CreateCodeAction) {
-										((CreateCodeAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((CreateCodeAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof InspectCodeAction) {
-										((InspectCodeAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((InspectCodeAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof CorrectCodeAction) {
-										((CorrectCodeAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((CorrectCodeAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof IntegrateCodeAction) {
-										((IntegrateCodeAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((IntegrateCodeAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof SystemTestAction) {
-										((SystemTestAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((SystemTestAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof CreateSystemTestPlanAction) {
-										((CreateSystemTestPlanAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((CreateSystemTestPlanAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof ReviewSystemTestPlanAction) {
-										((ReviewSystemTestPlanAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((ReviewSystemTestPlanAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof CorrectSystemTestPlanAction) {
-										((CorrectSystemTestPlanAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((CorrectSystemTestPlanAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof DeliverProductAction) {
-										((DeliverProductAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((DeliverProductAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof BreakAction) {
-										((BreakAction) tempAct)
-												.setBreakerInactive(softwareengineer);
+										((BreakAction) tempAct).setBreakerInactive(softwareengineer);
 									} else if (tempAct instanceof GetSickAction) {
 										if (tempAct.equals(getsickAct) == false) {
-											((GetSickAction) tempAct)
-													.setSickPersonInactive(softwareengineer);
+											((GetSickAction) tempAct).setSickPersonInactive(softwareengineer);
 										}
 									} else if (tempAct instanceof QuitAction) {
-										((QuitAction) tempAct)
-												.setQuitterInactive(softwareengineer);
+										((QuitAction) tempAct).setQuitterInactive(softwareengineer);
 									} else if (tempAct instanceof IntroduceNewRequirementsAction) {
 										((IntroduceNewRequirementsAction) tempAct)
 												.setEmpWOverheadTextInactive(softwareengineer);
 									} else if (tempAct instanceof UpdateProjectAttributesAction) {
-										((UpdateProjectAttributesAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((UpdateProjectAttributesAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof ChangePayRateAction) {
-										((ChangePayRateAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((ChangePayRateAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof GiveBonusAction) {
-										((GiveBonusAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((GiveBonusAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof FireAction) {
-										((FireAction) tempAct)
-												.setFiredPersonInactive(softwareengineer);
+										((FireAction) tempAct).setFiredPersonInactive(softwareengineer);
 									} else if (tempAct instanceof PurchaseToolAction) {
 										((PurchaseToolAction) tempAct)
 												.setEmpWhoseMenuClickedOnInactive(softwareengineer);
@@ -386,8 +327,7 @@ public class RuleExecutor {
 										((SuggestedRequirementsPhaseDurationAction) tempAct)
 												.setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof SuggestedDesignPhaseDurationAction) {
-										((SuggestedDesignPhaseDurationAction) tempAct)
-												.setEmpInactive(softwareengineer);
+										((SuggestedDesignPhaseDurationAction) tempAct).setEmpInactive(softwareengineer);
 									} else if (tempAct instanceof SuggestedImplIntegrationPhaseDurationAction) {
 										((SuggestedImplIntegrationPhaseDurationAction) tempAct)
 												.setEmpInactive(softwareengineer);
@@ -406,10 +346,10 @@ public class RuleExecutor {
 	}
 
 	// BreakEffectRuleA rule (Break Action):
-	private void breakEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<BreakAction> breakActs = state.getActionStateRepository()
-				.getBreakActionStateRepository().getAllActions();
+	private void breakEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<BreakAction> breakActs = state.getActionStateRepository().getBreakActionStateRepository()
+				.getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < breakActs.size(); i++) {
 				BreakAction breakAct = breakActs.elementAt(i);
@@ -419,12 +359,8 @@ public class RuleExecutor {
 						Employee breaker2 = breakers.elementAt(j);
 						if (breaker2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) breaker2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) + .1));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) + .05));
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) + .1));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) + .05));
 						}
 					}
 				}
@@ -433,250 +369,178 @@ public class RuleExecutor {
 	}
 
 	// BreakTrigRule rule (Break Action):
-	private void breakTrigRule(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<BreakAction> breakActs = state.getActionStateRepository()
-				.getBreakActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("BreakTrigRule"))) {
+	private void breakTrigRule(Stage gui, int updateInstructions, String ruleName, simse.adts.actions.Action action) {
+		Vector<BreakAction> breakActs = state.getActionStateRepository().getBreakActionStateRepository()
+				.getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("BreakTrigRule"))) {
 			for (int i = 0; i < breakActs.size(); i++) {
 				BreakAction breakAct = breakActs.elementAt(i);
 				if (breakAct == action) {
 					if ((breakAct.getAllBreakers().size() >= 1)) {
-						Vector<Employee> breakers = breakAct
-								.getAllActiveBreakers();
+						Vector<Employee> breakers = breakAct.getAllActiveBreakers();
 						for (int j = 0; j < breakers.size(); j++) {
 							Employee breaker2 = breakers.elementAt(j);
 							if (breaker2 instanceof SoftwareEngineer) {
 								SoftwareEngineer softwareengineer = (SoftwareEngineer) breaker2;
 								Vector<CreateRequirementsAction> createrequirementsactionsDeactivate = state
-										.getActionStateRepository()
-										.getCreateRequirementsActionStateRepository()
+										.getActionStateRepository().getCreateRequirementsActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < createrequirementsactionsDeactivate
-										.size(); k++) {
-									CreateRequirementsAction tempAct = createrequirementsactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < createrequirementsactionsDeactivate.size(); k++) {
+									CreateRequirementsAction tempAct = createrequirementsactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<ReviewRequirementsAction> reviewrequirementsactionsDeactivate = state
-										.getActionStateRepository()
-										.getReviewRequirementsActionStateRepository()
+										.getActionStateRepository().getReviewRequirementsActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < reviewrequirementsactionsDeactivate
-										.size(); k++) {
-									ReviewRequirementsAction tempAct = reviewrequirementsactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < reviewrequirementsactionsDeactivate.size(); k++) {
+									ReviewRequirementsAction tempAct = reviewrequirementsactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<CorrectRequirementsAction> correctrequirementsactionsDeactivate = state
-										.getActionStateRepository()
-										.getCorrectRequirementsActionStateRepository()
+										.getActionStateRepository().getCorrectRequirementsActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < correctrequirementsactionsDeactivate
-										.size(); k++) {
+								for (int k = 0; k < correctrequirementsactionsDeactivate.size(); k++) {
 									CorrectRequirementsAction tempAct = correctrequirementsactionsDeactivate
 											.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<CreateDesignAction> createdesignactionsDeactivate = state
-										.getActionStateRepository()
-										.getCreateDesignActionStateRepository()
+										.getActionStateRepository().getCreateDesignActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < createdesignactionsDeactivate
-										.size(); k++) {
-									CreateDesignAction tempAct = createdesignactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < createdesignactionsDeactivate.size(); k++) {
+									CreateDesignAction tempAct = createdesignactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<ReviewDesignAction> reviewdesignactionsDeactivate = state
-										.getActionStateRepository()
-										.getReviewDesignActionStateRepository()
+										.getActionStateRepository().getReviewDesignActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < reviewdesignactionsDeactivate
-										.size(); k++) {
-									ReviewDesignAction tempAct = reviewdesignactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < reviewdesignactionsDeactivate.size(); k++) {
+									ReviewDesignAction tempAct = reviewdesignactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<CorrectDesignAction> correctdesignactionsDeactivate = state
-										.getActionStateRepository()
-										.getCorrectDesignActionStateRepository()
+										.getActionStateRepository().getCorrectDesignActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < correctdesignactionsDeactivate
-										.size(); k++) {
-									CorrectDesignAction tempAct = correctdesignactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < correctdesignactionsDeactivate.size(); k++) {
+									CorrectDesignAction tempAct = correctdesignactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
-								Vector<CreateCodeAction> createcodeactionsDeactivate = state
-										.getActionStateRepository()
-										.getCreateCodeActionStateRepository()
-										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < createcodeactionsDeactivate
-										.size(); k++) {
-									CreateCodeAction tempAct = createcodeactionsDeactivate
-											.elementAt(k);
+								Vector<CreateCodeAction> createcodeactionsDeactivate = state.getActionStateRepository()
+										.getCreateCodeActionStateRepository().getAllActiveActions(softwareengineer);
+								for (int k = 0; k < createcodeactionsDeactivate.size(); k++) {
+									CreateCodeAction tempAct = createcodeactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<InspectCodeAction> inspectcodeactionsDeactivate = state
-										.getActionStateRepository()
-										.getInspectCodeActionStateRepository()
+										.getActionStateRepository().getInspectCodeActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < inspectcodeactionsDeactivate
-										.size(); k++) {
-									InspectCodeAction tempAct = inspectcodeactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < inspectcodeactionsDeactivate.size(); k++) {
+									InspectCodeAction tempAct = inspectcodeactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<CorrectCodeAction> correctcodeactionsDeactivate = state
-										.getActionStateRepository()
-										.getCorrectCodeActionStateRepository()
+										.getActionStateRepository().getCorrectCodeActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < correctcodeactionsDeactivate
-										.size(); k++) {
-									CorrectCodeAction tempAct = correctcodeactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < correctcodeactionsDeactivate.size(); k++) {
+									CorrectCodeAction tempAct = correctcodeactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<IntegrateCodeAction> integratecodeactionsDeactivate = state
-										.getActionStateRepository()
-										.getIntegrateCodeActionStateRepository()
+										.getActionStateRepository().getIntegrateCodeActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < integratecodeactionsDeactivate
-										.size(); k++) {
-									IntegrateCodeAction tempAct = integratecodeactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < integratecodeactionsDeactivate.size(); k++) {
+									IntegrateCodeAction tempAct = integratecodeactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
-								Vector<SystemTestAction> systemtestactionsDeactivate = state
-										.getActionStateRepository()
-										.getSystemTestActionStateRepository()
-										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < systemtestactionsDeactivate
-										.size(); k++) {
-									SystemTestAction tempAct = systemtestactionsDeactivate
-											.elementAt(k);
+								Vector<SystemTestAction> systemtestactionsDeactivate = state.getActionStateRepository()
+										.getSystemTestActionStateRepository().getAllActiveActions(softwareengineer);
+								for (int k = 0; k < systemtestactionsDeactivate.size(); k++) {
+									SystemTestAction tempAct = systemtestactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<CreateSystemTestPlanAction> createsystemtestplanactionsDeactivate = state
-										.getActionStateRepository()
-										.getCreateSystemTestPlanActionStateRepository()
+										.getActionStateRepository().getCreateSystemTestPlanActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < createsystemtestplanactionsDeactivate
-										.size(); k++) {
+								for (int k = 0; k < createsystemtestplanactionsDeactivate.size(); k++) {
 									CreateSystemTestPlanAction tempAct = createsystemtestplanactionsDeactivate
 											.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<ReviewSystemTestPlanAction> reviewsystemtestplanactionsDeactivate = state
-										.getActionStateRepository()
-										.getReviewSystemTestPlanActionStateRepository()
+										.getActionStateRepository().getReviewSystemTestPlanActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < reviewsystemtestplanactionsDeactivate
-										.size(); k++) {
+								for (int k = 0; k < reviewsystemtestplanactionsDeactivate.size(); k++) {
 									ReviewSystemTestPlanAction tempAct = reviewsystemtestplanactionsDeactivate
 											.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<CorrectSystemTestPlanAction> correctsystemtestplanactionsDeactivate = state
-										.getActionStateRepository()
-										.getCorrectSystemTestPlanActionStateRepository()
+										.getActionStateRepository().getCorrectSystemTestPlanActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < correctsystemtestplanactionsDeactivate
-										.size(); k++) {
+								for (int k = 0; k < correctsystemtestplanactionsDeactivate.size(); k++) {
 									CorrectSystemTestPlanAction tempAct = correctsystemtestplanactionsDeactivate
 											.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<DeliverProductAction> deliverproductactionsDeactivate = state
-										.getActionStateRepository()
-										.getDeliverProductActionStateRepository()
+										.getActionStateRepository().getDeliverProductActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < deliverproductactionsDeactivate
-										.size(); k++) {
-									DeliverProductAction tempAct = deliverproductactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < deliverproductactionsDeactivate.size(); k++) {
+									DeliverProductAction tempAct = deliverproductactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
-								Vector<GetSickAction> getsickactionsDeactivate = state
-										.getActionStateRepository()
-										.getGetSickActionStateRepository()
-										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < getsickactionsDeactivate
-										.size(); k++) {
-									GetSickAction tempAct = getsickactionsDeactivate
-											.elementAt(k);
+								Vector<GetSickAction> getsickactionsDeactivate = state.getActionStateRepository()
+										.getGetSickActionStateRepository().getAllActiveActions(softwareengineer);
+								for (int k = 0; k < getsickactionsDeactivate.size(); k++) {
+									GetSickAction tempAct = getsickactionsDeactivate.elementAt(k);
 									tempAct.setSickPersonInactive(softwareengineer);
 								}
-								Vector<QuitAction> quitactionsDeactivate = state
-										.getActionStateRepository()
-										.getQuitActionStateRepository()
-										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < quitactionsDeactivate
-										.size(); k++) {
-									QuitAction tempAct = quitactionsDeactivate
-											.elementAt(k);
+								Vector<QuitAction> quitactionsDeactivate = state.getActionStateRepository()
+										.getQuitActionStateRepository().getAllActiveActions(softwareengineer);
+								for (int k = 0; k < quitactionsDeactivate.size(); k++) {
+									QuitAction tempAct = quitactionsDeactivate.elementAt(k);
 									tempAct.setQuitterInactive(softwareengineer);
 								}
 								Vector<IntroduceNewRequirementsAction> introducenewrequirementsactionsDeactivate = state
-										.getActionStateRepository()
-										.getIntroduceNewRequirementsActionStateRepository()
+										.getActionStateRepository().getIntroduceNewRequirementsActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < introducenewrequirementsactionsDeactivate
-										.size(); k++) {
+								for (int k = 0; k < introducenewrequirementsactionsDeactivate.size(); k++) {
 									IntroduceNewRequirementsAction tempAct = introducenewrequirementsactionsDeactivate
 											.elementAt(k);
 									tempAct.setEmpWOverheadTextInactive(softwareengineer);
 								}
 								Vector<UpdateProjectAttributesAction> updateprojectattributesactionsDeactivate = state
-										.getActionStateRepository()
-										.getUpdateProjectAttributesActionStateRepository()
+										.getActionStateRepository().getUpdateProjectAttributesActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < updateprojectattributesactionsDeactivate
-										.size(); k++) {
+								for (int k = 0; k < updateprojectattributesactionsDeactivate.size(); k++) {
 									UpdateProjectAttributesAction tempAct = updateprojectattributesactionsDeactivate
 											.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
 								Vector<ChangePayRateAction> changepayrateactionsDeactivate = state
-										.getActionStateRepository()
-										.getChangePayRateActionStateRepository()
+										.getActionStateRepository().getChangePayRateActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < changepayrateactionsDeactivate
-										.size(); k++) {
-									ChangePayRateAction tempAct = changepayrateactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < changepayrateactionsDeactivate.size(); k++) {
+									ChangePayRateAction tempAct = changepayrateactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
-								Vector<GiveBonusAction> givebonusactionsDeactivate = state
-										.getActionStateRepository()
-										.getGiveBonusActionStateRepository()
-										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < givebonusactionsDeactivate
-										.size(); k++) {
-									GiveBonusAction tempAct = givebonusactionsDeactivate
-											.elementAt(k);
+								Vector<GiveBonusAction> givebonusactionsDeactivate = state.getActionStateRepository()
+										.getGiveBonusActionStateRepository().getAllActiveActions(softwareengineer);
+								for (int k = 0; k < givebonusactionsDeactivate.size(); k++) {
+									GiveBonusAction tempAct = givebonusactionsDeactivate.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
 								}
-								Vector<FireAction> fireactionsDeactivate = state
-										.getActionStateRepository()
-										.getFireActionStateRepository()
-										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < fireactionsDeactivate
-										.size(); k++) {
-									FireAction tempAct = fireactionsDeactivate
-											.elementAt(k);
+								Vector<FireAction> fireactionsDeactivate = state.getActionStateRepository()
+										.getFireActionStateRepository().getAllActiveActions(softwareengineer);
+								for (int k = 0; k < fireactionsDeactivate.size(); k++) {
+									FireAction tempAct = fireactionsDeactivate.elementAt(k);
 									tempAct.setFiredPersonInactive(softwareengineer);
 								}
 								Vector<PurchaseToolAction> purchasetoolactionsDeactivate = state
-										.getActionStateRepository()
-										.getPurchaseToolActionStateRepository()
+										.getActionStateRepository().getPurchaseToolActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < purchasetoolactionsDeactivate
-										.size(); k++) {
-									PurchaseToolAction tempAct = purchasetoolactionsDeactivate
-											.elementAt(k);
+								for (int k = 0; k < purchasetoolactionsDeactivate.size(); k++) {
+									PurchaseToolAction tempAct = purchasetoolactionsDeactivate.elementAt(k);
 									tempAct.setEmpWhoseMenuClickedOnInactive(softwareengineer);
 								}
 								softwareengineer.setOnBreak(true);
@@ -689,25 +553,18 @@ public class RuleExecutor {
 	}
 
 	// IntegrateCodeEffectRuleFirst rule (IntegrateCode Action):
-	private void integrateCodeEffectRuleFirst(Stage gui,
-			int updateInstructions, String ruleName,
+	private void integrateCodeEffectRuleFirst(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<IntegrateCodeAction> integratecodeActs = state
-				.getActionStateRepository()
+		Vector<IntegrateCodeAction> integratecodeActs = state.getActionStateRepository()
 				.getIntegrateCodeActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < integratecodeActs.size(); i++) {
-				IntegrateCodeAction integratecodeAct = integratecodeActs
-						.elementAt(i);
-				if ((integratecodeAct.getAllEmps().size() >= 1)
-						&& (integratecodeAct.getAllCodeDocs().size() >= 1)
+				IntegrateCodeAction integratecodeAct = integratecodeActs.elementAt(i);
+				if ((integratecodeAct.getAllEmps().size() >= 1) && (integratecodeAct.getAllCodeDocs().size() >= 1)
 						&& (integratecodeAct.getAllProjs().size() >= 1)
-						&& (integratecodeAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
-						&& (integratecodeAct.getAllAssociatedDesignDocs()
-								.size() >= 1)
-						&& (integratecodeAct.getAllDevelopmentEnvironments()
-								.size() >= 0)) {
+						&& (integratecodeAct.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (integratecodeAct.getAllAssociatedDesignDocs().size() >= 1)
+						&& (integratecodeAct.getAllDevelopmentEnvironments().size() >= 0)) {
 					Vector<Employee> emps = integratecodeAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
@@ -715,29 +572,26 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> codedocs = integratecodeAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = integratecodeAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
 							double allAssociatedDesignDocDesignDocumentPercentComplete = 0;
-							Vector allAssociatedDesignDocs = integratecodeAct
-									.getAllAssociatedDesignDocs();
+							Vector allAssociatedDesignDocs = integratecodeAct.getAllAssociatedDesignDocs();
 							for (int k = 0; k < allAssociatedDesignDocs.size(); k++) {
-								Object associateddesigndoc3 = allAssociatedDesignDocs
-										.elementAt(k);
+								Object associateddesigndoc3 = allAssociatedDesignDocs.elementAt(k);
 								if (associateddesigndoc3 instanceof DesignDocument) {
 									allAssociatedDesignDocDesignDocumentPercentComplete += (double) (((DesignDocument) associateddesigndoc3)
 											.getPercentComplete());
 								}
 							}
-							code.setPcntIntegratedDiffDesDoc((int) ((((allAssociatedDesignDocDesignDocumentPercentComplete - ((double) (code
-									.getPercentIntegrated()))) / 100) + .001) * 100000));
+							code.setPcntIntegratedDiffDesDoc(
+									(int) ((((allAssociatedDesignDocDesignDocumentPercentComplete
+											- ((double) (code.getPercentIntegrated()))) / 100) + .001) * 100000));
 						}
 					}
-					Vector<Project> projs = integratecodeAct
-							.getAllActiveProjs();
+					Vector<Project> projs = integratecodeAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -747,26 +601,21 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = integratecodeAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Artifact> associateddesigndocs = integratecodeAct
-							.getAllActiveAssociatedDesignDocs();
+					Vector<Artifact> associateddesigndocs = integratecodeAct.getAllActiveAssociatedDesignDocs();
 					for (int j = 0; j < associateddesigndocs.size(); j++) {
-						Artifact associateddesigndoc2 = associateddesigndocs
-								.elementAt(j);
+						Artifact associateddesigndoc2 = associateddesigndocs.elementAt(j);
 						if (associateddesigndoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndoc2;
 						}
 					}
-					Vector<Tool> developmentenvironments = integratecodeAct
-							.getAllActiveDevelopmentEnvironments();
+					Vector<Tool> developmentenvironments = integratecodeAct.getAllActiveDevelopmentEnvironments();
 					for (int j = 0; j < developmentenvironments.size(); j++) {
-						Tool developmentenvironment2 = developmentenvironments
-								.elementAt(j);
+						Tool developmentenvironment2 = developmentenvironments.elementAt(j);
 						if (developmentenvironment2 instanceof IDE) {
 							IDE ide = (IDE) developmentenvironment2;
 						}
@@ -777,13 +626,11 @@ public class RuleExecutor {
 	}
 
 	// GiveBonusEffectRuleA rule (GiveBonus Action):
-	private void giveBonusEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<GiveBonusAction> givebonusActs = state
-				.getActionStateRepository().getGiveBonusActionStateRepository()
+	private void giveBonusEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<GiveBonusAction> givebonusActs = state.getActionStateRepository().getGiveBonusActionStateRepository()
 				.getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("GiveBonusEffectRuleA"))) {
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("GiveBonusEffectRuleA"))) {
 			for (int i = 0; i < givebonusActs.size(); i++) {
 				GiveBonusAction givebonusAct = givebonusActs.elementAt(i);
 				if (givebonusAct == action) {
@@ -804,8 +651,7 @@ public class RuleExecutor {
 									try {
 										Double temp = new Double(response);
 										if (temp.doubleValue() > 0.0) {
-											inputBonusAmount = (double) (temp
-													.doubleValue());
+											inputBonusAmount = (double) (temp.doubleValue());
 											gotValidInput0 = true;
 										} else {
 											Dialog<String> d2 = new Dialog<>();
@@ -821,8 +667,7 @@ public class RuleExecutor {
 									}
 								} else // action cancelled
 								{
-									state.getActionStateRepository()
-											.getGiveBonusActionStateRepository()
+									state.getActionStateRepository().getGiveBonusActionStateRepository()
 											.remove(givebonusAct);
 									cancel = true;
 									break;
@@ -830,62 +675,50 @@ public class RuleExecutor {
 							}
 						}
 						if (gotValidInput0) {
-							Vector<Employee> emps = givebonusAct
-									.getAllActiveEmps();
+							Vector<Employee> emps = givebonusAct.getAllActiveEmps();
 							for (int j = 0; j < emps.size(); j++) {
 								Employee emp2 = emps.elementAt(j);
 								if (emp2 instanceof SoftwareEngineer) {
 									SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-									softwareengineer
-											.setEnergy((double) (((double) (softwareengineer
-													.getEnergy())) + (inputBonusAmount / (((double) (softwareengineer
-													.getPayRate())) * 480 / 2))));
-									softwareengineer
-											.setMood((double) (((double) (softwareengineer
-													.getMood())) + (inputBonusAmount / (((double) (softwareengineer
-													.getPayRate())) * 240 / 2))));
-									softwareengineer
-											.setProductivityInRequirements((double) (((double) (softwareengineer
-													.getProductivityInRequirements())) + (.75 * (inputBonusAmount
-													/ ((double) (softwareengineer
-															.getPayRate())) * 10))));
-									softwareengineer
-											.setProductivityInDesign((double) (((double) (softwareengineer
-													.getProductivityInDesign())) + (.75 * (inputBonusAmount
-													/ ((double) (softwareengineer
-															.getPayRate())) * 10))));
-									softwareengineer
-											.setProductivityInCoding((double) (((double) (softwareengineer
-													.getProductivityInCoding())) + (.75 * (inputBonusAmount
-													/ ((double) (softwareengineer
-															.getPayRate())) * 10))));
-									softwareengineer
-											.setErrorRateInRequirements((double) (((double) (softwareengineer
-													.getErrorRateInRequirements())) - (inputBonusAmount
-													/ ((double) (softwareengineer
-															.getPayRate())) * 10)));
-									softwareengineer
-											.setErrorRateInDesign((double) (((double) (softwareengineer
-													.getErrorRateInDesign())) - (inputBonusAmount
-													/ ((double) (softwareengineer
-															.getPayRate())) * 10)));
-									softwareengineer
-											.setErrorRateInCoding((double) (((double) (softwareengineer
-													.getErrorRateInCoding())) - (inputBonusAmount
-													/ ((double) (softwareengineer
-															.getPayRate())) * 10)));
+									softwareengineer.setEnergy(
+											(double) (((double) (softwareengineer.getEnergy())) + (inputBonusAmount
+													/ (((double) (softwareengineer.getPayRate())) * 480 / 2))));
+									softwareengineer.setMood(
+											(double) (((double) (softwareengineer.getMood())) + (inputBonusAmount
+													/ (((double) (softwareengineer.getPayRate())) * 240 / 2))));
+									softwareengineer.setProductivityInRequirements(
+											(double) (((double) (softwareengineer.getProductivityInRequirements()))
+													+ (.75 * (inputBonusAmount
+															/ ((double) (softwareengineer.getPayRate())) * 10))));
+									softwareengineer.setProductivityInDesign(
+											(double) (((double) (softwareengineer.getProductivityInDesign()))
+													+ (.75 * (inputBonusAmount
+															/ ((double) (softwareengineer.getPayRate())) * 10))));
+									softwareengineer.setProductivityInCoding(
+											(double) (((double) (softwareengineer.getProductivityInCoding()))
+													+ (.75 * (inputBonusAmount
+															/ ((double) (softwareengineer.getPayRate())) * 10))));
+									softwareengineer.setErrorRateInRequirements(
+											(double) (((double) (softwareengineer.getErrorRateInRequirements()))
+													- (inputBonusAmount / ((double) (softwareengineer.getPayRate()))
+															* 10)));
+									softwareengineer.setErrorRateInDesign(
+											(double) (((double) (softwareengineer.getErrorRateInDesign()))
+													- (inputBonusAmount / ((double) (softwareengineer.getPayRate()))
+															* 10)));
+									softwareengineer.setErrorRateInCoding(
+											(double) (((double) (softwareengineer.getErrorRateInCoding()))
+													- (inputBonusAmount / ((double) (softwareengineer.getPayRate()))
+															* 10)));
 								}
 							}
-							Vector<Project> projectwithbudgets = givebonusAct
-									.getAllActiveProjectWithBudgets();
+							Vector<Project> projectwithbudgets = givebonusAct.getAllActiveProjectWithBudgets();
 							for (int j = 0; j < projectwithbudgets.size(); j++) {
-								Project projectwithbudget2 = projectwithbudgets
-										.elementAt(j);
+								Project projectwithbudget2 = projectwithbudgets.elementAt(j);
 								if (projectwithbudget2 instanceof SEProject) {
 									SEProject seproject = (SEProject) projectwithbudget2;
-									seproject
-											.setMoneySpent((double) (((double) (seproject
-													.getMoneySpent())) + inputBonusAmount));
+									seproject.setMoneySpent(
+											(double) (((double) (seproject.getMoneySpent())) + inputBonusAmount));
 								}
 							}
 						}
@@ -896,61 +729,47 @@ public class RuleExecutor {
 	}
 
 	// IntegrateCodeEffectRuleA rule (IntegrateCode Action):
-	private void integrateCodeEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<IntegrateCodeAction> integratecodeActs = state
-				.getActionStateRepository()
+	private void integrateCodeEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<IntegrateCodeAction> integratecodeActs = state.getActionStateRepository()
 				.getIntegrateCodeActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < integratecodeActs.size(); i++) {
-				IntegrateCodeAction integratecodeAct = integratecodeActs
-						.elementAt(i);
-				if ((integratecodeAct.getAllEmps().size() >= 1)
-						&& (integratecodeAct.getAllCodeDocs().size() >= 1)
+				IntegrateCodeAction integratecodeAct = integratecodeActs.elementAt(i);
+				if ((integratecodeAct.getAllEmps().size() >= 1) && (integratecodeAct.getAllCodeDocs().size() >= 1)
 						&& (integratecodeAct.getAllProjs().size() >= 1)
-						&& (integratecodeAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
-						&& (integratecodeAct.getAllAssociatedDesignDocs()
-								.size() >= 1)
-						&& (integratecodeAct.getAllDevelopmentEnvironments()
-								.size() >= 0)) {
+						&& (integratecodeAct.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (integratecodeAct.getAllAssociatedDesignDocs().size() >= 1)
+						&& (integratecodeAct.getAllDevelopmentEnvironments().size() >= 0)) {
 					Vector<Employee> emps = integratecodeAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInCoding((double) ((((double) (softwareengineer
-											.getProductivityInCodingUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInCoding((double) ((((double) (softwareengineer
-											.getErrorRateInCodingUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInCoding(
+									(double) ((((double) (softwareengineer.getProductivityInCodingUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInCoding(
+									(double) ((((double) (softwareengineer.getErrorRateInCodingUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> codedocs = integratecodeAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = integratecodeAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
-							code.setPercentErroneous((double) ((((double) (code
-									.getNumKnownErrors())) + ((double) (code
-									.getNumUnknownErrors())))
-									/ (((double) (code.getSize())) + .1) * 100));
+							code.setPercentErroneous((double) ((((double) (code.getNumKnownErrors()))
+									+ ((double) (code.getNumUnknownErrors()))) / (((double) (code.getSize())) + .1)
+									* 100));
 							double allActiveEmpSoftwareEngineerProductivityInCoding = 0;
-							Vector allActiveEmps = integratecodeAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = integratecodeAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -958,26 +777,23 @@ public class RuleExecutor {
 											.getProductivityInCoding());
 								}
 							}
-							double numEmp = (double) (integratecodeAct
-									.getAllEmps().size());
+							double numEmp = (double) (integratecodeAct.getAllEmps().size());
 							double allActiveAssociatedDesignDocDesignDocumentPercentErroneous = 0;
-							Vector allActiveAssociatedDesignDocs = integratecodeAct
-									.getAllActiveAssociatedDesignDocs();
-							for (int k = 0; k < allActiveAssociatedDesignDocs
-									.size(); k++) {
-								Object associateddesigndoc3 = allActiveAssociatedDesignDocs
-										.elementAt(k);
+							Vector allActiveAssociatedDesignDocs = integratecodeAct.getAllActiveAssociatedDesignDocs();
+							for (int k = 0; k < allActiveAssociatedDesignDocs.size(); k++) {
+								Object associateddesigndoc3 = allActiveAssociatedDesignDocs.elementAt(k);
 								if (associateddesigndoc3 instanceof DesignDocument) {
 									allActiveAssociatedDesignDocDesignDocumentPercentErroneous += (double) (((DesignDocument) associateddesigndoc3)
 											.getPercentErroneous());
 								}
 							}
-							code.setAmountIntegrated((double) (((double) (code
-									.getAmountIntegrated())) + ((allActiveEmpSoftwareEngineerProductivityInCoding * 10)
-									* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
-									/ ((double) (code.getNumAuthors()))
-									* (1 + (2 * ((double) (code
-											.getPcntIntegratedDiffDesDoc())))) * (1 - (allActiveAssociatedDesignDocDesignDocumentPercentErroneous / 100)))));
+							code.setAmountIntegrated((double) (((double) (code.getAmountIntegrated()))
+									+ ((allActiveEmpSoftwareEngineerProductivityInCoding * 10)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											/ ((double) (code.getNumAuthors()))
+											* (1 + (2 * ((double) (code.getPcntIntegratedDiffDesDoc()))))
+											* (1 - (allActiveAssociatedDesignDocDesignDocumentPercentErroneous
+													/ 100)))));
 							double allActiveEmpSoftwareEngineerErrorRateInCoding = 0;
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
@@ -986,18 +802,15 @@ public class RuleExecutor {
 											.getErrorRateInCoding());
 								}
 							}
-							code.setNumUnknownErrors((double) (((double) (code
-									.getNumUnknownErrors())) + (allActiveEmpSoftwareEngineerErrorRateInCoding
-									* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
-									* (1 + (1 - ((double) (code
-											.getPcntIntegratedDiffDesDoc())))) * 1.5)));
-							code.setPercentIntegrated((double) (((double) (code
-									.getAmountIntegrated()))
+							code.setNumUnknownErrors((double) (((double) (code.getNumUnknownErrors()))
+									+ (allActiveEmpSoftwareEngineerErrorRateInCoding
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + (1 - ((double) (code.getPcntIntegratedDiffDesDoc())))) * 1.5)));
+							code.setPercentIntegrated((double) (((double) (code.getAmountIntegrated()))
 									/ (((double) (code.getSize())) + .1) * 100));
 						}
 					}
-					Vector<Project> projs = integratecodeAct
-							.getAllActiveProjs();
+					Vector<Project> projs = integratecodeAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -1007,26 +820,21 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = integratecodeAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Artifact> associateddesigndocs = integratecodeAct
-							.getAllActiveAssociatedDesignDocs();
+					Vector<Artifact> associateddesigndocs = integratecodeAct.getAllActiveAssociatedDesignDocs();
 					for (int j = 0; j < associateddesigndocs.size(); j++) {
-						Artifact associateddesigndoc2 = associateddesigndocs
-								.elementAt(j);
+						Artifact associateddesigndoc2 = associateddesigndocs.elementAt(j);
 						if (associateddesigndoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndoc2;
 						}
 					}
-					Vector<Tool> developmentenvironments = integratecodeAct
-							.getAllActiveDevelopmentEnvironments();
+					Vector<Tool> developmentenvironments = integratecodeAct.getAllActiveDevelopmentEnvironments();
 					for (int j = 0; j < developmentenvironments.size(); j++) {
-						Tool developmentenvironment2 = developmentenvironments
-								.elementAt(j);
+						Tool developmentenvironment2 = developmentenvironments.elementAt(j);
 						if (developmentenvironment2 instanceof IDE) {
 							IDE ide = (IDE) developmentenvironment2;
 						}
@@ -1037,59 +845,47 @@ public class RuleExecutor {
 	}
 
 	// CorrectCodeEffectRuleA rule (CorrectCode Action):
-	private void correctCodeEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<CorrectCodeAction> correctcodeActs = state
-				.getActionStateRepository()
+	private void correctCodeEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<CorrectCodeAction> correctcodeActs = state.getActionStateRepository()
 				.getCorrectCodeActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < correctcodeActs.size(); i++) {
 				CorrectCodeAction correctcodeAct = correctcodeActs.elementAt(i);
-				if ((correctcodeAct.getAllEmps().size() >= 1)
-						&& (correctcodeAct.getAllCodeDocs().size() >= 1)
+				if ((correctcodeAct.getAllEmps().size() >= 1) && (correctcodeAct.getAllCodeDocs().size() >= 1)
 						&& (correctcodeAct.getAllProjs().size() >= 1)
-						&& (correctcodeAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
+						&& (correctcodeAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (correctcodeAct.getAllAssociatedDesignDocs().size() >= 1)
-						&& (correctcodeAct.getAllDevelopmentEnvironments()
-								.size() >= 0)) {
+						&& (correctcodeAct.getAllDevelopmentEnvironments().size() >= 0)) {
 					Vector<Employee> emps = correctcodeAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInCoding((double) ((((double) (softwareengineer
-											.getProductivityInCodingUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInCoding((double) ((((double) (softwareengineer
-											.getErrorRateInCodingUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInCoding(
+									(double) ((((double) (softwareengineer.getProductivityInCodingUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInCoding(
+									(double) ((((double) (softwareengineer.getErrorRateInCodingUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> codedocs = correctcodeAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = correctcodeAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
-							code.setPercentErroneous((double) ((((double) (code
-									.getNumKnownErrors())) + ((double) (code
-									.getNumUnknownErrors())))
-									/ (((double) (code.getSize())) + .1) * 100));
+							code.setPercentErroneous((double) ((((double) (code.getNumKnownErrors()))
+									+ ((double) (code.getNumUnknownErrors()))) / (((double) (code.getSize())) + .1)
+									* 100));
 							double allActiveEmpSoftwareEngineerErrorRateInCoding = 0;
-							Vector allActiveEmps = correctcodeAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = correctcodeAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -1097,23 +893,21 @@ public class RuleExecutor {
 											.getErrorRateInCoding());
 								}
 							}
-							double numEmp = (double) (correctcodeAct
-									.getAllEmps().size());
+							double numEmp = (double) (correctcodeAct.getAllEmps().size());
 							double allActiveDevelopmentEnvironmentIDEErrorRateDecreaseFactor = 0;
 							Vector allActiveDevelopmentEnvironments = correctcodeAct
 									.getAllActiveDevelopmentEnvironments();
-							for (int k = 0; k < allActiveDevelopmentEnvironments
-									.size(); k++) {
-								Object developmentenvironment3 = allActiveDevelopmentEnvironments
-										.elementAt(k);
+							for (int k = 0; k < allActiveDevelopmentEnvironments.size(); k++) {
+								Object developmentenvironment3 = allActiveDevelopmentEnvironments.elementAt(k);
 								if (developmentenvironment3 instanceof IDE) {
 									allActiveDevelopmentEnvironmentIDEErrorRateDecreaseFactor += (double) (((IDE) developmentenvironment3)
 											.getErrorRateDecreaseFactor());
 								}
 							}
-							code.setNumUnknownErrors((double) (((double) (code
-									.getNumUnknownErrors())) + ((.2 * allActiveEmpSoftwareEngineerErrorRateInCoding)
-									* (1 - (.01 * (numEmp * (numEmp - 1) / 2))) * (1 - allActiveDevelopmentEnvironmentIDEErrorRateDecreaseFactor))));
+							code.setNumUnknownErrors((double) (((double) (code.getNumUnknownErrors()))
+									+ ((.2 * allActiveEmpSoftwareEngineerErrorRateInCoding)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 - allActiveDevelopmentEnvironmentIDEErrorRateDecreaseFactor))));
 							double allActiveEmpSoftwareEngineerProductivityInCoding = 0;
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
@@ -1123,18 +917,17 @@ public class RuleExecutor {
 								}
 							}
 							double allActiveDevelopmentEnvironmentIDEProductivityIncreaseFactor = 0;
-							for (int k = 0; k < allActiveDevelopmentEnvironments
-									.size(); k++) {
-								Object developmentenvironment3 = allActiveDevelopmentEnvironments
-										.elementAt(k);
+							for (int k = 0; k < allActiveDevelopmentEnvironments.size(); k++) {
+								Object developmentenvironment3 = allActiveDevelopmentEnvironments.elementAt(k);
 								if (developmentenvironment3 instanceof IDE) {
 									allActiveDevelopmentEnvironmentIDEProductivityIncreaseFactor += (double) (((IDE) developmentenvironment3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							code.setNumKnownErrors((double) (((double) (code
-									.getNumKnownErrors())) - ((.5 * allActiveEmpSoftwareEngineerProductivityInCoding)
-									* (1 - (.01 * (numEmp * (numEmp - 1) / 2))) * (1 + allActiveDevelopmentEnvironmentIDEProductivityIncreaseFactor))));
+							code.setNumKnownErrors((double) (((double) (code.getNumKnownErrors()))
+									- ((.5 * allActiveEmpSoftwareEngineerProductivityInCoding)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + allActiveDevelopmentEnvironmentIDEProductivityIncreaseFactor))));
 						}
 					}
 					Vector<Project> projs = correctcodeAct.getAllActiveProjs();
@@ -1147,26 +940,21 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = correctcodeAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Artifact> associateddesigndocs = correctcodeAct
-							.getAllActiveAssociatedDesignDocs();
+					Vector<Artifact> associateddesigndocs = correctcodeAct.getAllActiveAssociatedDesignDocs();
 					for (int j = 0; j < associateddesigndocs.size(); j++) {
-						Artifact associateddesigndoc2 = associateddesigndocs
-								.elementAt(j);
+						Artifact associateddesigndoc2 = associateddesigndocs.elementAt(j);
 						if (associateddesigndoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndoc2;
 						}
 					}
-					Vector<Tool> developmentenvironments = correctcodeAct
-							.getAllActiveDevelopmentEnvironments();
+					Vector<Tool> developmentenvironments = correctcodeAct.getAllActiveDevelopmentEnvironments();
 					for (int j = 0; j < developmentenvironments.size(); j++) {
-						Tool developmentenvironment2 = developmentenvironments
-								.elementAt(j);
+						Tool developmentenvironment2 = developmentenvironments.elementAt(j);
 						if (developmentenvironment2 instanceof IDE) {
 							IDE ide = (IDE) developmentenvironment2;
 						}
@@ -1177,25 +965,19 @@ public class RuleExecutor {
 	}
 
 	// CreateCodeEffectRuleFirst rule (CreateCode Action):
-	private void createCodeEffectRuleFirst(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<CreateCodeAction> createcodeActs = state
-				.getActionStateRepository()
-				.getCreateCodeActionStateRepository().getAllActions();
+	private void createCodeEffectRuleFirst(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<CreateCodeAction> createcodeActs = state.getActionStateRepository().getCreateCodeActionStateRepository()
+				.getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < createcodeActs.size(); i++) {
 				CreateCodeAction createcodeAct = createcodeActs.elementAt(i);
-				if ((createcodeAct.getAllEmps().size() >= 1)
-						&& (createcodeAct.getAllCodeDocs().size() >= 1)
+				if ((createcodeAct.getAllEmps().size() >= 1) && (createcodeAct.getAllCodeDocs().size() >= 1)
 						&& (createcodeAct.getAllProjs().size() >= 1)
-						&& (createcodeAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
-						&& (createcodeAct.getAllAssociatedDesignDocuments()
-								.size() >= 1)
-						&& (createcodeAct.getAllDevelopmentEnvironments()
-								.size() >= 0)
-						&& (createcodeAct.getAllAssociatedSystemTestPlans()
-								.size() >= 1)) {
+						&& (createcodeAct.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (createcodeAct.getAllAssociatedDesignDocuments().size() >= 1)
+						&& (createcodeAct.getAllDevelopmentEnvironments().size() >= 0)
+						&& (createcodeAct.getAllAssociatedSystemTestPlans().size() >= 1)) {
 					Vector<Employee> emps = createcodeAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
@@ -1203,40 +985,35 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> codedocs = createcodeAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = createcodeAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
 							double allAssociatedRequirementsDocRequirementsDocumentPercentComplete = 0;
-							Vector allAssociatedRequirementsDocs = createcodeAct
-									.getAllAssociatedRequirementsDocs();
-							for (int k = 0; k < allAssociatedRequirementsDocs
-									.size(); k++) {
-								Object associatedrequirementsdoc3 = allAssociatedRequirementsDocs
-										.elementAt(k);
+							Vector allAssociatedRequirementsDocs = createcodeAct.getAllAssociatedRequirementsDocs();
+							for (int k = 0; k < allAssociatedRequirementsDocs.size(); k++) {
+								Object associatedrequirementsdoc3 = allAssociatedRequirementsDocs.elementAt(k);
 								if (associatedrequirementsdoc3 instanceof RequirementsDocument) {
 									allAssociatedRequirementsDocRequirementsDocumentPercentComplete += (double) (((RequirementsDocument) associatedrequirementsdoc3)
 											.getPercentComplete());
 								}
 							}
-							code.setCompletenessDiffReqDoc((int) ((((allAssociatedRequirementsDocRequirementsDocumentPercentComplete - ((double) (code
-									.getPercentComplete()))) / 100) + .001) * 100000));
+							code.setCompletenessDiffReqDoc(
+									(int) ((((allAssociatedRequirementsDocRequirementsDocumentPercentComplete
+											- ((double) (code.getPercentComplete()))) / 100) + .001) * 100000));
 							double allAssociatedDesignDocumentDesignDocumentPercentComplete = 0;
-							Vector allAssociatedDesignDocuments = createcodeAct
-									.getAllAssociatedDesignDocuments();
-							for (int k = 0; k < allAssociatedDesignDocuments
-									.size(); k++) {
-								Object associateddesigndocument3 = allAssociatedDesignDocuments
-										.elementAt(k);
+							Vector allAssociatedDesignDocuments = createcodeAct.getAllAssociatedDesignDocuments();
+							for (int k = 0; k < allAssociatedDesignDocuments.size(); k++) {
+								Object associateddesigndocument3 = allAssociatedDesignDocuments.elementAt(k);
 								if (associateddesigndocument3 instanceof DesignDocument) {
 									allAssociatedDesignDocumentDesignDocumentPercentComplete += (double) (((DesignDocument) associateddesigndocument3)
 											.getPercentComplete());
 								}
 							}
-							code.setCompletenessDiffDesDoc((int) ((((allAssociatedDesignDocumentDesignDocumentPercentComplete - ((double) (code
-									.getPercentComplete()))) / 100) + .001) * 100000));
+							code.setCompletenessDiffDesDoc(
+									(int) ((((allAssociatedDesignDocumentDesignDocumentPercentComplete
+											- ((double) (code.getPercentComplete()))) / 100) + .001) * 100000));
 						}
 					}
 					Vector<Project> projs = createcodeAct.getAllActiveProjs();
@@ -1249,35 +1026,28 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = createcodeAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Artifact> associateddesigndocuments = createcodeAct
-							.getAllActiveAssociatedDesignDocuments();
+					Vector<Artifact> associateddesigndocuments = createcodeAct.getAllActiveAssociatedDesignDocuments();
 					for (int j = 0; j < associateddesigndocuments.size(); j++) {
-						Artifact associateddesigndocument2 = associateddesigndocuments
-								.elementAt(j);
+						Artifact associateddesigndocument2 = associateddesigndocuments.elementAt(j);
 						if (associateddesigndocument2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndocument2;
 						}
 					}
-					Vector<Tool> developmentenvironments = createcodeAct
-							.getAllActiveDevelopmentEnvironments();
+					Vector<Tool> developmentenvironments = createcodeAct.getAllActiveDevelopmentEnvironments();
 					for (int j = 0; j < developmentenvironments.size(); j++) {
-						Tool developmentenvironment2 = developmentenvironments
-								.elementAt(j);
+						Tool developmentenvironment2 = developmentenvironments.elementAt(j);
 						if (developmentenvironment2 instanceof IDE) {
 							IDE ide = (IDE) developmentenvironment2;
 						}
 					}
-					Vector<Artifact> associatedsystemtestplans = createcodeAct
-							.getAllActiveAssociatedSystemTestPlans();
+					Vector<Artifact> associatedsystemtestplans = createcodeAct.getAllActiveAssociatedSystemTestPlans();
 					for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-						Artifact associatedsystemtestplan2 = associatedsystemtestplans
-								.elementAt(j);
+						Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 						if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 						}
@@ -1288,62 +1058,48 @@ public class RuleExecutor {
 	}
 
 	// CreateCodeEffectRuleA rule (CreateCode Action):
-	private void createCodeEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<CreateCodeAction> createcodeActs = state
-				.getActionStateRepository()
-				.getCreateCodeActionStateRepository().getAllActions();
+	private void createCodeEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<CreateCodeAction> createcodeActs = state.getActionStateRepository().getCreateCodeActionStateRepository()
+				.getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < createcodeActs.size(); i++) {
 				CreateCodeAction createcodeAct = createcodeActs.elementAt(i);
-				if ((createcodeAct.getAllEmps().size() >= 1)
-						&& (createcodeAct.getAllCodeDocs().size() >= 1)
+				if ((createcodeAct.getAllEmps().size() >= 1) && (createcodeAct.getAllCodeDocs().size() >= 1)
 						&& (createcodeAct.getAllProjs().size() >= 1)
-						&& (createcodeAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
-						&& (createcodeAct.getAllAssociatedDesignDocuments()
-								.size() >= 1)
-						&& (createcodeAct.getAllDevelopmentEnvironments()
-								.size() >= 0)
-						&& (createcodeAct.getAllAssociatedSystemTestPlans()
-								.size() >= 1)) {
+						&& (createcodeAct.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (createcodeAct.getAllAssociatedDesignDocuments().size() >= 1)
+						&& (createcodeAct.getAllDevelopmentEnvironments().size() >= 0)
+						&& (createcodeAct.getAllAssociatedSystemTestPlans().size() >= 1)) {
 					Vector<Employee> emps = createcodeAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInCoding((double) ((((double) (softwareengineer
-											.getProductivityInCodingUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInCoding((double) ((((double) (softwareengineer
-											.getErrorRateInCodingUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInCoding(
+									(double) ((((double) (softwareengineer.getProductivityInCodingUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInCoding(
+									(double) ((((double) (softwareengineer.getErrorRateInCodingUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> codedocs = createcodeAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = createcodeAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
-							code.setPercentErroneous((double) ((((double) (code
-									.getNumKnownErrors())) + ((double) (code
-									.getNumUnknownErrors())))
-									/ (((double) (code.getSize())) + .1) * 100));
+							code.setPercentErroneous((double) ((((double) (code.getNumKnownErrors()))
+									+ ((double) (code.getNumUnknownErrors()))) / (((double) (code.getSize())) + .1)
+									* 100));
 							double allActiveEmpSoftwareEngineerErrorRateInCoding = 0;
-							Vector allActiveEmps = createcodeAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = createcodeAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -1351,15 +1107,12 @@ public class RuleExecutor {
 											.getErrorRateInCoding());
 								}
 							}
-							double numEmp = (double) (createcodeAct
-									.getAllEmps().size());
+							double numEmp = (double) (createcodeAct.getAllEmps().size());
 							double allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous = 0;
 							Vector allActiveAssociatedRequirementsDocs = createcodeAct
 									.getAllActiveAssociatedRequirementsDocs();
-							for (int k = 0; k < allActiveAssociatedRequirementsDocs
-									.size(); k++) {
-								Object associatedrequirementsdoc3 = allActiveAssociatedRequirementsDocs
-										.elementAt(k);
+							for (int k = 0; k < allActiveAssociatedRequirementsDocs.size(); k++) {
+								Object associatedrequirementsdoc3 = allActiveAssociatedRequirementsDocs.elementAt(k);
 								if (associatedrequirementsdoc3 instanceof RequirementsDocument) {
 									allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous += (double) (((RequirementsDocument) associatedrequirementsdoc3)
 											.getPercentErroneous());
@@ -1368,10 +1121,8 @@ public class RuleExecutor {
 							double allActiveAssociatedDesignDocumentDesignDocumentPercentErroneous = 0;
 							Vector allActiveAssociatedDesignDocuments = createcodeAct
 									.getAllActiveAssociatedDesignDocuments();
-							for (int k = 0; k < allActiveAssociatedDesignDocuments
-									.size(); k++) {
-								Object associateddesigndocument3 = allActiveAssociatedDesignDocuments
-										.elementAt(k);
+							for (int k = 0; k < allActiveAssociatedDesignDocuments.size(); k++) {
+								Object associateddesigndocument3 = allActiveAssociatedDesignDocuments.elementAt(k);
 								if (associateddesigndocument3 instanceof DesignDocument) {
 									allActiveAssociatedDesignDocumentDesignDocumentPercentErroneous += (double) (((DesignDocument) associateddesigndocument3)
 											.getPercentErroneous());
@@ -1380,24 +1131,23 @@ public class RuleExecutor {
 							double allActiveDevelopmentEnvironmentIDEErrorRateDecreaseFactor = 0;
 							Vector allActiveDevelopmentEnvironments = createcodeAct
 									.getAllActiveDevelopmentEnvironments();
-							for (int k = 0; k < allActiveDevelopmentEnvironments
-									.size(); k++) {
-								Object developmentenvironment3 = allActiveDevelopmentEnvironments
-										.elementAt(k);
+							for (int k = 0; k < allActiveDevelopmentEnvironments.size(); k++) {
+								Object developmentenvironment3 = allActiveDevelopmentEnvironments.elementAt(k);
 								if (developmentenvironment3 instanceof IDE) {
 									allActiveDevelopmentEnvironmentIDEErrorRateDecreaseFactor += (double) (((IDE) developmentenvironment3)
 											.getErrorRateDecreaseFactor());
 								}
 							}
-							code.setNumUnknownErrors((double) (((double) (code
-									.getNumUnknownErrors())) + (allActiveEmpSoftwareEngineerErrorRateInCoding
-									* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
-									* (1 + ((allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous + allActiveAssociatedDesignDocumentDesignDocumentPercentErroneous) / 100 * 20))
-									* (1 + (2 - ((.5 * ((double) (code
-											.getCompletenessDiffReqDoc()))) + (2 * ((double) (code
-											.getCompletenessDiffDesDoc())))))) * (1 - allActiveDevelopmentEnvironmentIDEErrorRateDecreaseFactor))));
-							code.setPercentIntegrated((double) (((double) (code
-									.getAmountIntegrated()))
+							code.setNumUnknownErrors((double) (((double) (code.getNumUnknownErrors()))
+									+ (allActiveEmpSoftwareEngineerErrorRateInCoding
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + ((allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous
+													+ allActiveAssociatedDesignDocumentDesignDocumentPercentErroneous)
+													/ 100 * 20))
+											* (1 + (2 - ((.5 * ((double) (code.getCompletenessDiffReqDoc())))
+													+ (2 * ((double) (code.getCompletenessDiffDesDoc()))))))
+											* (1 - allActiveDevelopmentEnvironmentIDEErrorRateDecreaseFactor))));
+							code.setPercentIntegrated((double) (((double) (code.getAmountIntegrated()))
 									/ (((double) (code.getSize())) + .1) * 100));
 							double allActiveEmpSoftwareEngineerProductivityInCoding = 0;
 							for (int k = 0; k < allActiveEmps.size(); k++) {
@@ -1408,23 +1158,21 @@ public class RuleExecutor {
 								}
 							}
 							double allActiveDevelopmentEnvironmentIDEProductivityIncreaseFactor = 0;
-							for (int k = 0; k < allActiveDevelopmentEnvironments
-									.size(); k++) {
-								Object developmentenvironment3 = allActiveDevelopmentEnvironments
-										.elementAt(k);
+							for (int k = 0; k < allActiveDevelopmentEnvironments.size(); k++) {
+								Object developmentenvironment3 = allActiveDevelopmentEnvironments.elementAt(k);
 								if (developmentenvironment3 instanceof IDE) {
 									allActiveDevelopmentEnvironmentIDEProductivityIncreaseFactor += (double) (((IDE) developmentenvironment3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							code.setSize((double) (((double) (code.getSize())) + (allActiveEmpSoftwareEngineerProductivityInCoding
-									* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
-									* (1 + (((double) (code
-											.getCompletenessDiffDesDoc())) + (.5 * ((double) (code
-											.getCompletenessDiffReqDoc()))))) * (1 + allActiveDevelopmentEnvironmentIDEProductivityIncreaseFactor))));
+							code.setSize((double) (((double) (code.getSize()))
+									+ (allActiveEmpSoftwareEngineerProductivityInCoding
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + (((double) (code.getCompletenessDiffDesDoc()))
+													+ (.5 * ((double) (code.getCompletenessDiffReqDoc())))))
+											* (1 + allActiveDevelopmentEnvironmentIDEProductivityIncreaseFactor))));
 							double allActiveProjSEProjectRequiredSizeOfCode = 0;
-							Vector allActiveProjs = createcodeAct
-									.getAllActiveProjs();
+							Vector allActiveProjs = createcodeAct.getAllActiveProjs();
 							for (int k = 0; k < allActiveProjs.size(); k++) {
 								Object proj3 = allActiveProjs.elementAt(k);
 								if (proj3 instanceof SEProject) {
@@ -1432,8 +1180,7 @@ public class RuleExecutor {
 											.getRequiredSizeOfCode());
 								}
 							}
-							code.setPercentComplete((double) (((double) (code
-									.getSize()))
+							code.setPercentComplete((double) (((double) (code.getSize()))
 									/ allActiveProjSEProjectRequiredSizeOfCode * 100));
 						}
 					}
@@ -1447,35 +1194,28 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = createcodeAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Artifact> associateddesigndocuments = createcodeAct
-							.getAllActiveAssociatedDesignDocuments();
+					Vector<Artifact> associateddesigndocuments = createcodeAct.getAllActiveAssociatedDesignDocuments();
 					for (int j = 0; j < associateddesigndocuments.size(); j++) {
-						Artifact associateddesigndocument2 = associateddesigndocuments
-								.elementAt(j);
+						Artifact associateddesigndocument2 = associateddesigndocuments.elementAt(j);
 						if (associateddesigndocument2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndocument2;
 						}
 					}
-					Vector<Tool> developmentenvironments = createcodeAct
-							.getAllActiveDevelopmentEnvironments();
+					Vector<Tool> developmentenvironments = createcodeAct.getAllActiveDevelopmentEnvironments();
 					for (int j = 0; j < developmentenvironments.size(); j++) {
-						Tool developmentenvironment2 = developmentenvironments
-								.elementAt(j);
+						Tool developmentenvironment2 = developmentenvironments.elementAt(j);
 						if (developmentenvironment2 instanceof IDE) {
 							IDE ide = (IDE) developmentenvironment2;
 						}
 					}
-					Vector<Artifact> associatedsystemtestplans = createcodeAct
-							.getAllActiveAssociatedSystemTestPlans();
+					Vector<Artifact> associatedsystemtestplans = createcodeAct.getAllActiveAssociatedSystemTestPlans();
 					for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-						Artifact associatedsystemtestplan2 = associatedsystemtestplans
-								.elementAt(j);
+						Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 						if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 						}
@@ -1486,42 +1226,33 @@ public class RuleExecutor {
 	}
 
 	// ReviewRequirementsEffectRuleB rule (ReviewRequirements Action):
-	private void reviewRequirementsEffectRuleB(Stage gui,
-			int updateInstructions, String ruleName,
+	private void reviewRequirementsEffectRuleB(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<ReviewRequirementsAction> reviewrequirementsActs = state
-				.getActionStateRepository()
+		Vector<ReviewRequirementsAction> reviewrequirementsActs = state.getActionStateRepository()
 				.getReviewRequirementsActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < reviewrequirementsActs.size(); i++) {
-				ReviewRequirementsAction reviewrequirementsAct = reviewrequirementsActs
-						.elementAt(i);
+				ReviewRequirementsAction reviewrequirementsAct = reviewrequirementsActs.elementAt(i);
 				if ((reviewrequirementsAct.getAllEmps().size() >= 1)
-						&& (reviewrequirementsAct.getAllRequirementsDocs()
-								.size() >= 1)
+						&& (reviewrequirementsAct.getAllRequirementsDocs().size() >= 1)
 						&& (reviewrequirementsAct.getAllProjs().size() >= 1)) {
-					Vector<Employee> emps = reviewrequirementsAct
-							.getAllActiveEmps();
+					Vector<Employee> emps = reviewrequirementsAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> requirementsdocs = reviewrequirementsAct
-							.getAllActiveRequirementsDocs();
+					Vector<Artifact> requirementsdocs = reviewrequirementsAct.getAllActiveRequirementsDocs();
 					for (int j = 0; j < requirementsdocs.size(); j++) {
-						Artifact requirementsdoc2 = requirementsdocs
-								.elementAt(j);
+						Artifact requirementsdoc2 = requirementsdocs.elementAt(j);
 						if (requirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) requirementsdoc2;
-							requirementsdocument
-									.setNumUnknownTemp((double) (((double) (requirementsdocument
-											.getNumUnknownErrors()))));
+							requirementsdocument.setNumUnknownTemp(
+									(double) (((double) (requirementsdocument.getNumUnknownErrors()))));
 						}
 					}
-					Vector<Project> projs = reviewrequirementsAct
-							.getAllActiveProjs();
+					Vector<Project> projs = reviewrequirementsAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -1534,38 +1265,30 @@ public class RuleExecutor {
 	}
 
 	// ReviewRequirementsEffectRuleC rule (ReviewRequirements Action):
-	private void reviewRequirementsEffectRuleC(Stage gui,
-			int updateInstructions, String ruleName,
+	private void reviewRequirementsEffectRuleC(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<ReviewRequirementsAction> reviewrequirementsActs = state
-				.getActionStateRepository()
+		Vector<ReviewRequirementsAction> reviewrequirementsActs = state.getActionStateRepository()
 				.getReviewRequirementsActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < reviewrequirementsActs.size(); i++) {
-				ReviewRequirementsAction reviewrequirementsAct = reviewrequirementsActs
-						.elementAt(i);
+				ReviewRequirementsAction reviewrequirementsAct = reviewrequirementsActs.elementAt(i);
 				if ((reviewrequirementsAct.getAllEmps().size() >= 1)
-						&& (reviewrequirementsAct.getAllRequirementsDocs()
-								.size() >= 1)
+						&& (reviewrequirementsAct.getAllRequirementsDocs().size() >= 1)
 						&& (reviewrequirementsAct.getAllProjs().size() >= 1)) {
-					Vector<Employee> emps = reviewrequirementsAct
-							.getAllActiveEmps();
+					Vector<Employee> emps = reviewrequirementsAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> requirementsdocs = reviewrequirementsAct
-							.getAllActiveRequirementsDocs();
+					Vector<Artifact> requirementsdocs = reviewrequirementsAct.getAllActiveRequirementsDocs();
 					for (int j = 0; j < requirementsdocs.size(); j++) {
-						Artifact requirementsdoc2 = requirementsdocs
-								.elementAt(j);
+						Artifact requirementsdoc2 = requirementsdocs.elementAt(j);
 						if (requirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) requirementsdoc2;
 							double allActiveEmpSoftwareEngineerProductivityInRequirements = 0;
-							Vector allActiveEmps = reviewrequirementsAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = reviewrequirementsAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -1573,16 +1296,14 @@ public class RuleExecutor {
 											.getProductivityInRequirements());
 								}
 							}
-							double numEmp = (double) (reviewrequirementsAct
-									.getAllEmps().size());
-							requirementsdocument
-									.setNumUnknownErrors((double) (((double) (requirementsdocument
-											.getNumUnknownErrors())) - ((.5 * allActiveEmpSoftwareEngineerProductivityInRequirements) * (1 - (.01 * (numEmp
-											* (numEmp - 1) / 2))))));
+							double numEmp = (double) (reviewrequirementsAct.getAllEmps().size());
+							requirementsdocument.setNumUnknownErrors(
+									(double) (((double) (requirementsdocument.getNumUnknownErrors()))
+											- ((.5 * allActiveEmpSoftwareEngineerProductivityInRequirements)
+													* (1 - (.01 * (numEmp * (numEmp - 1) / 2))))));
 						}
 					}
-					Vector<Project> projs = reviewrequirementsAct
-							.getAllActiveProjs();
+					Vector<Project> projs = reviewrequirementsAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -1595,16 +1316,13 @@ public class RuleExecutor {
 	}
 
 	// ChangePayRateEffectRuleA rule (ChangePayRate Action):
-	private void changePayRateEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<ChangePayRateAction> changepayrateActs = state
-				.getActionStateRepository()
+	private void changePayRateEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<ChangePayRateAction> changepayrateActs = state.getActionStateRepository()
 				.getChangePayRateActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("ChangePayRateEffectRuleA"))) {
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("ChangePayRateEffectRuleA"))) {
 			for (int i = 0; i < changepayrateActs.size(); i++) {
-				ChangePayRateAction changepayrateAct = changepayrateActs
-						.elementAt(i);
+				ChangePayRateAction changepayrateAct = changepayrateActs.elementAt(i);
 				if (changepayrateAct == action) {
 					if ((changepayrateAct.getAllEmps().size() >= 1)) {
 						double inputNewPayRate = 0;
@@ -1622,8 +1340,7 @@ public class RuleExecutor {
 									try {
 										Double temp = new Double(response);
 										if (temp.doubleValue() >= 0.0) {
-											inputNewPayRate = (double) (temp
-													.doubleValue());
+											inputNewPayRate = (double) (temp.doubleValue());
 											gotValidInput0 = true;
 										} else {
 											Dialog<String> d2 = new Dialog<>();
@@ -1639,8 +1356,7 @@ public class RuleExecutor {
 									}
 								} else // action cancelled
 								{
-									state.getActionStateRepository()
-											.getChangePayRateActionStateRepository()
+									state.getActionStateRepository().getChangePayRateActionStateRepository()
 											.remove(changepayrateAct);
 									cancel = true;
 									break;
@@ -1648,72 +1364,81 @@ public class RuleExecutor {
 							}
 						}
 						if (gotValidInput0) {
-							Vector<Employee> emps = changepayrateAct
-									.getAllActiveEmps();
+							Vector<Employee> emps = changepayrateAct.getAllActiveEmps();
 							for (int j = 0; j < emps.size(); j++) {
 								Employee emp2 = emps.elementAt(j);
 								if (emp2 instanceof SoftwareEngineer) {
 									SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-									softwareengineer
-											.setProductivityInTestingUnadjusted((double) (((double) (softwareengineer
-													.getProductivityInTestingUnadjusted())) + ((((double) (softwareengineer
-													.getProductivityInTestingUnadjusted())) * ((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate())))) / 2)));
-									softwareengineer
-											.setErrorRateInTestingUnadjusted((double) (((double) (softwareengineer
-													.getErrorRateInTestingUnadjusted())) - ((((double) (softwareengineer
-													.getErrorRateInTestingUnadjusted())) * ((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate())))) / 2)));
-									softwareengineer
-											.setProductivityInRequirementsUnadjusted((double) (((double) (softwareengineer
-													.getProductivityInRequirementsUnadjusted())) + ((((double) (softwareengineer
-													.getProductivityInRequirementsUnadjusted())) * ((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate())))) / 2)));
-									softwareengineer
-											.setProductivityInDesignUnadjusted((double) (((double) (softwareengineer
-													.getProductivityInDesignUnadjusted())) + ((((double) (softwareengineer
-													.getProductivityInDesignUnadjusted())) * ((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate())))) / 2)));
-									softwareengineer
-											.setProductivityInCodingUnadjusted((double) (((double) (softwareengineer
-													.getProductivityInCodingUnadjusted())) + ((((double) (softwareengineer
-													.getProductivityInCodingUnadjusted())) * ((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate())))) / 2)));
+									softwareengineer.setProductivityInTestingUnadjusted(
+											(double) (((double) (softwareengineer.getProductivityInTestingUnadjusted()))
+													+ ((((double) (softwareengineer
+															.getProductivityInTestingUnadjusted()))
+															* ((inputNewPayRate
+																	- ((double) (softwareengineer.getPayRate())))
+																	/ ((double) (softwareengineer.getPayRate()))))
+															/ 2)));
+									softwareengineer.setErrorRateInTestingUnadjusted(
+											(double) (((double) (softwareengineer.getErrorRateInTestingUnadjusted()))
+													- ((((double) (softwareengineer.getErrorRateInTestingUnadjusted()))
+															* ((inputNewPayRate
+																	- ((double) (softwareengineer.getPayRate())))
+																	/ ((double) (softwareengineer.getPayRate()))))
+															/ 2)));
+									softwareengineer.setProductivityInRequirementsUnadjusted(
+											(double) (((double) (softwareengineer
+													.getProductivityInRequirementsUnadjusted()))
+													+ ((((double) (softwareengineer
+															.getProductivityInRequirementsUnadjusted()))
+															* ((inputNewPayRate
+																	- ((double) (softwareengineer.getPayRate())))
+																	/ ((double) (softwareengineer.getPayRate()))))
+															/ 2)));
+									softwareengineer.setProductivityInDesignUnadjusted(
+											(double) (((double) (softwareengineer.getProductivityInDesignUnadjusted()))
+													+ ((((double) (softwareengineer
+															.getProductivityInDesignUnadjusted()))
+															* ((inputNewPayRate
+																	- ((double) (softwareengineer.getPayRate())))
+																	/ ((double) (softwareengineer.getPayRate()))))
+															/ 2)));
+									softwareengineer.setProductivityInCodingUnadjusted(
+											(double) (((double) (softwareengineer.getProductivityInCodingUnadjusted()))
+													+ ((((double) (softwareengineer
+															.getProductivityInCodingUnadjusted()))
+															* ((inputNewPayRate
+																	- ((double) (softwareengineer.getPayRate())))
+																	/ ((double) (softwareengineer.getPayRate()))))
+															/ 2)));
 									softwareengineer
 											.setErrorRateInRequirementsUnadjusted((double) (((double) (softwareengineer
-													.getErrorRateInRequirementsUnadjusted())) - ((((double) (softwareengineer
-													.getErrorRateInRequirementsUnadjusted())) * ((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate())))) / 2)));
-									softwareengineer
-											.setErrorRateInDesignUnadjusted((double) (((double) (softwareengineer
-													.getErrorRateInDesignUnadjusted())) - ((((double) (softwareengineer
-													.getErrorRateInDesignUnadjusted())) * ((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate())))) / 2)));
-									softwareengineer
-											.setErrorRateInCodingUnadjusted((double) (((double) (softwareengineer
-													.getErrorRateInCodingUnadjusted())) - ((((double) (softwareengineer
-													.getErrorRateInCodingUnadjusted())) * ((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate())))) / 2)));
-									softwareengineer
-											.setEnergy((double) (((double) (softwareengineer
-													.getEnergy())) + (((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate()))) * 2)));
-									softwareengineer
-											.setMood((double) (((double) (softwareengineer
-													.getMood())) + ((inputNewPayRate - ((double) (softwareengineer
-													.getPayRate()))) / ((double) (softwareengineer
-													.getPayRate())))));
-									softwareengineer
-											.setPayRate((double) (inputNewPayRate));
+													.getErrorRateInRequirementsUnadjusted()))
+													- ((((double) (softwareengineer
+															.getErrorRateInRequirementsUnadjusted()))
+															* ((inputNewPayRate
+																	- ((double) (softwareengineer.getPayRate())))
+																	/ ((double) (softwareengineer.getPayRate()))))
+															/ 2)));
+									softwareengineer.setErrorRateInDesignUnadjusted(
+											(double) (((double) (softwareengineer.getErrorRateInDesignUnadjusted()))
+													- ((((double) (softwareengineer.getErrorRateInDesignUnadjusted()))
+															* ((inputNewPayRate
+																	- ((double) (softwareengineer.getPayRate())))
+																	/ ((double) (softwareengineer.getPayRate()))))
+															/ 2)));
+									softwareengineer.setErrorRateInCodingUnadjusted(
+											(double) (((double) (softwareengineer.getErrorRateInCodingUnadjusted()))
+													- ((((double) (softwareengineer.getErrorRateInCodingUnadjusted()))
+															* ((inputNewPayRate
+																	- ((double) (softwareengineer.getPayRate())))
+																	/ ((double) (softwareengineer.getPayRate()))))
+															/ 2)));
+									softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy()))
+											+ (((inputNewPayRate - ((double) (softwareengineer.getPayRate())))
+													/ ((double) (softwareengineer.getPayRate()))) * 2)));
+									softwareengineer.setMood((double) (((double) (softwareengineer.getMood()))
+											+ ((inputNewPayRate - ((double) (softwareengineer.getPayRate())))
+													/ ((double) (softwareengineer.getPayRate())))));
+									softwareengineer.setPayRate((double) (inputNewPayRate));
 								}
 							}
 						}
@@ -1724,67 +1449,51 @@ public class RuleExecutor {
 	}
 
 	// ReviewRequirementsEffectRuleA rule (ReviewRequirements Action):
-	private void reviewRequirementsEffectRuleA(Stage gui,
-			int updateInstructions, String ruleName,
+	private void reviewRequirementsEffectRuleA(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<ReviewRequirementsAction> reviewrequirementsActs = state
-				.getActionStateRepository()
+		Vector<ReviewRequirementsAction> reviewrequirementsActs = state.getActionStateRepository()
 				.getReviewRequirementsActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < reviewrequirementsActs.size(); i++) {
-				ReviewRequirementsAction reviewrequirementsAct = reviewrequirementsActs
-						.elementAt(i);
+				ReviewRequirementsAction reviewrequirementsAct = reviewrequirementsActs.elementAt(i);
 				if ((reviewrequirementsAct.getAllEmps().size() >= 1)
-						&& (reviewrequirementsAct.getAllRequirementsDocs()
-								.size() >= 1)
+						&& (reviewrequirementsAct.getAllRequirementsDocs().size() >= 1)
 						&& (reviewrequirementsAct.getAllProjs().size() >= 1)) {
-					Vector<Employee> emps = reviewrequirementsAct
-							.getAllActiveEmps();
+					Vector<Employee> emps = reviewrequirementsAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInRequirements((double) ((((double) (softwareengineer
-											.getProductivityInRequirementsUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInRequirements((double) ((((double) (softwareengineer
-											.getErrorRateInRequirementsUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInRequirements(
+									(double) ((((double) (softwareengineer.getProductivityInRequirementsUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInRequirements(
+									(double) ((((double) (softwareengineer.getErrorRateInRequirementsUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> requirementsdocs = reviewrequirementsAct
-							.getAllActiveRequirementsDocs();
+					Vector<Artifact> requirementsdocs = reviewrequirementsAct.getAllActiveRequirementsDocs();
 					for (int j = 0; j < requirementsdocs.size(); j++) {
-						Artifact requirementsdoc2 = requirementsdocs
-								.elementAt(j);
+						Artifact requirementsdoc2 = requirementsdocs.elementAt(j);
 						if (requirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) requirementsdoc2;
+							requirementsdocument.setPercentErroneous(
+									(double) ((((double) (requirementsdocument.getNumKnownErrors()))
+											+ ((double) (requirementsdocument.getNumUnknownErrors())))
+											/ (((double) (requirementsdocument.getSize())) + .1) * 100));
 							requirementsdocument
-									.setPercentErroneous((double) ((((double) (requirementsdocument
-											.getNumKnownErrors())) + ((double) (requirementsdocument
-											.getNumUnknownErrors())))
-											/ (((double) (requirementsdocument
-													.getSize())) + .1) * 100));
-							requirementsdocument
-									.setNumKnownErrors((double) (((double) (requirementsdocument
-											.getNumKnownErrors())) + (((double) (requirementsdocument
-											.getNumUnknownTemp())) - ((double) (requirementsdocument
-											.getNumUnknownErrors())))));
+									.setNumKnownErrors((double) (((double) (requirementsdocument.getNumKnownErrors()))
+											+ (((double) (requirementsdocument.getNumUnknownTemp()))
+													- ((double) (requirementsdocument.getNumUnknownErrors())))));
 						}
 					}
-					Vector<Project> projs = reviewrequirementsAct
-							.getAllActiveProjs();
+					Vector<Project> projs = reviewrequirementsAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -1798,31 +1507,21 @@ public class RuleExecutor {
 
 	// IntroduceNewRequirementsEffectRuleA rule (IntroduceNewRequirements
 	// Action):
-	private void introduceNewRequirementsEffectRuleA(Stage gui,
-			int updateInstructions, String ruleName,
+	private void introduceNewRequirementsEffectRuleA(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<IntroduceNewRequirementsAction> introducenewrequirementsActs = state
-				.getActionStateRepository()
-				.getIntroduceNewRequirementsActionStateRepository()
-				.getAllActions();
+		Vector<IntroduceNewRequirementsAction> introducenewrequirementsActs = state.getActionStateRepository()
+				.getIntroduceNewRequirementsActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < introducenewrequirementsActs.size(); i++) {
-				IntroduceNewRequirementsAction introducenewrequirementsAct = introducenewrequirementsActs
-						.elementAt(i);
+				IntroduceNewRequirementsAction introducenewrequirementsAct = introducenewrequirementsActs.elementAt(i);
 				if ((introducenewrequirementsAct.getAllCusts().size() >= 1)
-						&& (introducenewrequirementsAct
-								.getAllAssociatedRequirementsDocuments().size() >= 1)
+						&& (introducenewrequirementsAct.getAllAssociatedRequirementsDocuments().size() >= 1)
 						&& (introducenewrequirementsAct.getAllProjs().size() >= 1)
-						&& (introducenewrequirementsAct
-								.getAllEmpWOverheadTexts().size() >= 1)
-						&& (introducenewrequirementsAct.getAllAssociatedCodes()
-								.size() >= 1)
-						&& (introducenewrequirementsAct
-								.getAllAssociatedDesignDocuments().size() >= 1)
-						&& (introducenewrequirementsAct
-								.getAllAssociatedSystemTestPlans().size() >= 1)) {
-					Vector<Customer> custs = introducenewrequirementsAct
-							.getAllActiveCusts();
+						&& (introducenewrequirementsAct.getAllEmpWOverheadTexts().size() >= 1)
+						&& (introducenewrequirementsAct.getAllAssociatedCodes().size() >= 1)
+						&& (introducenewrequirementsAct.getAllAssociatedDesignDocuments().size() >= 1)
+						&& (introducenewrequirementsAct.getAllAssociatedSystemTestPlans().size() >= 1)) {
+					Vector<Customer> custs = introducenewrequirementsAct.getAllActiveCusts();
 					for (int j = 0; j < custs.size(); j++) {
 						Customer cust2 = custs.elementAt(j);
 						if (cust2 instanceof ACustomer) {
@@ -1832,13 +1531,11 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocuments = introducenewrequirementsAct
 							.getAllActiveAssociatedRequirementsDocuments();
 					for (int j = 0; j < associatedrequirementsdocuments.size(); j++) {
-						Artifact associatedrequirementsdocument2 = associatedrequirementsdocuments
-								.elementAt(j);
+						Artifact associatedrequirementsdocument2 = associatedrequirementsdocuments.elementAt(j);
 						if (associatedrequirementsdocument2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdocument2;
 							double allActiveProjSEProjectRequiredSizeOfCode = 0;
-							Vector allActiveProjs = introducenewrequirementsAct
-									.getAllActiveProjs();
+							Vector allActiveProjs = introducenewrequirementsAct.getAllActiveProjs();
 							for (int k = 0; k < allActiveProjs.size(); k++) {
 								Object proj3 = allActiveProjs.elementAt(k);
 								if (proj3 instanceof SEProject) {
@@ -1847,48 +1544,37 @@ public class RuleExecutor {
 								}
 							}
 							requirementsdocument
-									.setPercentComplete((double) (((double) (requirementsdocument
-											.getSize()))
+									.setPercentComplete((double) (((double) (requirementsdocument.getSize()))
 											/ allActiveProjSEProjectRequiredSizeOfCode * 100));
 						}
 					}
-					Vector<Project> projs = introducenewrequirementsAct
-							.getAllActiveProjs();
+					Vector<Project> projs = introducenewrequirementsAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
 							SEProject seproject = (SEProject) proj2;
-							seproject
-									.setRequiredSizeOfCode((int) (((double) (seproject
-											.getRequiredSizeOfCode())) + ((double) ((ranNumGen
-											.nextInt(5 - 1 + 1) + 1)))));
-							seproject.setBudget((double) (((double) (seproject
-									.getBudget())) + ((double) ((ranNumGen
-									.nextInt(1000 - 0 + 1) + 0)))));
-							seproject
-									.setAllottedTime((int) (((double) (seproject
-											.getAllottedTime())) + ((double) ((ranNumGen
-											.nextInt(15 - 0 + 1) + 0)))));
+							seproject.setRequiredSizeOfCode((int) (((double) (seproject.getRequiredSizeOfCode()))
+									+ ((double) ((ranNumGen.nextInt(5 - 1 + 1) + 1)))));
+							seproject.setBudget((double) (((double) (seproject.getBudget()))
+									+ ((double) ((ranNumGen.nextInt(1000 - 0 + 1) + 0)))));
+							seproject.setAllottedTime((int) (((double) (seproject.getAllottedTime()))
+									+ ((double) ((ranNumGen.nextInt(15 - 0 + 1) + 0)))));
 						}
 					}
-					Vector<Employee> empwoverheadtexts = introducenewrequirementsAct
-							.getAllActiveEmpWOverheadTexts();
+					Vector<Employee> empwoverheadtexts = introducenewrequirementsAct.getAllActiveEmpWOverheadTexts();
 					for (int j = 0; j < empwoverheadtexts.size(); j++) {
-						Employee empwoverheadtext2 = empwoverheadtexts
-								.elementAt(j);
+						Employee empwoverheadtext2 = empwoverheadtexts.elementAt(j);
 						if (empwoverheadtext2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) empwoverheadtext2;
 						}
 					}
-					Vector<Artifact> associatedcodes = introducenewrequirementsAct
-							.getAllActiveAssociatedCodes();
+					Vector<Artifact> associatedcodes = introducenewrequirementsAct.getAllActiveAssociatedCodes();
 					for (int j = 0; j < associatedcodes.size(); j++) {
 						Artifact associatedcode2 = associatedcodes.elementAt(j);
 						if (associatedcode2 instanceof Code) {
 							Code code = (Code) associatedcode2;
 							double allActiveProjSEProjectRequiredSizeOfCode = 0;
-							Vector allActiveProjs = introducenewrequirementsAct
-									.getAllActiveProjs();
+							Vector allActiveProjs = introducenewrequirementsAct.getAllActiveProjs();
 							for (int k = 0; k < allActiveProjs.size(); k++) {
 								Object proj3 = allActiveProjs.elementAt(k);
 								if (proj3 instanceof SEProject) {
@@ -1896,21 +1582,18 @@ public class RuleExecutor {
 											.getRequiredSizeOfCode());
 								}
 							}
-							code.setPercentComplete((double) (((double) (code
-									.getSize()))
+							code.setPercentComplete((double) (((double) (code.getSize()))
 									/ allActiveProjSEProjectRequiredSizeOfCode * 100));
 						}
 					}
 					Vector<Artifact> associateddesigndocuments = introducenewrequirementsAct
 							.getAllActiveAssociatedDesignDocuments();
 					for (int j = 0; j < associateddesigndocuments.size(); j++) {
-						Artifact associateddesigndocument2 = associateddesigndocuments
-								.elementAt(j);
+						Artifact associateddesigndocument2 = associateddesigndocuments.elementAt(j);
 						if (associateddesigndocument2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndocument2;
 							double allActiveProjSEProjectRequiredSizeOfCode = 0;
-							Vector allActiveProjs = introducenewrequirementsAct
-									.getAllActiveProjs();
+							Vector allActiveProjs = introducenewrequirementsAct.getAllActiveProjs();
 							for (int k = 0; k < allActiveProjs.size(); k++) {
 								Object proj3 = allActiveProjs.elementAt(k);
 								if (proj3 instanceof SEProject) {
@@ -1918,22 +1601,18 @@ public class RuleExecutor {
 											.getRequiredSizeOfCode());
 								}
 							}
-							designdocument
-									.setPercentComplete((double) (((double) (designdocument
-											.getSize()))
-											/ allActiveProjSEProjectRequiredSizeOfCode * 100));
+							designdocument.setPercentComplete((double) (((double) (designdocument.getSize()))
+									/ allActiveProjSEProjectRequiredSizeOfCode * 100));
 						}
 					}
 					Vector<Artifact> associatedsystemtestplans = introducenewrequirementsAct
 							.getAllActiveAssociatedSystemTestPlans();
 					for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-						Artifact associatedsystemtestplan2 = associatedsystemtestplans
-								.elementAt(j);
+						Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 						if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 							double allActiveProjSEProjectRequiredSizeOfCode = 0;
-							Vector allActiveProjs = introducenewrequirementsAct
-									.getAllActiveProjs();
+							Vector allActiveProjs = introducenewrequirementsAct.getAllActiveProjs();
 							for (int k = 0; k < allActiveProjs.size(); k++) {
 								Object proj3 = allActiveProjs.elementAt(k);
 								if (proj3 instanceof SEProject) {
@@ -1941,10 +1620,8 @@ public class RuleExecutor {
 											.getRequiredSizeOfCode());
 								}
 							}
-							systemtestplan
-									.setPercentComplete((double) (((double) (systemtestplan
-											.getSize()))
-											/ allActiveProjSEProjectRequiredSizeOfCode * 100));
+							systemtestplan.setPercentComplete((double) (((double) (systemtestplan.getSize()))
+									/ allActiveProjSEProjectRequiredSizeOfCode * 100));
 						}
 					}
 				}
@@ -1953,85 +1630,70 @@ public class RuleExecutor {
 	}
 
 	// CreateSystemTestPlanEffectRuleFirst rule (CreateSystemTestPlan Action):
-	private void createSystemTestPlanEffectRuleFirst(Stage gui,
-			int updateInstructions, String ruleName,
+	private void createSystemTestPlanEffectRuleFirst(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<CreateSystemTestPlanAction> createsystemtestplanActs = state
-				.getActionStateRepository()
+		Vector<CreateSystemTestPlanAction> createsystemtestplanActs = state.getActionStateRepository()
 				.getCreateSystemTestPlanActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < createsystemtestplanActs.size(); i++) {
-				CreateSystemTestPlanAction createsystemtestplanAct = createsystemtestplanActs
-						.elementAt(i);
+				CreateSystemTestPlanAction createsystemtestplanAct = createsystemtestplanActs.elementAt(i);
 				if ((createsystemtestplanAct.getAllEmps().size() >= 1)
-						&& (createsystemtestplanAct.getAllAssociatedCodeDocs()
-								.size() >= 1)
+						&& (createsystemtestplanAct.getAllAssociatedCodeDocs().size() >= 1)
 						&& (createsystemtestplanAct.getAllProjs().size() >= 1)
-						&& (createsystemtestplanAct.getAllSystemTestPlanDocs()
-								.size() >= 1)
-						&& (createsystemtestplanAct
-								.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (createsystemtestplanAct.getAllSystemTestPlanDocs().size() >= 1)
+						&& (createsystemtestplanAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (createsystemtestplanAct.getAllTestingTools().size() >= 0)) {
-					Vector<Employee> emps = createsystemtestplanAct
-							.getAllActiveEmps();
+					Vector<Employee> emps = createsystemtestplanAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> associatedcodedocs = createsystemtestplanAct
-							.getAllActiveAssociatedCodeDocs();
+					Vector<Artifact> associatedcodedocs = createsystemtestplanAct.getAllActiveAssociatedCodeDocs();
 					for (int j = 0; j < associatedcodedocs.size(); j++) {
-						Artifact associatedcodedoc2 = associatedcodedocs
-								.elementAt(j);
+						Artifact associatedcodedoc2 = associatedcodedocs.elementAt(j);
 						if (associatedcodedoc2 instanceof Code) {
 							Code code = (Code) associatedcodedoc2;
 						}
 					}
-					Vector<Project> projs = createsystemtestplanAct
-							.getAllActiveProjs();
+					Vector<Project> projs = createsystemtestplanAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
 							SEProject seproject = (SEProject) proj2;
 						}
 					}
-					Vector<Artifact> systemtestplandocs = createsystemtestplanAct
-							.getAllActiveSystemTestPlanDocs();
+					Vector<Artifact> systemtestplandocs = createsystemtestplanAct.getAllActiveSystemTestPlanDocs();
 					for (int j = 0; j < systemtestplandocs.size(); j++) {
-						Artifact systemtestplandoc2 = systemtestplandocs
-								.elementAt(j);
+						Artifact systemtestplandoc2 = systemtestplandocs.elementAt(j);
 						if (systemtestplandoc2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) systemtestplandoc2;
 							double allAssociatedRequirementsDocRequirementsDocumentPercentComplete = 0;
 							Vector allAssociatedRequirementsDocs = createsystemtestplanAct
 									.getAllAssociatedRequirementsDocs();
-							for (int k = 0; k < allAssociatedRequirementsDocs
-									.size(); k++) {
-								Object associatedrequirementsdoc3 = allAssociatedRequirementsDocs
-										.elementAt(k);
+							for (int k = 0; k < allAssociatedRequirementsDocs.size(); k++) {
+								Object associatedrequirementsdoc3 = allAssociatedRequirementsDocs.elementAt(k);
 								if (associatedrequirementsdoc3 instanceof RequirementsDocument) {
 									allAssociatedRequirementsDocRequirementsDocumentPercentComplete += (double) (((RequirementsDocument) associatedrequirementsdoc3)
 											.getPercentComplete());
 								}
 							}
-							systemtestplan
-									.setCompletnessDiffReqDoc((int) ((((allAssociatedRequirementsDocRequirementsDocumentPercentComplete - ((double) (systemtestplan
-											.getPercentComplete()))) / 100) + .001) * 100000));
+							systemtestplan.setCompletnessDiffReqDoc(
+									(int) ((((allAssociatedRequirementsDocRequirementsDocumentPercentComplete
+											- ((double) (systemtestplan.getPercentComplete()))) / 100) + .001)
+											* 100000));
 						}
 					}
 					Vector<Artifact> associatedrequirementsdocs = createsystemtestplanAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Tool> testingtools = createsystemtestplanAct
-							.getAllActiveTestingTools();
+					Vector<Tool> testingtools = createsystemtestplanAct.getAllActiveTestingTools();
 					for (int j = 0; j < testingtools.size(); j++) {
 						Tool testingtool2 = testingtools.elementAt(j);
 						if (testingtool2 instanceof AutomatedTestingTool) {
@@ -2044,98 +1706,77 @@ public class RuleExecutor {
 	}
 
 	// CreateSystemTestPlanEffectRuleA rule (CreateSystemTestPlan Action):
-	private void createSystemTestPlanEffectRuleA(Stage gui,
-			int updateInstructions, String ruleName,
+	private void createSystemTestPlanEffectRuleA(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<CreateSystemTestPlanAction> createsystemtestplanActs = state
-				.getActionStateRepository()
+		Vector<CreateSystemTestPlanAction> createsystemtestplanActs = state.getActionStateRepository()
 				.getCreateSystemTestPlanActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < createsystemtestplanActs.size(); i++) {
-				CreateSystemTestPlanAction createsystemtestplanAct = createsystemtestplanActs
-						.elementAt(i);
+				CreateSystemTestPlanAction createsystemtestplanAct = createsystemtestplanActs.elementAt(i);
 				if ((createsystemtestplanAct.getAllEmps().size() >= 1)
-						&& (createsystemtestplanAct.getAllAssociatedCodeDocs()
-								.size() >= 1)
+						&& (createsystemtestplanAct.getAllAssociatedCodeDocs().size() >= 1)
 						&& (createsystemtestplanAct.getAllProjs().size() >= 1)
-						&& (createsystemtestplanAct.getAllSystemTestPlanDocs()
-								.size() >= 1)
-						&& (createsystemtestplanAct
-								.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (createsystemtestplanAct.getAllSystemTestPlanDocs().size() >= 1)
+						&& (createsystemtestplanAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (createsystemtestplanAct.getAllTestingTools().size() >= 0)) {
-					Vector<Employee> emps = createsystemtestplanAct
-							.getAllActiveEmps();
+					Vector<Employee> emps = createsystemtestplanAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInTesting((double) ((((double) (softwareengineer
-											.getProductivityInTestingUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInTesting((double) ((((double) (softwareengineer
-											.getErrorRateInTestingUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
+							softwareengineer.setProductivityInTesting(
+									(double) ((((double) (softwareengineer.getProductivityInTestingUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInTesting(
+									(double) ((((double) (softwareengineer.getErrorRateInTestingUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
 						}
 					}
-					Vector<Artifact> associatedcodedocs = createsystemtestplanAct
-							.getAllActiveAssociatedCodeDocs();
+					Vector<Artifact> associatedcodedocs = createsystemtestplanAct.getAllActiveAssociatedCodeDocs();
 					for (int j = 0; j < associatedcodedocs.size(); j++) {
-						Artifact associatedcodedoc2 = associatedcodedocs
-								.elementAt(j);
+						Artifact associatedcodedoc2 = associatedcodedocs.elementAt(j);
 						if (associatedcodedoc2 instanceof Code) {
 							Code code = (Code) associatedcodedoc2;
 						}
 					}
-					Vector<Project> projs = createsystemtestplanAct
-							.getAllActiveProjs();
+					Vector<Project> projs = createsystemtestplanAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
 							SEProject seproject = (SEProject) proj2;
 						}
 					}
-					Vector<Artifact> systemtestplandocs = createsystemtestplanAct
-							.getAllActiveSystemTestPlanDocs();
+					Vector<Artifact> systemtestplandocs = createsystemtestplanAct.getAllActiveSystemTestPlanDocs();
 					for (int j = 0; j < systemtestplandocs.size(); j++) {
-						Artifact systemtestplandoc2 = systemtestplandocs
-								.elementAt(j);
+						Artifact systemtestplandoc2 = systemtestplandocs.elementAt(j);
 						if (systemtestplandoc2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) systemtestplandoc2;
 							double allAssociatedRequirementsDocRequirementsDocumentPercentComplete = 0;
 							Vector allAssociatedRequirementsDocs = createsystemtestplanAct
 									.getAllAssociatedRequirementsDocs();
-							for (int k = 0; k < allAssociatedRequirementsDocs
-									.size(); k++) {
-								Object associatedrequirementsdoc3 = allAssociatedRequirementsDocs
-										.elementAt(k);
+							for (int k = 0; k < allAssociatedRequirementsDocs.size(); k++) {
+								Object associatedrequirementsdoc3 = allAssociatedRequirementsDocs.elementAt(k);
 								if (associatedrequirementsdoc3 instanceof RequirementsDocument) {
 									allAssociatedRequirementsDocRequirementsDocumentPercentComplete += (double) (((RequirementsDocument) associatedrequirementsdoc3)
 											.getPercentComplete());
 								}
 							}
+							systemtestplan.setCompletnessDiffReqDoc(
+									(int) ((((allAssociatedRequirementsDocRequirementsDocumentPercentComplete
+											- ((double) (systemtestplan.getPercentComplete()))) / 100) + .001)
+											* 100000));
 							systemtestplan
-									.setCompletnessDiffReqDoc((int) ((((allAssociatedRequirementsDocRequirementsDocumentPercentComplete - ((double) (systemtestplan
-											.getPercentComplete()))) / 100) + .001) * 100000));
-							systemtestplan
-									.setPercentErroneous((double) ((((double) (systemtestplan
-											.getNumKnownErrors())) + ((double) (systemtestplan
-											.getNumUnknownErrors())))
-											/ (((double) (systemtestplan
-													.getSize())) + .1) * 100));
+									.setPercentErroneous((double) ((((double) (systemtestplan.getNumKnownErrors()))
+											+ ((double) (systemtestplan.getNumUnknownErrors())))
+											/ (((double) (systemtestplan.getSize())) + .1) * 100));
 							double allActiveEmpSoftwareEngineerErrorRateInTesting = 0;
-							Vector allActiveEmps = createsystemtestplanAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = createsystemtestplanAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -2143,49 +1784,45 @@ public class RuleExecutor {
 											.getErrorRateInTesting());
 								}
 							}
-							double numEmp = (double) (createsystemtestplanAct
-									.getAllEmps().size());
+							double numEmp = (double) (createsystemtestplanAct.getAllEmps().size());
 							double allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous = 0;
 							Vector allActiveAssociatedRequirementsDocs = createsystemtestplanAct
 									.getAllActiveAssociatedRequirementsDocs();
-							for (int k = 0; k < allActiveAssociatedRequirementsDocs
-									.size(); k++) {
-								Object associatedrequirementsdoc3 = allActiveAssociatedRequirementsDocs
-										.elementAt(k);
+							for (int k = 0; k < allActiveAssociatedRequirementsDocs.size(); k++) {
+								Object associatedrequirementsdoc3 = allActiveAssociatedRequirementsDocs.elementAt(k);
 								if (associatedrequirementsdoc3 instanceof RequirementsDocument) {
 									allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous += (double) (((RequirementsDocument) associatedrequirementsdoc3)
 											.getPercentErroneous());
 								}
 							}
 							double allActiveAssociatedRequirementsDocRequirementsDocumentPercentComplete = 0;
-							for (int k = 0; k < allActiveAssociatedRequirementsDocs
-									.size(); k++) {
-								Object associatedrequirementsdoc3 = allActiveAssociatedRequirementsDocs
-										.elementAt(k);
+							for (int k = 0; k < allActiveAssociatedRequirementsDocs.size(); k++) {
+								Object associatedrequirementsdoc3 = allActiveAssociatedRequirementsDocs.elementAt(k);
 								if (associatedrequirementsdoc3 instanceof RequirementsDocument) {
 									allActiveAssociatedRequirementsDocRequirementsDocumentPercentComplete += (double) (((RequirementsDocument) associatedrequirementsdoc3)
 											.getPercentComplete());
 								}
 							}
 							double allActiveTestingToolAutomatedTestingToolErrorRateDecreaseFactor = 0;
-							Vector allActiveTestingTools = createsystemtestplanAct
-									.getAllActiveTestingTools();
+							Vector allActiveTestingTools = createsystemtestplanAct.getAllActiveTestingTools();
 							for (int k = 0; k < allActiveTestingTools.size(); k++) {
-								Object testingtool3 = allActiveTestingTools
-										.elementAt(k);
+								Object testingtool3 = allActiveTestingTools.elementAt(k);
 								if (testingtool3 instanceof AutomatedTestingTool) {
 									allActiveTestingToolAutomatedTestingToolErrorRateDecreaseFactor += (double) (((AutomatedTestingTool) testingtool3)
 											.getErrorRateDecreaseFactor());
 								}
 							}
-							systemtestplan
-									.setNumUnknownErrors((double) (((double) (systemtestplan
-											.getNumUnknownErrors())) + (allActiveEmpSoftwareEngineerErrorRateInTesting
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2)))
-											* (1 + (allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous / 100 * 20))
-											* (1 + (1 - allActiveAssociatedRequirementsDocRequirementsDocumentPercentComplete / 100 / 2))
-											* (1 - allActiveTestingToolAutomatedTestingToolErrorRateDecreaseFactor) * 2)));
+							systemtestplan.setNumUnknownErrors((double) (((double) (systemtestplan
+									.getNumUnknownErrors()))
+									+ (allActiveEmpSoftwareEngineerErrorRateInTesting
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + (allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous
+													/ 100 * 20))
+											* (1 + (1
+													- allActiveAssociatedRequirementsDocRequirementsDocumentPercentComplete
+															/ 100 / 2))
+											* (1 - allActiveTestingToolAutomatedTestingToolErrorRateDecreaseFactor)
+											* 2)));
 							double allActiveEmpSoftwareEngineerProductivityInTesting = 0;
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
@@ -2196,22 +1833,22 @@ public class RuleExecutor {
 							}
 							double allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor = 0;
 							for (int k = 0; k < allActiveTestingTools.size(); k++) {
-								Object testingtool3 = allActiveTestingTools
-										.elementAt(k);
+								Object testingtool3 = allActiveTestingTools.elementAt(k);
 								if (testingtool3 instanceof AutomatedTestingTool) {
 									allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor += (double) (((AutomatedTestingTool) testingtool3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							systemtestplan
-									.setSize((double) (((double) (systemtestplan
-											.getSize())) + ((allActiveEmpSoftwareEngineerProductivityInTesting
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2)))
-											* (1 + (2 * allActiveAssociatedRequirementsDocRequirementsDocumentPercentComplete / 100)) * (1 + allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor)) * 2)));
+							systemtestplan.setSize((double) (((double) (systemtestplan.getSize()))
+									+ ((allActiveEmpSoftwareEngineerProductivityInTesting
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + (2
+													* allActiveAssociatedRequirementsDocRequirementsDocumentPercentComplete
+													/ 100))
+											* (1 + allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor))
+											* 2)));
 							double allActiveProjSEProjectRequiredSizeOfCode = 0;
-							Vector allActiveProjs = createsystemtestplanAct
-									.getAllActiveProjs();
+							Vector allActiveProjs = createsystemtestplanAct.getAllActiveProjs();
 							for (int k = 0; k < allActiveProjs.size(); k++) {
 								Object proj3 = allActiveProjs.elementAt(k);
 								if (proj3 instanceof SEProject) {
@@ -2219,23 +1856,19 @@ public class RuleExecutor {
 											.getRequiredSizeOfCode());
 								}
 							}
-							systemtestplan
-									.setPercentComplete((double) (((double) (systemtestplan
-											.getSize()))
-											/ allActiveProjSEProjectRequiredSizeOfCode * 100));
+							systemtestplan.setPercentComplete((double) (((double) (systemtestplan.getSize()))
+									/ allActiveProjSEProjectRequiredSizeOfCode * 100));
 						}
 					}
 					Vector<Artifact> associatedrequirementsdocs = createsystemtestplanAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Tool> testingtools = createsystemtestplanAct
-							.getAllActiveTestingTools();
+					Vector<Tool> testingtools = createsystemtestplanAct.getAllActiveTestingTools();
 					for (int j = 0; j < testingtools.size(); j++) {
 						Tool testingtool2 = testingtools.elementAt(j);
 						if (testingtool2 instanceof AutomatedTestingTool) {
@@ -2248,40 +1881,34 @@ public class RuleExecutor {
 	}
 
 	// SystemTestEffectRuleFirst rule (SystemTest Action):
-	private void systemTestEffectRuleFirst(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<SystemTestAction> systemtestActs = state
-				.getActionStateRepository()
-				.getSystemTestActionStateRepository().getAllActions();
+	private void systemTestEffectRuleFirst(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<SystemTestAction> systemtestActs = state.getActionStateRepository().getSystemTestActionStateRepository()
+				.getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < systemtestActs.size(); i++) {
 				SystemTestAction systemtestAct = systemtestActs.elementAt(i);
-				if ((systemtestAct.getAllCodeDocs().size() >= 1)
-						&& (systemtestAct.getAllProjs().size() >= 1)
+				if ((systemtestAct.getAllCodeDocs().size() >= 1) && (systemtestAct.getAllProjs().size() >= 1)
 						&& (systemtestAct.getAllEmps().size() >= 1)
-						&& (systemtestAct.getAllAssociatedSystemTestPlans()
-								.size() >= 1)
+						&& (systemtestAct.getAllAssociatedSystemTestPlans().size() >= 1)
 						&& (systemtestAct.getAllTestingTools().size() >= 0)) {
-					Vector<Artifact> codedocs = systemtestAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = systemtestAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
 							double allAssociatedSystemTestPlanSystemTestPlanPercentComplete = 0;
-							Vector allAssociatedSystemTestPlans = systemtestAct
-									.getAllAssociatedSystemTestPlans();
-							for (int k = 0; k < allAssociatedSystemTestPlans
-									.size(); k++) {
-								Object associatedsystemtestplan3 = allAssociatedSystemTestPlans
-										.elementAt(k);
+							Vector allAssociatedSystemTestPlans = systemtestAct.getAllAssociatedSystemTestPlans();
+							for (int k = 0; k < allAssociatedSystemTestPlans.size(); k++) {
+								Object associatedsystemtestplan3 = allAssociatedSystemTestPlans.elementAt(k);
 								if (associatedsystemtestplan3 instanceof SystemTestPlan) {
 									allAssociatedSystemTestPlanSystemTestPlanPercentComplete += (double) (((SystemTestPlan) associatedsystemtestplan3)
 											.getPercentComplete());
 								}
 							}
-							code.setCompletenessDiffTestPlan((int) ((((allAssociatedSystemTestPlanSystemTestPlanPercentComplete - ((double) (code
-									.getPercentComplete()))) / 100) + .001) * 100000));
+							code.setCompletenessDiffTestPlan(
+									(int) ((((allAssociatedSystemTestPlanSystemTestPlanPercentComplete
+											- ((double) (code.getPercentComplete()))) / 100) + .001) * 100000));
 						}
 					}
 					Vector<Project> projs = systemtestAct.getAllActiveProjs();
@@ -2298,17 +1925,14 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> associatedsystemtestplans = systemtestAct
-							.getAllActiveAssociatedSystemTestPlans();
+					Vector<Artifact> associatedsystemtestplans = systemtestAct.getAllActiveAssociatedSystemTestPlans();
 					for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-						Artifact associatedsystemtestplan2 = associatedsystemtestplans
-								.elementAt(j);
+						Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 						if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 						}
 					}
-					Vector<Tool> testingtools = systemtestAct
-							.getAllActiveTestingTools();
+					Vector<Tool> testingtools = systemtestAct.getAllActiveTestingTools();
 					for (int j = 0; j < testingtools.size(); j++) {
 						Tool testingtool2 = testingtools.elementAt(j);
 						if (testingtool2 instanceof AutomatedTestingTool) {
@@ -2321,28 +1945,23 @@ public class RuleExecutor {
 	}
 
 	// SystemTestEffectRuleC rule (SystemTest Action):
-	private void systemTestEffectRuleC(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<SystemTestAction> systemtestActs = state
-				.getActionStateRepository()
-				.getSystemTestActionStateRepository().getAllActions();
+	private void systemTestEffectRuleC(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<SystemTestAction> systemtestActs = state.getActionStateRepository().getSystemTestActionStateRepository()
+				.getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < systemtestActs.size(); i++) {
 				SystemTestAction systemtestAct = systemtestActs.elementAt(i);
-				if ((systemtestAct.getAllCodeDocs().size() >= 1)
-						&& (systemtestAct.getAllProjs().size() >= 1)
+				if ((systemtestAct.getAllCodeDocs().size() >= 1) && (systemtestAct.getAllProjs().size() >= 1)
 						&& (systemtestAct.getAllEmps().size() >= 1)
-						&& (systemtestAct.getAllAssociatedSystemTestPlans()
-								.size() >= 1)
+						&& (systemtestAct.getAllAssociatedSystemTestPlans().size() >= 1)
 						&& (systemtestAct.getAllTestingTools().size() >= 0)) {
-					Vector<Artifact> codedocs = systemtestAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = systemtestAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
-							code.setNumUnknownTemp((double) (((double) (code
-									.getNumUnknownErrors()))));
+							code.setNumUnknownTemp((double) (((double) (code.getNumUnknownErrors()))));
 						}
 					}
 					Vector<Project> projs = systemtestAct.getAllActiveProjs();
@@ -2359,17 +1978,14 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> associatedsystemtestplans = systemtestAct
-							.getAllActiveAssociatedSystemTestPlans();
+					Vector<Artifact> associatedsystemtestplans = systemtestAct.getAllActiveAssociatedSystemTestPlans();
 					for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-						Artifact associatedsystemtestplan2 = associatedsystemtestplans
-								.elementAt(j);
+						Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 						if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 						}
 					}
-					Vector<Tool> testingtools = systemtestAct
-							.getAllActiveTestingTools();
+					Vector<Tool> testingtools = systemtestAct.getAllActiveTestingTools();
 					for (int j = 0; j < testingtools.size(); j++) {
 						Tool testingtool2 = testingtools.elementAt(j);
 						if (testingtool2 instanceof AutomatedTestingTool) {
@@ -2382,29 +1998,24 @@ public class RuleExecutor {
 	}
 
 	// SystemTestEffectRuleA rule (SystemTest Action):
-	private void systemTestEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<SystemTestAction> systemtestActs = state
-				.getActionStateRepository()
-				.getSystemTestActionStateRepository().getAllActions();
+	private void systemTestEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<SystemTestAction> systemtestActs = state.getActionStateRepository().getSystemTestActionStateRepository()
+				.getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < systemtestActs.size(); i++) {
 				SystemTestAction systemtestAct = systemtestActs.elementAt(i);
-				if ((systemtestAct.getAllCodeDocs().size() >= 1)
-						&& (systemtestAct.getAllProjs().size() >= 1)
+				if ((systemtestAct.getAllCodeDocs().size() >= 1) && (systemtestAct.getAllProjs().size() >= 1)
 						&& (systemtestAct.getAllEmps().size() >= 1)
-						&& (systemtestAct.getAllAssociatedSystemTestPlans()
-								.size() >= 1)
+						&& (systemtestAct.getAllAssociatedSystemTestPlans().size() >= 1)
 						&& (systemtestAct.getAllTestingTools().size() >= 0)) {
-					Vector<Artifact> codedocs = systemtestAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = systemtestAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
 							double allActiveEmpSoftwareEngineerProductivityInTesting = 0;
-							Vector allActiveEmps = systemtestAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = systemtestAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -2412,37 +2023,32 @@ public class RuleExecutor {
 											.getProductivityInTesting());
 								}
 							}
-							double numEmp = (double) (systemtestAct
-									.getAllEmps().size());
+							double numEmp = (double) (systemtestAct.getAllEmps().size());
 							double allActiveAssociatedSystemTestPlanSystemTestPlanPercentErroneous = 0;
 							Vector allActiveAssociatedSystemTestPlans = systemtestAct
 									.getAllActiveAssociatedSystemTestPlans();
-							for (int k = 0; k < allActiveAssociatedSystemTestPlans
-									.size(); k++) {
-								Object associatedsystemtestplan3 = allActiveAssociatedSystemTestPlans
-										.elementAt(k);
+							for (int k = 0; k < allActiveAssociatedSystemTestPlans.size(); k++) {
+								Object associatedsystemtestplan3 = allActiveAssociatedSystemTestPlans.elementAt(k);
 								if (associatedsystemtestplan3 instanceof SystemTestPlan) {
 									allActiveAssociatedSystemTestPlanSystemTestPlanPercentErroneous += (double) (((SystemTestPlan) associatedsystemtestplan3)
 											.getPercentErroneous());
 								}
 							}
 							double allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor = 0;
-							Vector allActiveTestingTools = systemtestAct
-									.getAllActiveTestingTools();
+							Vector allActiveTestingTools = systemtestAct.getAllActiveTestingTools();
 							for (int k = 0; k < allActiveTestingTools.size(); k++) {
-								Object testingtool3 = allActiveTestingTools
-										.elementAt(k);
+								Object testingtool3 = allActiveTestingTools.elementAt(k);
 								if (testingtool3 instanceof AutomatedTestingTool) {
 									allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor += (double) (((AutomatedTestingTool) testingtool3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							code.setNumUnknownErrors((double) (((double) (code
-									.getNumUnknownErrors())) - ((.5 * allActiveEmpSoftwareEngineerProductivityInTesting)
+							code.setNumUnknownErrors((double) (((double) (code.getNumUnknownErrors())) - ((.5
+									* allActiveEmpSoftwareEngineerProductivityInTesting)
 									* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
-									* (1 + ((double) (code
-											.getCompletenessDiffTestPlan())))
-									* (1 - (allActiveAssociatedSystemTestPlanSystemTestPlanPercentErroneous / 100)) * (1 + allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor))));
+									* (1 + ((double) (code.getCompletenessDiffTestPlan())))
+									* (1 - (allActiveAssociatedSystemTestPlanSystemTestPlanPercentErroneous / 100))
+									* (1 + allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor))));
 						}
 					}
 					Vector<Project> projs = systemtestAct.getAllActiveProjs();
@@ -2457,36 +2063,28 @@ public class RuleExecutor {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInTesting((double) ((((double) (softwareengineer
-											.getProductivityInTestingUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInTesting((double) ((((double) (softwareengineer
-											.getErrorRateInTestingUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
+							softwareengineer.setProductivityInTesting(
+									(double) ((((double) (softwareengineer.getProductivityInTestingUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInTesting(
+									(double) ((((double) (softwareengineer.getErrorRateInTestingUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
 						}
 					}
-					Vector<Artifact> associatedsystemtestplans = systemtestAct
-							.getAllActiveAssociatedSystemTestPlans();
+					Vector<Artifact> associatedsystemtestplans = systemtestAct.getAllActiveAssociatedSystemTestPlans();
 					for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-						Artifact associatedsystemtestplan2 = associatedsystemtestplans
-								.elementAt(j);
+						Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 						if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 						}
 					}
-					Vector<Tool> testingtools = systemtestAct
-							.getAllActiveTestingTools();
+					Vector<Tool> testingtools = systemtestAct.getAllActiveTestingTools();
 					for (int j = 0; j < testingtools.size(); j++) {
 						Tool testingtool2 = testingtools.elementAt(j);
 						if (testingtool2 instanceof AutomatedTestingTool) {
@@ -2499,34 +2097,28 @@ public class RuleExecutor {
 	}
 
 	// SystemTestEffectRuleB rule (SystemTest Action):
-	private void systemTestEffectRuleB(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<SystemTestAction> systemtestActs = state
-				.getActionStateRepository()
-				.getSystemTestActionStateRepository().getAllActions();
+	private void systemTestEffectRuleB(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<SystemTestAction> systemtestActs = state.getActionStateRepository().getSystemTestActionStateRepository()
+				.getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < systemtestActs.size(); i++) {
 				SystemTestAction systemtestAct = systemtestActs.elementAt(i);
-				if ((systemtestAct.getAllCodeDocs().size() >= 1)
-						&& (systemtestAct.getAllProjs().size() >= 1)
+				if ((systemtestAct.getAllCodeDocs().size() >= 1) && (systemtestAct.getAllProjs().size() >= 1)
 						&& (systemtestAct.getAllEmps().size() >= 1)
-						&& (systemtestAct.getAllAssociatedSystemTestPlans()
-								.size() >= 1)
+						&& (systemtestAct.getAllAssociatedSystemTestPlans().size() >= 1)
 						&& (systemtestAct.getAllTestingTools().size() >= 0)) {
-					Vector<Artifact> codedocs = systemtestAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = systemtestAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
-							code.setPercentErroneous((double) ((((double) (code
-									.getNumKnownErrors())) + ((double) (code
-									.getNumUnknownErrors())))
-									/ (((double) (code.getSize())) + .1) * 100));
-							code.setNumKnownErrors((double) (((double) (code
-									.getNumKnownErrors())) + (((double) (code
-									.getNumUnknownTemp())) - ((double) (code
-									.getNumUnknownErrors())))));
+							code.setPercentErroneous((double) ((((double) (code.getNumKnownErrors()))
+									+ ((double) (code.getNumUnknownErrors()))) / (((double) (code.getSize())) + .1)
+									* 100));
+							code.setNumKnownErrors((double) (((double) (code.getNumKnownErrors()))
+									+ (((double) (code.getNumUnknownTemp()))
+											- ((double) (code.getNumUnknownErrors())))));
 						}
 					}
 					Vector<Project> projs = systemtestAct.getAllActiveProjs();
@@ -2543,17 +2135,14 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> associatedsystemtestplans = systemtestAct
-							.getAllActiveAssociatedSystemTestPlans();
+					Vector<Artifact> associatedsystemtestplans = systemtestAct.getAllActiveAssociatedSystemTestPlans();
 					for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-						Artifact associatedsystemtestplan2 = associatedsystemtestplans
-								.elementAt(j);
+						Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 						if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 						}
 					}
-					Vector<Tool> testingtools = systemtestAct
-							.getAllActiveTestingTools();
+					Vector<Tool> testingtools = systemtestAct.getAllActiveTestingTools();
 					for (int j = 0; j < testingtools.size(); j++) {
 						Tool testingtool2 = testingtools.elementAt(j);
 						if (testingtool2 instanceof AutomatedTestingTool) {
@@ -2566,20 +2155,16 @@ public class RuleExecutor {
 	}
 
 	// ReviewDesignEffectRuleB rule (ReviewDesign Action):
-	private void reviewDesignEffectRuleB(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<ReviewDesignAction> reviewdesignActs = state
-				.getActionStateRepository()
+	private void reviewDesignEffectRuleB(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<ReviewDesignAction> reviewdesignActs = state.getActionStateRepository()
 				.getReviewDesignActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < reviewdesignActs.size(); i++) {
-				ReviewDesignAction reviewdesignAct = reviewdesignActs
-						.elementAt(i);
-				if ((reviewdesignAct.getAllEmps().size() >= 1)
-						&& (reviewdesignAct.getAllDesignDocs().size() >= 1)
+				ReviewDesignAction reviewdesignAct = reviewdesignActs.elementAt(i);
+				if ((reviewdesignAct.getAllEmps().size() >= 1) && (reviewdesignAct.getAllDesignDocs().size() >= 1)
 						&& (reviewdesignAct.getAllProjs().size() >= 1)
-						&& (reviewdesignAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)) {
+						&& (reviewdesignAct.getAllAssociatedRequirementsDocs().size() >= 1)) {
 					Vector<Employee> emps = reviewdesignAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
@@ -2587,15 +2172,13 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> designdocs = reviewdesignAct
-							.getAllActiveDesignDocs();
+					Vector<Artifact> designdocs = reviewdesignAct.getAllActiveDesignDocs();
 					for (int j = 0; j < designdocs.size(); j++) {
 						Artifact designdoc2 = designdocs.elementAt(j);
 						if (designdoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) designdoc2;
 							designdocument
-									.setNumUnknownTemp((double) (((double) (designdocument
-											.getNumUnknownErrors()))));
+									.setNumUnknownTemp((double) (((double) (designdocument.getNumUnknownErrors()))));
 						}
 					}
 					Vector<Project> projs = reviewdesignAct.getAllActiveProjs();
@@ -2608,8 +2191,7 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = reviewdesignAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
@@ -2620,53 +2202,42 @@ public class RuleExecutor {
 	}
 
 	// ReviewDesignEffectRuleA rule (ReviewDesign Action):
-	private void reviewDesignEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<ReviewDesignAction> reviewdesignActs = state
-				.getActionStateRepository()
+	private void reviewDesignEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<ReviewDesignAction> reviewdesignActs = state.getActionStateRepository()
 				.getReviewDesignActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < reviewdesignActs.size(); i++) {
-				ReviewDesignAction reviewdesignAct = reviewdesignActs
-						.elementAt(i);
-				if ((reviewdesignAct.getAllEmps().size() >= 1)
-						&& (reviewdesignAct.getAllDesignDocs().size() >= 1)
+				ReviewDesignAction reviewdesignAct = reviewdesignActs.elementAt(i);
+				if ((reviewdesignAct.getAllEmps().size() >= 1) && (reviewdesignAct.getAllDesignDocs().size() >= 1)
 						&& (reviewdesignAct.getAllProjs().size() >= 1)
-						&& (reviewdesignAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)) {
+						&& (reviewdesignAct.getAllAssociatedRequirementsDocs().size() >= 1)) {
 					Vector<Employee> emps = reviewdesignAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInDesign((double) ((((double) (softwareengineer
-											.getProductivityInDesignUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInDesign((double) ((((double) (softwareengineer
-											.getErrorRateInDesignUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInDesign(
+									(double) ((((double) (softwareengineer.getProductivityInDesignUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInDesign(
+									(double) ((((double) (softwareengineer.getErrorRateInDesignUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> designdocs = reviewdesignAct
-							.getAllActiveDesignDocs();
+					Vector<Artifact> designdocs = reviewdesignAct.getAllActiveDesignDocs();
 					for (int j = 0; j < designdocs.size(); j++) {
 						Artifact designdoc2 = designdocs.elementAt(j);
 						if (designdoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) designdoc2;
 							double allActiveEmpSoftwareEngineerProductivityInDesign = 0;
-							Vector allActiveEmps = reviewdesignAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = reviewdesignAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -2674,12 +2245,11 @@ public class RuleExecutor {
 											.getProductivityInDesign());
 								}
 							}
-							double numEmp = (double) (reviewdesignAct
-									.getAllEmps().size());
+							double numEmp = (double) (reviewdesignAct.getAllEmps().size());
 							designdocument
-									.setNumUnknownErrors((double) (((double) (designdocument
-											.getNumUnknownErrors())) - ((.5 * allActiveEmpSoftwareEngineerProductivityInDesign) * (1 - (.01 * (numEmp
-											* (numEmp - 1) / 2))))));
+									.setNumUnknownErrors((double) (((double) (designdocument.getNumUnknownErrors()))
+											- ((.5 * allActiveEmpSoftwareEngineerProductivityInDesign)
+													* (1 - (.01 * (numEmp * (numEmp - 1) / 2))))));
 						}
 					}
 					Vector<Project> projs = reviewdesignAct.getAllActiveProjs();
@@ -2692,8 +2262,7 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = reviewdesignAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
@@ -2704,20 +2273,16 @@ public class RuleExecutor {
 	}
 
 	// ReviewDesignEffectRuleC rule (ReviewDesign Action):
-	private void reviewDesignEffectRuleC(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<ReviewDesignAction> reviewdesignActs = state
-				.getActionStateRepository()
+	private void reviewDesignEffectRuleC(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<ReviewDesignAction> reviewdesignActs = state.getActionStateRepository()
 				.getReviewDesignActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < reviewdesignActs.size(); i++) {
-				ReviewDesignAction reviewdesignAct = reviewdesignActs
-						.elementAt(i);
-				if ((reviewdesignAct.getAllEmps().size() >= 1)
-						&& (reviewdesignAct.getAllDesignDocs().size() >= 1)
+				ReviewDesignAction reviewdesignAct = reviewdesignActs.elementAt(i);
+				if ((reviewdesignAct.getAllEmps().size() >= 1) && (reviewdesignAct.getAllDesignDocs().size() >= 1)
 						&& (reviewdesignAct.getAllProjs().size() >= 1)
-						&& (reviewdesignAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)) {
+						&& (reviewdesignAct.getAllAssociatedRequirementsDocs().size() >= 1)) {
 					Vector<Employee> emps = reviewdesignAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
@@ -2725,23 +2290,18 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> designdocs = reviewdesignAct
-							.getAllActiveDesignDocs();
+					Vector<Artifact> designdocs = reviewdesignAct.getAllActiveDesignDocs();
 					for (int j = 0; j < designdocs.size(); j++) {
 						Artifact designdoc2 = designdocs.elementAt(j);
 						if (designdoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) designdoc2;
+							designdocument.setNumKnownErrors((double) (((double) (designdocument.getNumKnownErrors()))
+									+ (((double) (designdocument.getNumUnknownTemp()))
+											- ((double) (designdocument.getNumUnknownErrors())))));
 							designdocument
-									.setNumKnownErrors((double) (((double) (designdocument
-											.getNumKnownErrors())) + (((double) (designdocument
-											.getNumUnknownTemp())) - ((double) (designdocument
-											.getNumUnknownErrors())))));
-							designdocument
-									.setPercentErroneous((double) ((((double) (designdocument
-											.getNumKnownErrors())) + ((double) (designdocument
-											.getNumUnknownErrors())))
-											/ (((double) (designdocument
-													.getSize())) + .1) * 100));
+									.setPercentErroneous((double) ((((double) (designdocument.getNumKnownErrors()))
+											+ ((double) (designdocument.getNumUnknownErrors())))
+											/ (((double) (designdocument.getSize())) + .1) * 100));
 						}
 					}
 					Vector<Project> projs = reviewdesignAct.getAllActiveProjs();
@@ -2754,8 +2314,7 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = reviewdesignAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
@@ -2766,19 +2325,16 @@ public class RuleExecutor {
 	}
 
 	// InspectCodeEffectRuleB rule (InspectCode Action):
-	private void inspectCodeEffectRuleB(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<InspectCodeAction> inspectcodeActs = state
-				.getActionStateRepository()
+	private void inspectCodeEffectRuleB(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<InspectCodeAction> inspectcodeActs = state.getActionStateRepository()
 				.getInspectCodeActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < inspectcodeActs.size(); i++) {
 				InspectCodeAction inspectcodeAct = inspectcodeActs.elementAt(i);
-				if ((inspectcodeAct.getAllEmps().size() >= 3)
-						&& (inspectcodeAct.getAllCodeDocs().size() >= 1)
+				if ((inspectcodeAct.getAllEmps().size() >= 3) && (inspectcodeAct.getAllCodeDocs().size() >= 1)
 						&& (inspectcodeAct.getAllProjs().size() >= 1)
-						&& (inspectcodeAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
+						&& (inspectcodeAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (inspectcodeAct.getAllAssociatedDesignDocs().size() >= 1)) {
 					Vector<Employee> emps = inspectcodeAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
@@ -2787,14 +2343,12 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> codedocs = inspectcodeAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = inspectcodeAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
-							code.setNumUnknownTemp((double) (((double) (code
-									.getNumUnknownErrors()))));
+							code.setNumUnknownTemp((double) (((double) (code.getNumUnknownErrors()))));
 						}
 					}
 					Vector<Project> projs = inspectcodeAct.getAllActiveProjs();
@@ -2807,17 +2361,14 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = inspectcodeAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Artifact> associateddesigndocs = inspectcodeAct
-							.getAllActiveAssociatedDesignDocs();
+					Vector<Artifact> associateddesigndocs = inspectcodeAct.getAllActiveAssociatedDesignDocs();
 					for (int j = 0; j < associateddesigndocs.size(); j++) {
-						Artifact associateddesigndoc2 = associateddesigndocs
-								.elementAt(j);
+						Artifact associateddesigndoc2 = associateddesigndocs.elementAt(j);
 						if (associateddesigndoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndoc2;
 						}
@@ -2828,53 +2379,43 @@ public class RuleExecutor {
 	}
 
 	// InspectCodeEffectRuleA rule (InspectCode Action):
-	private void inspectCodeEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<InspectCodeAction> inspectcodeActs = state
-				.getActionStateRepository()
+	private void inspectCodeEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<InspectCodeAction> inspectcodeActs = state.getActionStateRepository()
 				.getInspectCodeActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < inspectcodeActs.size(); i++) {
 				InspectCodeAction inspectcodeAct = inspectcodeActs.elementAt(i);
-				if ((inspectcodeAct.getAllEmps().size() >= 3)
-						&& (inspectcodeAct.getAllCodeDocs().size() >= 1)
+				if ((inspectcodeAct.getAllEmps().size() >= 3) && (inspectcodeAct.getAllCodeDocs().size() >= 1)
 						&& (inspectcodeAct.getAllProjs().size() >= 1)
-						&& (inspectcodeAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
+						&& (inspectcodeAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (inspectcodeAct.getAllAssociatedDesignDocs().size() >= 1)) {
 					Vector<Employee> emps = inspectcodeAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInCoding((double) ((((double) (softwareengineer
-											.getProductivityInCodingUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInCoding((double) ((((double) (softwareengineer
-											.getErrorRateInCodingUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInCoding(
+									(double) ((((double) (softwareengineer.getProductivityInCodingUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInCoding(
+									(double) ((((double) (softwareengineer.getErrorRateInCodingUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> codedocs = inspectcodeAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = inspectcodeAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
 							double allActiveEmpSoftwareEngineerProductivityInCoding = 0;
-							Vector allActiveEmps = inspectcodeAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = inspectcodeAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -2882,12 +2423,11 @@ public class RuleExecutor {
 											.getProductivityInCoding());
 								}
 							}
-							double numEmp = (double) (inspectcodeAct
-									.getAllEmps().size());
-							code.setNumUnknownErrors((double) (((double) (code
-									.getNumUnknownErrors())) - (((.5 * allActiveEmpSoftwareEngineerProductivityInCoding) * (1 - (.01 * (numEmp
-									* (numEmp - 1) / 2)))) * (1 - (((double) (code
-									.getPercentIntegrated())) / 100)))));
+							double numEmp = (double) (inspectcodeAct.getAllEmps().size());
+							code.setNumUnknownErrors((double) (((double) (code.getNumUnknownErrors()))
+									- (((.5 * allActiveEmpSoftwareEngineerProductivityInCoding)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2))))
+											* (1 - (((double) (code.getPercentIntegrated())) / 100)))));
 						}
 					}
 					Vector<Project> projs = inspectcodeAct.getAllActiveProjs();
@@ -2900,17 +2440,14 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = inspectcodeAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Artifact> associateddesigndocs = inspectcodeAct
-							.getAllActiveAssociatedDesignDocs();
+					Vector<Artifact> associateddesigndocs = inspectcodeAct.getAllActiveAssociatedDesignDocs();
 					for (int j = 0; j < associateddesigndocs.size(); j++) {
-						Artifact associateddesigndoc2 = associateddesigndocs
-								.elementAt(j);
+						Artifact associateddesigndoc2 = associateddesigndocs.elementAt(j);
 						if (associateddesigndoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndoc2;
 						}
@@ -2921,19 +2458,16 @@ public class RuleExecutor {
 	}
 
 	// InspectCodeEffectRuleC rule (InspectCode Action):
-	private void inspectCodeEffectRuleC(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<InspectCodeAction> inspectcodeActs = state
-				.getActionStateRepository()
+	private void inspectCodeEffectRuleC(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<InspectCodeAction> inspectcodeActs = state.getActionStateRepository()
 				.getInspectCodeActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < inspectcodeActs.size(); i++) {
 				InspectCodeAction inspectcodeAct = inspectcodeActs.elementAt(i);
-				if ((inspectcodeAct.getAllEmps().size() >= 3)
-						&& (inspectcodeAct.getAllCodeDocs().size() >= 1)
+				if ((inspectcodeAct.getAllEmps().size() >= 3) && (inspectcodeAct.getAllCodeDocs().size() >= 1)
 						&& (inspectcodeAct.getAllProjs().size() >= 1)
-						&& (inspectcodeAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
+						&& (inspectcodeAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (inspectcodeAct.getAllAssociatedDesignDocs().size() >= 1)) {
 					Vector<Employee> emps = inspectcodeAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
@@ -2942,20 +2476,17 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> codedocs = inspectcodeAct
-							.getAllActiveCodeDocs();
+					Vector<Artifact> codedocs = inspectcodeAct.getAllActiveCodeDocs();
 					for (int j = 0; j < codedocs.size(); j++) {
 						Artifact codedoc2 = codedocs.elementAt(j);
 						if (codedoc2 instanceof Code) {
 							Code code = (Code) codedoc2;
-							code.setNumKnownErrors((double) (((double) (code
-									.getNumKnownErrors())) + (((double) (code
-									.getNumUnknownTemp())) - ((double) (code
-									.getNumUnknownErrors())))));
-							code.setPercentErroneous((double) ((((double) (code
-									.getNumKnownErrors())) + ((double) (code
-									.getNumUnknownErrors())))
-									/ (((double) (code.getSize())) + .1) * 100));
+							code.setNumKnownErrors((double) (((double) (code.getNumKnownErrors()))
+									+ (((double) (code.getNumUnknownTemp()))
+											- ((double) (code.getNumUnknownErrors())))));
+							code.setPercentErroneous((double) ((((double) (code.getNumKnownErrors()))
+									+ ((double) (code.getNumUnknownErrors()))) / (((double) (code.getSize())) + .1)
+									* 100));
 						}
 					}
 					Vector<Project> projs = inspectcodeAct.getAllActiveProjs();
@@ -2968,17 +2499,14 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = inspectcodeAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Artifact> associateddesigndocs = inspectcodeAct
-							.getAllActiveAssociatedDesignDocs();
+					Vector<Artifact> associateddesigndocs = inspectcodeAct.getAllActiveAssociatedDesignDocs();
 					for (int j = 0; j < associateddesigndocs.size(); j++) {
-						Artifact associateddesigndoc2 = associateddesigndocs
-								.elementAt(j);
+						Artifact associateddesigndoc2 = associateddesigndocs.elementAt(j);
 						if (associateddesigndoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndoc2;
 						}
@@ -2989,50 +2517,42 @@ public class RuleExecutor {
 	}
 
 	// ReviewTestPlanEffectRuleB rule (ReviewSystemTestPlan Action):
-	private void reviewTestPlanEffectRuleB(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<ReviewSystemTestPlanAction> reviewsystemtestplanActs = state
-				.getActionStateRepository()
+	private void reviewTestPlanEffectRuleB(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<ReviewSystemTestPlanAction> reviewsystemtestplanActs = state.getActionStateRepository()
 				.getReviewSystemTestPlanActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < reviewsystemtestplanActs.size(); i++) {
-				ReviewSystemTestPlanAction reviewsystemtestplanAct = reviewsystemtestplanActs
-						.elementAt(i);
+				ReviewSystemTestPlanAction reviewsystemtestplanAct = reviewsystemtestplanActs.elementAt(i);
 				if ((reviewsystemtestplanAct.getAllEmps().size() >= 1)
 						&& (reviewsystemtestplanAct.getAllTestPlans().size() >= 1)
-						&& (reviewsystemtestplanAct
-								.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (reviewsystemtestplanAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (reviewsystemtestplanAct.getAllProjs().size() >= 1)) {
-					Vector<Employee> emps = reviewsystemtestplanAct
-							.getAllActiveEmps();
+					Vector<Employee> emps = reviewsystemtestplanAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> testplans = reviewsystemtestplanAct
-							.getAllActiveTestPlans();
+					Vector<Artifact> testplans = reviewsystemtestplanAct.getAllActiveTestPlans();
 					for (int j = 0; j < testplans.size(); j++) {
 						Artifact testplan2 = testplans.elementAt(j);
 						if (testplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) testplan2;
 							systemtestplan
-									.setNumUnknownTemp((double) (((double) (systemtestplan
-											.getNumUnknownErrors()))));
+									.setNumUnknownTemp((double) (((double) (systemtestplan.getNumUnknownErrors()))));
 						}
 					}
 					Vector<Artifact> associatedrequirementsdocs = reviewsystemtestplanAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Project> projs = reviewsystemtestplanAct
-							.getAllActiveProjs();
+					Vector<Project> projs = reviewsystemtestplanAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -3045,54 +2565,43 @@ public class RuleExecutor {
 	}
 
 	// ReviewTestPlanEffectRuleA rule (ReviewSystemTestPlan Action):
-	private void reviewTestPlanEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<ReviewSystemTestPlanAction> reviewsystemtestplanActs = state
-				.getActionStateRepository()
+	private void reviewTestPlanEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<ReviewSystemTestPlanAction> reviewsystemtestplanActs = state.getActionStateRepository()
 				.getReviewSystemTestPlanActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < reviewsystemtestplanActs.size(); i++) {
-				ReviewSystemTestPlanAction reviewsystemtestplanAct = reviewsystemtestplanActs
-						.elementAt(i);
+				ReviewSystemTestPlanAction reviewsystemtestplanAct = reviewsystemtestplanActs.elementAt(i);
 				if ((reviewsystemtestplanAct.getAllEmps().size() >= 1)
 						&& (reviewsystemtestplanAct.getAllTestPlans().size() >= 1)
-						&& (reviewsystemtestplanAct
-								.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (reviewsystemtestplanAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (reviewsystemtestplanAct.getAllProjs().size() >= 1)) {
-					Vector<Employee> emps = reviewsystemtestplanAct
-							.getAllActiveEmps();
+					Vector<Employee> emps = reviewsystemtestplanAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInTesting((double) ((((double) (softwareengineer
-											.getProductivityInTestingUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInTesting((double) ((((double) (softwareengineer
-											.getErrorRateInTestingUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInTesting(
+									(double) ((((double) (softwareengineer.getProductivityInTestingUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInTesting(
+									(double) ((((double) (softwareengineer.getErrorRateInTestingUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> testplans = reviewsystemtestplanAct
-							.getAllActiveTestPlans();
+					Vector<Artifact> testplans = reviewsystemtestplanAct.getAllActiveTestPlans();
 					for (int j = 0; j < testplans.size(); j++) {
 						Artifact testplan2 = testplans.elementAt(j);
 						if (testplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) testplan2;
 							double allActiveEmpSoftwareEngineerProductivityInTesting = 0;
-							Vector allActiveEmps = reviewsystemtestplanAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = reviewsystemtestplanAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -3100,25 +2609,22 @@ public class RuleExecutor {
 											.getProductivityInTesting());
 								}
 							}
-							double numEmp = (double) (reviewsystemtestplanAct
-									.getAllEmps().size());
+							double numEmp = (double) (reviewsystemtestplanAct.getAllEmps().size());
 							systemtestplan
-									.setNumUnknownErrors((double) (((double) (systemtestplan
-											.getNumUnknownErrors())) - ((.5 * allActiveEmpSoftwareEngineerProductivityInTesting) * (1 - (.01 * (numEmp
-											* (numEmp - 1) / 2))))));
+									.setNumUnknownErrors((double) (((double) (systemtestplan.getNumUnknownErrors()))
+											- ((.5 * allActiveEmpSoftwareEngineerProductivityInTesting)
+													* (1 - (.01 * (numEmp * (numEmp - 1) / 2))))));
 						}
 					}
 					Vector<Artifact> associatedrequirementsdocs = reviewsystemtestplanAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Project> projs = reviewsystemtestplanAct
-							.getAllActiveProjs();
+					Vector<Project> projs = reviewsystemtestplanAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -3131,58 +2637,47 @@ public class RuleExecutor {
 	}
 
 	// ReviewTestPlanEffectRuleC rule (ReviewSystemTestPlan Action):
-	private void reviewTestPlanEffectRuleC(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<ReviewSystemTestPlanAction> reviewsystemtestplanActs = state
-				.getActionStateRepository()
+	private void reviewTestPlanEffectRuleC(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<ReviewSystemTestPlanAction> reviewsystemtestplanActs = state.getActionStateRepository()
 				.getReviewSystemTestPlanActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < reviewsystemtestplanActs.size(); i++) {
-				ReviewSystemTestPlanAction reviewsystemtestplanAct = reviewsystemtestplanActs
-						.elementAt(i);
+				ReviewSystemTestPlanAction reviewsystemtestplanAct = reviewsystemtestplanActs.elementAt(i);
 				if ((reviewsystemtestplanAct.getAllEmps().size() >= 1)
 						&& (reviewsystemtestplanAct.getAllTestPlans().size() >= 1)
-						&& (reviewsystemtestplanAct
-								.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (reviewsystemtestplanAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (reviewsystemtestplanAct.getAllProjs().size() >= 1)) {
-					Vector<Employee> emps = reviewsystemtestplanAct
-							.getAllActiveEmps();
+					Vector<Employee> emps = reviewsystemtestplanAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> testplans = reviewsystemtestplanAct
-							.getAllActiveTestPlans();
+					Vector<Artifact> testplans = reviewsystemtestplanAct.getAllActiveTestPlans();
 					for (int j = 0; j < testplans.size(); j++) {
 						Artifact testplan2 = testplans.elementAt(j);
 						if (testplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) testplan2;
+							systemtestplan.setNumKnownErrors((double) (((double) (systemtestplan.getNumKnownErrors()))
+									+ (((double) (systemtestplan.getNumUnknownTemp()))
+											- ((double) (systemtestplan.getNumUnknownErrors())))));
 							systemtestplan
-									.setNumKnownErrors((double) (((double) (systemtestplan
-											.getNumKnownErrors())) + (((double) (systemtestplan
-											.getNumUnknownTemp())) - ((double) (systemtestplan
-											.getNumUnknownErrors())))));
-							systemtestplan
-									.setPercentErroneous((double) ((((double) (systemtestplan
-											.getNumKnownErrors())) + ((double) (systemtestplan
-											.getNumUnknownErrors())))
-											/ (((double) (systemtestplan
-													.getSize())) + .1) * 100));
+									.setPercentErroneous((double) ((((double) (systemtestplan.getNumKnownErrors()))
+											+ ((double) (systemtestplan.getNumUnknownErrors())))
+											/ (((double) (systemtestplan.getSize())) + .1) * 100));
 						}
 					}
 					Vector<Artifact> associatedrequirementsdocs = reviewsystemtestplanAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Project> projs = reviewsystemtestplanAct
-							.getAllActiveProjs();
+					Vector<Project> projs = reviewsystemtestplanAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -3195,21 +2690,16 @@ public class RuleExecutor {
 	}
 
 	// CreateDesignEffectRuleFirst rule (CreateDesign Action):
-	private void createDesignEffectRuleFirst(Stage gui,
-			int updateInstructions, String ruleName,
+	private void createDesignEffectRuleFirst(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<CreateDesignAction> createdesignActs = state
-				.getActionStateRepository()
+		Vector<CreateDesignAction> createdesignActs = state.getActionStateRepository()
 				.getCreateDesignActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < createdesignActs.size(); i++) {
-				CreateDesignAction createdesignAct = createdesignActs
-						.elementAt(i);
-				if ((createdesignAct.getAllEmps().size() >= 1)
-						&& (createdesignAct.getAllDesignDocs().size() >= 1)
+				CreateDesignAction createdesignAct = createdesignActs.elementAt(i);
+				if ((createdesignAct.getAllEmps().size() >= 1) && (createdesignAct.getAllDesignDocs().size() >= 1)
 						&& (createdesignAct.getAllProjs().size() >= 1)
-						&& (createdesignAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
+						&& (createdesignAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (createdesignAct.getAllDesignEnvironments().size() >= 0)
 						&& (createdesignAct.getAllAssociatedCodeDocs().size() >= 1)) {
 					Vector<Employee> emps = createdesignAct.getAllActiveEmps();
@@ -3219,27 +2709,24 @@ public class RuleExecutor {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> designdocs = createdesignAct
-							.getAllActiveDesignDocs();
+					Vector<Artifact> designdocs = createdesignAct.getAllActiveDesignDocs();
 					for (int j = 0; j < designdocs.size(); j++) {
 						Artifact designdoc2 = designdocs.elementAt(j);
 						if (designdoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) designdoc2;
 							double allAssociatedRequirementsDocRequirementsDocumentPercentComplete = 0;
-							Vector allAssociatedRequirementsDocs = createdesignAct
-									.getAllAssociatedRequirementsDocs();
-							for (int k = 0; k < allAssociatedRequirementsDocs
-									.size(); k++) {
-								Object associatedrequirementsdoc3 = allAssociatedRequirementsDocs
-										.elementAt(k);
+							Vector allAssociatedRequirementsDocs = createdesignAct.getAllAssociatedRequirementsDocs();
+							for (int k = 0; k < allAssociatedRequirementsDocs.size(); k++) {
+								Object associatedrequirementsdoc3 = allAssociatedRequirementsDocs.elementAt(k);
 								if (associatedrequirementsdoc3 instanceof RequirementsDocument) {
 									allAssociatedRequirementsDocRequirementsDocumentPercentComplete += (double) (((RequirementsDocument) associatedrequirementsdoc3)
 											.getPercentComplete());
 								}
 							}
-							designdocument
-									.setCompletenessDiffReqDoc((int) ((((allAssociatedRequirementsDocRequirementsDocumentPercentComplete - ((double) (designdocument
-											.getPercentComplete()))) / 100) + .001) * 100000));
+							designdocument.setCompletenessDiffReqDoc(
+									(int) ((((allAssociatedRequirementsDocRequirementsDocumentPercentComplete
+											- ((double) (designdocument.getPercentComplete()))) / 100) + .001)
+											* 100000));
 						}
 					}
 					Vector<Project> projs = createdesignAct.getAllActiveProjs();
@@ -3252,31 +2739,25 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = createdesignAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Tool> designenvironments = createdesignAct
-							.getAllActiveDesignEnvironments();
+					Vector<Tool> designenvironments = createdesignAct.getAllActiveDesignEnvironments();
 					for (int j = 0; j < designenvironments.size(); j++) {
-						Tool designenvironment2 = designenvironments
-								.elementAt(j);
+						Tool designenvironment2 = designenvironments.elementAt(j);
 						if (designenvironment2 instanceof DesignEnvironment) {
 							DesignEnvironment designenvironment = (DesignEnvironment) designenvironment2;
 						}
 					}
-					Vector<Artifact> associatedcodedocs = createdesignAct
-							.getAllActiveAssociatedCodeDocs();
+					Vector<Artifact> associatedcodedocs = createdesignAct.getAllActiveAssociatedCodeDocs();
 					for (int j = 0; j < associatedcodedocs.size(); j++) {
-						Artifact associatedcodedoc2 = associatedcodedocs
-								.elementAt(j);
+						Artifact associatedcodedoc2 = associatedcodedocs.elementAt(j);
 						if (associatedcodedoc2 instanceof Code) {
 							Code code = (Code) associatedcodedoc2;
 							double allDesignDocDesignDocumentPercentComplete = 0;
-							Vector allDesignDocs = createdesignAct
-									.getAllDesignDocs();
+							Vector allDesignDocs = createdesignAct.getAllDesignDocs();
 							for (int k = 0; k < allDesignDocs.size(); k++) {
 								Object designdoc3 = allDesignDocs.elementAt(k);
 								if (designdoc3 instanceof DesignDocument) {
@@ -3284,8 +2765,8 @@ public class RuleExecutor {
 											.getPercentComplete());
 								}
 							}
-							code.setCompletenessDiffDesDoc((int) ((((allDesignDocDesignDocumentPercentComplete - ((double) (code
-									.getPercentComplete()))) / 100) + .001) * 100000));
+							code.setCompletenessDiffDesDoc((int) ((((allDesignDocDesignDocumentPercentComplete
+									- ((double) (code.getPercentComplete()))) / 100) + .001) * 100000));
 						}
 					}
 				}
@@ -3294,20 +2775,16 @@ public class RuleExecutor {
 	}
 
 	// CreateDesignEffectRuleA rule (CreateDesign Action):
-	private void createDesignEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<CreateDesignAction> createdesignActs = state
-				.getActionStateRepository()
+	private void createDesignEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<CreateDesignAction> createdesignActs = state.getActionStateRepository()
 				.getCreateDesignActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < createdesignActs.size(); i++) {
-				CreateDesignAction createdesignAct = createdesignActs
-						.elementAt(i);
-				if ((createdesignAct.getAllEmps().size() >= 1)
-						&& (createdesignAct.getAllDesignDocs().size() >= 1)
+				CreateDesignAction createdesignAct = createdesignActs.elementAt(i);
+				if ((createdesignAct.getAllEmps().size() >= 1) && (createdesignAct.getAllDesignDocs().size() >= 1)
 						&& (createdesignAct.getAllProjs().size() >= 1)
-						&& (createdesignAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
+						&& (createdesignAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (createdesignAct.getAllDesignEnvironments().size() >= 0)
 						&& (createdesignAct.getAllAssociatedCodeDocs().size() >= 1)) {
 					Vector<Employee> emps = createdesignAct.getAllActiveEmps();
@@ -3315,34 +2792,27 @@ public class RuleExecutor {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInDesign((double) ((((double) (softwareengineer
-											.getProductivityInDesignUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInDesign((double) ((((double) (softwareengineer
-											.getErrorRateInDesignUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInDesign(
+									(double) ((((double) (softwareengineer.getProductivityInDesignUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInDesign(
+									(double) ((((double) (softwareengineer.getErrorRateInDesignUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> designdocs = createdesignAct
-							.getAllActiveDesignDocs();
+					Vector<Artifact> designdocs = createdesignAct.getAllActiveDesignDocs();
 					for (int j = 0; j < designdocs.size(); j++) {
 						Artifact designdoc2 = designdocs.elementAt(j);
 						if (designdoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) designdoc2;
 							double allActiveProjSEProjectRequiredSizeOfCode = 0;
-							Vector allActiveProjs = createdesignAct
-									.getAllActiveProjs();
+							Vector allActiveProjs = createdesignAct.getAllActiveProjs();
 							for (int k = 0; k < allActiveProjs.size(); k++) {
 								Object proj3 = allActiveProjs.elementAt(k);
 								if (proj3 instanceof SEProject) {
@@ -3350,19 +2820,14 @@ public class RuleExecutor {
 											.getRequiredSizeOfCode());
 								}
 							}
+							designdocument.setPercentComplete((double) (((double) (designdocument.getSize()))
+									/ allActiveProjSEProjectRequiredSizeOfCode * 100));
 							designdocument
-									.setPercentComplete((double) (((double) (designdocument
-											.getSize()))
-											/ allActiveProjSEProjectRequiredSizeOfCode * 100));
-							designdocument
-									.setPercentErroneous((double) ((((double) (designdocument
-											.getNumKnownErrors())) + ((double) (designdocument
-											.getNumUnknownErrors())))
-											/ (((double) (designdocument
-													.getSize())) + .1) * 100));
+									.setPercentErroneous((double) ((((double) (designdocument.getNumKnownErrors()))
+											+ ((double) (designdocument.getNumUnknownErrors())))
+											/ (((double) (designdocument.getSize())) + .1) * 100));
 							double allActiveEmpSoftwareEngineerErrorRateInDesign = 0;
-							Vector allActiveEmps = createdesignAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = createdesignAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -3370,40 +2835,34 @@ public class RuleExecutor {
 											.getErrorRateInDesign());
 								}
 							}
-							double numEmp = (double) (createdesignAct
-									.getAllEmps().size());
+							double numEmp = (double) (createdesignAct.getAllEmps().size());
 							double allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous = 0;
 							Vector allActiveAssociatedRequirementsDocs = createdesignAct
 									.getAllActiveAssociatedRequirementsDocs();
-							for (int k = 0; k < allActiveAssociatedRequirementsDocs
-									.size(); k++) {
-								Object associatedrequirementsdoc3 = allActiveAssociatedRequirementsDocs
-										.elementAt(k);
+							for (int k = 0; k < allActiveAssociatedRequirementsDocs.size(); k++) {
+								Object associatedrequirementsdoc3 = allActiveAssociatedRequirementsDocs.elementAt(k);
 								if (associatedrequirementsdoc3 instanceof RequirementsDocument) {
 									allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous += (double) (((RequirementsDocument) associatedrequirementsdoc3)
 											.getPercentErroneous());
 								}
 							}
 							double allActiveDesignEnvironmentDesignEnvironmentErrorRateDecreaseFactor = 0;
-							Vector allActiveDesignEnvironments = createdesignAct
-									.getAllActiveDesignEnvironments();
-							for (int k = 0; k < allActiveDesignEnvironments
-									.size(); k++) {
-								Object designenvironment3 = allActiveDesignEnvironments
-										.elementAt(k);
+							Vector allActiveDesignEnvironments = createdesignAct.getAllActiveDesignEnvironments();
+							for (int k = 0; k < allActiveDesignEnvironments.size(); k++) {
+								Object designenvironment3 = allActiveDesignEnvironments.elementAt(k);
 								if (designenvironment3 instanceof DesignEnvironment) {
 									allActiveDesignEnvironmentDesignEnvironmentErrorRateDecreaseFactor += (double) (((DesignEnvironment) designenvironment3)
 											.getErrorRateDecreaseFactor());
 								}
 							}
-							designdocument
-									.setNumUnknownErrors((double) (((double) (designdocument
-											.getNumUnknownErrors())) + (allActiveEmpSoftwareEngineerErrorRateInDesign
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2)))
-											* (1 + (allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous / 100 * 20))
-											* (1 + (1 - ((double) (designdocument
-													.getCompletenessDiffReqDoc())))) * (1 - allActiveDesignEnvironmentDesignEnvironmentErrorRateDecreaseFactor))));
+							designdocument.setNumUnknownErrors((double) (((double) (designdocument
+									.getNumUnknownErrors()))
+									+ (allActiveEmpSoftwareEngineerErrorRateInDesign
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + (allActiveAssociatedRequirementsDocRequirementsDocumentPercentErroneous
+													/ 100 * 20))
+											* (1 + (1 - ((double) (designdocument.getCompletenessDiffReqDoc()))))
+											* (1 - allActiveDesignEnvironmentDesignEnvironmentErrorRateDecreaseFactor))));
 							double allActiveEmpSoftwareEngineerProductivityInDesign = 0;
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
@@ -3413,22 +2872,18 @@ public class RuleExecutor {
 								}
 							}
 							double allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor = 0;
-							for (int k = 0; k < allActiveDesignEnvironments
-									.size(); k++) {
-								Object designenvironment3 = allActiveDesignEnvironments
-										.elementAt(k);
+							for (int k = 0; k < allActiveDesignEnvironments.size(); k++) {
+								Object designenvironment3 = allActiveDesignEnvironments.elementAt(k);
 								if (designenvironment3 instanceof DesignEnvironment) {
 									allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor += (double) (((DesignEnvironment) designenvironment3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							designdocument
-									.setSize((double) (((double) (designdocument
-											.getSize())) + ((allActiveEmpSoftwareEngineerProductivityInDesign
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2)))
-											* (1 + ((double) (designdocument
-													.getCompletenessDiffReqDoc()))) * (1 + allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor)))));
+							designdocument.setSize((double) (((double) (designdocument.getSize()))
+									+ ((allActiveEmpSoftwareEngineerProductivityInDesign
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + ((double) (designdocument.getCompletenessDiffReqDoc())))
+											* (1 + allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor)))));
 						}
 					}
 					Vector<Project> projs = createdesignAct.getAllActiveProjs();
@@ -3441,31 +2896,25 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = createdesignAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Tool> designenvironments = createdesignAct
-							.getAllActiveDesignEnvironments();
+					Vector<Tool> designenvironments = createdesignAct.getAllActiveDesignEnvironments();
 					for (int j = 0; j < designenvironments.size(); j++) {
-						Tool designenvironment2 = designenvironments
-								.elementAt(j);
+						Tool designenvironment2 = designenvironments.elementAt(j);
 						if (designenvironment2 instanceof DesignEnvironment) {
 							DesignEnvironment designenvironment = (DesignEnvironment) designenvironment2;
 						}
 					}
-					Vector<Artifact> associatedcodedocs = createdesignAct
-							.getAllActiveAssociatedCodeDocs();
+					Vector<Artifact> associatedcodedocs = createdesignAct.getAllActiveAssociatedCodeDocs();
 					for (int j = 0; j < associatedcodedocs.size(); j++) {
-						Artifact associatedcodedoc2 = associatedcodedocs
-								.elementAt(j);
+						Artifact associatedcodedoc2 = associatedcodedocs.elementAt(j);
 						if (associatedcodedoc2 instanceof Code) {
 							Code code = (Code) associatedcodedoc2;
 							double allActiveEmpSoftwareEngineerProductivityInDesign = 0;
-							Vector allActiveEmps = createdesignAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = createdesignAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -3473,36 +2922,31 @@ public class RuleExecutor {
 											.getProductivityInDesign());
 								}
 							}
-							double numEmp = (double) (createdesignAct
-									.getAllEmps().size());
+							double numEmp = (double) (createdesignAct.getAllEmps().size());
 							double allActiveDesignDocDesignDocumentCompletenessDiffReqDoc = 0;
-							Vector allActiveDesignDocs = createdesignAct
-									.getAllActiveDesignDocs();
+							Vector allActiveDesignDocs = createdesignAct.getAllActiveDesignDocs();
 							for (int k = 0; k < allActiveDesignDocs.size(); k++) {
-								Object designdoc3 = allActiveDesignDocs
-										.elementAt(k);
+								Object designdoc3 = allActiveDesignDocs.elementAt(k);
 								if (designdoc3 instanceof DesignDocument) {
 									allActiveDesignDocDesignDocumentCompletenessDiffReqDoc += (double) (((DesignDocument) designdoc3)
 											.getCompletenessDiffReqDoc());
 								}
 							}
 							double allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor = 0;
-							Vector allActiveDesignEnvironments = createdesignAct
-									.getAllActiveDesignEnvironments();
-							for (int k = 0; k < allActiveDesignEnvironments
-									.size(); k++) {
-								Object designenvironment3 = allActiveDesignEnvironments
-										.elementAt(k);
+							Vector allActiveDesignEnvironments = createdesignAct.getAllActiveDesignEnvironments();
+							for (int k = 0; k < allActiveDesignEnvironments.size(); k++) {
+								Object designenvironment3 = allActiveDesignEnvironments.elementAt(k);
 								if (designenvironment3 instanceof DesignEnvironment) {
 									allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor += (double) (((DesignEnvironment) designenvironment3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							code.setNumKnownErrors((double) (((double) (code
-									.getNumKnownErrors())) + ((1 - ((double) (code
-									.getCompletenessDiffDesDoc()))) * (allActiveEmpSoftwareEngineerProductivityInDesign
-									* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
-									* (1 + allActiveDesignDocDesignDocumentCompletenessDiffReqDoc) * (1 + allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor)))));
+							code.setNumKnownErrors((double) (((double) (code.getNumKnownErrors())) + ((1
+									- ((double) (code.getCompletenessDiffDesDoc())))
+									* (allActiveEmpSoftwareEngineerProductivityInDesign
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + allActiveDesignDocDesignDocumentCompletenessDiffReqDoc)
+											* (1 + allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor)))));
 						}
 					}
 				}
@@ -3511,45 +2955,35 @@ public class RuleExecutor {
 	}
 
 	// CreateRequirementsEffectRuleFirst rule (CreateRequirements Action):
-	private void createRequirementsEffectRuleFirst(Stage gui,
-			int updateInstructions, String ruleName,
+	private void createRequirementsEffectRuleFirst(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<CreateRequirementsAction> createrequirementsActs = state
-				.getActionStateRepository()
+		Vector<CreateRequirementsAction> createrequirementsActs = state.getActionStateRepository()
 				.getCreateRequirementsActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < createrequirementsActs.size(); i++) {
-				CreateRequirementsAction createrequirementsAct = createrequirementsActs
-						.elementAt(i);
+				CreateRequirementsAction createrequirementsAct = createrequirementsActs.elementAt(i);
 				if ((createrequirementsAct.getAllEmps().size() >= 1)
 						&& (createrequirementsAct.getAllReqDocs().size() >= 1)
 						&& (createrequirementsAct.getAllProjs().size() >= 1)
-						&& (createrequirementsAct
-								.getAllRequirementsCaptureTools().size() >= 0)
-						&& (createrequirementsAct.getAllAssociatedCodeDocs()
-								.size() >= 1)
-						&& (createrequirementsAct.getAllAssociatedDesignDocs()
-								.size() >= 1)
-						&& (createrequirementsAct
-								.getAllAssociatedSystemTestPlans().size() >= 1)) {
-					Vector<Employee> emps = createrequirementsAct
-							.getAllActiveEmps();
+						&& (createrequirementsAct.getAllRequirementsCaptureTools().size() >= 0)
+						&& (createrequirementsAct.getAllAssociatedCodeDocs().size() >= 1)
+						&& (createrequirementsAct.getAllAssociatedDesignDocs().size() >= 1)
+						&& (createrequirementsAct.getAllAssociatedSystemTestPlans().size() >= 1)) {
+					Vector<Employee> emps = createrequirementsAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 						}
 					}
-					Vector<Artifact> reqdocs = createrequirementsAct
-							.getAllActiveReqDocs();
+					Vector<Artifact> reqdocs = createrequirementsAct.getAllActiveReqDocs();
 					for (int j = 0; j < reqdocs.size(); j++) {
 						Artifact reqdoc2 = reqdocs.elementAt(j);
 						if (reqdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) reqdoc2;
 						}
 					}
-					Vector<Project> projs = createrequirementsAct
-							.getAllActiveProjs();
+					Vector<Project> projs = createrequirementsAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -3559,22 +2993,18 @@ public class RuleExecutor {
 					Vector<Tool> requirementscapturetools = createrequirementsAct
 							.getAllActiveRequirementsCaptureTools();
 					for (int j = 0; j < requirementscapturetools.size(); j++) {
-						Tool requirementscapturetool2 = requirementscapturetools
-								.elementAt(j);
+						Tool requirementscapturetool2 = requirementscapturetools.elementAt(j);
 						if (requirementscapturetool2 instanceof RequirementsCaptureTool) {
 							RequirementsCaptureTool requirementscapturetool = (RequirementsCaptureTool) requirementscapturetool2;
 						}
 					}
-					Vector<Artifact> associatedcodedocs = createrequirementsAct
-							.getAllActiveAssociatedCodeDocs();
+					Vector<Artifact> associatedcodedocs = createrequirementsAct.getAllActiveAssociatedCodeDocs();
 					for (int j = 0; j < associatedcodedocs.size(); j++) {
-						Artifact associatedcodedoc2 = associatedcodedocs
-								.elementAt(j);
+						Artifact associatedcodedoc2 = associatedcodedocs.elementAt(j);
 						if (associatedcodedoc2 instanceof Code) {
 							Code code = (Code) associatedcodedoc2;
 							double allReqDocRequirementsDocumentPercentComplete = 0;
-							Vector allReqDocs = createrequirementsAct
-									.getAllReqDocs();
+							Vector allReqDocs = createrequirementsAct.getAllReqDocs();
 							for (int k = 0; k < allReqDocs.size(); k++) {
 								Object reqdoc3 = allReqDocs.elementAt(k);
 								if (reqdoc3 instanceof RequirementsDocument) {
@@ -3582,20 +3012,17 @@ public class RuleExecutor {
 											.getPercentComplete());
 								}
 							}
-							code.setCompletenessDiffReqDoc((int) ((((allReqDocRequirementsDocumentPercentComplete - ((double) (code
-									.getPercentComplete()))) / 100) + .001) * 100000));
+							code.setCompletenessDiffReqDoc((int) ((((allReqDocRequirementsDocumentPercentComplete
+									- ((double) (code.getPercentComplete()))) / 100) + .001) * 100000));
 						}
 					}
-					Vector<Artifact> associateddesigndocs = createrequirementsAct
-							.getAllActiveAssociatedDesignDocs();
+					Vector<Artifact> associateddesigndocs = createrequirementsAct.getAllActiveAssociatedDesignDocs();
 					for (int j = 0; j < associateddesigndocs.size(); j++) {
-						Artifact associateddesigndoc2 = associateddesigndocs
-								.elementAt(j);
+						Artifact associateddesigndoc2 = associateddesigndocs.elementAt(j);
 						if (associateddesigndoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndoc2;
 							double allReqDocRequirementsDocumentPercentComplete = 0;
-							Vector allReqDocs = createrequirementsAct
-									.getAllReqDocs();
+							Vector allReqDocs = createrequirementsAct.getAllReqDocs();
 							for (int k = 0; k < allReqDocs.size(); k++) {
 								Object reqdoc3 = allReqDocs.elementAt(k);
 								if (reqdoc3 instanceof RequirementsDocument) {
@@ -3604,20 +3031,19 @@ public class RuleExecutor {
 								}
 							}
 							designdocument
-									.setCompletenessDiffReqDoc((int) ((((allReqDocRequirementsDocumentPercentComplete - ((double) (designdocument
-											.getPercentComplete()))) / 100) + .001) * 100000));
+									.setCompletenessDiffReqDoc((int) ((((allReqDocRequirementsDocumentPercentComplete
+											- ((double) (designdocument.getPercentComplete()))) / 100) + .001)
+											* 100000));
 						}
 					}
 					Vector<Artifact> associatedsystemtestplans = createrequirementsAct
 							.getAllActiveAssociatedSystemTestPlans();
 					for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-						Artifact associatedsystemtestplan2 = associatedsystemtestplans
-								.elementAt(j);
+						Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 						if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 							double allReqDocRequirementsDocumentPercentComplete = 0;
-							Vector allReqDocs = createrequirementsAct
-									.getAllReqDocs();
+							Vector allReqDocs = createrequirementsAct.getAllReqDocs();
 							for (int k = 0; k < allReqDocs.size(); k++) {
 								Object reqdoc3 = allReqDocs.elementAt(k);
 								if (reqdoc3 instanceof RequirementsDocument) {
@@ -3626,8 +3052,9 @@ public class RuleExecutor {
 								}
 							}
 							systemtestplan
-									.setCompletnessDiffReqDoc((int) ((((allReqDocRequirementsDocumentPercentComplete - ((double) (systemtestplan
-											.getPercentComplete()))) / 100) + .001) * 100000));
+									.setCompletnessDiffReqDoc((int) ((((allReqDocRequirementsDocumentPercentComplete
+											- ((double) (systemtestplan.getPercentComplete()))) / 100) + .001)
+											* 100000));
 						}
 					}
 				}
@@ -3636,61 +3063,46 @@ public class RuleExecutor {
 	}
 
 	// CreateRequirementsEffectRuleA rule (CreateRequirements Action):
-	private void createRequirementsEffectRuleA(Stage gui,
-			int updateInstructions, String ruleName,
+	private void createRequirementsEffectRuleA(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<CreateRequirementsAction> createrequirementsActs = state
-				.getActionStateRepository()
+		Vector<CreateRequirementsAction> createrequirementsActs = state.getActionStateRepository()
 				.getCreateRequirementsActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < createrequirementsActs.size(); i++) {
-				CreateRequirementsAction createrequirementsAct = createrequirementsActs
-						.elementAt(i);
+				CreateRequirementsAction createrequirementsAct = createrequirementsActs.elementAt(i);
 				if ((createrequirementsAct.getAllEmps().size() >= 1)
 						&& (createrequirementsAct.getAllReqDocs().size() >= 1)
 						&& (createrequirementsAct.getAllProjs().size() >= 1)
-						&& (createrequirementsAct
-								.getAllRequirementsCaptureTools().size() >= 0)
-						&& (createrequirementsAct.getAllAssociatedCodeDocs()
-								.size() >= 1)
-						&& (createrequirementsAct.getAllAssociatedDesignDocs()
-								.size() >= 1)
-						&& (createrequirementsAct
-								.getAllAssociatedSystemTestPlans().size() >= 1)) {
-					Vector<Employee> emps = createrequirementsAct
-							.getAllActiveEmps();
+						&& (createrequirementsAct.getAllRequirementsCaptureTools().size() >= 0)
+						&& (createrequirementsAct.getAllAssociatedCodeDocs().size() >= 1)
+						&& (createrequirementsAct.getAllAssociatedDesignDocs().size() >= 1)
+						&& (createrequirementsAct.getAllAssociatedSystemTestPlans().size() >= 1)) {
+					Vector<Employee> emps = createrequirementsAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInRequirements((double) ((((double) (softwareengineer
-											.getProductivityInRequirementsUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInRequirements((double) ((((double) (softwareengineer
-											.getErrorRateInRequirementsUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInRequirements(
+									(double) ((((double) (softwareengineer.getProductivityInRequirementsUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInRequirements(
+									(double) ((((double) (softwareengineer.getErrorRateInRequirementsUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> reqdocs = createrequirementsAct
-							.getAllActiveReqDocs();
+					Vector<Artifact> reqdocs = createrequirementsAct.getAllActiveReqDocs();
 					for (int j = 0; j < reqdocs.size(); j++) {
 						Artifact reqdoc2 = reqdocs.elementAt(j);
 						if (reqdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) reqdoc2;
 							double allActiveProjSEProjectRequiredSizeOfCode = 0;
-							Vector allActiveProjs = createrequirementsAct
-									.getAllActiveProjs();
+							Vector allActiveProjs = createrequirementsAct.getAllActiveProjs();
 							for (int k = 0; k < allActiveProjs.size(); k++) {
 								Object proj3 = allActiveProjs.elementAt(k);
 								if (proj3 instanceof SEProject) {
@@ -3699,18 +3111,14 @@ public class RuleExecutor {
 								}
 							}
 							requirementsdocument
-									.setPercentComplete((double) (((double) (requirementsdocument
-											.getSize()))
+									.setPercentComplete((double) (((double) (requirementsdocument.getSize()))
 											/ allActiveProjSEProjectRequiredSizeOfCode * 100));
-							requirementsdocument
-									.setPercentErroneous((double) ((((double) (requirementsdocument
-											.getNumKnownErrors())) + ((double) (requirementsdocument
-											.getNumUnknownErrors())))
-											/ (((double) (requirementsdocument
-													.getSize())) + .1) * 100));
+							requirementsdocument.setPercentErroneous(
+									(double) ((((double) (requirementsdocument.getNumKnownErrors()))
+											+ ((double) (requirementsdocument.getNumUnknownErrors())))
+											/ (((double) (requirementsdocument.getSize())) + .1) * 100));
 							double allActiveEmpSoftwareEngineerErrorRateInRequirements = 0;
-							Vector allActiveEmps = createrequirementsAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = createrequirementsAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -3718,26 +3126,23 @@ public class RuleExecutor {
 											.getErrorRateInRequirements());
 								}
 							}
-							double numEmp = (double) (createrequirementsAct
-									.getAllEmps().size());
+							double numEmp = (double) (createrequirementsAct.getAllEmps().size());
 							double allActiveRequirementsCaptureToolRequirementsCaptureToolErrorRateDecreaseFactor = 0;
 							Vector allActiveRequirementsCaptureTools = createrequirementsAct
 									.getAllActiveRequirementsCaptureTools();
-							for (int k = 0; k < allActiveRequirementsCaptureTools
-									.size(); k++) {
-								Object requirementscapturetool3 = allActiveRequirementsCaptureTools
-										.elementAt(k);
+							for (int k = 0; k < allActiveRequirementsCaptureTools.size(); k++) {
+								Object requirementscapturetool3 = allActiveRequirementsCaptureTools.elementAt(k);
 								if (requirementscapturetool3 instanceof RequirementsCaptureTool) {
 									allActiveRequirementsCaptureToolRequirementsCaptureToolErrorRateDecreaseFactor += (double) (((RequirementsCaptureTool) requirementscapturetool3)
 											.getErrorRateDecreaseFactor());
 								}
 							}
-							requirementsdocument
-									.setNumUnknownErrors((double) (((double) (requirementsdocument
-											.getNumUnknownErrors())) + ((allActiveEmpSoftwareEngineerErrorRateInRequirements
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2)))
-											* (1 - allActiveRequirementsCaptureToolRequirementsCaptureToolErrorRateDecreaseFactor) * 2))));
+							requirementsdocument.setNumUnknownErrors((double) (((double) (requirementsdocument
+									.getNumUnknownErrors()))
+									+ ((allActiveEmpSoftwareEngineerErrorRateInRequirements
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 - allActiveRequirementsCaptureToolRequirementsCaptureToolErrorRateDecreaseFactor)
+											* 2))));
 							double allActiveEmpSoftwareEngineerProductivityInRequirements = 0;
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
@@ -3747,25 +3152,21 @@ public class RuleExecutor {
 								}
 							}
 							double allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor = 0;
-							for (int k = 0; k < allActiveRequirementsCaptureTools
-									.size(); k++) {
-								Object requirementscapturetool3 = allActiveRequirementsCaptureTools
-										.elementAt(k);
+							for (int k = 0; k < allActiveRequirementsCaptureTools.size(); k++) {
+								Object requirementscapturetool3 = allActiveRequirementsCaptureTools.elementAt(k);
 								if (requirementscapturetool3 instanceof RequirementsCaptureTool) {
 									allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor += (double) (((RequirementsCaptureTool) requirementscapturetool3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							requirementsdocument
-									.setSize((double) (((double) (requirementsdocument
-											.getSize())) + ((allActiveEmpSoftwareEngineerProductivityInRequirements
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2)))
-											* (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor) * 2))));
+							requirementsdocument.setSize((double) (((double) (requirementsdocument.getSize()))
+									+ ((allActiveEmpSoftwareEngineerProductivityInRequirements
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor)
+											* 2))));
 						}
 					}
-					Vector<Project> projs = createrequirementsAct
-							.getAllActiveProjs();
+					Vector<Project> projs = createrequirementsAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -3775,22 +3176,18 @@ public class RuleExecutor {
 					Vector<Tool> requirementscapturetools = createrequirementsAct
 							.getAllActiveRequirementsCaptureTools();
 					for (int j = 0; j < requirementscapturetools.size(); j++) {
-						Tool requirementscapturetool2 = requirementscapturetools
-								.elementAt(j);
+						Tool requirementscapturetool2 = requirementscapturetools.elementAt(j);
 						if (requirementscapturetool2 instanceof RequirementsCaptureTool) {
 							RequirementsCaptureTool requirementscapturetool = (RequirementsCaptureTool) requirementscapturetool2;
 						}
 					}
-					Vector<Artifact> associatedcodedocs = createrequirementsAct
-							.getAllActiveAssociatedCodeDocs();
+					Vector<Artifact> associatedcodedocs = createrequirementsAct.getAllActiveAssociatedCodeDocs();
 					for (int j = 0; j < associatedcodedocs.size(); j++) {
-						Artifact associatedcodedoc2 = associatedcodedocs
-								.elementAt(j);
+						Artifact associatedcodedoc2 = associatedcodedocs.elementAt(j);
 						if (associatedcodedoc2 instanceof Code) {
 							Code code = (Code) associatedcodedoc2;
 							double allActiveEmpSoftwareEngineerProductivityInRequirements = 0;
-							Vector allActiveEmps = createrequirementsAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = createrequirementsAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -3798,37 +3195,32 @@ public class RuleExecutor {
 											.getProductivityInRequirements());
 								}
 							}
-							double numEmp = (double) (createrequirementsAct
-									.getAllEmps().size());
+							double numEmp = (double) (createrequirementsAct.getAllEmps().size());
 							double allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor = 0;
 							Vector allActiveRequirementsCaptureTools = createrequirementsAct
 									.getAllActiveRequirementsCaptureTools();
-							for (int k = 0; k < allActiveRequirementsCaptureTools
-									.size(); k++) {
-								Object requirementscapturetool3 = allActiveRequirementsCaptureTools
-										.elementAt(k);
+							for (int k = 0; k < allActiveRequirementsCaptureTools.size(); k++) {
+								Object requirementscapturetool3 = allActiveRequirementsCaptureTools.elementAt(k);
 								if (requirementscapturetool3 instanceof RequirementsCaptureTool) {
 									allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor += (double) (((RequirementsCaptureTool) requirementscapturetool3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							code.setNumKnownErrors((double) (((double) (code
-									.getNumKnownErrors())) + ((1 - ((double) (code
-									.getCompletenessDiffReqDoc()))) * (allActiveEmpSoftwareEngineerProductivityInRequirements
-									* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
-									* (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor) * 2))));
+							code.setNumKnownErrors((double) (((double) (code.getNumKnownErrors())) + ((1
+									- ((double) (code.getCompletenessDiffReqDoc())))
+									* (allActiveEmpSoftwareEngineerProductivityInRequirements
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor)
+											* 2))));
 						}
 					}
-					Vector<Artifact> associateddesigndocs = createrequirementsAct
-							.getAllActiveAssociatedDesignDocs();
+					Vector<Artifact> associateddesigndocs = createrequirementsAct.getAllActiveAssociatedDesignDocs();
 					for (int j = 0; j < associateddesigndocs.size(); j++) {
-						Artifact associateddesigndoc2 = associateddesigndocs
-								.elementAt(j);
+						Artifact associateddesigndoc2 = associateddesigndocs.elementAt(j);
 						if (associateddesigndoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) associateddesigndoc2;
 							double allActiveEmpSoftwareEngineerProductivityInRequirements = 0;
-							Vector allActiveEmps = createrequirementsAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = createrequirementsAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -3836,39 +3228,33 @@ public class RuleExecutor {
 											.getProductivityInRequirements());
 								}
 							}
-							double numEmp = (double) (createrequirementsAct
-									.getAllEmps().size());
+							double numEmp = (double) (createrequirementsAct.getAllEmps().size());
 							double allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor = 0;
 							Vector allActiveRequirementsCaptureTools = createrequirementsAct
 									.getAllActiveRequirementsCaptureTools();
-							for (int k = 0; k < allActiveRequirementsCaptureTools
-									.size(); k++) {
-								Object requirementscapturetool3 = allActiveRequirementsCaptureTools
-										.elementAt(k);
+							for (int k = 0; k < allActiveRequirementsCaptureTools.size(); k++) {
+								Object requirementscapturetool3 = allActiveRequirementsCaptureTools.elementAt(k);
 								if (requirementscapturetool3 instanceof RequirementsCaptureTool) {
 									allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor += (double) (((RequirementsCaptureTool) requirementscapturetool3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							designdocument
-									.setNumKnownErrors((double) (((double) (designdocument
-											.getNumKnownErrors())) + ((1 - ((double) (designdocument
-											.getCompletenessDiffReqDoc()))) * (allActiveEmpSoftwareEngineerProductivityInRequirements
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2)))
-											* (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor) * 2))));
+							designdocument.setNumKnownErrors((double) (((double) (designdocument.getNumKnownErrors()))
+									+ ((1 - ((double) (designdocument.getCompletenessDiffReqDoc())))
+											* (allActiveEmpSoftwareEngineerProductivityInRequirements
+													* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+													* (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor)
+													* 2))));
 						}
 					}
 					Vector<Artifact> associatedsystemtestplans = createrequirementsAct
 							.getAllActiveAssociatedSystemTestPlans();
 					for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-						Artifact associatedsystemtestplan2 = associatedsystemtestplans
-								.elementAt(j);
+						Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 						if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 							double allActiveEmpSoftwareEngineerProductivityInRequirements = 0;
-							Vector allActiveEmps = createrequirementsAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = createrequirementsAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -3876,27 +3262,23 @@ public class RuleExecutor {
 											.getProductivityInRequirements());
 								}
 							}
-							double numEmp = (double) (createrequirementsAct
-									.getAllEmps().size());
+							double numEmp = (double) (createrequirementsAct.getAllEmps().size());
 							double allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor = 0;
 							Vector allActiveRequirementsCaptureTools = createrequirementsAct
 									.getAllActiveRequirementsCaptureTools();
-							for (int k = 0; k < allActiveRequirementsCaptureTools
-									.size(); k++) {
-								Object requirementscapturetool3 = allActiveRequirementsCaptureTools
-										.elementAt(k);
+							for (int k = 0; k < allActiveRequirementsCaptureTools.size(); k++) {
+								Object requirementscapturetool3 = allActiveRequirementsCaptureTools.elementAt(k);
 								if (requirementscapturetool3 instanceof RequirementsCaptureTool) {
 									allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor += (double) (((RequirementsCaptureTool) requirementscapturetool3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							systemtestplan
-									.setNumKnownErrors((double) (((double) (systemtestplan
-											.getNumKnownErrors())) + ((1 - ((double) (systemtestplan
-											.getCompletnessDiffReqDoc()))) * (allActiveEmpSoftwareEngineerProductivityInRequirements
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2)))
-											* (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor) * 2))));
+							systemtestplan.setNumKnownErrors((double) (((double) (systemtestplan.getNumKnownErrors()))
+									+ ((1 - ((double) (systemtestplan.getCompletnessDiffReqDoc())))
+											* (allActiveEmpSoftwareEngineerProductivityInRequirements
+													* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+													* (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor)
+													* 2))));
 						}
 					}
 				}
@@ -3905,63 +3287,47 @@ public class RuleExecutor {
 	}
 
 	// CorrectRequirementsEffectRuleA rule (CorrectRequirements Action):
-	private void correctRequirementsEffectRuleA(Stage gui,
-			int updateInstructions, String ruleName,
+	private void correctRequirementsEffectRuleA(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
-		Vector<CorrectRequirementsAction> correctrequirementsActs = state
-				.getActionStateRepository()
+		Vector<CorrectRequirementsAction> correctrequirementsActs = state.getActionStateRepository()
 				.getCorrectRequirementsActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < correctrequirementsActs.size(); i++) {
-				CorrectRequirementsAction correctrequirementsAct = correctrequirementsActs
-						.elementAt(i);
+				CorrectRequirementsAction correctrequirementsAct = correctrequirementsActs.elementAt(i);
 				if ((correctrequirementsAct.getAllEmps().size() >= 1)
-						&& (correctrequirementsAct.getAllRequirementsDocs()
-								.size() >= 1)
+						&& (correctrequirementsAct.getAllRequirementsDocs().size() >= 1)
 						&& (correctrequirementsAct.getAllProjs().size() >= 1)
-						&& (correctrequirementsAct
-								.getAllRequirementsCaptureTools().size() >= 0)) {
-					Vector<Employee> emps = correctrequirementsAct
-							.getAllActiveEmps();
+						&& (correctrequirementsAct.getAllRequirementsCaptureTools().size() >= 0)) {
+					Vector<Employee> emps = correctrequirementsAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInRequirements((double) ((((double) (softwareengineer
-											.getProductivityInRequirementsUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInRequirements((double) ((((double) (softwareengineer
-											.getErrorRateInRequirementsUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInRequirements(
+									(double) ((((double) (softwareengineer.getProductivityInRequirementsUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInRequirements(
+									(double) ((((double) (softwareengineer.getErrorRateInRequirementsUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> requirementsdocs = correctrequirementsAct
-							.getAllActiveRequirementsDocs();
+					Vector<Artifact> requirementsdocs = correctrequirementsAct.getAllActiveRequirementsDocs();
 					for (int j = 0; j < requirementsdocs.size(); j++) {
-						Artifact requirementsdoc2 = requirementsdocs
-								.elementAt(j);
+						Artifact requirementsdoc2 = requirementsdocs.elementAt(j);
 						if (requirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) requirementsdoc2;
-							requirementsdocument
-									.setPercentErroneous((double) ((((double) (requirementsdocument
-											.getNumKnownErrors())) + ((double) (requirementsdocument
-											.getNumUnknownErrors())))
-											/ (((double) (requirementsdocument
-													.getSize())) + .1) * 100));
+							requirementsdocument.setPercentErroneous(
+									(double) ((((double) (requirementsdocument.getNumKnownErrors()))
+											+ ((double) (requirementsdocument.getNumUnknownErrors())))
+											/ (((double) (requirementsdocument.getSize())) + .1) * 100));
 							double allActiveEmpSoftwareEngineerErrorRateInRequirements = 0;
-							Vector allActiveEmps = correctrequirementsAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = correctrequirementsAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -3969,25 +3335,22 @@ public class RuleExecutor {
 											.getErrorRateInRequirements());
 								}
 							}
-							double numEmp = (double) (correctrequirementsAct
-									.getAllEmps().size());
+							double numEmp = (double) (correctrequirementsAct.getAllEmps().size());
 							double allActiveRequirementsCaptureToolRequirementsCaptureToolErrorRateDecreaseFactor = 0;
 							Vector allActiveRequirementsCaptureTools = correctrequirementsAct
 									.getAllActiveRequirementsCaptureTools();
-							for (int k = 0; k < allActiveRequirementsCaptureTools
-									.size(); k++) {
-								Object requirementscapturetool3 = allActiveRequirementsCaptureTools
-										.elementAt(k);
+							for (int k = 0; k < allActiveRequirementsCaptureTools.size(); k++) {
+								Object requirementscapturetool3 = allActiveRequirementsCaptureTools.elementAt(k);
 								if (requirementscapturetool3 instanceof RequirementsCaptureTool) {
 									allActiveRequirementsCaptureToolRequirementsCaptureToolErrorRateDecreaseFactor += (double) (((RequirementsCaptureTool) requirementscapturetool3)
 											.getErrorRateDecreaseFactor());
 								}
 							}
-							requirementsdocument
-									.setNumUnknownErrors((double) (((double) (requirementsdocument
-											.getNumUnknownErrors())) + ((.2 * allActiveEmpSoftwareEngineerErrorRateInRequirements)
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2))) * (1 - allActiveRequirementsCaptureToolRequirementsCaptureToolErrorRateDecreaseFactor))));
+							requirementsdocument.setNumUnknownErrors(
+									(double) (((double) (requirementsdocument.getNumUnknownErrors())) + ((.2
+											* allActiveEmpSoftwareEngineerErrorRateInRequirements)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 - allActiveRequirementsCaptureToolRequirementsCaptureToolErrorRateDecreaseFactor))));
 							double allActiveEmpSoftwareEngineerProductivityInRequirements = 0;
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
@@ -3997,24 +3360,21 @@ public class RuleExecutor {
 								}
 							}
 							double allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor = 0;
-							for (int k = 0; k < allActiveRequirementsCaptureTools
-									.size(); k++) {
-								Object requirementscapturetool3 = allActiveRequirementsCaptureTools
-										.elementAt(k);
+							for (int k = 0; k < allActiveRequirementsCaptureTools.size(); k++) {
+								Object requirementscapturetool3 = allActiveRequirementsCaptureTools.elementAt(k);
 								if (requirementscapturetool3 instanceof RequirementsCaptureTool) {
 									allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor += (double) (((RequirementsCaptureTool) requirementscapturetool3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							requirementsdocument
-									.setNumKnownErrors((double) (((double) (requirementsdocument
-											.getNumKnownErrors())) - ((.5 * allActiveEmpSoftwareEngineerProductivityInRequirements)
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2))) * (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor))));
+							requirementsdocument.setNumKnownErrors(
+									(double) (((double) (requirementsdocument.getNumKnownErrors())) - ((.5
+											* allActiveEmpSoftwareEngineerProductivityInRequirements)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + allActiveRequirementsCaptureToolRequirementsCaptureToolProductivityIncreaseFactor))));
 						}
 					}
-					Vector<Project> projs = correctrequirementsAct
-							.getAllActiveProjs();
+					Vector<Project> projs = correctrequirementsAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -4024,8 +3384,7 @@ public class RuleExecutor {
 					Vector<Tool> requirementscapturetools = correctrequirementsAct
 							.getAllActiveRequirementsCaptureTools();
 					for (int j = 0; j < requirementscapturetools.size(); j++) {
-						Tool requirementscapturetool2 = requirementscapturetools
-								.elementAt(j);
+						Tool requirementscapturetool2 = requirementscapturetools.elementAt(j);
 						if (requirementscapturetool2 instanceof RequirementsCaptureTool) {
 							RequirementsCaptureTool requirementscapturetool = (RequirementsCaptureTool) requirementscapturetool2;
 						}
@@ -4036,60 +3395,47 @@ public class RuleExecutor {
 	}
 
 	// CorrectDesignEffectRuleA rule (CorrectDesign Action):
-	private void correctDesignEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<CorrectDesignAction> correctdesignActs = state
-				.getActionStateRepository()
+	private void correctDesignEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<CorrectDesignAction> correctdesignActs = state.getActionStateRepository()
 				.getCorrectDesignActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < correctdesignActs.size(); i++) {
-				CorrectDesignAction correctdesignAct = correctdesignActs
-						.elementAt(i);
-				if ((correctdesignAct.getAllEmps().size() >= 1)
-						&& (correctdesignAct.getAllDesignDocs().size() >= 1)
+				CorrectDesignAction correctdesignAct = correctdesignActs.elementAt(i);
+				if ((correctdesignAct.getAllEmps().size() >= 1) && (correctdesignAct.getAllDesignDocs().size() >= 1)
 						&& (correctdesignAct.getAllProjs().size() >= 1)
-						&& (correctdesignAct.getAllAssociatedRequirementsDocs()
-								.size() >= 1)
+						&& (correctdesignAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (correctdesignAct.getAllDesignEnvironments().size() >= 0)) {
 					Vector<Employee> emps = correctdesignAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInDesign((double) ((((double) (softwareengineer
-											.getProductivityInDesignUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInDesign((double) ((((double) (softwareengineer
-											.getErrorRateInDesignUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInDesign(
+									(double) ((((double) (softwareengineer.getProductivityInDesignUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInDesign(
+									(double) ((((double) (softwareengineer.getErrorRateInDesignUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> designdocs = correctdesignAct
-							.getAllActiveDesignDocs();
+					Vector<Artifact> designdocs = correctdesignAct.getAllActiveDesignDocs();
 					for (int j = 0; j < designdocs.size(); j++) {
 						Artifact designdoc2 = designdocs.elementAt(j);
 						if (designdoc2 instanceof DesignDocument) {
 							DesignDocument designdocument = (DesignDocument) designdoc2;
 							designdocument
-									.setPercentErroneous((double) ((((double) (designdocument
-											.getNumKnownErrors())) + ((double) (designdocument
-											.getNumUnknownErrors())))
-											/ (((double) (designdocument
-													.getSize())) + .1) * 100));
+									.setPercentErroneous((double) ((((double) (designdocument.getNumKnownErrors()))
+											+ ((double) (designdocument.getNumUnknownErrors())))
+											/ (((double) (designdocument.getSize())) + .1) * 100));
 							double allActiveEmpSoftwareEngineerErrorRateInDesign = 0;
-							Vector allActiveEmps = correctdesignAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = correctdesignAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -4097,25 +3443,21 @@ public class RuleExecutor {
 											.getErrorRateInDesign());
 								}
 							}
-							double numEmp = (double) (correctdesignAct
-									.getAllEmps().size());
+							double numEmp = (double) (correctdesignAct.getAllEmps().size());
 							double allActiveDesignEnvironmentDesignEnvironmentErrorRateDecreaseFactor = 0;
-							Vector allActiveDesignEnvironments = correctdesignAct
-									.getAllActiveDesignEnvironments();
-							for (int k = 0; k < allActiveDesignEnvironments
-									.size(); k++) {
-								Object designenvironment3 = allActiveDesignEnvironments
-										.elementAt(k);
+							Vector allActiveDesignEnvironments = correctdesignAct.getAllActiveDesignEnvironments();
+							for (int k = 0; k < allActiveDesignEnvironments.size(); k++) {
+								Object designenvironment3 = allActiveDesignEnvironments.elementAt(k);
 								if (designenvironment3 instanceof DesignEnvironment) {
 									allActiveDesignEnvironmentDesignEnvironmentErrorRateDecreaseFactor += (double) (((DesignEnvironment) designenvironment3)
 											.getErrorRateDecreaseFactor());
 								}
 							}
-							designdocument
-									.setNumUnknownErrors((double) (((double) (designdocument
-											.getNumUnknownErrors())) + ((.2 * allActiveEmpSoftwareEngineerErrorRateInDesign)
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2))) * (1 - allActiveDesignEnvironmentDesignEnvironmentErrorRateDecreaseFactor))));
+							designdocument.setNumUnknownErrors(
+									(double) (((double) (designdocument.getNumUnknownErrors())) + ((.2
+											* allActiveEmpSoftwareEngineerErrorRateInDesign)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 - allActiveDesignEnvironmentDesignEnvironmentErrorRateDecreaseFactor))));
 							double allActiveEmpSoftwareEngineerProductivityInDesign = 0;
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
@@ -4125,24 +3467,20 @@ public class RuleExecutor {
 								}
 							}
 							double allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor = 0;
-							for (int k = 0; k < allActiveDesignEnvironments
-									.size(); k++) {
-								Object designenvironment3 = allActiveDesignEnvironments
-										.elementAt(k);
+							for (int k = 0; k < allActiveDesignEnvironments.size(); k++) {
+								Object designenvironment3 = allActiveDesignEnvironments.elementAt(k);
 								if (designenvironment3 instanceof DesignEnvironment) {
 									allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor += (double) (((DesignEnvironment) designenvironment3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							designdocument
-									.setNumKnownErrors((double) (((double) (designdocument
-											.getNumKnownErrors())) - ((.5 * allActiveEmpSoftwareEngineerProductivityInDesign)
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2))) * (1 + allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor))));
+							designdocument.setNumKnownErrors((double) (((double) (designdocument.getNumKnownErrors()))
+									- ((.5 * allActiveEmpSoftwareEngineerProductivityInDesign)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + allActiveDesignEnvironmentDesignEnvironmentProductivityIncreaseFactor))));
 						}
 					}
-					Vector<Project> projs = correctdesignAct
-							.getAllActiveProjs();
+					Vector<Project> projs = correctdesignAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
@@ -4152,17 +3490,14 @@ public class RuleExecutor {
 					Vector<Artifact> associatedrequirementsdocs = correctdesignAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Tool> designenvironments = correctdesignAct
-							.getAllActiveDesignEnvironments();
+					Vector<Tool> designenvironments = correctdesignAct.getAllActiveDesignEnvironments();
 					for (int j = 0; j < designenvironments.size(); j++) {
-						Tool designenvironment2 = designenvironments
-								.elementAt(j);
+						Tool designenvironment2 = designenvironments.elementAt(j);
 						if (designenvironment2 instanceof DesignEnvironment) {
 							DesignEnvironment designenvironment = (DesignEnvironment) designenvironment2;
 						}
@@ -4173,48 +3508,37 @@ public class RuleExecutor {
 	}
 
 	// CreateCodeTrigRule rule (CreateCode Action):
-	private void createCodeTrigRule(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<CreateCodeAction> createcodeActs = state
-				.getActionStateRepository()
-				.getCreateCodeActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("CreateCodeTrigRule"))) {
+	private void createCodeTrigRule(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<CreateCodeAction> createcodeActs = state.getActionStateRepository().getCreateCodeActionStateRepository()
+				.getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("CreateCodeTrigRule"))) {
 			for (int i = 0; i < createcodeActs.size(); i++) {
 				CreateCodeAction createcodeAct = createcodeActs.elementAt(i);
 				if (createcodeAct == action) {
-					if ((createcodeAct.getAllEmps().size() >= 1)
-							&& (createcodeAct.getAllCodeDocs().size() >= 1)
+					if ((createcodeAct.getAllEmps().size() >= 1) && (createcodeAct.getAllCodeDocs().size() >= 1)
 							&& (createcodeAct.getAllProjs().size() >= 1)
-							&& (createcodeAct
-									.getAllAssociatedRequirementsDocs().size() >= 1)
-							&& (createcodeAct.getAllAssociatedDesignDocuments()
-									.size() >= 1)
-							&& (createcodeAct.getAllDevelopmentEnvironments()
-									.size() >= 0)
-							&& (createcodeAct.getAllAssociatedSystemTestPlans()
-									.size() >= 1)) {
-						Vector<Employee> emps = createcodeAct
-								.getAllActiveEmps();
+							&& (createcodeAct.getAllAssociatedRequirementsDocs().size() >= 1)
+							&& (createcodeAct.getAllAssociatedDesignDocuments().size() >= 1)
+							&& (createcodeAct.getAllDevelopmentEnvironments().size() >= 0)
+							&& (createcodeAct.getAllAssociatedSystemTestPlans().size() >= 1)) {
+						Vector<Employee> emps = createcodeAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
 								SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 							}
 						}
-						Vector<Artifact> codedocs = createcodeAct
-								.getAllActiveCodeDocs();
+						Vector<Artifact> codedocs = createcodeAct.getAllActiveCodeDocs();
 						for (int j = 0; j < codedocs.size(); j++) {
 							Artifact codedoc2 = codedocs.elementAt(j);
 							if (codedoc2 instanceof Code) {
 								Code code = (Code) codedoc2;
-								double numEmp = (double) (createcodeAct
-										.getAllEmps().size());
+								double numEmp = (double) (createcodeAct.getAllEmps().size());
 								code.setNumAuthors((int) (numEmp));
 							}
 						}
-						Vector<Project> projs = createcodeAct
-								.getAllActiveProjs();
+						Vector<Project> projs = createcodeAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
@@ -4224,8 +3548,7 @@ public class RuleExecutor {
 						Vector<Artifact> associatedrequirementsdocs = createcodeAct
 								.getAllActiveAssociatedRequirementsDocs();
 						for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-							Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-									.elementAt(j);
+							Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 							if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 								RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 							}
@@ -4233,17 +3556,14 @@ public class RuleExecutor {
 						Vector<Artifact> associateddesigndocuments = createcodeAct
 								.getAllActiveAssociatedDesignDocuments();
 						for (int j = 0; j < associateddesigndocuments.size(); j++) {
-							Artifact associateddesigndocument2 = associateddesigndocuments
-									.elementAt(j);
+							Artifact associateddesigndocument2 = associateddesigndocuments.elementAt(j);
 							if (associateddesigndocument2 instanceof DesignDocument) {
 								DesignDocument designdocument = (DesignDocument) associateddesigndocument2;
 							}
 						}
-						Vector<Tool> developmentenvironments = createcodeAct
-								.getAllActiveDevelopmentEnvironments();
+						Vector<Tool> developmentenvironments = createcodeAct.getAllActiveDevelopmentEnvironments();
 						for (int j = 0; j < developmentenvironments.size(); j++) {
-							Tool developmentenvironment2 = developmentenvironments
-									.elementAt(j);
+							Tool developmentenvironment2 = developmentenvironments.elementAt(j);
 							if (developmentenvironment2 instanceof IDE) {
 								IDE ide = (IDE) developmentenvironment2;
 							}
@@ -4251,8 +3571,7 @@ public class RuleExecutor {
 						Vector<Artifact> associatedsystemtestplans = createcodeAct
 								.getAllActiveAssociatedSystemTestPlans();
 						for (int j = 0; j < associatedsystemtestplans.size(); j++) {
-							Artifact associatedsystemtestplan2 = associatedsystemtestplans
-									.elementAt(j);
+							Artifact associatedsystemtestplan2 = associatedsystemtestplans.elementAt(j);
 							if (associatedsystemtestplan2 instanceof SystemTestPlan) {
 								SystemTestPlan systemtestplan = (SystemTestPlan) associatedsystemtestplan2;
 							}
@@ -4264,57 +3583,44 @@ public class RuleExecutor {
 	}
 
 	// CorrectTestPlanEffectRuleA rule (CorrectSystemTestPlan Action):
-	private void correctTestPlanEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<CorrectSystemTestPlanAction> correctsystemtestplanActs = state
-				.getActionStateRepository()
-				.getCorrectSystemTestPlanActionStateRepository()
-				.getAllActions();
+	private void correctTestPlanEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<CorrectSystemTestPlanAction> correctsystemtestplanActs = state.getActionStateRepository()
+				.getCorrectSystemTestPlanActionStateRepository().getAllActions();
 		if ((updateInstructions == UPDATE_ALL_CONTINUOUS)) {
 			for (int i = 0; i < correctsystemtestplanActs.size(); i++) {
-				CorrectSystemTestPlanAction correctsystemtestplanAct = correctsystemtestplanActs
-						.elementAt(i);
+				CorrectSystemTestPlanAction correctsystemtestplanAct = correctsystemtestplanActs.elementAt(i);
 				if ((correctsystemtestplanAct.getAllEmps().size() >= 1)
 						&& (correctsystemtestplanAct.getAllTestPlans().size() >= 1)
-						&& (correctsystemtestplanAct
-								.getAllAssociatedRequirementsDocs().size() >= 1)
+						&& (correctsystemtestplanAct.getAllAssociatedRequirementsDocs().size() >= 1)
 						&& (correctsystemtestplanAct.getAllProjs().size() >= 1)
-						&& (correctsystemtestplanAct.getAllTestingTools()
-								.size() >= 0)) {
-					Vector<Employee> emps = correctsystemtestplanAct
-							.getAllActiveEmps();
+						&& (correctsystemtestplanAct.getAllTestingTools().size() >= 0)) {
+					Vector<Employee> emps = correctsystemtestplanAct.getAllActiveEmps();
 					for (int j = 0; j < emps.size(); j++) {
 						Employee emp2 = emps.elementAt(j);
 						if (emp2 instanceof SoftwareEngineer) {
 							SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
-							softwareengineer
-									.setEnergy((double) (((double) (softwareengineer
-											.getEnergy())) - .0025));
-							softwareengineer
-									.setMood((double) (((double) (softwareengineer
-											.getMood())) - .00125));
-							double numActiveActionsThisPartA = (double) (state
-									.getActionStateRepository()
+							softwareengineer.setEnergy((double) (((double) (softwareengineer.getEnergy())) - .0025));
+							softwareengineer.setMood((double) (((double) (softwareengineer.getMood())) - .00125));
+							double numActiveActionsThisPartA = (double) (state.getActionStateRepository()
 									.getAllActiveActions(emp2).size());
-							softwareengineer
-									.setProductivityInTesting((double) ((((double) (softwareengineer
-											.getProductivityInTestingUnadjusted())) * ((double) (softwareengineer
-											.getEnergy()))) / (numActiveActionsThisPartA - 1)));
-							softwareengineer
-									.setErrorRateInTesting((double) ((((double) (softwareengineer
-											.getErrorRateInTestingUnadjusted())) * (1 + 1 - ((double) (softwareengineer
-											.getEnergy())))) / (numActiveActionsThisPartA - 1)));
+							softwareengineer.setProductivityInTesting(
+									(double) ((((double) (softwareengineer.getProductivityInTestingUnadjusted()))
+											* ((double) (softwareengineer.getEnergy())))
+											/ (numActiveActionsThisPartA - 1)));
+							softwareengineer.setErrorRateInTesting(
+									(double) ((((double) (softwareengineer.getErrorRateInTestingUnadjusted()))
+											* (1 + 1 - ((double) (softwareengineer.getEnergy()))))
+											/ (numActiveActionsThisPartA - 1)));
 						}
 					}
-					Vector<Artifact> testplans = correctsystemtestplanAct
-							.getAllActiveTestPlans();
+					Vector<Artifact> testplans = correctsystemtestplanAct.getAllActiveTestPlans();
 					for (int j = 0; j < testplans.size(); j++) {
 						Artifact testplan2 = testplans.elementAt(j);
 						if (testplan2 instanceof SystemTestPlan) {
 							SystemTestPlan systemtestplan = (SystemTestPlan) testplan2;
 							double allActiveEmpSoftwareEngineerProductivityInTesting = 0;
-							Vector allActiveEmps = correctsystemtestplanAct
-									.getAllActiveEmps();
+							Vector allActiveEmps = correctsystemtestplanAct.getAllActiveEmps();
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
 								if (emp3 instanceof SoftwareEngineer) {
@@ -4322,24 +3628,20 @@ public class RuleExecutor {
 											.getProductivityInTesting());
 								}
 							}
-							double numEmp = (double) (correctsystemtestplanAct
-									.getAllEmps().size());
+							double numEmp = (double) (correctsystemtestplanAct.getAllEmps().size());
 							double allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor = 0;
-							Vector allActiveTestingTools = correctsystemtestplanAct
-									.getAllActiveTestingTools();
+							Vector allActiveTestingTools = correctsystemtestplanAct.getAllActiveTestingTools();
 							for (int k = 0; k < allActiveTestingTools.size(); k++) {
-								Object testingtool3 = allActiveTestingTools
-										.elementAt(k);
+								Object testingtool3 = allActiveTestingTools.elementAt(k);
 								if (testingtool3 instanceof AutomatedTestingTool) {
 									allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor += (double) (((AutomatedTestingTool) testingtool3)
 											.getProductivityIncreaseFactor());
 								}
 							}
-							systemtestplan
-									.setNumKnownErrors((double) (((double) (systemtestplan
-											.getNumKnownErrors())) - ((.5 * allActiveEmpSoftwareEngineerProductivityInTesting)
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2))) * (1 + allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor))));
+							systemtestplan.setNumKnownErrors((double) (((double) (systemtestplan.getNumKnownErrors()))
+									- ((.5 * allActiveEmpSoftwareEngineerProductivityInTesting)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 + allActiveTestingToolAutomatedTestingToolProductivityIncreaseFactor))));
 							double allActiveEmpSoftwareEngineerErrorRateInTesting = 0;
 							for (int k = 0; k < allActiveEmps.size(); k++) {
 								Object emp3 = allActiveEmps.elementAt(k);
@@ -4350,45 +3652,39 @@ public class RuleExecutor {
 							}
 							double allActiveTestingToolAutomatedTestingToolErrorRateDecreaseFactor = 0;
 							for (int k = 0; k < allActiveTestingTools.size(); k++) {
-								Object testingtool3 = allActiveTestingTools
-										.elementAt(k);
+								Object testingtool3 = allActiveTestingTools.elementAt(k);
 								if (testingtool3 instanceof AutomatedTestingTool) {
 									allActiveTestingToolAutomatedTestingToolErrorRateDecreaseFactor += (double) (((AutomatedTestingTool) testingtool3)
 											.getErrorRateDecreaseFactor());
 								}
 							}
+							systemtestplan.setNumUnknownErrors(
+									(double) (((double) (systemtestplan.getNumUnknownErrors())) + ((.2
+											* allActiveEmpSoftwareEngineerErrorRateInTesting)
+											* (1 - (.01 * (numEmp * (numEmp - 1) / 2)))
+											* (1 - allActiveTestingToolAutomatedTestingToolErrorRateDecreaseFactor))));
 							systemtestplan
-									.setNumUnknownErrors((double) (((double) (systemtestplan
-											.getNumUnknownErrors())) + ((.2 * allActiveEmpSoftwareEngineerErrorRateInTesting)
-											* (1 - (.01 * (numEmp
-													* (numEmp - 1) / 2))) * (1 - allActiveTestingToolAutomatedTestingToolErrorRateDecreaseFactor))));
-							systemtestplan
-									.setPercentErroneous((double) ((((double) (systemtestplan
-											.getNumKnownErrors())) + ((double) (systemtestplan
-											.getNumUnknownErrors())))
-											/ (((double) (systemtestplan
-													.getSize())) + .1) * 100));
+									.setPercentErroneous((double) ((((double) (systemtestplan.getNumKnownErrors()))
+											+ ((double) (systemtestplan.getNumUnknownErrors())))
+											/ (((double) (systemtestplan.getSize())) + .1) * 100));
 						}
 					}
 					Vector<Artifact> associatedrequirementsdocs = correctsystemtestplanAct
 							.getAllActiveAssociatedRequirementsDocs();
 					for (int j = 0; j < associatedrequirementsdocs.size(); j++) {
-						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs
-								.elementAt(j);
+						Artifact associatedrequirementsdoc2 = associatedrequirementsdocs.elementAt(j);
 						if (associatedrequirementsdoc2 instanceof RequirementsDocument) {
 							RequirementsDocument requirementsdocument = (RequirementsDocument) associatedrequirementsdoc2;
 						}
 					}
-					Vector<Project> projs = correctsystemtestplanAct
-							.getAllActiveProjs();
+					Vector<Project> projs = correctsystemtestplanAct.getAllActiveProjs();
 					for (int j = 0; j < projs.size(); j++) {
 						Project proj2 = projs.elementAt(j);
 						if (proj2 instanceof SEProject) {
 							SEProject seproject = (SEProject) proj2;
 						}
 					}
-					Vector<Tool> testingtools = correctsystemtestplanAct
-							.getAllActiveTestingTools();
+					Vector<Tool> testingtools = correctsystemtestplanAct.getAllActiveTestingTools();
 					for (int j = 0; j < testingtools.size(); j++) {
 						Tool testingtool2 = testingtools.elementAt(j);
 						if (testingtool2 instanceof AutomatedTestingTool) {
@@ -4401,41 +3697,32 @@ public class RuleExecutor {
 	}
 
 	// CalculateScore rule (DeliverProduct Action):
-	private void calculateScore(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<DeliverProductAction> deliverproductActs = state
-				.getActionStateRepository()
+	private void calculateScore(Stage gui, int updateInstructions, String ruleName, simse.adts.actions.Action action) {
+		Vector<DeliverProductAction> deliverproductActs = state.getActionStateRepository()
 				.getDeliverProductActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("CalculateScore"))) {
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("CalculateScore"))) {
 			for (int i = 0; i < deliverproductActs.size(); i++) {
-				DeliverProductAction deliverproductAct = deliverproductActs
-						.elementAt(i);
+				DeliverProductAction deliverproductAct = deliverproductActs.elementAt(i);
 				if (deliverproductAct == action) {
-					if ((deliverproductAct.getAllEmps().size() >= 1)
-							&& (deliverproductAct.getAllProjs().size() >= 1)
+					if ((deliverproductAct.getAllEmps().size() >= 1) && (deliverproductAct.getAllProjs().size() >= 1)
 							&& (deliverproductAct.getAllCodeDocs().size() >= 1)
 							&& (deliverproductAct.getAllCusts().size() >= 1)) {
-						Vector<Employee> emps = deliverproductAct
-								.getAllActiveEmps();
+						Vector<Employee> emps = deliverproductAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
 								SoftwareEngineer softwareengineer = (SoftwareEngineer) emp2;
 							}
 						}
-						Vector<Project> projs = deliverproductAct
-								.getAllActiveProjs();
+						Vector<Project> projs = deliverproductAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
 								SEProject seproject = (SEProject) proj2;
 								double allActiveCodeDocCodeNumUnknownErrors = 0;
-								Vector allActiveCodeDocs = deliverproductAct
-										.getAllActiveCodeDocs();
+								Vector allActiveCodeDocs = deliverproductAct.getAllActiveCodeDocs();
 								for (int k = 0; k < allActiveCodeDocs.size(); k++) {
-									Object codedoc3 = allActiveCodeDocs
-											.elementAt(k);
+									Object codedoc3 = allActiveCodeDocs.elementAt(k);
 									if (codedoc3 instanceof Code) {
 										allActiveCodeDocCodeNumUnknownErrors += (double) (((Code) codedoc3)
 												.getNumUnknownErrors());
@@ -4443,8 +3730,7 @@ public class RuleExecutor {
 								}
 								double allActiveCodeDocCodeNumKnownErrors = 0;
 								for (int k = 0; k < allActiveCodeDocs.size(); k++) {
-									Object codedoc3 = allActiveCodeDocs
-											.elementAt(k);
+									Object codedoc3 = allActiveCodeDocs.elementAt(k);
 									if (codedoc3 instanceof Code) {
 										allActiveCodeDocCodeNumKnownErrors += (double) (((Code) codedoc3)
 												.getNumKnownErrors());
@@ -4452,19 +3738,17 @@ public class RuleExecutor {
 								}
 								double allActiveCodeDocCodeSize = 0;
 								for (int k = 0; k < allActiveCodeDocs.size(); k++) {
-									Object codedoc3 = allActiveCodeDocs
-											.elementAt(k);
+									Object codedoc3 = allActiveCodeDocs.elementAt(k);
 									if (codedoc3 instanceof Code) {
-										allActiveCodeDocCodeSize += (double) (((Code) codedoc3)
-												.getSize());
+										allActiveCodeDocCodeSize += (double) (((Code) codedoc3).getSize());
 									}
 								}
-								seproject
-										.setCodeCorrectnessScore((double) (1 - ((allActiveCodeDocCodeNumUnknownErrors + allActiveCodeDocCodeNumKnownErrors) / (allActiveCodeDocCodeSize + .1))));
+								seproject.setCodeCorrectnessScore((double) (1
+										- ((allActiveCodeDocCodeNumUnknownErrors + allActiveCodeDocCodeNumKnownErrors)
+												/ (allActiveCodeDocCodeSize + .1))));
 								double allActiveCodeDocCodePercentComplete = 0;
 								for (int k = 0; k < allActiveCodeDocs.size(); k++) {
-									Object codedoc3 = allActiveCodeDocs
-											.elementAt(k);
+									Object codedoc3 = allActiveCodeDocs.elementAt(k);
 									if (codedoc3 instanceof Code) {
 										allActiveCodeDocCodePercentComplete += (double) (((Code) codedoc3)
 												.getPercentComplete());
@@ -4472,46 +3756,36 @@ public class RuleExecutor {
 								}
 								seproject
 										.setCodeCompletenessScore((double) (allActiveCodeDocCodePercentComplete / 100));
-								seproject
-										.setBudgetScore((double) (1 + ((((double) (seproject
-												.getBudget())) - ((double) (seproject
-												.getMoneySpent()))) / ((double) (seproject
-												.getBudget())))));
-								seproject
-										.setScheduleScore((double) (1 + ((((double) (seproject
-												.getAllottedTime())) - ((double) (seproject
-												.getTimeUsed()))) / ((double) (seproject
-												.getAllottedTime())))));
+								seproject.setBudgetScore((double) (1
+										+ ((((double) (seproject.getBudget())) - ((double) (seproject.getMoneySpent())))
+												/ ((double) (seproject.getBudget())))));
+								seproject.setScheduleScore((double) (1 + ((((double) (seproject.getAllottedTime()))
+										- ((double) (seproject.getTimeUsed())))
+										/ ((double) (seproject.getAllottedTime())))));
 								double allActiveCodeDocCodePercentIntegrated = 0;
 								for (int k = 0; k < allActiveCodeDocs.size(); k++) {
-									Object codedoc3 = allActiveCodeDocs
-											.elementAt(k);
+									Object codedoc3 = allActiveCodeDocs.elementAt(k);
 									if (codedoc3 instanceof Code) {
 										allActiveCodeDocCodePercentIntegrated += (double) (((Code) codedoc3)
 												.getPercentIntegrated());
 									}
 								}
-								seproject
-										.setScore((int) (100 * (.3
-												+ ((((double) (seproject
-														.getCodeCompletenessScore()))
-														* ((double) (seproject
-																.getCodeCorrectnessScore())) * (allActiveCodeDocCodePercentIntegrated / 100)) * .7)
-												- (.3 * (1 - ((double) (seproject
-														.getBudgetScore())))) - (.3 * (1 - ((double) (seproject
-												.getScheduleScore())))))));
+								seproject.setScore((int) (100 * (.3
+										+ ((((double) (seproject.getCodeCompletenessScore()))
+												* ((double) (seproject.getCodeCorrectnessScore()))
+												* (allActiveCodeDocCodePercentIntegrated / 100)) * .7)
+										- (.3 * (1 - ((double) (seproject.getBudgetScore()))))
+										- (.3 * (1 - ((double) (seproject.getScheduleScore())))))));
 							}
 						}
-						Vector<Artifact> codedocs = deliverproductAct
-								.getAllActiveCodeDocs();
+						Vector<Artifact> codedocs = deliverproductAct.getAllActiveCodeDocs();
 						for (int j = 0; j < codedocs.size(); j++) {
 							Artifact codedoc2 = codedocs.elementAt(j);
 							if (codedoc2 instanceof Code) {
 								Code code = (Code) codedoc2;
 							}
 						}
-						Vector<Customer> custs = deliverproductAct
-								.getAllActiveCusts();
+						Vector<Customer> custs = deliverproductAct.getAllActiveCusts();
 						for (int j = 0; j < custs.size(); j++) {
 							Customer cust2 = custs.elementAt(j);
 							if (cust2 instanceof ACustomer) {
@@ -4525,248 +3799,175 @@ public class RuleExecutor {
 	}
 
 	// BreakDestRule rule (Break Action):
-	private void breakDestRule(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<BreakAction> breakActs = state.getActionStateRepository()
-				.getBreakActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("BreakDestRule"))) {
+	private void breakDestRule(Stage gui, int updateInstructions, String ruleName, simse.adts.actions.Action action) {
+		Vector<BreakAction> breakActs = state.getActionStateRepository().getBreakActionStateRepository()
+				.getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("BreakDestRule"))) {
 			for (int i = 0; i < breakActs.size(); i++) {
 				BreakAction breakAct = breakActs.elementAt(i);
 				if (breakAct == action) {
 					if ((breakAct.getAllBreakers().size() >= 1)) {
-						Vector<Employee> breakers = breakAct
-								.getAllActiveBreakers();
+						Vector<Employee> breakers = breakAct.getAllActiveBreakers();
 						for (int j = 0; j < breakers.size(); j++) {
 							Employee breaker2 = breakers.elementAt(j);
 							if (breaker2 instanceof SoftwareEngineer) {
 								SoftwareEngineer softwareengineer = (SoftwareEngineer) breaker2;
 								Vector<CreateRequirementsAction> createrequirementsactionsActivate = state
-										.getActionStateRepository()
-										.getCreateRequirementsActionStateRepository()
+										.getActionStateRepository().getCreateRequirementsActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < createrequirementsactionsActivate
-										.size(); k++) {
-									CreateRequirementsAction tempAct = createrequirementsactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < createrequirementsactionsActivate.size(); k++) {
+									CreateRequirementsAction tempAct = createrequirementsactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<ReviewRequirementsAction> reviewrequirementsactionsActivate = state
-										.getActionStateRepository()
-										.getReviewRequirementsActionStateRepository()
+										.getActionStateRepository().getReviewRequirementsActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < reviewrequirementsactionsActivate
-										.size(); k++) {
-									ReviewRequirementsAction tempAct = reviewrequirementsactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < reviewrequirementsactionsActivate.size(); k++) {
+									ReviewRequirementsAction tempAct = reviewrequirementsactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<CorrectRequirementsAction> correctrequirementsactionsActivate = state
-										.getActionStateRepository()
-										.getCorrectRequirementsActionStateRepository()
+										.getActionStateRepository().getCorrectRequirementsActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < correctrequirementsactionsActivate
-										.size(); k++) {
-									CorrectRequirementsAction tempAct = correctrequirementsactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < correctrequirementsactionsActivate.size(); k++) {
+									CorrectRequirementsAction tempAct = correctrequirementsactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<CreateDesignAction> createdesignactionsActivate = state
-										.getActionStateRepository()
-										.getCreateDesignActionStateRepository()
+										.getActionStateRepository().getCreateDesignActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < createdesignactionsActivate
-										.size(); k++) {
-									CreateDesignAction tempAct = createdesignactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < createdesignactionsActivate.size(); k++) {
+									CreateDesignAction tempAct = createdesignactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<ReviewDesignAction> reviewdesignactionsActivate = state
-										.getActionStateRepository()
-										.getReviewDesignActionStateRepository()
+										.getActionStateRepository().getReviewDesignActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < reviewdesignactionsActivate
-										.size(); k++) {
-									ReviewDesignAction tempAct = reviewdesignactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < reviewdesignactionsActivate.size(); k++) {
+									ReviewDesignAction tempAct = reviewdesignactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<CorrectDesignAction> correctdesignactionsActivate = state
-										.getActionStateRepository()
-										.getCorrectDesignActionStateRepository()
+										.getActionStateRepository().getCorrectDesignActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < correctdesignactionsActivate
-										.size(); k++) {
-									CorrectDesignAction tempAct = correctdesignactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < correctdesignactionsActivate.size(); k++) {
+									CorrectDesignAction tempAct = correctdesignactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
-								Vector<CreateCodeAction> createcodeactionsActivate = state
-										.getActionStateRepository()
-										.getCreateCodeActionStateRepository()
-										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < createcodeactionsActivate
-										.size(); k++) {
-									CreateCodeAction tempAct = createcodeactionsActivate
-											.elementAt(k);
+								Vector<CreateCodeAction> createcodeactionsActivate = state.getActionStateRepository()
+										.getCreateCodeActionStateRepository().getAllInactiveActions(softwareengineer);
+								for (int k = 0; k < createcodeactionsActivate.size(); k++) {
+									CreateCodeAction tempAct = createcodeactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
-								Vector<InspectCodeAction> inspectcodeactionsActivate = state
-										.getActionStateRepository()
-										.getInspectCodeActionStateRepository()
-										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < inspectcodeactionsActivate
-										.size(); k++) {
-									InspectCodeAction tempAct = inspectcodeactionsActivate
-											.elementAt(k);
+								Vector<InspectCodeAction> inspectcodeactionsActivate = state.getActionStateRepository()
+										.getInspectCodeActionStateRepository().getAllInactiveActions(softwareengineer);
+								for (int k = 0; k < inspectcodeactionsActivate.size(); k++) {
+									InspectCodeAction tempAct = inspectcodeactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
-								Vector<CorrectCodeAction> correctcodeactionsActivate = state
-										.getActionStateRepository()
-										.getCorrectCodeActionStateRepository()
-										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < correctcodeactionsActivate
-										.size(); k++) {
-									CorrectCodeAction tempAct = correctcodeactionsActivate
-											.elementAt(k);
+								Vector<CorrectCodeAction> correctcodeactionsActivate = state.getActionStateRepository()
+										.getCorrectCodeActionStateRepository().getAllInactiveActions(softwareengineer);
+								for (int k = 0; k < correctcodeactionsActivate.size(); k++) {
+									CorrectCodeAction tempAct = correctcodeactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<IntegrateCodeAction> integratecodeactionsActivate = state
-										.getActionStateRepository()
-										.getIntegrateCodeActionStateRepository()
+										.getActionStateRepository().getIntegrateCodeActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < integratecodeactionsActivate
-										.size(); k++) {
-									IntegrateCodeAction tempAct = integratecodeactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < integratecodeactionsActivate.size(); k++) {
+									IntegrateCodeAction tempAct = integratecodeactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
-								Vector<SystemTestAction> systemtestactionsActivate = state
-										.getActionStateRepository()
-										.getSystemTestActionStateRepository()
-										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < systemtestactionsActivate
-										.size(); k++) {
-									SystemTestAction tempAct = systemtestactionsActivate
-											.elementAt(k);
+								Vector<SystemTestAction> systemtestactionsActivate = state.getActionStateRepository()
+										.getSystemTestActionStateRepository().getAllInactiveActions(softwareengineer);
+								for (int k = 0; k < systemtestactionsActivate.size(); k++) {
+									SystemTestAction tempAct = systemtestactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<CreateSystemTestPlanAction> createsystemtestplanactionsActivate = state
-										.getActionStateRepository()
-										.getCreateSystemTestPlanActionStateRepository()
+										.getActionStateRepository().getCreateSystemTestPlanActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < createsystemtestplanactionsActivate
-										.size(); k++) {
+								for (int k = 0; k < createsystemtestplanactionsActivate.size(); k++) {
 									CreateSystemTestPlanAction tempAct = createsystemtestplanactionsActivate
 											.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<ReviewSystemTestPlanAction> reviewsystemtestplanactionsActivate = state
-										.getActionStateRepository()
-										.getReviewSystemTestPlanActionStateRepository()
+										.getActionStateRepository().getReviewSystemTestPlanActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < reviewsystemtestplanactionsActivate
-										.size(); k++) {
+								for (int k = 0; k < reviewsystemtestplanactionsActivate.size(); k++) {
 									ReviewSystemTestPlanAction tempAct = reviewsystemtestplanactionsActivate
 											.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<CorrectSystemTestPlanAction> correctsystemtestplanactionsActivate = state
-										.getActionStateRepository()
-										.getCorrectSystemTestPlanActionStateRepository()
+										.getActionStateRepository().getCorrectSystemTestPlanActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < correctsystemtestplanactionsActivate
-										.size(); k++) {
+								for (int k = 0; k < correctsystemtestplanactionsActivate.size(); k++) {
 									CorrectSystemTestPlanAction tempAct = correctsystemtestplanactionsActivate
 											.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<DeliverProductAction> deliverproductactionsActivate = state
-										.getActionStateRepository()
-										.getDeliverProductActionStateRepository()
+										.getActionStateRepository().getDeliverProductActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < deliverproductactionsActivate
-										.size(); k++) {
-									DeliverProductAction tempAct = deliverproductactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < deliverproductactionsActivate.size(); k++) {
+									DeliverProductAction tempAct = deliverproductactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
-								Vector<GetSickAction> getsickactionsActivate = state
-										.getActionStateRepository()
-										.getGetSickActionStateRepository()
-										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < getsickactionsActivate
-										.size(); k++) {
-									GetSickAction tempAct = getsickactionsActivate
-											.elementAt(k);
+								Vector<GetSickAction> getsickactionsActivate = state.getActionStateRepository()
+										.getGetSickActionStateRepository().getAllInactiveActions(softwareengineer);
+								for (int k = 0; k < getsickactionsActivate.size(); k++) {
+									GetSickAction tempAct = getsickactionsActivate.elementAt(k);
 									tempAct.setSickPersonActive(softwareengineer);
 								}
-								Vector<QuitAction> quitactionsActivate = state
-										.getActionStateRepository()
-										.getQuitActionStateRepository()
-										.getAllInactiveActions(softwareengineer);
+								Vector<QuitAction> quitactionsActivate = state.getActionStateRepository()
+										.getQuitActionStateRepository().getAllInactiveActions(softwareengineer);
 								for (int k = 0; k < quitactionsActivate.size(); k++) {
-									QuitAction tempAct = quitactionsActivate
-											.elementAt(k);
+									QuitAction tempAct = quitactionsActivate.elementAt(k);
 									tempAct.setQuitterActive(softwareengineer);
 								}
 								Vector<IntroduceNewRequirementsAction> introducenewrequirementsactionsActivate = state
-										.getActionStateRepository()
-										.getIntroduceNewRequirementsActionStateRepository()
+										.getActionStateRepository().getIntroduceNewRequirementsActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < introducenewrequirementsactionsActivate
-										.size(); k++) {
+								for (int k = 0; k < introducenewrequirementsactionsActivate.size(); k++) {
 									IntroduceNewRequirementsAction tempAct = introducenewrequirementsactionsActivate
 											.elementAt(k);
 									tempAct.setEmpWOverheadTextActive(softwareengineer);
 								}
 								Vector<UpdateProjectAttributesAction> updateprojectattributesactionsActivate = state
-										.getActionStateRepository()
-										.getUpdateProjectAttributesActionStateRepository()
+										.getActionStateRepository().getUpdateProjectAttributesActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < updateprojectattributesactionsActivate
-										.size(); k++) {
+								for (int k = 0; k < updateprojectattributesactionsActivate.size(); k++) {
 									UpdateProjectAttributesAction tempAct = updateprojectattributesactionsActivate
 											.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
 								Vector<ChangePayRateAction> changepayrateactionsActivate = state
-										.getActionStateRepository()
-										.getChangePayRateActionStateRepository()
+										.getActionStateRepository().getChangePayRateActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < changepayrateactionsActivate
-										.size(); k++) {
-									ChangePayRateAction tempAct = changepayrateactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < changepayrateactionsActivate.size(); k++) {
+									ChangePayRateAction tempAct = changepayrateactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
-								Vector<GiveBonusAction> givebonusactionsActivate = state
-										.getActionStateRepository()
-										.getGiveBonusActionStateRepository()
-										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < givebonusactionsActivate
-										.size(); k++) {
-									GiveBonusAction tempAct = givebonusactionsActivate
-											.elementAt(k);
+								Vector<GiveBonusAction> givebonusactionsActivate = state.getActionStateRepository()
+										.getGiveBonusActionStateRepository().getAllInactiveActions(softwareengineer);
+								for (int k = 0; k < givebonusactionsActivate.size(); k++) {
+									GiveBonusAction tempAct = givebonusactionsActivate.elementAt(k);
 									tempAct.setEmpActive(softwareengineer);
 								}
-								Vector<FireAction> fireactionsActivate = state
-										.getActionStateRepository()
-										.getFireActionStateRepository()
-										.getAllInactiveActions(softwareengineer);
+								Vector<FireAction> fireactionsActivate = state.getActionStateRepository()
+										.getFireActionStateRepository().getAllInactiveActions(softwareengineer);
 								for (int k = 0; k < fireactionsActivate.size(); k++) {
-									FireAction tempAct = fireactionsActivate
-											.elementAt(k);
+									FireAction tempAct = fireactionsActivate.elementAt(k);
 									tempAct.setFiredPersonActive(softwareengineer);
 								}
 								Vector<PurchaseToolAction> purchasetoolactionsActivate = state
-										.getActionStateRepository()
-										.getPurchaseToolActionStateRepository()
+										.getActionStateRepository().getPurchaseToolActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
-								for (int k = 0; k < purchasetoolactionsActivate
-										.size(); k++) {
-									PurchaseToolAction tempAct = purchasetoolactionsActivate
-											.elementAt(k);
+								for (int k = 0; k < purchasetoolactionsActivate.size(); k++) {
+									PurchaseToolAction tempAct = purchasetoolactionsActivate.elementAt(k);
 									tempAct.setEmpWhoseMenuClickedOnActive(softwareengineer);
 								}
 								softwareengineer.setOnBreak(false);
@@ -4779,114 +3980,84 @@ public class RuleExecutor {
 	}
 
 	// GetSickDestRule rule (GetSick Action):
-	private void getSickDestRule(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<GetSickAction> getsickActs = state.getActionStateRepository()
-				.getGetSickActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("GetSickDestRule"))) {
+	private void getSickDestRule(Stage gui, int updateInstructions, String ruleName, simse.adts.actions.Action action) {
+		Vector<GetSickAction> getsickActs = state.getActionStateRepository().getGetSickActionStateRepository()
+				.getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("GetSickDestRule"))) {
 			for (int i = 0; i < getsickActs.size(); i++) {
 				GetSickAction getsickAct = getsickActs.elementAt(i);
 				if (getsickAct == action) {
 					if ((getsickAct.getAllSickPersons().size() >= 1)) {
-						Vector<Employee> sickpersons = getsickAct
-								.getAllActiveSickPersons();
+						Vector<Employee> sickpersons = getsickAct.getAllActiveSickPersons();
 						for (int j = 0; j < sickpersons.size(); j++) {
 							Employee sickperson2 = sickpersons.elementAt(j);
 							if (sickperson2 instanceof SoftwareEngineer) {
 								SoftwareEngineer softwareengineer = (SoftwareEngineer) sickperson2;
-								Vector<simse.adts.actions.Action> otherActs = state
-										.getActionStateRepository()
+								Vector<simse.adts.actions.Action> otherActs = state.getActionStateRepository()
 										.getAllInactiveActions(softwareengineer);
 								for (int k = 0; k < otherActs.size(); k++) {
-									simse.adts.actions.Action tempAct = otherActs
-											.elementAt(k);
+									simse.adts.actions.Action tempAct = otherActs.elementAt(k);
 									if (tempAct instanceof CreateRequirementsAction) {
-										((CreateRequirementsAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((CreateRequirementsAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof ReviewRequirementsAction) {
-										((ReviewRequirementsAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((ReviewRequirementsAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof CorrectRequirementsAction) {
-										((CorrectRequirementsAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((CorrectRequirementsAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof CreateDesignAction) {
-										((CreateDesignAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((CreateDesignAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof ReviewDesignAction) {
-										((ReviewDesignAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((ReviewDesignAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof CorrectDesignAction) {
-										((CorrectDesignAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((CorrectDesignAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof CreateCodeAction) {
-										((CreateCodeAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((CreateCodeAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof InspectCodeAction) {
-										((InspectCodeAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((InspectCodeAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof CorrectCodeAction) {
-										((CorrectCodeAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((CorrectCodeAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof IntegrateCodeAction) {
-										((IntegrateCodeAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((IntegrateCodeAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof SystemTestAction) {
-										((SystemTestAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((SystemTestAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof CreateSystemTestPlanAction) {
-										((CreateSystemTestPlanAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((CreateSystemTestPlanAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof ReviewSystemTestPlanAction) {
-										((ReviewSystemTestPlanAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((ReviewSystemTestPlanAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof CorrectSystemTestPlanAction) {
-										((CorrectSystemTestPlanAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((CorrectSystemTestPlanAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof DeliverProductAction) {
-										((DeliverProductAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((DeliverProductAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof BreakAction) {
-										((BreakAction) tempAct)
-												.setBreakerActive(softwareengineer);
+										((BreakAction) tempAct).setBreakerActive(softwareengineer);
 									} else if (tempAct instanceof GetSickAction) {
 										if (tempAct.equals(getsickAct) == false) {
-											((GetSickAction) tempAct)
-													.setSickPersonActive(softwareengineer);
+											((GetSickAction) tempAct).setSickPersonActive(softwareengineer);
 										}
 									} else if (tempAct instanceof QuitAction) {
-										((QuitAction) tempAct)
-												.setQuitterActive(softwareengineer);
+										((QuitAction) tempAct).setQuitterActive(softwareengineer);
 									} else if (tempAct instanceof IntroduceNewRequirementsAction) {
 										((IntroduceNewRequirementsAction) tempAct)
 												.setEmpWOverheadTextActive(softwareengineer);
 									} else if (tempAct instanceof UpdateProjectAttributesAction) {
-										((UpdateProjectAttributesAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((UpdateProjectAttributesAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof ChangePayRateAction) {
-										((ChangePayRateAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((ChangePayRateAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof GiveBonusAction) {
-										((GiveBonusAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((GiveBonusAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof FireAction) {
-										((FireAction) tempAct)
-												.setFiredPersonActive(softwareengineer);
+										((FireAction) tempAct).setFiredPersonActive(softwareengineer);
 									} else if (tempAct instanceof PurchaseToolAction) {
-										((PurchaseToolAction) tempAct)
-												.setEmpWhoseMenuClickedOnActive(softwareengineer);
+										((PurchaseToolAction) tempAct).setEmpWhoseMenuClickedOnActive(softwareengineer);
 									} else if (tempAct instanceof SuggestedRequirementsPhaseDurationAction) {
 										((SuggestedRequirementsPhaseDurationAction) tempAct)
 												.setEmpActive(softwareengineer);
 									} else if (tempAct instanceof SuggestedDesignPhaseDurationAction) {
-										((SuggestedDesignPhaseDurationAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((SuggestedDesignPhaseDurationAction) tempAct).setEmpActive(softwareengineer);
 									} else if (tempAct instanceof SuggestedImplIntegrationPhaseDurationAction) {
 										((SuggestedImplIntegrationPhaseDurationAction) tempAct)
 												.setEmpActive(softwareengineer);
 									} else if (tempAct instanceof SuggestedTestingPhaseDurationAction) {
-										((SuggestedTestingPhaseDurationAction) tempAct)
-												.setEmpActive(softwareengineer);
+										((SuggestedTestingPhaseDurationAction) tempAct).setEmpActive(softwareengineer);
 									}
 								}
 							}
@@ -4898,31 +4069,25 @@ public class RuleExecutor {
 	}
 
 	// PurchaseToolEffectRuleA rule (PurchaseTool Action):
-	private void purchaseToolEffectRuleA(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<PurchaseToolAction> purchasetoolActs = state
-				.getActionStateRepository()
+	private void purchaseToolEffectRuleA(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<PurchaseToolAction> purchasetoolActs = state.getActionStateRepository()
 				.getPurchaseToolActionStateRepository().getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("PurchaseToolEffectRuleA"))) {
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("PurchaseToolEffectRuleA"))) {
 			for (int i = 0; i < purchasetoolActs.size(); i++) {
-				PurchaseToolAction purchasetoolAct = purchasetoolActs
-						.elementAt(i);
+				PurchaseToolAction purchasetoolAct = purchasetoolActs.elementAt(i);
 				if (purchasetoolAct == action) {
 					if ((purchasetoolAct.getAllEmpWhoseMenuClickedOns().size() >= 1)
 							&& (purchasetoolAct.getAllSETools().size() >= 1)
 							&& (purchasetoolAct.getAllProjs().size() >= 1)) {
-						Vector<Employee> empwhosemenuclickedons = purchasetoolAct
-								.getAllActiveEmpWhoseMenuClickedOns();
+						Vector<Employee> empwhosemenuclickedons = purchasetoolAct.getAllActiveEmpWhoseMenuClickedOns();
 						for (int j = 0; j < empwhosemenuclickedons.size(); j++) {
-							Employee empwhosemenuclickedon2 = empwhosemenuclickedons
-									.elementAt(j);
+							Employee empwhosemenuclickedon2 = empwhosemenuclickedons.elementAt(j);
 							if (empwhosemenuclickedon2 instanceof SoftwareEngineer) {
 								SoftwareEngineer softwareengineer = (SoftwareEngineer) empwhosemenuclickedon2;
 							}
 						}
-						Vector<Tool> setools = purchasetoolAct
-								.getAllActiveSETools();
+						Vector<Tool> setools = purchasetoolAct.getAllActiveSETools();
 						for (int j = 0; j < setools.size(); j++) {
 							Tool setool2 = setools.elementAt(j);
 							if (setool2 instanceof IDE) {
@@ -4939,27 +4104,22 @@ public class RuleExecutor {
 								designenvironment.setPurchased(true);
 							}
 						}
-						Vector<Project> projs = purchasetoolAct
-								.getAllActiveProjs();
+						Vector<Project> projs = purchasetoolAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
 								SEProject seproject = (SEProject) proj2;
 								double allActiveSEToolIDECost = 0;
-								Vector allActiveSETools = purchasetoolAct
-										.getAllActiveSETools();
+								Vector allActiveSETools = purchasetoolAct.getAllActiveSETools();
 								for (int k = 0; k < allActiveSETools.size(); k++) {
-									Object setool3 = allActiveSETools
-											.elementAt(k);
+									Object setool3 = allActiveSETools.elementAt(k);
 									if (setool3 instanceof IDE) {
-										allActiveSEToolIDECost += (double) (((IDE) setool3)
-												.getCost());
+										allActiveSEToolIDECost += (double) (((IDE) setool3).getCost());
 									}
 								}
 								double allActiveSEToolRequirementsCaptureToolCost = 0;
 								for (int k = 0; k < allActiveSETools.size(); k++) {
-									Object setool3 = allActiveSETools
-											.elementAt(k);
+									Object setool3 = allActiveSETools.elementAt(k);
 									if (setool3 instanceof RequirementsCaptureTool) {
 										allActiveSEToolRequirementsCaptureToolCost += (double) (((RequirementsCaptureTool) setool3)
 												.getCost());
@@ -4967,8 +4127,7 @@ public class RuleExecutor {
 								}
 								double allActiveSEToolAutomatedTestingToolCost = 0;
 								for (int k = 0; k < allActiveSETools.size(); k++) {
-									Object setool3 = allActiveSETools
-											.elementAt(k);
+									Object setool3 = allActiveSETools.elementAt(k);
 									if (setool3 instanceof AutomatedTestingTool) {
 										allActiveSEToolAutomatedTestingToolCost += (double) (((AutomatedTestingTool) setool3)
 												.getCost());
@@ -4976,19 +4135,16 @@ public class RuleExecutor {
 								}
 								double allActiveSEToolDesignEnvironmentCost = 0;
 								for (int k = 0; k < allActiveSETools.size(); k++) {
-									Object setool3 = allActiveSETools
-											.elementAt(k);
+									Object setool3 = allActiveSETools.elementAt(k);
 									if (setool3 instanceof DesignEnvironment) {
 										allActiveSEToolDesignEnvironmentCost += (double) (((DesignEnvironment) setool3)
 												.getCost());
 									}
 								}
-								seproject
-										.setMoneySpent((double) (((double) (seproject
-												.getMoneySpent()))
-												+ allActiveSEToolIDECost
-												+ allActiveSEToolRequirementsCaptureToolCost
-												+ allActiveSEToolAutomatedTestingToolCost + allActiveSEToolDesignEnvironmentCost));
+								seproject.setMoneySpent((double) (((double) (seproject.getMoneySpent()))
+										+ allActiveSEToolIDECost + allActiveSEToolRequirementsCaptureToolCost
+										+ allActiveSEToolAutomatedTestingToolCost
+										+ allActiveSEToolDesignEnvironmentCost));
 							}
 						}
 					}
@@ -4998,32 +4154,26 @@ public class RuleExecutor {
 	}
 
 	// DeactivateEmpsSuggReq rule (SuggestedRequirementsPhaseDuration Action):
-	private void deactivateEmpsSuggReq(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
+	private void deactivateEmpsSuggReq(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
 		Vector<SuggestedRequirementsPhaseDurationAction> suggestedrequirementsphasedurationActs = state
-				.getActionStateRepository()
-				.getSuggestedRequirementsPhaseDurationActionStateRepository()
+				.getActionStateRepository().getSuggestedRequirementsPhaseDurationActionStateRepository()
 				.getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("DeactivateEmpsSuggReq"))) {
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("DeactivateEmpsSuggReq"))) {
 			for (int i = 0; i < suggestedrequirementsphasedurationActs.size(); i++) {
 				SuggestedRequirementsPhaseDurationAction suggestedrequirementsphasedurationAct = suggestedrequirementsphasedurationActs
 						.elementAt(i);
 				if (suggestedrequirementsphasedurationAct == action) {
-					if ((suggestedrequirementsphasedurationAct.getAllProjs()
-							.size() >= 1)
-							&& (suggestedrequirementsphasedurationAct
-									.getAllEmps().size() >= 1)) {
-						Vector<Project> projs = suggestedrequirementsphasedurationAct
-								.getAllActiveProjs();
+					if ((suggestedrequirementsphasedurationAct.getAllProjs().size() >= 1)
+							&& (suggestedrequirementsphasedurationAct.getAllEmps().size() >= 1)) {
+						Vector<Project> projs = suggestedrequirementsphasedurationAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
 								SEProject seproject = (SEProject) proj2;
 							}
 						}
-						Vector<Employee> emps = suggestedrequirementsphasedurationAct
-								.getAllActiveEmps();
+						Vector<Employee> emps = suggestedrequirementsphasedurationAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
@@ -5032,8 +4182,7 @@ public class RuleExecutor {
 										.getActionStateRepository()
 										.getSuggestedRequirementsPhaseDurationActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < suggestedrequirementsphasedurationactionsDeactivate
-										.size(); k++) {
+								for (int k = 0; k < suggestedrequirementsphasedurationactionsDeactivate.size(); k++) {
 									SuggestedRequirementsPhaseDurationAction tempAct = suggestedrequirementsphasedurationactionsDeactivate
 											.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
@@ -5048,25 +4197,19 @@ public class RuleExecutor {
 
 	// SetSuggestedRequirementsDone rule (SuggestedRequirementsPhaseDuration
 	// Action):
-	private void setSuggestedRequirementsDone(Stage gui,
-			int updateInstructions, String ruleName,
+	private void setSuggestedRequirementsDone(Stage gui, int updateInstructions, String ruleName,
 			simse.adts.actions.Action action) {
 		Vector<SuggestedRequirementsPhaseDurationAction> suggestedrequirementsphasedurationActs = state
-				.getActionStateRepository()
-				.getSuggestedRequirementsPhaseDurationActionStateRepository()
+				.getActionStateRepository().getSuggestedRequirementsPhaseDurationActionStateRepository()
 				.getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("SetSuggestedRequirementsDone"))) {
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("SetSuggestedRequirementsDone"))) {
 			for (int i = 0; i < suggestedrequirementsphasedurationActs.size(); i++) {
 				SuggestedRequirementsPhaseDurationAction suggestedrequirementsphasedurationAct = suggestedrequirementsphasedurationActs
 						.elementAt(i);
 				if (suggestedrequirementsphasedurationAct == action) {
-					if ((suggestedrequirementsphasedurationAct.getAllProjs()
-							.size() >= 1)
-							&& (suggestedrequirementsphasedurationAct
-									.getAllEmps().size() >= 1)) {
-						Vector<Project> projs = suggestedrequirementsphasedurationAct
-								.getAllActiveProjs();
+					if ((suggestedrequirementsphasedurationAct.getAllProjs().size() >= 1)
+							&& (suggestedrequirementsphasedurationAct.getAllEmps().size() >= 1)) {
+						Vector<Project> projs = suggestedrequirementsphasedurationAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
@@ -5074,8 +4217,7 @@ public class RuleExecutor {
 								seproject.setSuggestedRequirementsDone(true);
 							}
 						}
-						Vector<Employee> emps = suggestedrequirementsphasedurationAct
-								.getAllActiveEmps();
+						Vector<Employee> emps = suggestedrequirementsphasedurationAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
@@ -5089,31 +4231,25 @@ public class RuleExecutor {
 	}
 
 	// DeactivateEmpsSuggDes rule (SuggestedDesignPhaseDuration Action):
-	private void deactivateEmpsSuggDes(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<SuggestedDesignPhaseDurationAction> suggesteddesignphasedurationActs = state
-				.getActionStateRepository()
-				.getSuggestedDesignPhaseDurationActionStateRepository()
-				.getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("DeactivateEmpsSuggDes"))) {
+	private void deactivateEmpsSuggDes(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<SuggestedDesignPhaseDurationAction> suggesteddesignphasedurationActs = state.getActionStateRepository()
+				.getSuggestedDesignPhaseDurationActionStateRepository().getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("DeactivateEmpsSuggDes"))) {
 			for (int i = 0; i < suggesteddesignphasedurationActs.size(); i++) {
 				SuggestedDesignPhaseDurationAction suggesteddesignphasedurationAct = suggesteddesignphasedurationActs
 						.elementAt(i);
 				if (suggesteddesignphasedurationAct == action) {
 					if ((suggesteddesignphasedurationAct.getAllProjs().size() >= 1)
-							&& (suggesteddesignphasedurationAct.getAllEmps()
-									.size() >= 1)) {
-						Vector<Project> projs = suggesteddesignphasedurationAct
-								.getAllActiveProjs();
+							&& (suggesteddesignphasedurationAct.getAllEmps().size() >= 1)) {
+						Vector<Project> projs = suggesteddesignphasedurationAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
 								SEProject seproject = (SEProject) proj2;
 							}
 						}
-						Vector<Employee> emps = suggesteddesignphasedurationAct
-								.getAllActiveEmps();
+						Vector<Employee> emps = suggesteddesignphasedurationAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
@@ -5122,8 +4258,7 @@ public class RuleExecutor {
 										.getActionStateRepository()
 										.getSuggestedDesignPhaseDurationActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < suggesteddesignphasedurationactionsDeactivate
-										.size(); k++) {
+								for (int k = 0; k < suggesteddesignphasedurationactionsDeactivate.size(); k++) {
 									SuggestedDesignPhaseDurationAction tempAct = suggesteddesignphasedurationactionsDeactivate
 											.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
@@ -5137,23 +4272,18 @@ public class RuleExecutor {
 	}
 
 	// SetSuggestedDesignDone rule (SuggestedDesignPhaseDuration Action):
-	private void setSuggestedDesignDone(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<SuggestedDesignPhaseDurationAction> suggesteddesignphasedurationActs = state
-				.getActionStateRepository()
-				.getSuggestedDesignPhaseDurationActionStateRepository()
-				.getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("SetSuggestedDesignDone"))) {
+	private void setSuggestedDesignDone(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<SuggestedDesignPhaseDurationAction> suggesteddesignphasedurationActs = state.getActionStateRepository()
+				.getSuggestedDesignPhaseDurationActionStateRepository().getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("SetSuggestedDesignDone"))) {
 			for (int i = 0; i < suggesteddesignphasedurationActs.size(); i++) {
 				SuggestedDesignPhaseDurationAction suggesteddesignphasedurationAct = suggesteddesignphasedurationActs
 						.elementAt(i);
 				if (suggesteddesignphasedurationAct == action) {
 					if ((suggesteddesignphasedurationAct.getAllProjs().size() >= 1)
-							&& (suggesteddesignphasedurationAct.getAllEmps()
-									.size() >= 1)) {
-						Vector<Project> projs = suggesteddesignphasedurationAct
-								.getAllActiveProjs();
+							&& (suggesteddesignphasedurationAct.getAllEmps().size() >= 1)) {
+						Vector<Project> projs = suggesteddesignphasedurationAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
@@ -5161,8 +4291,7 @@ public class RuleExecutor {
 								seproject.setSuggestedDesignDone(true);
 							}
 						}
-						Vector<Employee> emps = suggesteddesignphasedurationAct
-								.getAllActiveEmps();
+						Vector<Employee> emps = suggesteddesignphasedurationAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
@@ -5177,33 +4306,26 @@ public class RuleExecutor {
 
 	// DeactivateEmpsSuggImp rule (SuggestedImplIntegrationPhaseDuration
 	// Action):
-	private void deactivateEmpsSuggImp(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
+	private void deactivateEmpsSuggImp(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
 		Vector<SuggestedImplIntegrationPhaseDurationAction> suggestedimplintegrationphasedurationActs = state
-				.getActionStateRepository()
-				.getSuggestedImplIntegrationPhaseDurationActionStateRepository()
+				.getActionStateRepository().getSuggestedImplIntegrationPhaseDurationActionStateRepository()
 				.getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("DeactivateEmpsSuggImp"))) {
-			for (int i = 0; i < suggestedimplintegrationphasedurationActs
-					.size(); i++) {
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("DeactivateEmpsSuggImp"))) {
+			for (int i = 0; i < suggestedimplintegrationphasedurationActs.size(); i++) {
 				SuggestedImplIntegrationPhaseDurationAction suggestedimplintegrationphasedurationAct = suggestedimplintegrationphasedurationActs
 						.elementAt(i);
 				if (suggestedimplintegrationphasedurationAct == action) {
-					if ((suggestedimplintegrationphasedurationAct.getAllProjs()
-							.size() >= 1)
-							&& (suggestedimplintegrationphasedurationAct
-									.getAllEmps().size() >= 1)) {
-						Vector<Project> projs = suggestedimplintegrationphasedurationAct
-								.getAllActiveProjs();
+					if ((suggestedimplintegrationphasedurationAct.getAllProjs().size() >= 1)
+							&& (suggestedimplintegrationphasedurationAct.getAllEmps().size() >= 1)) {
+						Vector<Project> projs = suggestedimplintegrationphasedurationAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
 								SEProject seproject = (SEProject) proj2;
 							}
 						}
-						Vector<Employee> emps = suggestedimplintegrationphasedurationAct
-								.getAllActiveEmps();
+						Vector<Employee> emps = suggestedimplintegrationphasedurationAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
@@ -5227,35 +4349,27 @@ public class RuleExecutor {
 	}
 
 	// SetSuggestedImplDone rule (SuggestedImplIntegrationPhaseDuration Action):
-	private void setSuggestedImplDone(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
+	private void setSuggestedImplDone(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
 		Vector<SuggestedImplIntegrationPhaseDurationAction> suggestedimplintegrationphasedurationActs = state
-				.getActionStateRepository()
-				.getSuggestedImplIntegrationPhaseDurationActionStateRepository()
+				.getActionStateRepository().getSuggestedImplIntegrationPhaseDurationActionStateRepository()
 				.getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("SetSuggestedImplDone"))) {
-			for (int i = 0; i < suggestedimplintegrationphasedurationActs
-					.size(); i++) {
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("SetSuggestedImplDone"))) {
+			for (int i = 0; i < suggestedimplintegrationphasedurationActs.size(); i++) {
 				SuggestedImplIntegrationPhaseDurationAction suggestedimplintegrationphasedurationAct = suggestedimplintegrationphasedurationActs
 						.elementAt(i);
 				if (suggestedimplintegrationphasedurationAct == action) {
-					if ((suggestedimplintegrationphasedurationAct.getAllProjs()
-							.size() >= 1)
-							&& (suggestedimplintegrationphasedurationAct
-									.getAllEmps().size() >= 1)) {
-						Vector<Project> projs = suggestedimplintegrationphasedurationAct
-								.getAllActiveProjs();
+					if ((suggestedimplintegrationphasedurationAct.getAllProjs().size() >= 1)
+							&& (suggestedimplintegrationphasedurationAct.getAllEmps().size() >= 1)) {
+						Vector<Project> projs = suggestedimplintegrationphasedurationAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
 								SEProject seproject = (SEProject) proj2;
-								seproject
-										.setSuggestedImplementationIntegrationDone(true);
+								seproject.setSuggestedImplementationIntegrationDone(true);
 							}
 						}
-						Vector<Employee> emps = suggestedimplintegrationphasedurationAct
-								.getAllActiveEmps();
+						Vector<Employee> emps = suggestedimplintegrationphasedurationAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
@@ -5269,31 +4383,25 @@ public class RuleExecutor {
 	}
 
 	// DeactivateEmpsSuggTest rule (SuggestedTestingPhaseDuration Action):
-	private void deactivateEmpsSuggTest(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<SuggestedTestingPhaseDurationAction> suggestedtestingphasedurationActs = state
-				.getActionStateRepository()
-				.getSuggestedTestingPhaseDurationActionStateRepository()
-				.getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("DeactivateEmpsSuggTest"))) {
+	private void deactivateEmpsSuggTest(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<SuggestedTestingPhaseDurationAction> suggestedtestingphasedurationActs = state.getActionStateRepository()
+				.getSuggestedTestingPhaseDurationActionStateRepository().getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("DeactivateEmpsSuggTest"))) {
 			for (int i = 0; i < suggestedtestingphasedurationActs.size(); i++) {
 				SuggestedTestingPhaseDurationAction suggestedtestingphasedurationAct = suggestedtestingphasedurationActs
 						.elementAt(i);
 				if (suggestedtestingphasedurationAct == action) {
 					if ((suggestedtestingphasedurationAct.getAllProjs().size() >= 1)
-							&& (suggestedtestingphasedurationAct.getAllEmps()
-									.size() >= 1)) {
-						Vector<Project> projs = suggestedtestingphasedurationAct
-								.getAllActiveProjs();
+							&& (suggestedtestingphasedurationAct.getAllEmps().size() >= 1)) {
+						Vector<Project> projs = suggestedtestingphasedurationAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
 								SEProject seproject = (SEProject) proj2;
 							}
 						}
-						Vector<Employee> emps = suggestedtestingphasedurationAct
-								.getAllActiveEmps();
+						Vector<Employee> emps = suggestedtestingphasedurationAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
@@ -5302,8 +4410,7 @@ public class RuleExecutor {
 										.getActionStateRepository()
 										.getSuggestedTestingPhaseDurationActionStateRepository()
 										.getAllActiveActions(softwareengineer);
-								for (int k = 0; k < suggestedtestingphasedurationactionsDeactivate
-										.size(); k++) {
+								for (int k = 0; k < suggestedtestingphasedurationactionsDeactivate.size(); k++) {
 									SuggestedTestingPhaseDurationAction tempAct = suggestedtestingphasedurationactionsDeactivate
 											.elementAt(k);
 									tempAct.setEmpInactive(softwareengineer);
@@ -5317,23 +4424,18 @@ public class RuleExecutor {
 	}
 
 	// SetSuggestedTestingDone rule (SuggestedTestingPhaseDuration Action):
-	private void setSuggestedTestingDone(Stage gui, int updateInstructions,
-			String ruleName, simse.adts.actions.Action action) {
-		Vector<SuggestedTestingPhaseDurationAction> suggestedtestingphasedurationActs = state
-				.getActionStateRepository()
-				.getSuggestedTestingPhaseDurationActionStateRepository()
-				.getAllActions();
-		if ((updateInstructions == UPDATE_ONE)
-				&& (ruleName.equals("SetSuggestedTestingDone"))) {
+	private void setSuggestedTestingDone(Stage gui, int updateInstructions, String ruleName,
+			simse.adts.actions.Action action) {
+		Vector<SuggestedTestingPhaseDurationAction> suggestedtestingphasedurationActs = state.getActionStateRepository()
+				.getSuggestedTestingPhaseDurationActionStateRepository().getAllActions();
+		if ((updateInstructions == UPDATE_ONE) && (ruleName.equals("SetSuggestedTestingDone"))) {
 			for (int i = 0; i < suggestedtestingphasedurationActs.size(); i++) {
 				SuggestedTestingPhaseDurationAction suggestedtestingphasedurationAct = suggestedtestingphasedurationActs
 						.elementAt(i);
 				if (suggestedtestingphasedurationAct == action) {
 					if ((suggestedtestingphasedurationAct.getAllProjs().size() >= 1)
-							&& (suggestedtestingphasedurationAct.getAllEmps()
-									.size() >= 1)) {
-						Vector<Project> projs = suggestedtestingphasedurationAct
-								.getAllActiveProjs();
+							&& (suggestedtestingphasedurationAct.getAllEmps().size() >= 1)) {
+						Vector<Project> projs = suggestedtestingphasedurationAct.getAllActiveProjs();
 						for (int j = 0; j < projs.size(); j++) {
 							Project proj2 = projs.elementAt(j);
 							if (proj2 instanceof SEProject) {
@@ -5341,8 +4443,7 @@ public class RuleExecutor {
 								seproject.setSuggestedTestDone(true);
 							}
 						}
-						Vector<Employee> emps = suggestedtestingphasedurationAct
-								.getAllActiveEmps();
+						Vector<Employee> emps = suggestedtestingphasedurationAct.getAllActiveEmps();
 						for (int j = 0; j < emps.size(); j++) {
 							Employee emp2 = emps.elementAt(j);
 							if (emp2 instanceof SoftwareEngineer) {
@@ -5356,80 +4457,59 @@ public class RuleExecutor {
 	}
 
 	private void checkAllMins(Stage parent) {
-		Vector<simse.adts.actions.Action> actions = state
-				.getActionStateRepository().getAllActions();
+		Vector<simse.adts.actions.Action> actions = state.getActionStateRepository().getAllActions();
 		for (int i = 0; i < actions.size(); i++) {
 			simse.adts.actions.Action act = actions.elementAt(i);
 			if (act instanceof CreateRequirementsAction) {
 				CreateRequirementsAction b = (CreateRequirementsAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllReqDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllReqDocs().size() < 1) || (b.getAllProjs().size() < 1)
 						|| (b.getAllRequirementsCaptureTools().size() < -999999)
-						|| (b.getAllAssociatedCodeDocs().size() < 1)
-						|| (b.getAllAssociatedDesignDocs().size() < 1)
+						|| (b.getAllAssociatedCodeDocs().size() < 1) || (b.getAllAssociatedDesignDocs().size() < 1)
 						|| (b.getAllAssociatedSystemTestPlans().size() < 1)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped creating the requirements document");
+							((Employee) d).setOverheadText("I've stopped creating the requirements document");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped creating the requirements document");
+							((Customer) d).setOverheadText("I've stopped creating the requirements document");
 						}
 					}
-					state.getActionStateRepository()
-							.getCreateRequirementsActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getCreateRequirementsActionStateRepository().remove(b);
 				}
 			} else if (act instanceof ReviewRequirementsAction) {
 				ReviewRequirementsAction b = (ReviewRequirementsAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllRequirementsDocs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllRequirementsDocs().size() < 1)
 						|| (b.getAllProjs().size() < 1)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I'm done reviewing the requirements document");
+							((Employee) d).setOverheadText("I'm done reviewing the requirements document");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I'm done reviewing the requirements document");
+							((Customer) d).setOverheadText("I'm done reviewing the requirements document");
 						}
 					}
-					state.getActionStateRepository()
-							.getReviewRequirementsActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getReviewRequirementsActionStateRepository().remove(b);
 				}
 			} else if (act instanceof CorrectRequirementsAction) {
 				CorrectRequirementsAction b = (CorrectRequirementsAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllRequirementsDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
-						|| (b.getAllRequirementsCaptureTools().size() < -999999)) {
+				if ((b.getAllEmps().size() < 1) || (b.getAllRequirementsDocs().size() < 1)
+						|| (b.getAllProjs().size() < 1) || (b.getAllRequirementsCaptureTools().size() < -999999)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped correcting the requirements document");
+							((Employee) d).setOverheadText("I've stopped correcting the requirements document");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped correcting the requirements document");
+							((Customer) d).setOverheadText("I've stopped correcting the requirements document");
 						}
 					}
-					state.getActionStateRepository()
-							.getCorrectRequirementsActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getCorrectRequirementsActionStateRepository().remove(b);
 				}
 			} else if (act instanceof CreateDesignAction) {
 				CreateDesignAction b = (CreateDesignAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllDesignDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllDesignDocs().size() < 1) || (b.getAllProjs().size() < 1)
 						|| (b.getAllAssociatedRequirementsDocs().size() < 1)
 						|| (b.getAllDesignEnvironments().size() < -999999)
 						|| (b.getAllAssociatedCodeDocs().size() < 1)) {
@@ -5437,62 +4517,47 @@ public class RuleExecutor {
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped creating the design document");
+							((Employee) d).setOverheadText("I've stopped creating the design document");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped creating the design document");
+							((Customer) d).setOverheadText("I've stopped creating the design document");
 						}
 					}
-					state.getActionStateRepository()
-							.getCreateDesignActionStateRepository().remove(b);
+					state.getActionStateRepository().getCreateDesignActionStateRepository().remove(b);
 				}
 			} else if (act instanceof ReviewDesignAction) {
 				ReviewDesignAction b = (ReviewDesignAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllDesignDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllDesignDocs().size() < 1) || (b.getAllProjs().size() < 1)
 						|| (b.getAllAssociatedRequirementsDocs().size() < 1)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped reviewing the design document");
+							((Employee) d).setOverheadText("I've stopped reviewing the design document");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped reviewing the design document");
+							((Customer) d).setOverheadText("I've stopped reviewing the design document");
 						}
 					}
-					state.getActionStateRepository()
-							.getReviewDesignActionStateRepository().remove(b);
+					state.getActionStateRepository().getReviewDesignActionStateRepository().remove(b);
 				}
 			} else if (act instanceof CorrectDesignAction) {
 				CorrectDesignAction b = (CorrectDesignAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllDesignDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllDesignDocs().size() < 1) || (b.getAllProjs().size() < 1)
 						|| (b.getAllAssociatedRequirementsDocs().size() < 1)
 						|| (b.getAllDesignEnvironments().size() < -999999)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped correcting the design document");
+							((Employee) d).setOverheadText("I've stopped correcting the design document");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped correcting the design document");
+							((Customer) d).setOverheadText("I've stopped correcting the design document");
 						}
 					}
-					state.getActionStateRepository()
-							.getCorrectDesignActionStateRepository().remove(b);
+					state.getActionStateRepository().getCorrectDesignActionStateRepository().remove(b);
 				}
 			} else if (act instanceof CreateCodeAction) {
 				CreateCodeAction b = (CreateCodeAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllCodeDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllCodeDocs().size() < 1) || (b.getAllProjs().size() < 1)
 						|| (b.getAllAssociatedRequirementsDocs().size() < 1)
 						|| (b.getAllAssociatedDesignDocuments().size() < 1)
 						|| (b.getAllDevelopmentEnvironments().size() < -999999)
@@ -5501,42 +4566,32 @@ public class RuleExecutor {
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped creating code");
+							((Employee) d).setOverheadText("I've stopped creating code");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped creating code");
+							((Customer) d).setOverheadText("I've stopped creating code");
 						}
 					}
-					state.getActionStateRepository()
-							.getCreateCodeActionStateRepository().remove(b);
+					state.getActionStateRepository().getCreateCodeActionStateRepository().remove(b);
 				}
 			} else if (act instanceof InspectCodeAction) {
 				InspectCodeAction b = (InspectCodeAction) act;
-				if ((b.getAllEmps().size() < 3)
-						|| (b.getAllCodeDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
+				if ((b.getAllEmps().size() < 3) || (b.getAllCodeDocs().size() < 1) || (b.getAllProjs().size() < 1)
 						|| (b.getAllAssociatedRequirementsDocs().size() < 1)
 						|| (b.getAllAssociatedDesignDocs().size() < 1)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped inspecting the code");
+							((Employee) d).setOverheadText("I've stopped inspecting the code");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped inspecting the code");
+							((Customer) d).setOverheadText("I've stopped inspecting the code");
 						}
 					}
-					state.getActionStateRepository()
-							.getInspectCodeActionStateRepository().remove(b);
+					state.getActionStateRepository().getInspectCodeActionStateRepository().remove(b);
 				}
 			} else if (act instanceof CorrectCodeAction) {
 				CorrectCodeAction b = (CorrectCodeAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllCodeDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllCodeDocs().size() < 1) || (b.getAllProjs().size() < 1)
 						|| (b.getAllAssociatedRequirementsDocs().size() < 1)
 						|| (b.getAllAssociatedDesignDocs().size() < 1)
 						|| (b.getAllDevelopmentEnvironments().size() < -999999)) {
@@ -5544,21 +4599,16 @@ public class RuleExecutor {
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped correcting code");
+							((Employee) d).setOverheadText("I've stopped correcting code");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped correcting code");
+							((Customer) d).setOverheadText("I've stopped correcting code");
 						}
 					}
-					state.getActionStateRepository()
-							.getCorrectCodeActionStateRepository().remove(b);
+					state.getActionStateRepository().getCorrectCodeActionStateRepository().remove(b);
 				}
 			} else if (act instanceof IntegrateCodeAction) {
 				IntegrateCodeAction b = (IntegrateCodeAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllCodeDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllCodeDocs().size() < 1) || (b.getAllProjs().size() < 1)
 						|| (b.getAllAssociatedRequirementsDocs().size() < 1)
 						|| (b.getAllAssociatedDesignDocs().size() < 1)
 						|| (b.getAllDevelopmentEnvironments().size() < -999999)) {
@@ -5566,110 +4616,82 @@ public class RuleExecutor {
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped integrating code");
+							((Employee) d).setOverheadText("I've stopped integrating code");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped integrating code");
+							((Customer) d).setOverheadText("I've stopped integrating code");
 						}
 					}
-					state.getActionStateRepository()
-							.getIntegrateCodeActionStateRepository().remove(b);
+					state.getActionStateRepository().getIntegrateCodeActionStateRepository().remove(b);
 				}
 			} else if (act instanceof SystemTestAction) {
 				SystemTestAction b = (SystemTestAction) act;
-				if ((b.getAllCodeDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
-						|| (b.getAllEmps().size() < 1)
+				if ((b.getAllCodeDocs().size() < 1) || (b.getAllProjs().size() < 1) || (b.getAllEmps().size() < 1)
 						|| (b.getAllAssociatedSystemTestPlans().size() < 1)
 						|| (b.getAllTestingTools().size() < -999999)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped doing the system test");
+							((Employee) d).setOverheadText("I've stopped doing the system test");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped doing the system test");
+							((Customer) d).setOverheadText("I've stopped doing the system test");
 						}
 					}
-					state.getActionStateRepository()
-							.getSystemTestActionStateRepository().remove(b);
+					state.getActionStateRepository().getSystemTestActionStateRepository().remove(b);
 				}
 			} else if (act instanceof CreateSystemTestPlanAction) {
 				CreateSystemTestPlanAction b = (CreateSystemTestPlanAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllAssociatedCodeDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
-						|| (b.getAllSystemTestPlanDocs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllAssociatedCodeDocs().size() < 1)
+						|| (b.getAllProjs().size() < 1) || (b.getAllSystemTestPlanDocs().size() < 1)
 						|| (b.getAllAssociatedRequirementsDocs().size() < 1)
 						|| (b.getAllTestingTools().size() < -999999)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped creating the system test plan");
+							((Employee) d).setOverheadText("I've stopped creating the system test plan");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped creating the system test plan");
+							((Customer) d).setOverheadText("I've stopped creating the system test plan");
 						}
 					}
-					state.getActionStateRepository()
-							.getCreateSystemTestPlanActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getCreateSystemTestPlanActionStateRepository().remove(b);
 				}
 			} else if (act instanceof ReviewSystemTestPlanAction) {
 				ReviewSystemTestPlanAction b = (ReviewSystemTestPlanAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllTestPlans().size() < 1)
-						|| (b.getAllAssociatedRequirementsDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)) {
+				if ((b.getAllEmps().size() < 1) || (b.getAllTestPlans().size() < 1)
+						|| (b.getAllAssociatedRequirementsDocs().size() < 1) || (b.getAllProjs().size() < 1)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped reviewing the system test plan");
+							((Employee) d).setOverheadText("I've stopped reviewing the system test plan");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped reviewing the system test plan");
+							((Customer) d).setOverheadText("I've stopped reviewing the system test plan");
 						}
 					}
-					state.getActionStateRepository()
-							.getReviewSystemTestPlanActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getReviewSystemTestPlanActionStateRepository().remove(b);
 				}
 			} else if (act instanceof CorrectSystemTestPlanAction) {
 				CorrectSystemTestPlanAction b = (CorrectSystemTestPlanAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllTestPlans().size() < 1)
-						|| (b.getAllAssociatedRequirementsDocs().size() < 1)
-						|| (b.getAllProjs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllTestPlans().size() < 1)
+						|| (b.getAllAssociatedRequirementsDocs().size() < 1) || (b.getAllProjs().size() < 1)
 						|| (b.getAllTestingTools().size() < -999999)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I've stopped correcting the system test plan");
+							((Employee) d).setOverheadText("I've stopped correcting the system test plan");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I've stopped correcting the system test plan");
+							((Customer) d).setOverheadText("I've stopped correcting the system test plan");
 						}
 					}
-					state.getActionStateRepository()
-							.getCorrectSystemTestPlanActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getCorrectSystemTestPlanActionStateRepository().remove(b);
 				}
 			} else if (act instanceof DeliverProductAction) {
 				DeliverProductAction b = (DeliverProductAction) act;
-				if ((b.getAllEmps().size() < 1) || (b.getAllProjs().size() < 1)
-						|| (b.getAllCodeDocs().size() < 1)
+				if ((b.getAllEmps().size() < 1) || (b.getAllProjs().size() < 1) || (b.getAllCodeDocs().size() < 1)
 						|| (b.getAllCusts().size() < 1)) {
-					state.getActionStateRepository()
-							.getDeliverProductActionStateRepository().remove(b);
+					state.getActionStateRepository().getDeliverProductActionStateRepository().remove(b);
 				}
 			} else if (act instanceof BreakAction) {
 				BreakAction b = (BreakAction) act;
@@ -5678,16 +4700,13 @@ public class RuleExecutor {
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I'm going back to work now");
+							((Employee) d).setOverheadText("I'm going back to work now");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I'm going back to work now");
+							((Customer) d).setOverheadText("I'm going back to work now");
 						}
 					}
 					update(parent, UPDATE_ONE, "BreakDestRule", b);
-					state.getActionStateRepository()
-							.getBreakActionStateRepository().remove(b);
+					state.getActionStateRepository().getBreakActionStateRepository().remove(b);
 				}
 			} else if (act instanceof GetSickAction) {
 				GetSickAction b = (GetSickAction) act;
@@ -5696,113 +4715,87 @@ public class RuleExecutor {
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("I'm not sick anymore -- back to work!");
+							((Employee) d).setOverheadText("I'm not sick anymore -- back to work!");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("I'm not sick anymore -- back to work!");
+							((Customer) d).setOverheadText("I'm not sick anymore -- back to work!");
 						}
 					}
 					update(parent, UPDATE_ONE, "GetSickDestRule", b);
-					state.getActionStateRepository()
-							.getGetSickActionStateRepository().remove(b);
+					state.getActionStateRepository().getGetSickActionStateRepository().remove(b);
 				}
 			} else if (act instanceof QuitAction) {
 				QuitAction b = (QuitAction) act;
 				if ((b.getAllQuitters().size() < 1)) {
-					state.getActionStateRepository()
-							.getQuitActionStateRepository().remove(b);
+					state.getActionStateRepository().getQuitActionStateRepository().remove(b);
 				}
 			} else if (act instanceof IntroduceNewRequirementsAction) {
 				IntroduceNewRequirementsAction b = (IntroduceNewRequirementsAction) act;
-				if ((b.getAllCusts().size() < 1)
-						|| (b.getAllAssociatedRequirementsDocuments().size() < 1)
-						|| (b.getAllProjs().size() < 1)
-						|| (b.getAllEmpWOverheadTexts().size() < 1)
-						|| (b.getAllAssociatedCodes().size() < 1)
-						|| (b.getAllAssociatedDesignDocuments().size() < 1)
+				if ((b.getAllCusts().size() < 1) || (b.getAllAssociatedRequirementsDocuments().size() < 1)
+						|| (b.getAllProjs().size() < 1) || (b.getAllEmpWOverheadTexts().size() < 1)
+						|| (b.getAllAssociatedCodes().size() < 1) || (b.getAllAssociatedDesignDocuments().size() < 1)
 						|| (b.getAllAssociatedSystemTestPlans().size() < 1)) {
-					state.getActionStateRepository()
-							.getIntroduceNewRequirementsActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getIntroduceNewRequirementsActionStateRepository().remove(b);
 				}
 			} else if (act instanceof UpdateProjectAttributesAction) {
 				UpdateProjectAttributesAction b = (UpdateProjectAttributesAction) act;
 				if ((b.getAllProjs().size() < 1) || (b.getAllEmps().size() < 1)) {
-					state.getActionStateRepository()
-							.getUpdateProjectAttributesActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getUpdateProjectAttributesActionStateRepository().remove(b);
 				}
 			} else if (act instanceof ChangePayRateAction) {
 				ChangePayRateAction b = (ChangePayRateAction) act;
 				if ((b.getAllEmps().size() < 1)) {
-					state.getActionStateRepository()
-							.getChangePayRateActionStateRepository().remove(b);
+					state.getActionStateRepository().getChangePayRateActionStateRepository().remove(b);
 				}
 			} else if (act instanceof GiveBonusAction) {
 				GiveBonusAction b = (GiveBonusAction) act;
-				if ((b.getAllEmps().size() < 1)
-						|| (b.getAllProjectWithBudgets().size() < 1)) {
+				if ((b.getAllEmps().size() < 1) || (b.getAllProjectWithBudgets().size() < 1)) {
 					Vector<SSObject> c = b.getAllParticipants();
 					for (int j = 0; j < c.size(); j++) {
 						SSObject d = c.elementAt(j);
 						if (d instanceof Employee) {
-							((Employee) d)
-									.setOverheadText("Thanks for the bonus!");
+							((Employee) d).setOverheadText("Thanks for the bonus!");
 						} else if (d instanceof Customer) {
-							((Customer) d)
-									.setOverheadText("Thanks for the bonus!");
+							((Customer) d).setOverheadText("Thanks for the bonus!");
 						}
 					}
-					state.getActionStateRepository()
-							.getGiveBonusActionStateRepository().remove(b);
+					state.getActionStateRepository().getGiveBonusActionStateRepository().remove(b);
 				}
 			} else if (act instanceof FireAction) {
 				FireAction b = (FireAction) act;
 				if ((b.getAllFiredPersons().size() < 1)) {
-					state.getActionStateRepository()
-							.getFireActionStateRepository().remove(b);
+					state.getActionStateRepository().getFireActionStateRepository().remove(b);
 				}
 			} else if (act instanceof PurchaseToolAction) {
 				PurchaseToolAction b = (PurchaseToolAction) act;
-				if ((b.getAllEmpWhoseMenuClickedOns().size() < 1)
-						|| (b.getAllSETools().size() < 1)
+				if ((b.getAllEmpWhoseMenuClickedOns().size() < 1) || (b.getAllSETools().size() < 1)
 						|| (b.getAllProjs().size() < 1)) {
-					state.getActionStateRepository()
-							.getPurchaseToolActionStateRepository().remove(b);
+					state.getActionStateRepository().getPurchaseToolActionStateRepository().remove(b);
 				}
 			} else if (act instanceof SuggestedRequirementsPhaseDurationAction) {
 				SuggestedRequirementsPhaseDurationAction b = (SuggestedRequirementsPhaseDurationAction) act;
 				if ((b.getAllProjs().size() < 1) || (b.getAllEmps().size() < 1)) {
-					update(parent, UPDATE_ONE, "SetSuggestedRequirementsDone",
-							b);
-					state.getActionStateRepository()
-							.getSuggestedRequirementsPhaseDurationActionStateRepository()
+					update(parent, UPDATE_ONE, "SetSuggestedRequirementsDone", b);
+					state.getActionStateRepository().getSuggestedRequirementsPhaseDurationActionStateRepository()
 							.remove(b);
 				}
 			} else if (act instanceof SuggestedDesignPhaseDurationAction) {
 				SuggestedDesignPhaseDurationAction b = (SuggestedDesignPhaseDurationAction) act;
 				if ((b.getAllProjs().size() < 1) || (b.getAllEmps().size() < 1)) {
 					update(parent, UPDATE_ONE, "SetSuggestedDesignDone", b);
-					state.getActionStateRepository()
-							.getSuggestedDesignPhaseDurationActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getSuggestedDesignPhaseDurationActionStateRepository().remove(b);
 				}
 			} else if (act instanceof SuggestedImplIntegrationPhaseDurationAction) {
 				SuggestedImplIntegrationPhaseDurationAction b = (SuggestedImplIntegrationPhaseDurationAction) act;
 				if ((b.getAllProjs().size() < 1) || (b.getAllEmps().size() < 1)) {
 					update(parent, UPDATE_ONE, "SetSuggestedImplDone", b);
-					state.getActionStateRepository()
-							.getSuggestedImplIntegrationPhaseDurationActionStateRepository()
+					state.getActionStateRepository().getSuggestedImplIntegrationPhaseDurationActionStateRepository()
 							.remove(b);
 				}
 			} else if (act instanceof SuggestedTestingPhaseDurationAction) {
 				SuggestedTestingPhaseDurationAction b = (SuggestedTestingPhaseDurationAction) act;
 				if ((b.getAllProjs().size() < 1) || (b.getAllEmps().size() < 1)) {
 					update(parent, UPDATE_ONE, "SetSuggestedTestingDone", b);
-					state.getActionStateRepository()
-							.getSuggestedTestingPhaseDurationActionStateRepository()
-							.remove(b);
+					state.getActionStateRepository().getSuggestedTestingPhaseDurationActionStateRepository().remove(b);
 				}
 			}
 		}

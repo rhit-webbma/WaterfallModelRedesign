@@ -39,6 +39,7 @@ public class IntegrateCodeAction extends Action implements Cloneable {
 		associatedrequirementsdocs = new Hashtable<Artifact, Boolean>();
 		associateddesigndocs = new Hashtable<Artifact, Boolean>();
 		developmentenvironments = new Hashtable<Tool, Boolean>();
+		actionName = Action.INTEGRATECODE;
 	}
 
 	public Object clone() {

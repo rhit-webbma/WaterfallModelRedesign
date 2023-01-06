@@ -23,6 +23,7 @@ public class FireAction extends Action implements Cloneable {
 	public FireAction() {
 		firedpersons = new Hashtable<Employee, Boolean>();
 		timeToLive = 1;
+		actionName = Action.FIRE;
 	}
 
 	public Object clone() {

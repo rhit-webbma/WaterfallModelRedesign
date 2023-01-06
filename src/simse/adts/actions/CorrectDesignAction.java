@@ -36,6 +36,7 @@ public class CorrectDesignAction extends Action implements Cloneable {
 		projs = new Hashtable<Project, Boolean>();
 		associatedrequirementsdocs = new Hashtable<Artifact, Boolean>();
 		designenvironments = new Hashtable<Tool, Boolean>();
+		actionName = Action.CORRECTDESIGN;
 	}
 
 	public Object clone() {
