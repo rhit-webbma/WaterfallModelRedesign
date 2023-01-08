@@ -147,7 +147,6 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, Si
 			characters.add(char1);
 		}
 		
-		layout.getChildren().add(titlePanel);
 		
 		update();
 		this.getChildren().add(layout);		
