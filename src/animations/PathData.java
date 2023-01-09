@@ -2,13 +2,13 @@ package animations;
 
 public class PathData {
 
-	public static final double[][] PATH_0 = {{0, 90}, {-64, 0}, {0, -54}, {-38, 0}, {0, -51}, {0, 15}};
-	public static final double[][] PATH_1 = {{-264, 0}, {0, -130}, {0, 130}, {264, 0}};
-	public static final double[][] PATH_2 = {{0, 75}, {-299, 0}, {299, 0}, {0, -75}};
-	public static final double[][] PATH_3 = {{0, 39}, {-95, 0}, {0, -145}, {0, 145}, {95, 0}, {0, -39}};
-	public static final double[][] PATH_4 = {{-103, 0}, {0, -118}, {200, 0}, {-200, 0}, {0, 118}, {103, 0}};
-	public static final double[][] PATH_5 = {{0, 39}, {-149, 0}, {0, 170}, {0, -170}, {149, 0}, {0, -39}};
-	public static final double[][] PATH_6 = {{0, -128}, {202, 0}, {-202, 0}, {0, 128}};
+	public static final double[][] PATH_0 = {{-12, 0}, {0, 74}, {185, 0}, {-185, 0}, {0, -74}, {12,0}};
+	public static final double[][] PATH_1 = {{-56, 0}, {0, -96}, {-94, 0}, {0, 11}, {0, -11}, {94, 0}, {0, 96}, {56, 0}};
+	public static final double[][] PATH_2 = {{-143, 0}, {0, -116}, {-156, 0}, {0, -10}, {0, 10}, {156, 0}, {0, 116}, {143, 0}};
+	public static final double[][] PATH_3 = {{-58, 0}, {0, 104}, {-32, 0}, {32, 0}, {0, -104}, {58, 0}};
+	public static final double[][] PATH_4 = {{-233, 0}, {0, -17}, {0, 17}, {233, 0}};
+	public static final double[][] PATH_5 = {{56, 0}, {0, -65}, {56, 0}, {0, -5}, {0, 5}, {-56, 0}, {0, 65}, {-56, 0}};
+	public static final double[][] PATH_6 = {{0, 69}, {210, 0}, {0, -157}, {0, 157}, {-210, 0}, {0, -69}};
 	
 	public static double[][] getPath(int pathNumber) {
 		switch (pathNumber)
