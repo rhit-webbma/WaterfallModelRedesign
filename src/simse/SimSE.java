@@ -34,8 +34,8 @@ public class SimSE extends Application{
 		state.getClock().setGUI(gui);
 		gui.setX(0);
 		gui.setY(0);
-		gui.setWidth(1024);
-		gui.setHeight(744);
+		gui.setWidth(1180);
+		gui.setHeight(720);
 		logic.getTriggerChecker().update(false, gui);
 		branches.add(branch);
 		guis.add(gui);
