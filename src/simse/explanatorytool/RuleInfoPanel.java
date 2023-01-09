@@ -13,45 +13,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import simse.adts.actions.BreakAction;
-import simse.adts.actions.ChangePayRateAction;
-import simse.adts.actions.CorrectCodeAction;
-import simse.adts.actions.CorrectDesignAction;
-import simse.adts.actions.CorrectRequirementsAction;
-import simse.adts.actions.CorrectSystemTestPlanAction;
-import simse.adts.actions.CreateCodeAction;
-import simse.adts.actions.CreateDesignAction;
-import simse.adts.actions.CreateRequirementsAction;
-import simse.adts.actions.CreateSystemTestPlanAction;
-import simse.adts.actions.DeliverProductAction;
-import simse.adts.actions.FireAction;
-import simse.adts.actions.GetSickAction;
-import simse.adts.actions.GiveBonusAction;
-import simse.adts.actions.InspectCodeAction;
-import simse.adts.actions.IntegrateCodeAction;
-import simse.adts.actions.IntroduceNewRequirementsAction;
-import simse.adts.actions.PurchaseToolAction;
-import simse.adts.actions.QuitAction;
-import simse.adts.actions.ReviewDesignAction;
-import simse.adts.actions.ReviewRequirementsAction;
-import simse.adts.actions.ReviewSystemTestPlanAction;
-import simse.adts.actions.SuggestedDesignPhaseDurationAction;
-import simse.adts.actions.SuggestedImplIntegrationPhaseDurationAction;
-import simse.adts.actions.SuggestedRequirementsPhaseDurationAction;
-import simse.adts.actions.SuggestedTestingPhaseDurationAction;
-import simse.adts.actions.SystemTestAction;
+import simse.adts.actions.Action;
 import simse.util.RuleCategories;
-import simse.util.RuleDescriptions;
 
 public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
-	private simse.adts.actions.Action action; // action in focus
+	private Action action; // action in focus
 
-	private ListView triggerRuleList;
-	private ListView destroyerRuleList;
-	private ListView intermediateRuleList;
+	private ListView<String> triggerRuleList;
+	private ListView<String> destroyerRuleList;
+	private ListView<String> intermediateRuleList;
 	private TextArea descriptionArea; // for displaying a rule description
 
-	public RuleInfoPanel(Stage owner, simse.adts.actions.Action action) {
+	public RuleInfoPanel(Stage owner, Action action) {
 		this.action = action;
 
 		// Create main panel:
@@ -63,7 +36,7 @@ public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		TitledPane trigRuleTitlePane = new TitledPane("Trigger Rules:", rulePane);
 
 		// rule lists:
-		triggerRuleList = new ListView();
+		triggerRuleList = new ListView<String>();
 		triggerRuleList.setFixedCellSize(7);
 		triggerRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		triggerRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
@@ -74,7 +47,7 @@ public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		rulePane.getChildren().add(triggerRuleListPane);
 
 		TitledPane destRuleTitlePane = new TitledPane("Destroyer Rules: ", rulePane);
-		destroyerRuleList = new ListView();
+		destroyerRuleList = new ListView<String>();
 		destroyerRuleList.setFixedCellSize(7);
 		destroyerRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		destroyerRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
@@ -85,7 +58,7 @@ public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		rulePane.getChildren().add(destroyerRuleListPane);
 
 		TitledPane intRuleTitlePane = new TitledPane("Intermediate Rules:", rulePane);
-		intermediateRuleList = new ListView();
+		intermediateRuleList = new ListView<String>();
 		intermediateRuleList.setFixedCellSize(7);
 		intermediateRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		intermediateRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);

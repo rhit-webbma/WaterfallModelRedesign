@@ -6,6 +6,7 @@ import java.util.Vector;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -15,8 +16,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import simse.adts.actions.Action;
 import simse.adts.actions.BreakAction;
 import simse.adts.actions.ChangePayRateAction;
 import simse.adts.actions.CorrectCodeAction;
@@ -60,16 +63,14 @@ import simse.adts.objects.SEProject;
 import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.SystemTestPlan;
 import simse.adts.objects.Tool;
-import simse.util.DestroyerDescriptions;
 import simse.util.RuleCategories;
-import simse.util.TriggerDescriptions;
 
 public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
-	private simse.adts.actions.Action action; // action in focus
+	private Action action; // action in focus
 
-	private TableView table;
-	private ListView triggerList; // for choosing which trigger show
-	private ListView destroyerList; // for choosing which destroyer to show
+	private TableView<Participant> table;
+	private ListView<String> triggerList; // for choosing which trigger show
+	private ListView<String> destroyerList; // for choosing which destroyer to show
 	private TextArea descriptionArea; // for displaying a trigger/destroyer
 										// description
 	private TextArea actionDescriptionArea; // for displaying the action
@@ -78,7 +79,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	private final int TRIGGER = 0;
 	private final int DESTROYER = 1;
 
-	public ActionInfoPanel(simse.adts.actions.Action action) {
+	public ActionInfoPanel(Action action) {
 		this.action = action;
 
 		// Create main panel (box):
@@ -97,46 +98,45 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		actionDescriptionScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		initializeActionDescription();
 		actionDescriptionPane.getChildren().add(actionDescriptionScrollPane);
+		actionDescriptionPane.setAlignment(Pos.CENTER);
 		
 		// Create participants pane and components:
 		VBox participantsPane = new VBox();
 		TitledPane participantsTitlePane = new TitledPane("Participants:", participantsPane);
 
 		// participants table:
-		ScrollPane participantsTablePane = new ScrollPane(
-				createParticipantsTable());
-		participantsTablePane
-				.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		ScrollPane participantsTablePane = new ScrollPane(createParticipantsTable());
+		participantsTablePane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		participantsTablePane.setPrefSize(900, 125);
 		participantsPane.getChildren().add(participantsTablePane);
+		participantsPane.setAlignment(Pos.CENTER);
 
 		// Create triggerDestroyer pane and components:
-		Pane triggerDestroyerPane = new Pane();
-
-		// list pane:
-		VBox listPane = new VBox();
+		GridPane triggerDestroyerPane = new GridPane();
 
 		// trigger list:
-		TitledPane triggerListTitlePane = new TitledPane("Triggers:", listPane);
-		triggerList = new ListView();
-		triggerList.setFixedCellSize(3);
+		VBox tListPane = new VBox();
+		TitledPane triggerListTitlePane = new TitledPane("Triggers:", tListPane);
+		triggerList = new ListView<String>();
+		triggerList.setFixedCellSize(24);
 		triggerList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		
 		triggerList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		
 		initializeTriggerList();
 		ScrollPane triggerListPane = new ScrollPane(triggerList);
-		listPane.getChildren().add(triggerListPane);
+		triggerListPane.setMaxHeight(80);
+		tListPane.getChildren().add(triggerListPane);
 
 		// destroyer list:
-		TitledPane destroyerListTitlePane = new TitledPane("Destroyers: ", listPane);
-		destroyerList = new ListView();
-		destroyerList.setFixedCellSize(3);
+		VBox dListPane = new VBox();
+		TitledPane destroyerListTitlePane = new TitledPane("Destroyers: ", dListPane);
+		destroyerList = new ListView<String>();
+		destroyerList.setFixedCellSize(24);
 		destroyerList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		destroyerList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		initializeDestroyerList();
 		ScrollPane destroyerListPane = new ScrollPane(destroyerList);
-		listPane.getChildren().add(destroyerListPane);
+		destroyerListPane.setMaxHeight(80);
+		dListPane.getChildren().add(destroyerListPane);
 
 		// description pane:
 		VBox descriptionPane = new VBox();
@@ -155,11 +155,14 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		descriptionScrollPane.setContent(descriptionArea);
 		descriptionPane.getChildren().add(descriptionScrollPane);
 
-		triggerDestroyerPane.getChildren().add(descriptionPane);
+		triggerDestroyerPane.add(triggerListTitlePane, 0, 0);
+		triggerDestroyerPane.add(destroyerListTitlePane, 0, 1);
+		triggerDestroyerPane.add(descriptionTitlePane, 1, 0, 1, 2);
+		triggerDestroyerPane.setAlignment(Pos.CENTER);
 
 		// Add panes to main pane:		
-		mainPane.getChildren().add(actionDescriptionPane);
-		mainPane.getChildren().add(participantsPane);
+		mainPane.getChildren().add(actionDescriptionTitlePane);
+		mainPane.getChildren().add(participantsTitlePane);
 		mainPane.getChildren().add(triggerDestroyerPane);
 		
 		this.getChildren().add(mainPane);
@@ -231,6 +234,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	// initializes the JList of triggers
 	private void initializeTriggerList() {
 		String actionName = action.getActionName();
+		System.out.println(actionName);
+		System.out.println("Trig: " + RuleCategories.getBackendTrigRulesForAction(actionName)[0]);
 		triggerList.getItems().setAll(RuleCategories.getBackendTrigRulesForAction(actionName));
 	}
 
@@ -240,11 +245,11 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		destroyerList.getItems().setAll(RuleCategories.getBackendDestRulesForAction(actionName));
 	}
 
-	private TableView createParticipantsTable() {
-		TableView newView = new TableView();
-		TableColumn name = new TableColumn("Participant Name");
-		TableColumn participant = new TableColumn("Participant");
-		TableColumn status = new TableColumn("Status");
+	private TableView<Participant> createParticipantsTable() {
+		TableView<Participant> newView = new TableView<Participant>();
+		TableColumn<Participant, String> name = new TableColumn<>("Participant Name");
+		TableColumn<Participant, String> participant = new TableColumn<>("Participant");
+		TableColumn<Participant, String> status = new TableColumn<>("Status");
 		ObservableList<Participant> data = FXCollections.observableArrayList();
 		int index = 0;
 		if (action instanceof CreateRequirementsAction) {
@@ -3493,7 +3498,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		String name = trigOrDest == TRIGGER ? (String) triggerList
 				.getSelectionModel().getSelectedItem() : (String) destroyerList.getSelectionModel().getSelectedItem();
 		if (name != null) {
-			String actionName = action.getActionName();
+			String actionName = this.action.getActionName();
 			descriptionArea.setText(RuleCategories.getBackendRuleMappings(actionName, name));
 			descriptionArea.positionCaret(0);
 		}
