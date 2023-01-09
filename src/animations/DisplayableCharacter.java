@@ -15,19 +15,23 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
+import simse.gui.MapData;
 
 public abstract class DisplayableCharacter extends Group{
 	
 	private SimSESprite displayedCharacter;
-	protected int velocity, height, width;
+	protected int velocity, height, width, characterNum;
 	private double previousX, previousY;
 	private PathTransition transition;
+	private boolean starting;
 	private Path pathToFollow;
 	protected ArrayList<SimSESprite> animationList;
 	
 	public DisplayableCharacter(Path pathToFollow, int characterNum, int width, int height) {	
 		this.velocity = 2;
 		this.pathToFollow = pathToFollow;
+		this.characterNum = characterNum;
+		this.starting = false;
 		this.height = height;
 		this.width = width;
 		this.directionCheck();
@@ -45,6 +49,7 @@ public abstract class DisplayableCharacter extends Group{
 	public DisplayableCharacter(int characterNum, int width, int height) {
 		this.height = height;
 		this.width = width;
+		this.characterNum = characterNum;
 		animationList = new ArrayList<>();
 		initalizeAnimationList(characterNum);
 		displayedCharacter = animationList.get(0);
@@ -83,6 +88,19 @@ public abstract class DisplayableCharacter extends Group{
 		
 		transition.setOnFinished(e -> {
 			int randomNumber = rand.nextInt(15);
+			Path newPath = null;
+			
+			if(starting) {
+				double[][] pathDirections = PathData.getStartingPath(characterNum);
+				newPath = new CreatablePath(MapData.getStartingMapLocation(characterNum)[0] + 5, MapData.getStartingMapLocation(characterNum)[1], pathDirections);
+				this.starting = false;
+			} else {
+				double[][] pathDirections = PathData.getEndingPath(characterNum);
+				newPath = new CreatablePath(MapData.getEndingMapLocation(characterNum)[0] + 5, MapData.getEndingMapLocation(characterNum)[1], pathDirections);
+				this.starting = true;
+			}
+			
+			transition.setPath(newPath);
 			transition.setDelay(Duration.seconds(randomNumber));
 			
 				

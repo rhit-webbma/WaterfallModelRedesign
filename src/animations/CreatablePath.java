@@ -27,7 +27,7 @@ public class CreatablePath extends Path {
 				this.getElements().add(new LineTo(x, y));
 		}
 		
-		this.getElements().add(new ClosePath());
+//		this.getElements().add(new ClosePath());
 	
 //        y += 41;
 //        this.getElements().add(new LineTo(x, y));
