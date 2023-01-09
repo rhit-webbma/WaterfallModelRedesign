@@ -4,7 +4,6 @@ package simse.gui;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import animations.Character1;
 import animations.DisplayableCharacter;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;

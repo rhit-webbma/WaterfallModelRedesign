@@ -128,6 +128,7 @@ public class Engine extends TimerTask implements EventHandler<ActionEvent> {
 
 	public void giveGUI(SimSEGUI g) {
 		gui = g;
+		gui.show();
 		new StartingNarrativeDialog();
 	}
 
