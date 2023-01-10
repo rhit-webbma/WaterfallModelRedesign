@@ -47,13 +47,13 @@ public class ArtifactInfoScreen extends Stage implements EventHandler<MouseEvent
 		this.setTitle(artifactName);
 		
 		StackPane imagePane = new StackPane();
-		imagePane.setMinSize(150, 150);
+		imagePane.setMinSize(110, 110);
 		ImageView img = JavaFXHelpers.createImageView("src/simse/gui/icons/" + artifact.getName() + ".gif");
 		if (img == null) {
 			img = JavaFXHelpers.createImageView("src/simse/gui/icons/3.gif");
 		}
-		img.setScaleX(2.5);
-		img.setScaleY(2.5);
+		img.setScaleX(2);
+		img.setScaleY(2);
 		imagePane.getChildren().add(img);
 		
 		actionsButton = new Button("Assign Employees to work on Artifact");

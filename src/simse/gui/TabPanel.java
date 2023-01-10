@@ -143,7 +143,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		toolFrame = new ToolsAtAGlanceFrame(state, gui);
 //		projectFrame = new ProjectsAtAGlanceFrame(state, gui);
-		projectFrame = new ProjectOverviewScreen(state);
+		projectFrame = new ProjectOverviewScreen(state, gui);
 		customerFrame = new CustomersAtAGlanceFrame(state, gui);
 		panelsFrame = new PanelsScreen(state, gui, logic);
 		trackPane = TrackPanel.getInstance();

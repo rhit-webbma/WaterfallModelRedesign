@@ -39,6 +39,7 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 	TableView table;
 	
 	VBox mainPane;
+	HBox buttonPaneEmp;
 
 	public EmployeesOverviewScreen(State s, SimSEGUI gui, Logic l) {
 		this.state = s;
@@ -76,16 +77,16 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 		tablePane.setCenter(table);
 		mainPane.getChildren().add(tablePane);
 		
-		HBox buttonPane = new HBox();
+		buttonPaneEmp = new HBox();
 		
 		moreDetail = new Button ("More Detail on Selected Employee");
 		moreDetail.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		buttonPane.getChildren().add(moreDetail);
+		buttonPaneEmp.getChildren().add(moreDetail);
 		
 		rules = new Button("Rules for Employees");
 		rules.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		buttonPane.getChildren().add(rules);
-		mainPane.getChildren().add(buttonPane);
+		buttonPaneEmp.getChildren().add(rules);
+		mainPane.getChildren().add(buttonPaneEmp);
 		
 		Scene scene = new Scene(mainPane, 900, 500);
 		this.setScene(scene);
@@ -96,11 +97,8 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 		Object source = evt.getSource();
 		if (source == employeeTab) {
 			update(true);
-			if (mainPane.getChildren().contains(moreDetail)) mainPane.getChildren().remove(moreDetail);
-			mainPane.getChildren().add(moreDetail);
 		} else if (source == customerTab) {
 			update(false);
-			mainPane.getChildren().remove(moreDetail);
 		} else if (source == moreDetail) {
 			SoftwareEngineer selected = null;
 			try {
@@ -124,8 +122,14 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 		mainPane.getChildren().remove(tablePane);
 		if (isEmployee) {
 			tableModel = new SoftwareEngineerTableModel(state);
+			if (!mainPane.getChildren().contains(buttonPaneEmp)) {
+				mainPane.getChildren().add(buttonPaneEmp);
+			}
 		} else {
 			tableModel = new ACustomerTableModel(state);
+			if (mainPane.getChildren().contains(buttonPaneEmp)) {
+				mainPane.getChildren().remove(buttonPaneEmp);
+			}
 		}
 		table = tableModel.createTable();
 		tablePane = new BorderPane(table);
