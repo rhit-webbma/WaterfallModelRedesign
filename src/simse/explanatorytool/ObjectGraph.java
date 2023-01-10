@@ -408,8 +408,7 @@ public class ObjectGraph extends Stage implements ChartMouseListenerFX {
 		plot.setAxisOffset(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
 		plot.setDomainGridlinePaint(java.awt.Color.WHITE);
 		plot.setRangeGridlinePaint(java.awt.Color.WHITE);
-		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot
-				.getRenderer();
+		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
 		renderer.setDefaultShapesVisible(true);
 		renderer.setDefaultShapesFilled(true);
 
@@ -707,83 +706,12 @@ public class ObjectGraph extends Stage implements ChartMouseListenerFX {
 		}
 	}
 
-	// responds to RIGHT-clicks on the chart
-//	public void mouseReleased(MouseEvent me) {
-//		if (me.getButton() != MouseButton.PRIMARY) { // not left-click
-//			XYPlot plot = chart.getXYPlot();
-//			Range domainRange = plot.getDataRange(plot.getDomainAxis());
-//			if (domainRange != null) { // chart is not blank
-//				javafx.geometry.Point2D pt = chartViewer.localToScreen(me.getScreenX(), me.getScreenY());
-//				ChartRenderingInfo info = this.chartViewer
-//						.getRenderingInfo();
-//				Rectangle2D dataArea = info.getPlotInfo().getDataArea();
-//				NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-//				RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
-//				double chartX = domainAxis.java2DToValue(pt.getX(), dataArea,
-//						domainAxisEdge);
-//				lastRightClickedX = (int) Math.rint(chartX);
-//				if (domainRange != null
-//						&& lastRightClickedX >= domainRange.getLowerBound()
-//						&& lastRightClickedX <= (domainRange.getUpperBound() - 1)
-//						&& lastRightClickedX >= 0) { // clicked within domain
-//														// range
-//					if (chartViewer.getContextMenu().getItems().indexOf(
-//							newBranchItem) == -1) { // no new branch item on
-//													// menu currently
-//						chartViewer.getContextMenu().getItems().add(separator);
-//						chartViewer.getContextMenu().getItems().add(newBranchItem);
-////						chartViewer.getPopupMenu().pack();
-////						chartViewer.getPopupMenu().repaint();
-//					}
-//				} else { // clicked outside of domain range
-//					if (chartViewer.getContextMenu().getItems().indexOf(
-//							newBranchItem) >= 0) { // new branch item currently
-//													// on menu
-//						chartViewer.getContextMenu().getItems().remove(newBranchItem);
-//						if (chartViewer.getContextMenu().getItems().indexOf(
-//								separator) >= 0) { // has separator
-//							chartViewer.getContextMenu().getItems().remove(separator);
-//						}
-////						chartPanel.getPopupMenu().pack();
-////						chartPanel.getPopupMenu().repaint();
-//					}
-//				}
-//			}
-//		}
-//	}
-
-//	public void mousePressed(MouseEvent me) {
-//	}
-//
-//	public void mouseClicked(MouseEvent me) {
-//	}
-//
-//	public void mouseEntered(MouseEvent me) {
-//	}
-//
-//	public void mouseExited(MouseEvent me) {
-//	}
-
-//	public void actionPerformed(ActionEvent evt) {
-//		if (evt.getSource() == newBranchItem) {
-//			String newBranchName = JOptionPane.showInputDialog(null,
-//					"Please name this new game:", "Name New Game",
-//					JOptionPane.QUESTION_MESSAGE);
-//			if (newBranchName != null) {
-//				State tempState = (State) log.get(lastRightClickedX).clone();
-//				Logger tempLogger = new Logger(tempState, new ArrayList<State>(
-//						log.subList(0, lastRightClickedX)));
-//				Clock tempClock = new Clock(tempLogger, lastRightClickedX);
-//				tempState.setClock(tempClock);
-//				tempState.setLogger(tempLogger);
-//				SimSE.startNewBranch(tempState, new Branch(newBranchName,
-//						lastRightClickedX, tempClock.getTime(), branch, null));
-//			}
-//		}
-//	}
-
 	public XYPlot getXYPlot() {
 		return chart.getXYPlot();
+	}
+	
+	public JFreeChart getChart() {
+		return chart;
 	}
 
 	public String getChartTitle() {

@@ -195,6 +195,14 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 	public TabPanel getTabPanel() {
 		return tabPanel;
 	}
+	
+	public ArrayList<State> getLog() {
+		return this.expTool.getLog();
+	}
+	
+	public Branch getBranch() {
+		return this.branch;
+	}
 
 	// forces gui to update, used when the game ends
 	public void forceGUIUpdate() {
