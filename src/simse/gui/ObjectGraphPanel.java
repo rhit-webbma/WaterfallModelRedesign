@@ -92,7 +92,7 @@ public class ObjectGraphPanel extends Pane implements ChartMouseListenerFX{
 		chart = objGraph.getChart();
 		chartViewer = new ChartViewer(chart);
 		chartViewer.addChartMouseListener(this);
-		chartViewer.setPrefSize(500, 200);
+		chartViewer.setPrefSize(500, 300);
 	
 		mainPane.getChildren().add(chartViewer);
 		this.getChildren().add(mainPane);

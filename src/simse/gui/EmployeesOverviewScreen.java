@@ -102,7 +102,11 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 			update(false);
 			mainPane.getChildren().remove(moreDetail);
 		} else if (source == moreDetail) {
-			SoftwareEngineer selected = (SoftwareEngineer) table.getSelectionModel().getSelectedItem();
+			SoftwareEngineer selected = null;
+			try {
+				selected =(SoftwareEngineer) table.getSelectionModel().getSelectedItem();
+			} catch (ClassCastException ex) {}
+			
 			if (selected == null) {
 				Alert alert = new Alert(AlertType.WARNING, "Please select an employee to get detailed information on");
 				alert.show();

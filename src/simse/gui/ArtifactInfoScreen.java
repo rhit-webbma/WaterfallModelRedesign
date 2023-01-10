@@ -4,6 +4,7 @@ package simse.gui;
 import java.util.ArrayList;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -46,13 +47,13 @@ public class ArtifactInfoScreen extends Stage implements EventHandler<MouseEvent
 		this.setTitle(artifactName);
 		
 		StackPane imagePane = new StackPane();
-		imagePane.setMinSize(200, 200);
+		imagePane.setMinSize(150, 150);
 		ImageView img = JavaFXHelpers.createImageView("src/simse/gui/icons/" + artifact.getName() + ".gif");
 		if (img == null) {
 			img = JavaFXHelpers.createImageView("src/simse/gui/icons/3.gif");
 		}
-		img.setScaleX(3);
-		img.setScaleY(3);
+		img.setScaleX(2.5);
+		img.setScaleY(2.5);
 		imagePane.getChildren().add(img);
 		
 		actionsButton = new Button("Assign Employees to work on Artifact");
@@ -81,7 +82,7 @@ public class ArtifactInfoScreen extends Stage implements EventHandler<MouseEvent
 		mainPane.getChildren().add(objGraph);
 		mainPane.setAlignment(Pos.CENTER);
 		
-		Scene scene = new Scene(mainPane, 500, 600);
+		Scene scene = new Scene(mainPane, 500, 700);
 		this.setScene(scene);
 		
 	}

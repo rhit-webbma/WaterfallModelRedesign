@@ -55,7 +55,8 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		this.actions = new ContextMenu();
 		this.engineer = engineer;
 		
-		this.setTitle(engineer.getName());
+		String engineerName = engineer.getName();
+		this.setTitle(engineerName);
 		
 		Vector<String> menuItems = engineer.getMenu();
 		for (int i = 0; i < menuItems.size(); i++) {
@@ -66,13 +67,13 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		}
 		
 		StackPane imagePane = new StackPane();
-		imagePane.setMinSize(200, 200);
+		imagePane.setMinSize(110, 110);
 		ImageView img = JavaFXHelpers.createImageView("src/simse/gui/icons/" + engineer.getName() + ".gif");
 		if (img == null) {
 			img = JavaFXHelpers.createImageView("src/simse/gui/icons/alex.gif");
 		}
-		img.setScaleX(3);
-		img.setScaleY(3);
+		img.setScaleX(2);
+		img.setScaleY(2);
 		imagePane.getChildren().add(img);
 		
 		
@@ -88,7 +89,14 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		attributes.getItems().add("Testing Experience: " + engineer.getTestingExperience());
 		attributes.getItems().add("Pay Rate: " + Double.toString(engineer.getPayRate()));
 		attributes.getItems().add("On Break: " + Boolean.toString(engineer.getOnBreak()));
+		attributes.setMaxHeight(attributes.getItems().size()*24);
 		
+		String objTypeFull = engineer.getClass().toString();
+		String[] objTypeArr = objTypeFull.split("\\.");
+		String objType = objTypeArr[objTypeArr.length - 1];
+		String objTypeType = "Employee";
+		String title = engineerName + " Attributes";
+		ObjectGraphPanel objGraph = new ObjectGraphPanel(title, gui.getLog(), objTypeType, objType, engineerName, gui.getBranch());		
 		
 		Label name = new Label(engineer.getName());
 		name.setFont(new Font(30));
@@ -96,9 +104,10 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		mainPane.getChildren().add(imagePane);
 		mainPane.getChildren().add(actionsButton);
 		mainPane.getChildren().add(attributes);
+		mainPane.getChildren().add(objGraph);
 		mainPane.setAlignment(Pos.CENTER);
 		
-		Scene scene = new Scene(mainPane, 300, 400);
+		Scene scene = new Scene(mainPane, 500, 700);
 		this.setScene(scene);
 	}
 	
