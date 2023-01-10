@@ -13,6 +13,7 @@ import animations.SimSECharacter;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -22,6 +23,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
@@ -81,13 +85,12 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		super(s, l);
 		mainGUIFrame = parent;
 		overheadTextDisplayed = false;
-//		int width = (int) getWidth();
-//		int height = (int) getHeight();
 		
 		this.setHeight(height);
 		this.setWidth(width);
 		
 		final Canvas canvas = new Canvas(width, height);
+		
 		
 		dbGraphics = canvas.getGraphicsContext2D();
 		
@@ -183,13 +186,9 @@ public class World extends SimSEMap implements EventHandler<Event> {
 
 	// double buffering to prevent flickering
 	public void update(GraphicsContext gc) {
-//		if (dbImage == null) {
-//			dbImage = new Image(, getWidth(), getHeight(), true, true);
-//		}
 
 		// clear screen in background:
 		dbGraphics.setFill(Color.BLACK);
-//		dbGraphics.fillRect(0, 0, getWidth(), getHeight());
 		dbGraphics.fillRect(0, 0, width, height);
 		
 		// draw elements in background:
@@ -211,28 +210,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	}
 
 	public void paint() {
-//		int width = (int) getWidth();
-//		int height = (int) getHeight();
 		GraphicsContext gc = dbGraphics;
-
-//		 draw the map:
-//		for (int i = 0; i < MapData.Y_MAPSIZE; i++) {
-//			for (int j = 0; j < MapData.X_MAPSIZE; j++) {
-//				gc.drawImage(mapRep[j][i].getBase(), xspacer + j * MapData.TILE_SIZE, yspacer + i * MapData.TILE_SIZE);
-//				gc.drawImage(mapRep[j][i].getFringe(), xspacer + j * MapData.TILE_SIZE,
-//						yspacer + i * MapData.TILE_SIZE);
-//			}
-//		}
-
-		// draw employees:
-		for (int i = 0; i < sopUsers.size(); i++) {
-			
-			DisplayedEmployee tmp = sopUsers.get(i);
-			if (tmp.isDisplayed() && tmp.isActivated()) {
-//				gc.drawImage(tmp.getUserIcon(), xspacer + tmp.getXLocation() * MapData.TILE_SIZE,
-//						yspacer + tmp.getYLocation() * MapData.TILE_SIZE);
-			}
-		}
 
 		// go through all employees and display their overhead text, if any:
 		int numOverheadTexts = 0;
