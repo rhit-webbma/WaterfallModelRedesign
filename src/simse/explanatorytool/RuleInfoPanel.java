@@ -2,6 +2,7 @@
 package simse.explanatorytool;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -10,6 +11,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -28,46 +30,63 @@ public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		this.action = action;
 
 		// Create main panel:
-		Pane mainPane = new Pane();
-		mainPane.setPrefSize(900, 550);
+		GridPane mainPane = new GridPane();
+		mainPane.setPrefSize(900, 600);
+		mainPane.setHgap(10);
+		mainPane.setVgap(10);
 
 		// Create rule pane and components:
-		VBox rulePane = new VBox();
-		TitledPane trigRuleTitlePane = new TitledPane("Trigger Rules:", rulePane);
+		VBox tRulePane = new VBox();
+		TitledPane trigRuleTitlePane = new TitledPane("Trigger Rules:", tRulePane);
 
 		// rule lists:
 		triggerRuleList = new ListView<String>();
-		triggerRuleList.setFixedCellSize(7);
+		triggerRuleList.setFixedCellSize(24);
 		triggerRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		triggerRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		ScrollPane triggerRuleListPane = new ScrollPane(triggerRuleList);
+		triggerRuleListPane.setMaxHeight(100);
+		triggerRuleListPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		triggerRuleListPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		String trigToolTip = "Rules that execute at the beginning of the action";
 		trigRuleTitlePane.setTooltip(new Tooltip(trigToolTip));
 		triggerRuleList.setTooltip(new Tooltip(trigToolTip));
-		rulePane.getChildren().add(triggerRuleListPane);
+		tRulePane.getChildren().add(triggerRuleListPane);
 
-		TitledPane destRuleTitlePane = new TitledPane("Destroyer Rules: ", rulePane);
+		VBox dRulePane = new VBox();
+		TitledPane destRuleTitlePane = new TitledPane("Destroyer Rules: ", dRulePane);
 		destroyerRuleList = new ListView<String>();
-		destroyerRuleList.setFixedCellSize(7);
+		destroyerRuleList.setFixedCellSize(24);
 		destroyerRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		destroyerRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		ScrollPane destroyerRuleListPane = new ScrollPane(destroyerRuleList);
+		destroyerRuleListPane.setMaxHeight(100);
+		destroyerRuleListPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		destroyerRuleListPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		String destToolTip = "Rules that execute at the end of the action";
 		destRuleTitlePane.setTooltip(new Tooltip(destToolTip));
 		destroyerRuleList.setTooltip(new Tooltip(destToolTip));
-		rulePane.getChildren().add(destroyerRuleListPane);
+		dRulePane.getChildren().add(destroyerRuleListPane);
 
-		TitledPane intRuleTitlePane = new TitledPane("Intermediate Rules:", rulePane);
+		VBox iRulePane = new VBox();
+		TitledPane intRuleTitlePane = new TitledPane("Intermediate Rules:", iRulePane);
 		intermediateRuleList = new ListView<String>();
-		intermediateRuleList.setFixedCellSize(7);
+		intermediateRuleList.setFixedCellSize(24);
 		intermediateRuleList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		intermediateRuleList.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		ScrollPane intermediateRuleListPane = new ScrollPane(intermediateRuleList);
+		intermediateRuleListPane.setMaxHeight(100);
+		intermediateRuleListPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		intermediateRuleListPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		String intToolTip = "Rules that execute every clock tick during the life of the action";
 		intRuleTitlePane.setTooltip(new Tooltip(intToolTip));
 		intermediateRuleList.setTooltip(new Tooltip(intToolTip));
-		rulePane.getChildren().add(intermediateRuleListPane);
+		iRulePane.getChildren().add(intermediateRuleListPane);
 
+		VBox rulePane = new VBox();
+		rulePane.getChildren().add(trigRuleTitlePane);
+		rulePane.getChildren().add(destRuleTitlePane);
+		rulePane.getChildren().add(intRuleTitlePane);
 		initializeRuleLists();
 
 		// description pane:
@@ -77,19 +96,17 @@ public class RuleInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		// description text area:
 		descriptionArea = new TextArea();
 		descriptionArea.setPrefColumnCount(29);
-		descriptionArea.setPrefRowCount(30);
+		descriptionArea.setPrefRowCount(25);
 		descriptionArea.setWrapText(true);
 		descriptionArea.setEditable(false);
 		ScrollPane descriptionScrollPane = new ScrollPane(descriptionArea);
 		descriptionScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		descriptionScrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		descriptionPane.getChildren().add(descriptionScrollPane);
-
-		rulePane.getChildren().add(descriptionPane);
-
-		// Add panes to main pane:
-		mainPane.getChildren().add(rulePane);
-		mainPane.getChildren().add(descriptionPane);
+	
+		mainPane.add(rulePane, 0, 0);
+		mainPane.add(descriptionTitlePane, 1, 0, 1, 3);
+		mainPane.setAlignment(Pos.CENTER);
 		this.getChildren().add(mainPane);
 	}
 

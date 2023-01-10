@@ -307,6 +307,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 				timelinesBrowser.setIconified(false);
 			}
 			timelinesBrowser.show();
+			timelinesBrowser.toFront();
 		} else if (source == generateObjGraphButton) { 
 			String selectedObj = (String) objectList.getSelectionModel().getSelectedItem();
 			String[] words = selectedObj.split("\\s");

@@ -4,6 +4,10 @@ package simse;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import simse.engine.Engine;
 import simse.explanatorytool.Branch;
@@ -20,6 +24,14 @@ public class SimSE extends Application{
 	private static Engine engine;
 
 	public static void startNewBranch(State state, Branch branch) {
+		for (int i = 0; i < branches.size(); i++) {
+			if (branch.getName().equals(branches.get(i).getName())) {
+				Alert alert = new Alert(AlertType.ERROR, "Please choose a unique name for your new branch", 
+						ButtonType.OK);
+				alert.showAndWait();
+				return;
+			}
+		}
 		Logic logic = new Logic(state);
 		engine = new Engine(logic, state);
 		SimSEGUI gui = new SimSEGUI(engine, state, logic, branch, timelinesBrowser);

@@ -8,7 +8,7 @@ public class Participant {
 	private SimpleStringProperty title1;
 	private SimpleStringProperty title2;
 
-	public Participant(String status, String title1, String title2) {
+	public Participant(String title1, String title2, String status) {
 		this.status = new SimpleStringProperty(status);
 		this.title1 = new SimpleStringProperty(title1);
 		this.title2 = new SimpleStringProperty(title2);

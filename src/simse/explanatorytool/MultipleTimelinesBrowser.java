@@ -61,9 +61,9 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
         	Object source = event.getSource();
         	if (source == newBranchItem) {
     			TextInputDialog td = new TextInputDialog();
-    			td.setContentText("Name New Branch");
     			td.setContentText("Please name this new game:");
     			td.setHeaderText(null);
+    			td.setResult(null);
     			Optional<String> result = td.showAndWait();
     			result.ifPresent(name -> {
     				this.newBranchName = name;
@@ -188,11 +188,9 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 																		// add
 																		// new
 																		// series
-			int numNewSeries = SimSE.getBranches().size()
-					- dataset.getSeriesCount();
+			int numNewSeries = SimSE.getBranches().size() - dataset.getSeriesCount();
 			while (numNewSeries > 0) {
-				Branch newBranch = SimSE.getBranches().get(
-						dataset.getSeriesCount());
+				Branch newBranch = SimSE.getBranches().get(dataset.getSeriesCount());
 				XYSeries newSeries = null;
 				if (newBranch.getRoot() == null) { // root game
 					newSeries = new XYSeries(ROOT_GAME_NAME);
@@ -209,18 +207,14 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 						if (SimSE.getBranches().get(j) == newBranch.getRoot()) { // found
 																					// the
 																					// root
-							newSeries.add(newBranch.getStartTick(),
-									(j * 10 + 1));
+							newSeries.add(newBranch.getStartTick(), (j * 10 + 1));
 						}
 					}
 				}
 				dataset.addSeries(newSeries);
-				newSeries.add(newBranch.getStartTick(),
-						(dataset.indexOf(newSeries.getKey()) * 10 + 1));
-				newSeries.add(newBranch.getEndTick(),
-						(dataset.indexOf(newSeries.getKey()) * 10 + 1));
-				((XYLineAndShapeRenderer) ((XYPlot) chart.getPlot())
-						.getRenderer()).setSeriesStroke(
+				newSeries.add(newBranch.getStartTick(), (dataset.indexOf(newSeries.getKey()) * 10 + 1));
+				newSeries.add(newBranch.getEndTick(), (dataset.indexOf(newSeries.getKey()) * 10 + 1));
+				((XYLineAndShapeRenderer) ((XYPlot) chart.getPlot()).getRenderer()).setSeriesStroke(
 						(dataset.getSeriesCount() - 1), new BasicStroke(10));
 				numNewSeries--;
 			}
@@ -240,8 +234,7 @@ public class MultipleTimelinesBrowser extends Stage implements EventHandler<Mous
 																					// ended
 																					// yet
 				int itemCount = dataset.getSeries(i).getItemCount();
-				XYDataItem lastItem = dataset.getSeries(i).getDataItem(
-						itemCount - 1);
+				XYDataItem lastItem = dataset.getSeries(i).getDataItem(itemCount - 1);
 
 				if (lastItem.getX().intValue() < b.getEndTick()) { // series
 																	// needs to

@@ -22,7 +22,7 @@ public class ActionInfoWindow extends Stage {
 		mainPane.getTabs().add(actionTab);
 		mainPane.getTabs().add(ruleTab);
 		
-		Scene newScene = new Scene(mainPane, 900, 550);
+		Scene newScene = new Scene(mainPane, 900, 600);
 		this.setScene(newScene);
 		show();
 	}
