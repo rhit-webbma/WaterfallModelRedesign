@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -105,9 +106,12 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		TitledPane participantsTitlePane = new TitledPane("Participants:", participantsPane);
 
 		// participants table:
-		ScrollPane participantsTablePane = new ScrollPane(createParticipantsTable());
-		participantsTablePane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		participantsTablePane.setPrefSize(900, 125);
+		table = createParticipantsTable();
+		table.setMinWidth(800);
+		ScrollPane participantsTablePane = new ScrollPane(table);
+		participantsTablePane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		participantsTablePane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		participantsTablePane.setPrefSize(850, 150);
 		participantsPane.getChildren().add(participantsTablePane);
 		participantsPane.setAlignment(Pos.CENTER);
 
@@ -124,6 +128,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		initializeTriggerList();
 		ScrollPane triggerListPane = new ScrollPane(triggerList);
 		triggerListPane.setMaxHeight(80);
+		triggerListPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		triggerListPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		tListPane.getChildren().add(triggerListPane);
 
 		// destroyer list:
@@ -136,6 +142,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		initializeDestroyerList();
 		ScrollPane destroyerListPane = new ScrollPane(destroyerList);
 		destroyerListPane.setMaxHeight(80);
+		destroyerListPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		destroyerListPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		dListPane.getChildren().add(destroyerListPane);
 
 		// description pane:
@@ -159,11 +167,13 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 		triggerDestroyerPane.add(destroyerListTitlePane, 0, 1);
 		triggerDestroyerPane.add(descriptionTitlePane, 1, 0, 1, 2);
 		triggerDestroyerPane.setAlignment(Pos.CENTER);
+		triggerDestroyerPane.setHgap(10);
 
 		// Add panes to main pane:		
 		mainPane.getChildren().add(actionDescriptionTitlePane);
 		mainPane.getChildren().add(participantsTitlePane);
 		mainPane.getChildren().add(triggerDestroyerPane);
+		mainPane.setAlignment(Pos.CENTER);
 		
 		this.getChildren().add(mainPane);
 		this.setPrefSize(900, 550);
@@ -234,8 +244,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	// initializes the JList of triggers
 	private void initializeTriggerList() {
 		String actionName = action.getActionName();
-		System.out.println(actionName);
-		System.out.println("Trig: " + RuleCategories.getBackendTrigRulesForAction(actionName)[0]);
 		triggerList.getItems().setAll(RuleCategories.getBackendTrigRulesForAction(actionName));
 	}
 
@@ -248,17 +256,18 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 	private TableView<Participant> createParticipantsTable() {
 		TableView<Participant> newView = new TableView<Participant>();
 		TableColumn<Participant, String> name = new TableColumn<>("Participant Name");
+		name.setCellValueFactory(new PropertyValueFactory<>("title1"));
 		TableColumn<Participant, String> participant = new TableColumn<>("Participant");
+		participant.setCellValueFactory(new PropertyValueFactory<>("title2"));
 		TableColumn<Participant, String> status = new TableColumn<>("Status");
+		status.setCellValueFactory(new PropertyValueFactory<>("status"));
 		ObservableList<Participant> data = FXCollections.observableArrayList();
-		int index = 0;
 		if (action instanceof CreateRequirementsAction) {
 			CreateRequirementsAction createrequirementsAction = (CreateRequirementsAction) action;
 
 			// Emp participant:
 			Vector<Employee> emps = createrequirementsAction.getAllEmps();
-			Vector<Employee> activeEmps = createrequirementsAction
-					.getAllActiveEmps();
+			Vector<Employee> activeEmps = createrequirementsAction.getAllActiveEmps();
 			for (int i = 0; i < emps.size(); i++) {
 				Employee emp = emps.get(i);
 				String title = "Emp";
@@ -272,84 +281,68 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					boolean active = false;
 					for (int j = 0; j < activeEmps.size(); j++) {
 						Employee activeEmp = activeEmps.get(j);
-						if ((activeEmp instanceof SoftwareEngineer)
-								&& ((SoftwareEngineer) activeEmp).getName()
-										.equals(((SoftwareEngineer) emp)
-												.getName())) {
+						if ((activeEmp instanceof SoftwareEngineer) && 
+								((SoftwareEngineer) activeEmp).getName().equals(((SoftwareEngineer) emp).getName())) {
 							active = true;
 							break;
 						}
 					}
-					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// ReqDoc participant:
 			Vector<Artifact> reqdocs = createrequirementsAction.getAllReqDocs();
-			Vector<Artifact> activeReqDocs = createrequirementsAction
-					.getAllActiveReqDocs();
+			Vector<Artifact> activeReqDocs = createrequirementsAction.getAllActiveReqDocs();
 			for (int i = 0; i < reqdocs.size(); i++) {
 				Artifact reqdoc = reqdocs.get(i);
 				String title = "ReqDoc";
 				String title1 = "";
 				if (reqdoc instanceof RequirementsDocument) {
 					RequirementsDocument requirementsdocumentReqDoc = (RequirementsDocument) reqdoc;
-					title1 = "RequirementsDocument Artifact "
-							+ requirementsdocumentReqDoc.getName();
+					title1 = "RequirementsDocument Artifact " + requirementsdocumentReqDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
 					for (int j = 0; j < activeReqDocs.size(); j++) {
 						Artifact activeReqDoc = activeReqDocs.get(j);
-						if ((activeReqDoc instanceof RequirementsDocument)
-								&& ((RequirementsDocument) activeReqDoc)
-										.getName().equals(
-												((RequirementsDocument) reqdoc)
-														.getName())) {
+						if ((activeReqDoc instanceof RequirementsDocument) && 
+								((RequirementsDocument) activeReqDoc).getName().equals(
+										((RequirementsDocument) reqdoc).getName())) {
 							active = true;
 							break;
 						}
 					}
-//					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
-					data.add(new Participant("ReqDoc", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 					
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = createrequirementsAction.getAllProjs();
-			Vector<Project> activeProjs = createrequirementsAction
-					.getAllActiveProjs();
+			Vector<Project> activeProjs = createrequirementsAction.getAllActiveProjs();
 			for (int i = 0; i < projs.size(); i++) {
 				Project proj = projs.get(i);
 				String title = "Proj";
 				String title1 = "";
 				if (proj instanceof SEProject) {
 					SEProject seprojectProj = (SEProject) proj;
-					title1 = "SEProject Project "
-							+ seprojectProj.getDescription();
+					title1 = "SEProject Project " + seprojectProj.getDescription();
 
 					// find out whether it's active or not:
 					boolean active = false;
 					for (int j = 0; j < activeProjs.size(); j++) {
 						Project activeProj = activeProjs.get(j);
-						if ((activeProj instanceof SEProject)
-								&& ((SEProject) activeProj).getDescription()
-										.equals(((SEProject) proj)
-												.getDescription())) {
+						if ((activeProj instanceof SEProject) && ((SEProject) activeProj).getDescription()
+										.equals(((SEProject) proj).getDescription())) {
 							active = true;
 							break;
 						}
 					}
-					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// RequirementsCaptureTool participant:
-			Vector<Tool> requirementscapturetools = createrequirementsAction
-					.getAllRequirementsCaptureTools();
-			Vector<Tool> activeRequirementsCaptureTools = createrequirementsAction
-					.getAllActiveRequirementsCaptureTools();
+			Vector<Tool> requirementscapturetools = createrequirementsAction.getAllRequirementsCaptureTools();
+			Vector<Tool> activeRequirementsCaptureTools = createrequirementsAction.getAllActiveRequirementsCaptureTools();
 			for (int i = 0; i < requirementscapturetools.size(); i++) {
 				Tool requirementscapturetool = requirementscapturetools.get(i);
 				String title = "RequirementsCaptureTool";
@@ -357,8 +350,7 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 				if (requirementscapturetool instanceof RequirementsCaptureTool) {
 					RequirementsCaptureTool requirementscapturetoolRequirementsCaptureTool = (RequirementsCaptureTool) requirementscapturetool;
 					title1 = "RequirementsCaptureTool Tool "
-							+ requirementscapturetoolRequirementsCaptureTool
-									.getName();
+							+ requirementscapturetoolRequirementsCaptureTool.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -366,62 +358,50 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 						Tool activeRequirementsCaptureTool = activeRequirementsCaptureTools
 								.get(j);
 						if ((activeRequirementsCaptureTool instanceof RequirementsCaptureTool)
-								&& ((RequirementsCaptureTool) activeRequirementsCaptureTool)
-										.getName()
-										.equals(((RequirementsCaptureTool) requirementscapturetool)
-												.getName())) {
+								&& ((RequirementsCaptureTool) activeRequirementsCaptureTool).getName()
+										.equals(((RequirementsCaptureTool) requirementscapturetool).getName())) {
 							active = true;
 							break;
 						}
 					}
-					data.add(new Participant("RequirementsCaptureTool", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedCodeDoc participant:
-			Vector<Artifact> associatedcodedocs = createrequirementsAction
-					.getAllAssociatedCodeDocs();
-			Vector<Artifact> activeAssociatedCodeDocs = createrequirementsAction
-					.getAllActiveAssociatedCodeDocs();
+			Vector<Artifact> associatedcodedocs = createrequirementsAction.getAllAssociatedCodeDocs();
+			Vector<Artifact> activeAssociatedCodeDocs = createrequirementsAction.getAllActiveAssociatedCodeDocs();
 			for (int i = 0; i < associatedcodedocs.size(); i++) {
 				Artifact associatedcodedoc = associatedcodedocs.get(i);
 				String title = "AssociatedCodeDoc";
 				String title1 = "";
 				if (associatedcodedoc instanceof Code) {
 					Code codeAssociatedCodeDoc = (Code) associatedcodedoc;
-					title1 = "Code Artifact "
-							+ codeAssociatedCodeDoc.getName();
+					title1 = "Code Artifact " + codeAssociatedCodeDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
 					for (int j = 0; j < activeAssociatedCodeDocs.size(); j++) {
-						Artifact activeAssociatedCodeDoc = activeAssociatedCodeDocs
-								.get(j);
+						Artifact activeAssociatedCodeDoc = activeAssociatedCodeDocs.get(j);
 						if ((activeAssociatedCodeDoc instanceof Code)
 								&& ((Code) activeAssociatedCodeDoc).getName()
-										.equals(((Code) associatedcodedoc)
-												.getName())) {
+										.equals(((Code) associatedcodedoc).getName())) {
 							active = true;
 							break;
 						}
 					}
-					data.add(new Participant("AssociatedCodeDoc", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedDesignDoc participant:
-			Vector<Artifact> associateddesigndocs = createrequirementsAction
-					.getAllAssociatedDesignDocs();
-			Vector<Artifact> activeAssociatedDesignDocs = createrequirementsAction
-					.getAllActiveAssociatedDesignDocs();
+			Vector<Artifact> associateddesigndocs = createrequirementsAction.getAllAssociatedDesignDocs();
+			Vector<Artifact> activeAssociatedDesignDocs = createrequirementsAction.getAllActiveAssociatedDesignDocs();
 			for (int i = 0; i < associateddesigndocs.size(); i++) {
 				Artifact associateddesigndoc = associateddesigndocs.get(i);
 				String title = "AssociatedDesignDoc";
 				String title1 = "";
 				if (associateddesigndoc instanceof DesignDocument) {
 					DesignDocument designdocumentAssociatedDesignDoc = (DesignDocument) associateddesigndoc;
-					title1 = "DesignDocument Artifact "
-							+ designdocumentAssociatedDesignDoc.getName();
+					title1 = "DesignDocument Artifact " + designdocumentAssociatedDesignDoc.getName();
 
 					// find out whether it's active or not:
 					boolean active = false;
@@ -429,17 +409,14 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 						Artifact activeAssociatedDesignDoc = activeAssociatedDesignDocs
 								.get(j);
 						if ((activeAssociatedDesignDoc instanceof DesignDocument)
-								&& ((DesignDocument) activeAssociatedDesignDoc)
-										.getName()
-										.equals(((DesignDocument) associateddesigndoc)
-												.getName())) {
+								&& ((DesignDocument) activeAssociatedDesignDoc).getName()
+										.equals(((DesignDocument) associateddesigndoc).getName())) {
 							active = true;
 							break;
 						}
 					}
-					data.add(new Participant("AssociatedDesignDoc", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedSystemTestPlan participant:
 			Vector<Artifact> associatedsystemtestplans = createrequirementsAction
@@ -470,9 +447,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant("AssociatedSystemTestPlan", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof ReviewRequirementsAction) {
 			ReviewRequirementsAction reviewrequirementsAction = (ReviewRequirementsAction) action;
@@ -502,9 +478,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// RequirementsDoc participant:
 			Vector<Artifact> requirementsdocs = reviewrequirementsAction
@@ -534,9 +509,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant("RequirementsDoc", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = reviewrequirementsAction.getAllProjs();
@@ -563,9 +537,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof CorrectRequirementsAction) {
 			CorrectRequirementsAction correctrequirementsAction = (CorrectRequirementsAction) action;
@@ -595,9 +568,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant("Emp", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// RequirementsDoc participant:
 			Vector<Artifact> requirementsdocs = correctrequirementsAction
@@ -627,9 +599,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant("RequirementsDoc", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = correctrequirementsAction.getAllProjs();
@@ -656,9 +627,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant("Proj", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// RequirementsCaptureTool participant:
 			Vector<Tool> requirementscapturetools = correctrequirementsAction
@@ -689,9 +659,8 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 							break;
 						}
 					}
-					data.add(new Participant("RequirementsCaptureTool", title1, active ? "Active" : "Inactive"));
+					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof CreateDesignAction) {
 			CreateDesignAction createdesignAction = (CreateDesignAction) action;
@@ -722,7 +691,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// DesignDoc participant:
 			Vector<Artifact> designdocs = createdesignAction.getAllDesignDocs();
@@ -751,7 +719,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = createdesignAction.getAllProjs();
@@ -780,7 +747,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = createdesignAction
@@ -814,7 +780,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// DesignEnvironment participant:
 			Vector<Tool> designenvironments = createdesignAction
@@ -846,7 +811,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedCodeDoc participant:
 			Vector<Artifact> associatedcodedocs = createdesignAction
@@ -877,7 +841,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof ReviewDesignAction) {
 			ReviewDesignAction reviewdesignAction = (ReviewDesignAction) action;
@@ -908,7 +871,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// DesignDoc participant:
 			Vector<Artifact> designdocs = reviewdesignAction.getAllDesignDocs();
@@ -937,7 +899,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = reviewdesignAction.getAllProjs();
@@ -966,7 +927,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = reviewdesignAction
@@ -1000,7 +960,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof CorrectDesignAction) {
 			CorrectDesignAction correctdesignAction = (CorrectDesignAction) action;
@@ -1032,7 +991,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// DesignDoc participant:
 			Vector<Artifact> designdocs = correctdesignAction
@@ -1062,7 +1020,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = correctdesignAction.getAllProjs();
@@ -1091,7 +1048,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = correctdesignAction
@@ -1125,7 +1081,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// DesignEnvironment participant:
 			Vector<Tool> designenvironments = correctdesignAction
@@ -1157,7 +1112,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof CreateCodeAction) {
 			CreateCodeAction createcodeAction = (CreateCodeAction) action;
@@ -1188,7 +1142,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// CodeDoc participant:
 			Vector<Artifact> codedocs = createcodeAction.getAllCodeDocs();
@@ -1215,7 +1168,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = createcodeAction.getAllProjs();
@@ -1243,7 +1195,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = createcodeAction
@@ -1277,7 +1228,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedDesignDocument participant:
 			Vector<Artifact> associateddesigndocuments = createcodeAction
@@ -1310,7 +1260,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// DevelopmentEnvironment participant:
 			Vector<Tool> developmentenvironments = createcodeAction
@@ -1342,7 +1291,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedSystemTestPlan participant:
 			Vector<Artifact> associatedsystemtestplans = createcodeAction
@@ -1375,7 +1323,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof InspectCodeAction) {
 			InspectCodeAction inspectcodeAction = (InspectCodeAction) action;
@@ -1406,7 +1353,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// CodeDoc participant:
 			Vector<Artifact> codedocs = inspectcodeAction.getAllCodeDocs();
@@ -1433,7 +1379,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = inspectcodeAction.getAllProjs();
@@ -1461,7 +1406,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = inspectcodeAction
@@ -1495,7 +1439,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedDesignDoc participant:
 			Vector<Artifact> associateddesigndocs = inspectcodeAction
@@ -1527,7 +1470,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof CorrectCodeAction) {
 			CorrectCodeAction correctcodeAction = (CorrectCodeAction) action;
@@ -1558,7 +1500,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// CodeDoc participant:
 			Vector<Artifact> codedocs = correctcodeAction.getAllCodeDocs();
@@ -1585,7 +1526,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = correctcodeAction.getAllProjs();
@@ -1613,7 +1553,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = correctcodeAction
@@ -1647,7 +1586,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedDesignDoc participant:
 			Vector<Artifact> associateddesigndocs = correctcodeAction
@@ -1679,7 +1617,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// DevelopmentEnvironment participant:
 			Vector<Tool> developmentenvironments = correctcodeAction
@@ -1711,7 +1648,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof IntegrateCodeAction) {
 			IntegrateCodeAction integratecodeAction = (IntegrateCodeAction) action;
@@ -1743,7 +1679,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// CodeDoc participant:
 			Vector<Artifact> codedocs = integratecodeAction.getAllCodeDocs();
@@ -1770,7 +1705,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = integratecodeAction.getAllProjs();
@@ -1799,7 +1733,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = integratecodeAction
@@ -1833,7 +1766,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedDesignDoc participant:
 			Vector<Artifact> associateddesigndocs = integratecodeAction
@@ -1865,7 +1797,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// DevelopmentEnvironment participant:
 			Vector<Tool> developmentenvironments = integratecodeAction
@@ -1897,7 +1828,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof SystemTestAction) {
 			SystemTestAction systemtestAction = (SystemTestAction) action;
@@ -1927,7 +1857,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = systemtestAction.getAllProjs();
@@ -1955,7 +1884,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Emp participant:
 			Vector<Employee> emps = systemtestAction.getAllEmps();
@@ -1983,7 +1911,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedSystemTestPlan participant:
 			Vector<Artifact> associatedsystemtestplans = systemtestAction
@@ -2016,7 +1943,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// TestingTool participant:
 			Vector<Tool> testingtools = systemtestAction.getAllTestingTools();
@@ -2046,7 +1972,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof CreateSystemTestPlanAction) {
 			CreateSystemTestPlanAction createsystemtestplanAction = (CreateSystemTestPlanAction) action;
@@ -2078,7 +2003,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedCodeDoc participant:
 			Vector<Artifact> associatedcodedocs = createsystemtestplanAction
@@ -2109,7 +2033,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = createsystemtestplanAction.getAllProjs();
@@ -2138,7 +2061,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// SystemTestPlanDoc participant:
 			Vector<Artifact> systemtestplandocs = createsystemtestplanAction
@@ -2170,7 +2092,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = createsystemtestplanAction
@@ -2204,7 +2125,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// TestingTool participant:
 			Vector<Tool> testingtools = createsystemtestplanAction
@@ -2235,7 +2155,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof ReviewSystemTestPlanAction) {
 			ReviewSystemTestPlanAction reviewsystemtestplanAction = (ReviewSystemTestPlanAction) action;
@@ -2267,7 +2186,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// TestPlan participant:
 			Vector<Artifact> testplans = reviewsystemtestplanAction
@@ -2297,7 +2215,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = reviewsystemtestplanAction
@@ -2331,7 +2248,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = reviewsystemtestplanAction.getAllProjs();
@@ -2360,7 +2276,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof CorrectSystemTestPlanAction) {
 			CorrectSystemTestPlanAction correctsystemtestplanAction = (CorrectSystemTestPlanAction) action;
@@ -2392,7 +2307,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// TestPlan participant:
 			Vector<Artifact> testplans = correctsystemtestplanAction
@@ -2422,7 +2336,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDoc participant:
 			Vector<Artifact> associatedrequirementsdocs = correctsystemtestplanAction
@@ -2456,7 +2369,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = correctsystemtestplanAction.getAllProjs();
@@ -2485,7 +2397,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// TestingTool participant:
 			Vector<Tool> testingtools = correctsystemtestplanAction
@@ -2516,7 +2427,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof DeliverProductAction) {
 			DeliverProductAction deliverproductAction = (DeliverProductAction) action;
@@ -2548,7 +2458,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = deliverproductAction.getAllProjs();
@@ -2577,7 +2486,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// CodeDoc participant:
 			Vector<Artifact> codedocs = deliverproductAction.getAllCodeDocs();
@@ -2604,7 +2512,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Cust participant:
 			Vector<Customer> custs = deliverproductAction.getAllCusts();
@@ -2632,7 +2539,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof BreakAction) {
 			BreakAction breakAction = (BreakAction) action;
@@ -2664,7 +2570,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof GetSickAction) {
 			GetSickAction getsickAction = (GetSickAction) action;
@@ -2697,7 +2602,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof QuitAction) {
 			QuitAction quitAction = (QuitAction) action;
@@ -2728,7 +2632,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof IntroduceNewRequirementsAction) {
 			IntroduceNewRequirementsAction introducenewrequirementsAction = (IntroduceNewRequirementsAction) action;
@@ -2760,7 +2663,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedRequirementsDocument participant:
 			Vector<Artifact> associatedrequirementsdocuments = introducenewrequirementsAction
@@ -2795,7 +2697,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = introducenewrequirementsAction
@@ -2825,7 +2726,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// EmpWOverheadText participant:
 			Vector<Employee> empwoverheadtexts = introducenewrequirementsAction
@@ -2857,7 +2757,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedCode participant:
 			Vector<Artifact> associatedcodes = introducenewrequirementsAction
@@ -2888,7 +2787,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedDesignDocument participant:
 			Vector<Artifact> associateddesigndocuments = introducenewrequirementsAction
@@ -2921,7 +2819,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// AssociatedSystemTestPlan participant:
 			Vector<Artifact> associatedsystemtestplans = introducenewrequirementsAction
@@ -2954,7 +2851,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof ChangePayRateAction) {
 			ChangePayRateAction changepayrateAction = (ChangePayRateAction) action;
@@ -2986,7 +2882,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof GiveBonusAction) {
 			GiveBonusAction givebonusAction = (GiveBonusAction) action;
@@ -3017,7 +2912,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// ProjectWithBudget participant:
 			Vector<Project> projectwithbudgets = givebonusAction
@@ -3049,7 +2943,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof FireAction) {
 			FireAction fireAction = (FireAction) action;
@@ -3082,7 +2975,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof PurchaseToolAction) {
 			PurchaseToolAction purchasetoolAction = (PurchaseToolAction) action;
@@ -3117,7 +3009,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// SETool participant:
 			Vector<Tool> setools = purchasetoolAction.getAllSETools();
@@ -3203,7 +3094,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Proj participant:
 			Vector<Project> projs = purchasetoolAction.getAllProjs();
@@ -3232,7 +3122,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof SuggestedRequirementsPhaseDurationAction) {
 			SuggestedRequirementsPhaseDurationAction suggestedrequirementsphasedurationAction = (SuggestedRequirementsPhaseDurationAction) action;
@@ -3265,7 +3154,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Emp participant:
 			Vector<Employee> emps = suggestedrequirementsphasedurationAction
@@ -3295,7 +3183,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof SuggestedDesignPhaseDurationAction) {
 			SuggestedDesignPhaseDurationAction suggesteddesignphasedurationAction = (SuggestedDesignPhaseDurationAction) action;
@@ -3328,7 +3215,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Emp participant:
 			Vector<Employee> emps = suggesteddesignphasedurationAction
@@ -3358,7 +3244,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof SuggestedImplIntegrationPhaseDurationAction) {
 			SuggestedImplIntegrationPhaseDurationAction suggestedimplintegrationphasedurationAction = (SuggestedImplIntegrationPhaseDurationAction) action;
@@ -3391,7 +3276,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Emp participant:
 			Vector<Employee> emps = suggestedimplintegrationphasedurationAction
@@ -3421,7 +3305,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		} else if (action instanceof SuggestedTestingPhaseDurationAction) {
 			SuggestedTestingPhaseDurationAction suggestedtestingphasedurationAction = (SuggestedTestingPhaseDurationAction) action;
@@ -3454,7 +3337,6 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 			// Emp participant:
 			Vector<Employee> emps = suggestedtestingphasedurationAction
@@ -3484,11 +3366,9 @@ public class ActionInfoPanel extends Pane implements EventHandler<MouseEvent> {
 					}
 					data.add(new Participant(title, title1, active ? "Active" : "Inactive"));
 				}
-				index++;
 			}
 		}
-		
-		newView.getColumns().addAll(name, participant, status);
+		newView.getColumns().setAll(name, participant, status);
 		newView.setItems(data);
 		return newView;
 	}
