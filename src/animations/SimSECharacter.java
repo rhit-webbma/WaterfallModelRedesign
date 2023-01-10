@@ -4,7 +4,7 @@ import javafx.scene.shape.Path;
 
 public class SimSECharacter extends DisplayableCharacter{
 	
-	public SimSECharacter(Path pathToFollow, int characterNum, int height, int width) {
+	public SimSECharacter(CreatablePath pathToFollow, int characterNum, int height, int width) {
 		super(pathToFollow, characterNum, height, width);
 	}
 
@@ -15,7 +15,7 @@ public class SimSECharacter extends DisplayableCharacter{
 	@Override
 	void initalizeAnimationList(int characterNum) {
 		// TODO Auto-generated method stub
-		animationList.add(new CharacterIdle(characterNum));
+		animationList.add(new CharacterIdleFront(characterNum));
 		animationList.add(new CharacterWalkForward(characterNum));
 		animationList.add(new CharacterWalkBack(characterNum));
 		animationList.add(new CharacterWalkLeft(characterNum));

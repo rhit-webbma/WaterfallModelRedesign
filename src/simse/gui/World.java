@@ -10,7 +10,6 @@ import animations.CreatablePath;
 import animations.DisplayableCharacter;
 import animations.PathData;
 import animations.SimSECharacter;
-
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -120,7 +119,13 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		for (int i = 0; i < sopUsers.size(); i++) {
 			DisplayedEmployee tmp = sopUsers.get(i);
 			double[][] pathDirections = PathData.getStartingPath(i);
-			Path newPath = new CreatablePath(MapData.getStartingMapLocation(i)[0] + 5, MapData.getStartingMapLocation(i)[1], pathDirections);
+			CreatablePath newPath = new CreatablePath(
+					MapData.getStartingMapLocation(i)[0] + 5, 
+					MapData.getStartingMapLocation(i)[1],
+					pathDirections,
+					PathData.getAnimationData(i)[0],
+					PathData.getAnimationData(i)[1]
+					);
 			DisplayableCharacter char1 = new SimSECharacter(newPath, i, 50, 75);
 			this.getChildren().add(char1);
 			char1.requestFocus();

@@ -13,11 +13,13 @@ import javafx.scene.shape.Path;
  *
  */
 public class CreatablePath extends Path {
+	
+	private SimSESprite startingAnimation, endingAnimation;
 
-	public CreatablePath(double x, double y, double[][] xyChanges) {
+	public CreatablePath(double x, double y, double[][] xyChanges, SimSESprite startingAnimation, SimSESprite endingAnimation) {
 		
-//		int xPos = x;
-//		int yPos = y;
+		this.startingAnimation = startingAnimation;
+		this.endingAnimation = endingAnimation;
 		
         this.getElements().add(new MoveTo(x, y));
 		        
@@ -25,14 +27,15 @@ public class CreatablePath extends Path {
 				x += xyChanges[i][0];
 				y += xyChanges[i][1];
 				this.getElements().add(new LineTo(x, y));
-		}
-		
-//		this.getElements().add(new ClosePath());
+		}  
+	}
 	
-//        y += 41;
-//        this.getElements().add(new LineTo(x, y));
-//        x += 299;
-//        this.getElements().add(new LineTo(x, y));    
+	public SimSESprite getStartingAnimation() {
+		return this.startingAnimation;
+	}
+	
+	public SimSESprite getEndingAnimation() {
+		return this.endingAnimation;
 	}
 	
 }

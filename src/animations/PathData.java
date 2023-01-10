@@ -17,6 +17,14 @@ public class PathData {
 	public static final double[][] PATH_6S = {{0, 69}, {210, 0}, {0, -157}};
 	public static final double[][] PATH_6E = {{0, 157}, {-210, 0}, {0, -69}};
 	
+	public static final SimSESprite[] PATH_0_ANIM_DATA = {new CharacterIdleFront(0), new CharacterIdleRight(0)};
+	public static final SimSESprite[] PATH_1_ANIM_DATA = {new CharacterIdleFront(1), new CharacterIdleFront(1)};
+	public static final SimSESprite[] PATH_2_ANIM_DATA = {new CharacterIdleFront(2), new CharacterIdleBack(2)};
+	public static final SimSESprite[] PATH_3_ANIM_DATA = {new CharacterIdleFront(3), new CharacterIdleLeft(3)};
+	public static final SimSESprite[] PATH_4_ANIM_DATA = {new CharacterIdleFront(4), new CharacterIdleBack(4)};
+	public static final SimSESprite[] PATH_5_ANIM_DATA = {new CharacterIdleFront(5), new CharacterIdleBack(5)};
+	public static final SimSESprite[] PATH_6_ANIM_DATA = {new CharacterIdleFront(6), new CharacterIdleBack(6)};
+	
 	public static double[][] getStartingPath(int pathNumber) {
 		switch (pathNumber)
 		{
@@ -43,6 +51,20 @@ public class PathData {
 		case 6: return PATH_6E;
 		default: throw new IllegalArgumentException();
 		}		
+	}
+	
+	public static SimSESprite[] getAnimationData(int animationNumber) {
+		switch (animationNumber)
+		{
+		case 0: return PATH_0_ANIM_DATA;
+		case 1: return PATH_1_ANIM_DATA;
+		case 2: return PATH_2_ANIM_DATA;
+		case 3: return PATH_3_ANIM_DATA;
+		case 4: return PATH_4_ANIM_DATA;
+		case 5: return PATH_5_ANIM_DATA;
+		case 6: return PATH_6_ANIM_DATA;
+		default: throw new IllegalArgumentException();
+		}	
 	}
 	
 	

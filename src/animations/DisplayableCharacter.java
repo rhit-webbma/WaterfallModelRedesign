@@ -24,10 +24,10 @@ public abstract class DisplayableCharacter extends Group{
 	private double previousX, previousY;
 	private PathTransition transition;
 	private boolean starting;
-	private Path pathToFollow;
+	private CreatablePath pathToFollow;
 	protected ArrayList<SimSESprite> animationList;
 	
-	public DisplayableCharacter(Path pathToFollow, int characterNum, int width, int height) {	
+	public DisplayableCharacter(CreatablePath pathToFollow, int characterNum, int width, int height) {	
 		this.velocity = 2;
 		this.pathToFollow = pathToFollow;
 		this.characterNum = characterNum;
@@ -37,7 +37,7 @@ public abstract class DisplayableCharacter extends Group{
 		this.directionCheck();
 		animationList = new ArrayList<>();
 		initalizeAnimationList(characterNum);
-		displayedCharacter = animationList.get(0);
+		displayedCharacter = pathToFollow.getStartingAnimation();
 		displayedCharacter.setFitHeight(height);
 		displayedCharacter.setFitWidth(width);
 		this.getChildren().add(displayedCharacter);
@@ -79,7 +79,7 @@ public abstract class DisplayableCharacter extends Group{
 	public void beginPathing() {
 		this.transition = new PathTransition();
 		Random rand = new Random();
-		int duration = (int)Math.floor(Math.random()*(18-14+1)+14);
+		int duration = (int)Math.floor(Math.random()*(18-15)+14);
 		
 		transition.setNode(this);
 		transition.setDuration(Duration.seconds(duration));
@@ -87,16 +87,28 @@ public abstract class DisplayableCharacter extends Group{
 		transition.setCycleCount(1);
 		
 		transition.setOnFinished(e -> {
-			int randomNumber = rand.nextInt(15);
+			int randomNumber = rand.nextInt(60)+10;
 			Path newPath = null;
 			
 			if(starting) {
 				double[][] pathDirections = PathData.getStartingPath(characterNum);
-				newPath = new CreatablePath(MapData.getStartingMapLocation(characterNum)[0] + 5, MapData.getStartingMapLocation(characterNum)[1], pathDirections);
+				newPath = new CreatablePath(
+						MapData.getStartingMapLocation(characterNum)[0] + 5,
+						MapData.getStartingMapLocation(characterNum)[1],
+						pathDirections,
+						PathData.getAnimationData(characterNum)[0],
+						PathData.getAnimationData(characterNum)[1]
+						);
 				this.starting = false;
 			} else {
 				double[][] pathDirections = PathData.getEndingPath(characterNum);
-				newPath = new CreatablePath(MapData.getEndingMapLocation(characterNum)[0] + 5, MapData.getEndingMapLocation(characterNum)[1], pathDirections);
+				newPath = new CreatablePath(
+						MapData.getEndingMapLocation(characterNum)[0] + 5,
+						MapData.getEndingMapLocation(characterNum)[1],
+						pathDirections,
+						PathData.getAnimationData(characterNum)[0],
+						PathData.getAnimationData(characterNum)[1]
+						);
 				this.starting = true;
 			}
 			
@@ -167,7 +179,11 @@ public abstract class DisplayableCharacter extends Group{
 		   }
 		   
 		   if(currentX == previousX && currentY == previousY) {
-			   displayedCharacter = animationList.get(0);
+			   if(starting) {
+				   displayedCharacter = pathToFollow.getEndingAnimation();
+			   } else {
+				   displayedCharacter = pathToFollow.getStartingAnimation();
+			   }
 		   }
 		   
 		   pointOfSprite = displayedCharacter.localToParent(getTranslateX(), getTranslateY());
