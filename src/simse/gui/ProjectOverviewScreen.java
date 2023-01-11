@@ -93,7 +93,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 		tableModel = new SEProjectTableModel(this.state);
 		table = tableModel.createTable();
 		table.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		table.setMaxHeight(200);
+		table.setMaxHeight(50);
 		projectPane.setCenter(table);
 		
 		toolsPane = new BorderPane();
@@ -112,7 +112,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 		tableModel2 = new ToolTableModel(this.state);
 		table2 = tableModel2.createTable();
 		table2.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
-		table2.setMaxHeight(200);
+		table2.setMaxHeight(50);
 		toolsPane.setCenter(table2);
 	}
 	
