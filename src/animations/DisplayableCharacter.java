@@ -15,25 +15,29 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
+import simse.gui.MapData;
 
 public abstract class DisplayableCharacter extends Group{
 	
 	private SimSESprite displayedCharacter;
-	protected int velocity, height, width;
+	protected int velocity, height, width, characterNum;
 	private double previousX, previousY;
 	private PathTransition transition;
-	private Path pathToFollow;
+	private boolean starting;
+	private CreatablePath pathToFollow;
 	protected ArrayList<SimSESprite> animationList;
 	
-	public DisplayableCharacter(Path pathToFollow, int characterNum, int width, int height) {	
+	public DisplayableCharacter(CreatablePath pathToFollow, int characterNum, int width, int height) {	
 		this.velocity = 2;
 		this.pathToFollow = pathToFollow;
+		this.characterNum = characterNum;
+		this.starting = false;
 		this.height = height;
 		this.width = width;
 		this.directionCheck();
 		animationList = new ArrayList<>();
 		initalizeAnimationList(characterNum);
-		displayedCharacter = animationList.get(0);
+		displayedCharacter = pathToFollow.getStartingAnimation();
 		displayedCharacter.setFitHeight(height);
 		displayedCharacter.setFitWidth(width);
 		this.getChildren().add(displayedCharacter);
@@ -45,6 +49,7 @@ public abstract class DisplayableCharacter extends Group{
 	public DisplayableCharacter(int characterNum, int width, int height) {
 		this.height = height;
 		this.width = width;
+		this.characterNum = characterNum;
 		animationList = new ArrayList<>();
 		initalizeAnimationList(characterNum);
 		displayedCharacter = animationList.get(0);
@@ -74,7 +79,7 @@ public abstract class DisplayableCharacter extends Group{
 	public void beginPathing() {
 		this.transition = new PathTransition();
 		Random rand = new Random();
-		int duration = (int)Math.floor(Math.random()*(18-14+1)+14);
+		int duration = (int)Math.floor(Math.random()*(18-15)+14);
 		
 		transition.setNode(this);
 		transition.setDuration(Duration.seconds(duration));
@@ -82,7 +87,32 @@ public abstract class DisplayableCharacter extends Group{
 		transition.setCycleCount(1);
 		
 		transition.setOnFinished(e -> {
-			int randomNumber = rand.nextInt(15);
+			int randomNumber = rand.nextInt(60)+10;
+			Path newPath = null;
+			
+			if(starting) {
+				double[][] pathDirections = PathData.getStartingPath(characterNum);
+				newPath = new CreatablePath(
+						MapData.getStartingMapLocation(characterNum)[0] + 5,
+						MapData.getStartingMapLocation(characterNum)[1],
+						pathDirections,
+						PathData.getAnimationData(characterNum)[0],
+						PathData.getAnimationData(characterNum)[1]
+						);
+				this.starting = false;
+			} else {
+				double[][] pathDirections = PathData.getEndingPath(characterNum);
+				newPath = new CreatablePath(
+						MapData.getEndingMapLocation(characterNum)[0] + 5,
+						MapData.getEndingMapLocation(characterNum)[1],
+						pathDirections,
+						PathData.getAnimationData(characterNum)[0],
+						PathData.getAnimationData(characterNum)[1]
+						);
+				this.starting = true;
+			}
+			
+			transition.setPath(newPath);
 			transition.setDelay(Duration.seconds(randomNumber));
 			
 				
@@ -149,7 +179,11 @@ public abstract class DisplayableCharacter extends Group{
 		   }
 		   
 		   if(currentX == previousX && currentY == previousY) {
-			   displayedCharacter = animationList.get(0);
+			   if(starting) {
+				   displayedCharacter = pathToFollow.getEndingAnimation();
+			   } else {
+				   displayedCharacter = pathToFollow.getStartingAnimation();
+			   }
 		   }
 		   
 		   pointOfSprite = displayedCharacter.localToParent(getTranslateX(), getTranslateY());

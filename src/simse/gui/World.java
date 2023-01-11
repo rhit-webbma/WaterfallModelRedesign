@@ -10,10 +10,10 @@ import animations.CreatablePath;
 import animations.DisplayableCharacter;
 import animations.PathData;
 import animations.SimSECharacter;
-
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -23,6 +23,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
@@ -41,8 +45,8 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	public final int xViewable = 9;
 	public final int yViewable = 9;
 	
-	private final double width = 1070;
-	private final double height = 400;
+	private final double width = 1180;
+	private final double height = 720;
 
 	private final SimSEGUI mainGUIFrame;
 
@@ -81,9 +85,13 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		super(s, l);
 		mainGUIFrame = parent;
 		overheadTextDisplayed = false;
-//		int width = (int) getWidth();
-//		int height = (int) getHeight();
+		
+		this.setHeight(height);
+		this.setWidth(width);
+		
 		final Canvas canvas = new Canvas(width, height);
+		
+		
 		dbGraphics = canvas.getGraphicsContext2D();
 		
 		
@@ -97,31 +105,42 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		if (yspacer < 0)
 			yspacer = 0;
 		
-//		ImageView mapView = new ImageView();
-//		
-//		FileInputStream inputStream = null;
-//		try {
-//			inputStream = new FileInputStream("SimSEMap\\SimSESpriteSheet.png");
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		mapView.setImage(new Image(inputStream));
-//		
-//		this.getChildren().add(mapView);
-//		
+		ImageView mapView = new ImageView();
 		
+		FileInputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream("SimSEMap\\SimSESpriteSheet.png");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		mapView.setImage(new Image(inputStream));
+		
+		this.getChildren().add(mapView);
 		
 		for (int i = 0; i < sopUsers.size(); i++) {
 			DisplayedEmployee tmp = sopUsers.get(i);
-			double[][] pathDirections = PathData.getPath(i);
-			Path newPath = new CreatablePath(xspacer + tmp.getXLocation() * MapData.TILE_SIZE + 30, yspacer + tmp.getYLocation() * MapData.TILE_SIZE + 10, pathDirections);
+			double[][] pathDirections = PathData.getStartingPath(i);
+			CreatablePath newPath = new CreatablePath(
+					MapData.getStartingMapLocation(i)[0] + 5, 
+					MapData.getStartingMapLocation(i)[1],
+					pathDirections,
+					PathData.getAnimationData(i)[0],
+					PathData.getAnimationData(i)[1]
+					);
 			DisplayableCharacter char1 = new SimSECharacter(newPath, i, 50, 75);
 			this.getChildren().add(char1);
 			char1.requestFocus();
 		}
+		
+		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent event) {
+		        System.out.println("X: " + event.getSceneX());
+		        System.out.println("Y: " + event.getSceneY());
+		    }
+		});
 		
 
 
@@ -167,13 +186,9 @@ public class World extends SimSEMap implements EventHandler<Event> {
 
 	// double buffering to prevent flickering
 	public void update(GraphicsContext gc) {
-//		if (dbImage == null) {
-//			dbImage = new Image(, getWidth(), getHeight(), true, true);
-//		}
 
 		// clear screen in background:
 		dbGraphics.setFill(Color.BLACK);
-//		dbGraphics.fillRect(0, 0, getWidth(), getHeight());
 		dbGraphics.fillRect(0, 0, width, height);
 		
 		// draw elements in background:
@@ -195,28 +210,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	}
 
 	public void paint() {
-//		int width = (int) getWidth();
-//		int height = (int) getHeight();
 		GraphicsContext gc = dbGraphics;
-
-//		 draw the map:
-		for (int i = 0; i < MapData.Y_MAPSIZE; i++) {
-			for (int j = 0; j < MapData.X_MAPSIZE; j++) {
-				gc.drawImage(mapRep[j][i].getBase(), xspacer + j * MapData.TILE_SIZE, yspacer + i * MapData.TILE_SIZE);
-				gc.drawImage(mapRep[j][i].getFringe(), xspacer + j * MapData.TILE_SIZE,
-						yspacer + i * MapData.TILE_SIZE);
-			}
-		}
-
-		// draw employees:
-		for (int i = 0; i < sopUsers.size(); i++) {
-			
-			DisplayedEmployee tmp = sopUsers.get(i);
-			if (tmp.isDisplayed() && tmp.isActivated()) {
-//				gc.drawImage(tmp.getUserIcon(), xspacer + tmp.getXLocation() * MapData.TILE_SIZE,
-//						yspacer + tmp.getYLocation() * MapData.TILE_SIZE);
-			}
-		}
 
 		// go through all employees and display their overhead text, if any:
 		int numOverheadTexts = 0;

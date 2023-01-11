@@ -10,6 +10,22 @@ public class MapData {
 	static final int TILE_SIZE = 50; // size of 1 tile
 	static final int X_MAPSIZE = 16; // number of tiles along X axis for map
 	static final int Y_MAPSIZE = 10; // number of tiles along Y axis for map
+	
+	static final int MAPSIZE_SPACER_Y = 135;
+	static final int[] MAP_POS_0S = {629, 452 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_0E = {802, 526 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_1S = {588, 377 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_1E = {438, 292 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_2S = {672, 377 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_2E = {373, 251 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_3S = {842, 377 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_3E = {752, 481 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_4S = {698, 273 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_4E = {465, 256 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_5S = {782, 273 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_5E = {894, 203 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_6S = {52, 384 - MAPSIZE_SPACER_Y};
+	static final int[] MAP_POS_6E = {262, 296 - MAPSIZE_SPACER_Y};
 
 	static final int TRANSPARENT = -1;
 	static final int TILE_GRID = 0;
@@ -113,6 +129,34 @@ public class MapData {
 
 	public static Image getImage(String file) {
 		return JavaFXHelpers.createImage(file);
+	}
+	
+	public static int[] getStartingMapLocation(int locationNumber) {
+		switch (locationNumber)
+		{
+		case 0: return MAP_POS_0S;
+		case 1: return MAP_POS_1S;
+		case 2: return MAP_POS_2S;
+		case 3: return MAP_POS_3S;
+		case 4: return MAP_POS_4S;
+		case 5: return MAP_POS_5S;
+		case 6: return MAP_POS_6S;
+		default: throw new IllegalArgumentException();
+		}			
+	}
+	
+	public static int[] getEndingMapLocation(int locationNumber) {
+		switch (locationNumber)
+		{
+		case 0: return MAP_POS_0E;
+		case 1: return MAP_POS_1E;
+		case 2: return MAP_POS_2E;
+		case 3: return MAP_POS_3E;
+		case 4: return MAP_POS_4E;
+		case 5: return MAP_POS_5E;
+		case 6: return MAP_POS_6E;
+		default: throw new IllegalArgumentException();
+		}			
 	}
 
 	public static Image getImage(int key) {

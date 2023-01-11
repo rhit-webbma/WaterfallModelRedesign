@@ -37,8 +37,9 @@ public class SimSE extends Application{
 		state.getClock().setGUI(gui);
 		gui.setX(0);
 		gui.setY(0);
-		gui.setWidth(1024);
-		gui.setHeight(744);
+
+		gui.setWidth(1180);
+		gui.setHeight(720);
 		RuleCategories.initializeRuleCategories();
 		engine.giveGUI(gui);
 		logic.getTriggerChecker().update(false, gui);
@@ -69,6 +70,8 @@ public class SimSE extends Application{
 	public static void main(String args[]) {
 		launch(args);
 	}
+	
+	
 
 	@Override
 	public void start(Stage arg0) throws Exception {

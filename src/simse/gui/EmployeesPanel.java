@@ -146,7 +146,6 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, Si
 			DisplayableCharacter char1 = new SimSECharacter(i, 50, 75);
 			characters.add(char1);
 		}
-		
 		update();
 		this.getChildren().add(layout);		
 	}
