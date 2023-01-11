@@ -60,6 +60,14 @@ public class PanelsScreen extends Stage implements EventHandler<MouseEvent> {
 				gui.removePanel(Panels.MELLO);
 				melloButton.setText("Add");
 			}
+		} else if (src == progGraphButton) {
+			System.out.println("Click");
+			if (progGraphButton.getText().equals("Add")) {
+				gui.addBottomPanel(Panels.GRAPH);
+			} else {
+				gui.removePanel(Panels.GRAPH);
+				progGraphButton.setText("Add");
+			}
 		}
 	}
 

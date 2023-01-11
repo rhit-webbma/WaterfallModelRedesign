@@ -112,23 +112,20 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 	private Color btnBlue = Color.rgb(180, 180, 255, 1.0);
 	private Image border;
 	private Image allIcon;
-	
+
 	private EventHandler<ActionEvent> menuItemEvent = new EventHandler<ActionEvent>() {
-        public void handle(ActionEvent event)
-        {
-        	guiChanged = true;
+		public void handle(ActionEvent event) {
+			guiChanged = true;
 			Object source = event.getSource();
 			if (source instanceof MenuItem) {
 				MenuItem jm = (MenuItem) source;
-				logic.getMenuInputManager().menuItemSelected(rightClickedEmployee,
-						jm.getText(), gui);
+				logic.getMenuInputManager().menuItemSelected(rightClickedEmployee, jm.getText(), gui);
 				gui.getWorld().update();
 			}
-        }
-    };
+		}
+	};
 
-	public TabPanel(SimSEGUI g, State s, Logic l, Engine e, InformationPanel a,
-			 ExplanatoryTool expTool) {
+	public TabPanel(SimSEGUI g, State s, Logic l, Engine e, InformationPanel a, ExplanatoryTool expTool) {
 		logic = l;
 		gui = g;
 		state = s;
@@ -154,8 +151,8 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 
 		// get the Border styles:
 		defaultBorder = new Button().getBorder();
-		selectedBorder = new Border(new BorderStroke(Color.BLACK, 
-	            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+		selectedBorder = new Border(
+				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
 //				new BevelBorder(BevelBorder.RAISED, new Color(80, 80,
 //				225, 255), new Color(0, 0, 115, 255));
 
@@ -183,22 +180,22 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		clockPane.setPrefSize(250, 100);
 
 		// Add panes and labels to main pane:
-		
+
 		gridPane.setHgap(10);
-	    gridPane.setVgap(10);
-	    gridPane.setPadding(new Insets(0, 0, 0, 0));
-	    gridPane.getColumnConstraints().add(new ColumnConstraints(logoPane.getWidth() + 100));
-		
+		gridPane.setVgap(10);
+		gridPane.setPadding(new Insets(0, 0, 0, 0));
+		gridPane.getColumnConstraints().add(new ColumnConstraints(logoPane.getWidth() + 100));
+
 		// Add Logo Pane:
-		GridPane.setConstraints(logoPane, 0, 0, 2, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, 
-				Priority.NEVER, new Insets(0, 0, 0, 0));
+		GridPane.setConstraints(logoPane, 0, 0, 2, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER,
+				new Insets(0, 0, 0, 0));
 		gridPane.add(logoPane, 0, 0);
 
 		// Add panes and labels to main pane
-		
+
 		HBox buttons = new HBox();
 		buttons.setSpacing(40);
-		
+
 		Button projectButton = new Button("Project");
 		projectButton.setId("TabButton");
 		projectButton.setPrefHeight(40);
@@ -213,7 +210,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			}
 		});
 		buttons.getChildren().add(projectButton);
-		
+
 		Button peopleButton = new Button("People");
 		peopleButton.setId("TabButton");
 		peopleButton.setPrefHeight(40);
@@ -229,7 +226,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			}
 		});
 		buttons.getChildren().add(peopleButton);
-		
+
 		Button artifactsButton = new Button("Artifacts");
 		artifactsButton.setId("TabButton");
 		artifactsButton.setPrefHeight(40);
@@ -248,7 +245,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			}
 		});
 		buttons.getChildren().add(artifactsButton);
-		
+
 		Button analyzeButton = new Button("Analyze");
 		analyzeButton.setId("TabButton");
 		analyzeButton.setPrefHeight(40);
@@ -269,7 +266,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				expTool.show();
 			}
 		});
-		
+
 		Button panelsButton = new Button("Panels");
 		panelsButton.setId("TabButton");
 		panelsButton.setPrefHeight(40);
@@ -285,17 +282,16 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 			}
 		});
 		buttons.getChildren().add(panelsButton);
-		
+
 		gridPane.add(buttons, 2, 0);
-				
-		
+
 		gridPane.add(clockPane, 4, 0);
 
 		setPrefSize(1920, 100);
 		updateImages(EMPLOYEE);
-		
+
 		this.getChildren().add(gridPane);
-		
+
 		this.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 	}
 
@@ -359,15 +355,15 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				button[index].setBackground(JavaFXHelpers.createBackgroundColor(Color.LIGHTGRAY));
 				button[index].setBorder(defaultBorder);
 				button[index].disarm();
-				GridPane.setConstraints(button[index], i, j, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, 
-						Priority.NEVER, new Insets(2, 1, 0, 0));
-				if(!pane.getChildren().contains(button[index])) {
+				GridPane.setConstraints(button[index], i, j, 1, 1, HPos.LEFT, VPos.TOP, Priority.NEVER, Priority.NEVER,
+						new Insets(2, 1, 0, 0));
+				if (!pane.getChildren().contains(button[index])) {
 					pane.getChildren().add(button[index]);
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void handle(Event event) {
 		if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
@@ -378,7 +374,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 					rightClickedEmployee = (Employee) buttonsToObjs.get(button);
 				}
 			}
-		} else if (event.getEventType() ==  ActionEvent.ACTION) {
+		} else if (event.getEventType() == ActionEvent.ACTION) {
 			guiChanged = true;
 			Object source = event.getSource();
 			if (source instanceof Button) {
@@ -530,11 +526,10 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 				} else {
 					button = buttonList[j++];
 				}
-				if ((index == EMPLOYEE)
-						&& (state.getClock().isStopped() == false)) {
+				if ((index == EMPLOYEE) && (state.getClock().isStopped() == false)) {
 					Employee e = (Employee) obj;
 					PopupListener pListener = ((PopupListener) button.getOnMousePressed());
-					if(pListener != null) {
+					if (pListener != null) {
 						pListener.setEnabled(true);
 						ContextMenu p = pListener.getPopupMenu();
 						p.getItems().removeAll();
@@ -676,7 +671,7 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		}
 		return url;
 	}
-	
+
 	public ClockPanel getClockPanel() {
 		return clockPane;
 	}
