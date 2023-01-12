@@ -92,6 +92,7 @@ public abstract class Employee extends SSObject implements Cloneable {
 
 	public void setOverheadText(String s, String name) {
 		track.addText(s, name);
+		overheadText = s;
 	}
 
 	public void clearOverheadText() {

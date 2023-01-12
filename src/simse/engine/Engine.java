@@ -41,7 +41,7 @@ public class Engine extends TimerTask implements EventHandler<ActionEvent> {
 		
 		timer = new Timeline(new KeyFrame(Duration.millis(50), this));
 		timer.setCycleCount(Timeline.INDEFINITE);
-		timer.setDelay(Duration.millis(50));
+		timer.setDelay(Duration.millis(100));
 		timer.play();		
 		
 		SoftwareEngineer a0 = new SoftwareEngineer("Andre", 1.0, 0.9, 1.0,
