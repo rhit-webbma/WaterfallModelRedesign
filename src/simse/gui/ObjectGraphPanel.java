@@ -48,6 +48,7 @@ import simse.state.logger.Logger;
 
 public class ObjectGraphPanel extends Pane implements ChartMouseListenerFX, SimSEPanel{
 	private ArrayList<State> log;
+	private String title;
 	private String objTypeType;
 	private String objType;
 	private String keyAttVal;
@@ -59,6 +60,7 @@ public class ObjectGraphPanel extends Pane implements ChartMouseListenerFX, SimS
 	private int lastRightClickedX; // last x-val that was right-clicked on
 	private Branch branch; // branch from which this graph is generated
 	private ObjectGraph objGraph;
+	private SimSEGUI gui;
 	
 	private EventHandler<ActionEvent> menuEvent = new EventHandler<ActionEvent>() {
         private String newBranchName = null;
@@ -88,12 +90,14 @@ public class ObjectGraphPanel extends Pane implements ChartMouseListenerFX, SimS
     };
 	
 	public ObjectGraphPanel(String title, ArrayList<State> log, String objTypeType, String objType, 
-			String keyAttVal, Branch branch) {
+			String keyAttVal, Branch branch, SimSEGUI gui) {
 		VBox mainPane = new VBox();
 		this.branch = branch;
+		this.gui = gui;
 		if (branch.getName() != null) {
 			title = title.concat(" - " + branch.getName());
 		}
+		this.title = title;
 		this.objTypeType = objTypeType;
 		this.objType = objType;
 		this.keyAttVal = keyAttVal;
@@ -165,258 +169,12 @@ public class ObjectGraphPanel extends Pane implements ChartMouseListenerFX, SimS
 	}
 	
 	public void update() {
-		this.objGraph.update();
-//		if ((log.size() > 0) && (log.get(log.size() - 1) != null)) { // there is
-//																		// a log
-//																		// that
-//																		// has
-//																		// not
-//																		// been
-//																		// graphed
-//																		// yet
-//		// add a new end data point for each series/attribute
-//			for (int j = 0; j < attributes.length; j++) {
-//				if (objTypeType.equals("Employee")
-//						&& objType.equals("SoftwareEngineer")) {
-//					SoftwareEngineer softwareengineer = log.get(log.size() - 1)
-//								.getEmployeeStateRepository()
-//								.getSoftwareEngineerStateRepository()
-//								.get(keyAttVal);
-//					if (softwareengineer != null) {
-//						if (attributes[j].equals("Energy")) {
-//							series[j].add(log.size(),
-//									softwareengineer.getEnergy());
-//						} else if (attributes[j].equals("Mood")) {
-//							series[j].add(log.size(),
-//									softwareengineer.getMood());
-//						} else if (attributes[j].equals("PayRate")) {
-//							series[j].add(log.size(),
-//									softwareengineer.getPayRate());
-//						}
-//					}
-//				} else if (objTypeType.equals("Artifact")
-//						&& objType.equals("RequirementsDocument")) {
-//					RequirementsDocument requirementsdocument = null;
-//					if (keyAttVal.equals("Requirements")) {
-//						requirementsdocument = log.get(log.size() - 1)
-//								.getArtifactStateRepository()
-//								.getRequirementsDocumentStateRepository()
-//								.get("Requirements");
-//					}
-//					if (requirementsdocument != null) {
-//						if (attributes[j].equals("NumKnownErrors")) {
-//							series[j].add(log.size(),
-//									requirementsdocument.getNumKnownErrors());
-//						} else if (attributes[j].equals("NumUnknownErrors")) {
-//							series[j].add(log.size(),
-//									requirementsdocument.getNumUnknownErrors());
-//						} else if (attributes[j].equals("PercentErroneous")) {
-//							series[j].add(log.size(),
-//									requirementsdocument.getPercentErroneous());
-//						} else if (attributes[j].equals("PercentComplete")) {
-//							series[j].add(log.size(),
-//									requirementsdocument.getPercentComplete());
-//						}
-//					}
-//				} else if (objTypeType.equals("Artifact")
-//						&& objType.equals("DesignDocument")) {
-//					DesignDocument designdocument = null;
-//					if (keyAttVal.equals("Design")) {
-//						designdocument = log.get(log.size() - 1)
-//								.getArtifactStateRepository()
-//								.getDesignDocumentStateRepository()
-//								.get("Design");
-//					}
-//					if (designdocument != null) {
-//						if (attributes[j].equals("NumKnownErrors")) {
-//							series[j].add(log.size(),
-//									designdocument.getNumKnownErrors());
-//						} else if (attributes[j].equals("NumUnknownErrors")) {
-//							series[j].add(log.size(),
-//									designdocument.getNumUnknownErrors());
-//						} else if (attributes[j].equals("PercentErroneous")) {
-//							series[j].add(log.size(),
-//									designdocument.getPercentErroneous());
-//						} else if (attributes[j].equals("PercentComplete")) {
-//							series[j].add(log.size(),
-//									designdocument.getPercentComplete());
-//						}
-//					}
-//				} else if (objTypeType.equals("Artifact")
-//						&& objType.equals("Code")) {
-//					Code code = null;
-//					if (keyAttVal.equals("Code")) {
-//						code = log.get(log.size() - 1)
-//								.getArtifactStateRepository()
-//								.getCodeStateRepository().get("Code");
-//					}
-//					if (code != null) {
-//						if (attributes[j].equals("PercentComplete")) {
-//							series[j]
-//									.add(log.size(), code.getPercentComplete());
-//						} else if (attributes[j].equals("PercentIntegrated")) {
-//							series[j].add(log.size(),
-//									code.getPercentIntegrated());
-//						} else if (attributes[j].equals("NumKnownErrors")) {
-//							series[j].add(log.size(), code.getNumKnownErrors());
-//						} else if (attributes[j].equals("NumUnknownErrors")) {
-//							series[j].add(log.size(),
-//									code.getNumUnknownErrors());
-//						} else if (attributes[j].equals("PercentErroneous")) {
-//							series[j].add(log.size(),
-//									code.getPercentErroneous());
-//						}
-//					}
-//				} else if (objTypeType.equals("Artifact")
-//						&& objType.equals("SystemTestPlan")) {
-//					SystemTestPlan systemtestplan = null;
-//					if (keyAttVal.equals("TestPlan")) {
-//						systemtestplan = log.get(log.size() - 1)
-//								.getArtifactStateRepository()
-//								.getSystemTestPlanStateRepository()
-//								.get("TestPlan");
-//					}
-//					if (systemtestplan != null) {
-//						if (attributes[j].equals("NumKnownErrors")) {
-//							series[j].add(log.size(),
-//									systemtestplan.getNumKnownErrors());
-//						} else if (attributes[j].equals("NumUnknownErrors")) {
-//							series[j].add(log.size(),
-//									systemtestplan.getNumUnknownErrors());
-//						} else if (attributes[j].equals("PercentErroneous")) {
-//							series[j].add(log.size(),
-//									systemtestplan.getPercentErroneous());
-//						} else if (attributes[j].equals("PercentComplete")) {
-//							series[j].add(log.size(),
-//									systemtestplan.getPercentComplete());
-//						}
-//					}
-//				} else if (objTypeType.equals("Project")
-//						&& objType.equals("SEProject")) {
-//					SEProject seproject = null;
-//					if (keyAttVal.equals("Groceries@Home")) {
-//						seproject = log.get(log.size() - 1)
-//								.getProjectStateRepository()
-//								.getSEProjectStateRepository()
-//								.get("Groceries@Home");
-//					}
-//					if (seproject != null) {
-//						if (attributes[j].equals("Budget")) {
-//							series[j].add(log.size(), seproject.getBudget());
-//						} else if (attributes[j].equals("MoneySpent")) {
-//							series[j]
-//									.add(log.size(), seproject.getMoneySpent());
-//						} else if (attributes[j].equals("AllottedTime")) {
-//							series[j].add(log.size(),
-//									seproject.getAllottedTime());
-//						} else if (attributes[j].equals("TimeUsed")) {
-//							series[j].add(log.size(), seproject.getTimeUsed());
-//						} else if (attributes[j].equals("Score")) {
-//							series[j].add(log.size(), seproject.getScore());
-//						}
-//					}
-//				} else if (objTypeType.equals("Tool")
-//						&& objType.equals("RequirementsCaptureTool")) {
-//					RequirementsCaptureTool requirementscapturetool = null;
-//					if (keyAttVal.equals("SteelTrace")) {
-//						requirementscapturetool = log.get(log.size() - 1)
-//								.getToolStateRepository()
-//								.getRequirementsCaptureToolStateRepository()
-//								.get("SteelTrace");
-//					}
-//					if (requirementscapturetool != null) {
-//						if (attributes[j].equals("Cost")) {
-//							series[j].add(log.size(),
-//									requirementscapturetool.getCost());
-//						} else if (attributes[j]
-//								.equals("ProductivityIncreaseFactor")) {
-//							series[j].add(log.size(), requirementscapturetool
-//									.getProductivityIncreaseFactor());
-//						} else if (attributes[j]
-//								.equals("ErrorRateDecreaseFactor")) {
-//							series[j].add(log.size(), requirementscapturetool
-//									.getErrorRateDecreaseFactor());
-//						}
-//					}
-//				} else if (objTypeType.equals("Tool")
-//						&& objType.equals("DesignEnvironment")) {
-//					DesignEnvironment designenvironment = null;
-//					if (keyAttVal.equals("RationalRose")) {
-//						designenvironment = log.get(log.size() - 1)
-//								.getToolStateRepository()
-//								.getDesignEnvironmentStateRepository()
-//								.get("RationalRose");
-//					}
-//					if (designenvironment != null) {
-//						if (attributes[j].equals("Cost")) {
-//							series[j].add(log.size(),
-//									designenvironment.getCost());
-//						} else if (attributes[j]
-//								.equals("ProductivityIncreaseFactor")) {
-//							series[j].add(log.size(), designenvironment
-//									.getProductivityIncreaseFactor());
-//						} else if (attributes[j]
-//								.equals("ErrorRateDecreaseFactor")) {
-//							series[j].add(log.size(), designenvironment
-//									.getErrorRateDecreaseFactor());
-//						}
-//					}
-//				} else if (objTypeType.equals("Tool") && objType.equals("IDE")) {
-//					IDE ide = null;
-//					if (keyAttVal.equals("Eclipse")) {
-//						ide = log.get(log.size() - 1).getToolStateRepository()
-//								.getIDEStateRepository().get("Eclipse");
-//					}
-//					if (ide != null) {
-//						if (attributes[j].equals("Cost")) {
-//							series[j].add(log.size(), ide.getCost());
-//						} else if (attributes[j]
-//								.equals("ProductivityIncreaseFactor")) {
-//							series[j].add(log.size(),
-//									ide.getProductivityIncreaseFactor());
-//						} else if (attributes[j]
-//								.equals("ErrorRateDecreaseFactor")) {
-//							series[j].add(log.size(),
-//									ide.getErrorRateDecreaseFactor());
-//						}
-//					}
-//				} else if (objTypeType.equals("Tool")
-//						&& objType.equals("AutomatedTestingTool")) {
-//					AutomatedTestingTool automatedtestingtool = null;
-//					if (keyAttVal.equals("JUnit")) {
-//						automatedtestingtool = log.get(log.size() - 1)
-//								.getToolStateRepository()
-//								.getAutomatedTestingToolStateRepository()
-//								.get("JUnit");
-//					}
-//					if (automatedtestingtool != null) {
-//						if (attributes[j].equals("Cost")) {
-//							series[j].add(log.size(),
-//									automatedtestingtool.getCost());
-//						} else if (attributes[j]
-//								.equals("ProductivityIncreaseFactor")) {
-//							series[j].add(log.size(), automatedtestingtool
-//									.getProductivityIncreaseFactor());
-//						} else if (attributes[j]
-//								.equals("ErrorRateDecreaseFactor")) {
-//							series[j].add(log.size(), automatedtestingtool
-//									.getErrorRateDecreaseFactor());
-//						}
-//					}
-//				} else if (objTypeType.equals("Customer")
-//						&& objType.equals("ACustomer")) {
-//					ACustomer acustomer = null;
-//					if (keyAttVal.equals("Grocery Home Delivery Service")) {
-//						acustomer = log.get(log.size() - 1)
-//								.getCustomerStateRepository()
-//								.getACustomerStateRepository()
-//								.get("Grocery Home Delivery Service");
-//					}
-//					if (acustomer != null) {
-//					}
-//				}
-//			}
-//		}
+		log = gui.getLog();
+		if (log != null) {
+			this.objGraph = new ObjectGraph(title, log, objTypeType, objType, keyAttVal, attributes, false, branch);
+			chart = objGraph.getChart();
+			chartViewer.setChart(chart);
+		}
 	}
 	
 	@Override

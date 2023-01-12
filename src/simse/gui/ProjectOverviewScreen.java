@@ -4,10 +4,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -15,35 +17,39 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import simse.adts.objects.SEProject;
+import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.Tool;
 import simse.state.State;
 import simse.util.RuleType;
 
 public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEvent>{
 	
-	State state;
-	SimSEGUI gui;
+	private State state;
+	private SimSEGUI gui;
 
-	Label titleLabel;
-	Label toolsLabel;
+	private Label titleLabel;
+	private Label toolsLabel;
 	
-	TableModel<SEProject> tableModel;
-	TableView<SEProject> table;
+	private TableModel<SEProject> tableModel;
+	private TableView<SEProject> table;
 	
-	TableModel<Tool> tableModel2;
-	TableView<Tool> table2;
+	private TableModel<Tool> tableModel2;
+	private TableView<Tool> table2;
 	
-	Button rules, projectTab, toolsTab;
-	boolean lastClickedProject;
+	private Button rules, projectTab, toolsTab, changeGraph;
+	private boolean lastClickedProject;
+	private int lastClickedToolIndex, lastClickedProjectIndex;
 	
-	BorderPane projectPane, toolsPane;
-	VBox mainPane, graphPane;
+	private BorderPane projectPane, toolsPane;
+	private VBox mainPane, graphPane;
 	
 	
 	public ProjectOverviewScreen(State s, SimSEGUI gui) {
 		this.state = s;
 		this.gui = gui;
 		lastClickedProject = true;
+		lastClickedToolIndex = 0;
+		lastClickedProjectIndex = 0;
 		
 		this.setTitle("Project Screen");
 		mainPane = new VBox();
@@ -61,6 +67,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 		
 		createTabs();
 		mainPane.getChildren().add(projectPane);
+		graphPane = new VBox();
 		updateGraph();
 		mainPane.getChildren().add(graphPane);
 		
@@ -69,6 +76,10 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 		rules = new Button("Rules for Projects/Tools");
 		rules.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		buttonPane.getChildren().add(rules);
+		
+		changeGraph = new Button("Change Graph");
+		changeGraph.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		buttonPane.getChildren().add(changeGraph);
 		mainPane.getChildren().add(buttonPane);
 		
 		Scene scene = new Scene(mainPane, 900, 700);
@@ -117,23 +128,22 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 	}
 	
 	private void updateGraph() {
-		graphPane = new VBox();
 		String objType = "";
 		String objTypeType = "";
 		String title = "";
 		String name = "";
 		if (lastClickedProject) {
-			objType = "SEProject";
+			objType = tableModel.getData().get(lastClickedProjectIndex).getClass().getSimpleName();
 			objTypeType = "Project";
-			name = tableModel.getData().get(0).getDescription();
+			name = tableModel.getData().get(lastClickedProjectIndex).getDescription();
 		} else {
-			objType = tableModel2.getData().get(0).getClass().getSimpleName();
+			objType = tableModel2.getData().get(lastClickedToolIndex).getClass().getSimpleName();
 			objTypeType = "Tool";
-			name = tableModel2.getData().get(0).getDescription();
+			name = tableModel2.getData().get(lastClickedToolIndex).getName();
 		}
 		title = name + " Attributes";
 		ObjectGraphPanel objGraph = new ObjectGraphPanel(title, gui.getLog(), objTypeType, objType, 
-				name, gui.getBranch());
+				name, gui.getBranch(), gui);
 		while (graphPane.getChildren().size() > 0) {
 			graphPane.getChildren().remove(0);
 		}
@@ -179,6 +189,24 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 		} else if (source == toolsTab) {
 			lastClickedProject = false;
 			update();
+		} else if (source == changeGraph) {
+			if (lastClickedProject) {
+				lastClickedProjectIndex = table.getSelectionModel().getSelectedIndex();
+				if (lastClickedProjectIndex == -1) {
+					Alert alert = new Alert(AlertType.WARNING, "Please select a project to see its graph");
+					alert.show();
+				} else {
+					update();
+				}
+			} else {
+				lastClickedToolIndex = table2.getSelectionModel().getSelectedIndex();
+				if (lastClickedToolIndex == -1) {
+					Alert alert = new Alert(AlertType.WARNING, "Please select a tool to see its graph");
+					alert.show();
+				} else {
+					update();
+				}
+			}
 		}
 	}
 

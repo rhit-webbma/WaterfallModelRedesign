@@ -44,6 +44,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 	private TrackPanel trackPanel;
 	private MelloPanel melloPanel;
 	private ObjectGraphPanel objGraphPanel;
+	private VBox objGraphWrapper;
 	private Pane panel1 = new Pane();
 	private Pane panel2 = new Pane();
 	private Pane panel3 = new Pane();
@@ -120,8 +121,10 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		infoPanel = new InformationPanel(this, state, engine);
 		tabPanel = new TabPanel(this, state, logic, engine, infoPanel, expTool);
 		employeesPanel = new EmployeesPanel(this, state, logic);
+//		objGraphWrapper = new VBox();
 		objGraphPanel = new ObjectGraphPanel("Groceries@Home Attributes", getLog(), "Project", "SEProject", 
-				"Groceries@Home", this.branch);
+				"Groceries@Home", this.branch, this);
+//		objGraphWrapper.getChildren().add(objGraphPanel);
 		trackPanel = TrackPanel.getInstance();
 		melloPanel = MelloPanel.getInstance();
 
@@ -220,9 +223,19 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		infoPanel.update();
 		world.update();
 		employeesPanel.update();
-//		objGraphPanel.update();
 		expTool.update();
 		branch.update(state);
+//		updateGraph();
+		objGraphPanel.update();
+	}
+	
+	public void updateGraph() {
+		if (objGraphWrapper.getChildren().contains(objGraphPanel)) {
+			objGraphWrapper.getChildren().remove(objGraphPanel);
+			objGraphPanel = new ObjectGraphPanel("Groceries@Home Attributes", getLog(), "Project", "SEProject", 
+					"Groceries@Home", this.branch, this);
+			objGraphWrapper.getChildren().add(objGraphPanel);
+		}
 	}
 
 	public void close() {
@@ -284,7 +297,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 				break;
 				
 			case GRAPH:
-//				objGraphPanel.update();
+				objGraphPanel.update();
 				panel1.getChildren().add(objGraphPanel);
 				break;
 				
@@ -307,7 +320,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 				break;
 				
 			case GRAPH:
-//				objGraphPanel.update();
+				objGraphPanel.update();
 				panel2.getChildren().add(objGraphPanel);
 				break;
 				

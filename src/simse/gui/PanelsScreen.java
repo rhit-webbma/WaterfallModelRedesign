@@ -61,7 +61,6 @@ public class PanelsScreen extends Stage implements EventHandler<MouseEvent> {
 				melloButton.setText("Add");
 			}
 		} else if (src == progGraphButton) {
-			System.out.println("Click");
 			if (progGraphButton.getText().equals("Add")) {
 				gui.addBottomPanel(Panels.GRAPH);
 			} else {
