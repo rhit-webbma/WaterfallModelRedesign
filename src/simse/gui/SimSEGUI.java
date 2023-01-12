@@ -121,9 +121,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		infoPanel = new InformationPanel(this, state, engine);
 		tabPanel = new TabPanel(this, state, logic, engine, infoPanel, expTool);
 		employeesPanel = new EmployeesPanel(this, state, logic);
-//		objGraphWrapper = new VBox();
 		objGraphPanel = new ObjectGraphPanel(this);
-//		objGraphWrapper.getChildren().add(objGraphPanel);
 		trackPanel = TrackPanel.getInstance();
 		melloPanel = MelloPanel.getInstance();
 
@@ -224,16 +222,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		employeesPanel.update();
 		expTool.update();
 		branch.update(state);
-//		updateGraph();
 		objGraphPanel.update();
-	}
-	
-	public void updateGraph() {
-		if (objGraphWrapper.getChildren().contains(objGraphPanel)) {
-			objGraphWrapper.getChildren().remove(objGraphPanel);
-			objGraphPanel = new ObjectGraphPanel(this);
-			objGraphWrapper.getChildren().add(objGraphPanel);
-		}
 	}
 
 	public void close() {
