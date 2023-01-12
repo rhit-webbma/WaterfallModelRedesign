@@ -122,8 +122,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 		tabPanel = new TabPanel(this, state, logic, engine, infoPanel, expTool);
 		employeesPanel = new EmployeesPanel(this, state, logic);
 //		objGraphWrapper = new VBox();
-		objGraphPanel = new ObjectGraphPanel("Groceries@Home Attributes", getLog(), "Project", "SEProject", 
-				"Groceries@Home", this.branch, this);
+		objGraphPanel = new ObjectGraphPanel(this);
 //		objGraphWrapper.getChildren().add(objGraphPanel);
 		trackPanel = TrackPanel.getInstance();
 		melloPanel = MelloPanel.getInstance();
@@ -232,8 +231,7 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 	public void updateGraph() {
 		if (objGraphWrapper.getChildren().contains(objGraphPanel)) {
 			objGraphWrapper.getChildren().remove(objGraphPanel);
-			objGraphPanel = new ObjectGraphPanel("Groceries@Home Attributes", getLog(), "Project", "SEProject", 
-					"Groceries@Home", this.branch, this);
+			objGraphPanel = new ObjectGraphPanel(this);
 			objGraphWrapper.getChildren().add(objGraphPanel);
 		}
 	}
@@ -404,9 +402,9 @@ public class SimSEGUI extends Stage implements EventHandler<Event> {
 			break;
 			
 		case GRAPH:
-			if (!p1Empty && panel1.getChildren().get(0) instanceof ObjectGraphPanel) {
+			if (!p1Empty && panel1.getChildren().get(0) instanceof ObjectGraphPane) {
 				panel1.getChildren().clear();
-			} else if (!p2Empty && panel2.getChildren().get(0) instanceof ObjectGraphPanel) {
+			} else if (!p2Empty && panel2.getChildren().get(0) instanceof ObjectGraphPane) {
 				panel2.getChildren().clear();
 			}
 			break;

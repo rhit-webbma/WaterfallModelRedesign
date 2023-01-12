@@ -71,7 +71,7 @@ public class ArtifactInfoScreen extends Stage implements EventHandler<MouseEvent
 		String objType = objTypeArr[objTypeArr.length - 1];
 		String objTypeType = "Artifact";
 		String title = artifactName + " Attributes";
-		ObjectGraphPanel objGraph = new ObjectGraphPanel(title, gui.getLog(), objTypeType, objType, artifactName, gui.getBranch(), gui);
+		ObjectGraphPane objGraph = new ObjectGraphPane(title, gui.getLog(), objTypeType, objType, artifactName, gui.getBranch(), gui);
 		
 		Label name = new Label(artifact.getName());
 		name.setFont(new Font(30));

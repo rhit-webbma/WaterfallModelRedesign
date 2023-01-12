@@ -96,7 +96,7 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		String objType = objTypeArr[objTypeArr.length - 1];
 		String objTypeType = "Employee";
 		String title = engineerName + " Attributes";
-		ObjectGraphPanel objGraph = new ObjectGraphPanel(title, gui.getLog(), objTypeType, objType, engineerName, gui.getBranch(), gui);		
+		ObjectGraphPane objGraph = new ObjectGraphPane(title, gui.getLog(), objTypeType, objType, engineerName, gui.getBranch(), gui);		
 		
 		Label name = new Label(engineer.getName());
 		name.setFont(new Font(30));

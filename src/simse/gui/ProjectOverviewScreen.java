@@ -36,7 +36,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 	private TableModel<Tool> tableModel2;
 	private TableView<Tool> table2;
 	
-	private Button rules, projectTab, toolsTab, changeGraph;
+	private Button rules, projectTab, toolsTab, changeGraph, updateGraph;
 	private boolean lastClickedProject;
 	private int lastClickedToolIndex, lastClickedProjectIndex;
 	
@@ -80,6 +80,11 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 		changeGraph = new Button("Change Graph");
 		changeGraph.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		buttonPane.getChildren().add(changeGraph);
+		
+		updateGraph = new Button("Update Graph");
+		updateGraph.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
+		buttonPane.getChildren().add(updateGraph);
+		
 		mainPane.getChildren().add(buttonPane);
 		
 		Scene scene = new Scene(mainPane, 900, 700);
@@ -142,7 +147,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 			name = tableModel2.getData().get(lastClickedToolIndex).getName();
 		}
 		title = name + " Attributes";
-		ObjectGraphPanel objGraph = new ObjectGraphPanel(title, gui.getLog(), objTypeType, objType, 
+		ObjectGraphPane objGraph = new ObjectGraphPane(title, gui.getLog(), objTypeType, objType, 
 				name, gui.getBranch(), gui);
 		while (graphPane.getChildren().size() > 0) {
 			graphPane.getChildren().remove(0);
@@ -174,7 +179,9 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 				mainPane.getChildren().remove(projectPane);
 			}
 		}
-		updateGraph();
+		if (!gui.getEngine().isRunning()) {
+			updateGraph();
+		}
 	}
 	
 	@Override
@@ -186,9 +193,15 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 		} else if (source == projectTab) {
 			lastClickedProject = true;
 			update();
+			if (gui.getEngine().isRunning()) {
+				updateGraph();
+			}
 		} else if (source == toolsTab) {
 			lastClickedProject = false;
 			update();
+			if (gui.getEngine().isRunning()) {
+				updateGraph();
+			}
 		} else if (source == changeGraph) {
 			if (lastClickedProject) {
 				lastClickedProjectIndex = table.getSelectionModel().getSelectedIndex();
@@ -207,6 +220,8 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 					update();
 				}
 			}
+		} else if (source == updateGraph) {
+			updateGraph();
 		}
 	}
 
