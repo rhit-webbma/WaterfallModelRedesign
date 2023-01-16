@@ -562,4 +562,8 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 			descriptionArea.positionCaret(0);
 		}
 	}
+	
+	public ArrayList<State> getLog() {
+		return this.log;
+	}
 }
