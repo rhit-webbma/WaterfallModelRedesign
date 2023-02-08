@@ -20,8 +20,7 @@ public class Logic {
 		destChecker = new DestroyerChecker(state, ruleEx, trigChecker);
 		ruleEx.setTriggerChecker(trigChecker);
 		ruleEx.setDestroyerChecker(destChecker);
-		menInputMgr = new MenuInputManager(state, trigChecker, destChecker,
-				ruleEx);
+		menInputMgr = new MenuInputManager(state, trigChecker, destChecker, ruleEx);
 	}
 
 	public MenuInputManager getMenuInputManager() {

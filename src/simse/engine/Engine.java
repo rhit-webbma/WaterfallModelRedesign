@@ -191,15 +191,7 @@ public class Engine extends TimerTask implements EventHandler<ActionEvent> {
 				}
 			}
 		} else {
-			try {
-				gui.getTabPanel().getClockPanel().resetAdvClockImage();
-			} catch (NullPointerException e) {
-				System.out.println("It's null, what's null who the fuck knows");
-				System.out.println("Gui: " + gui);
-				System.out.println("TabPanel: " + gui.getTabPanel());
-				System.out.println("ClockPanel: " + gui.getTabPanel().getClockPanel());
-			}
-			
+			gui.getTabPanel().getClockPanel().resetAdvClockImage();
 		}
 	}
 }
