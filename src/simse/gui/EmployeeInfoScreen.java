@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import simse.adts.objects.Employee;
 import simse.adts.objects.SoftwareEngineer;
 import simse.gui.util.JavaFXHelpers;
 import simse.logic.Logic;
@@ -33,7 +34,7 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 	SimSEGUI gui;
 	Logic logic;
 	State state;
-	SoftwareEngineer engineer;
+	Employee employee;
 	
 	Button actionsButton; 
 	ListView<String> attributes;
@@ -47,18 +48,18 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		}
 	};
 
-	public EmployeeInfoScreen(State s, SimSEGUI gui, Logic l, SoftwareEngineer engineer) {
+	public EmployeeInfoScreen(State s, SimSEGUI gui, Logic l, Employee employee) {
 		this.state = s;
 		this.gui = gui;
 		this.logic = l;
 		this.mainPane = new VBox();
 		this.actions = new ContextMenu();
-		this.engineer = engineer;
+		this.employee = employee;
 		
-		String engineerName = engineer.getName();
+		String engineerName = employee.getName();
 		this.setTitle(engineerName);
 		
-		Vector<String> menuItems = engineer.getMenu();
+		Vector<String> menuItems = employee.getMenu();
 		for (int i = 0; i < menuItems.size(); i++) {
 			String item = menuItems.elementAt(i);
 			MenuItem tempItem = new MenuItem(item);
@@ -68,7 +69,7 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		
 		StackPane imagePane = new StackPane();
 		imagePane.setMinSize(110, 110);
-		ImageView img = JavaFXHelpers.createImageView("src/simse/gui/icons/" + engineer.getName() + ".gif");
+		ImageView img = JavaFXHelpers.createImageView("src/simse/gui/icons/" + employee.getName() + ".gif");
 		if (img == null) {
 			img = JavaFXHelpers.createImageView("src/simse/gui/icons/alex.gif");
 		}
@@ -81,24 +82,23 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		actionsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		
 		attributes = new ListView<String>();
-		attributes.getItems().add("Energy: " + Double.toString(engineer.getEnergy()));
-		attributes.getItems().add("Mood: " + Double.toString(engineer.getMood()));
-		attributes.getItems().add("Requirements Experience: " + engineer.getRequirementsExperience());
-		attributes.getItems().add("Design Experience: " + engineer.getDesignExperience());
-		attributes.getItems().add("Coding Experience: " + engineer.getCodingExperience());
-		attributes.getItems().add("Testing Experience: " + engineer.getTestingExperience());
-		attributes.getItems().add("Pay Rate: " + Double.toString(engineer.getPayRate()));
-		attributes.getItems().add("On Break: " + Boolean.toString(engineer.getOnBreak()));
+		attributes.getItems().add("Energy: " + Double.toString(employee.getEnergy()));
+		attributes.getItems().add("Mood: " + Double.toString(employee.getMood()));
+		attributes.getItems().add("Requirements Experience: " + employee.getRequirementsExperience());
+		attributes.getItems().add("Design Experience: " + employee.getDesignExperience());
+		attributes.getItems().add("Coding Experience: " + employee.getCodingExperience());
+		attributes.getItems().add("Testing Experience: " + employee.getTestingExperience());
+		attributes.getItems().add("Pay Rate: " + Double.toString(employee.getPayRate()));
 		attributes.setMaxHeight(attributes.getItems().size()*24);
 		
-		String objTypeFull = engineer.getClass().toString();
+		String objTypeFull = employee.getClass().toString();
 		String[] objTypeArr = objTypeFull.split("\\.");
 		String objType = objTypeArr[objTypeArr.length - 1];
 		String objTypeType = "Employee";
 		String title = engineerName + " Attributes";
 		ObjectGraphPane objGraph = new ObjectGraphPane(title, gui.getLog(), objTypeType, objType, engineerName, gui.getBranch(), gui);		
 		
-		Label name = new Label(engineer.getName());
+		Label name = new Label(employee.getName());
 		name.setFont(new Font(30));
 		mainPane.getChildren().add(name);
 		mainPane.getChildren().add(imagePane);
@@ -113,7 +113,7 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 	
 	public void popupMenuActions(MenuItem source) {
 		MenuItem item = (MenuItem) source;
-		logic.getMenuInputManager().menuItemSelected(engineer, item.getText(), gui);
+		logic.getMenuInputManager().menuItemSelected(employee, item.getText(), gui);
 		gui.getWorld().update();
 	}
 
