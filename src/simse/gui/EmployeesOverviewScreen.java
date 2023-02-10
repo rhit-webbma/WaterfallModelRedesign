@@ -69,7 +69,7 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 		separator.setPadding(new Insets(10, 0, 15, 0));
 		mainPane.getChildren().add(separator);
 		
-		tableModel = new SoftwareEngineerTableModel(s);
+		tableModel = new EmployeeTableModel(s);
 		table = tableModel.createTable();
 
 		// Create panes:
