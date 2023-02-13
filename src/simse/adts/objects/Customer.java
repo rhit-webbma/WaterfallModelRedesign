@@ -17,6 +17,7 @@ public abstract class Customer extends SSObject implements Cloneable {
 	public Object clone() {
 		Customer cl = (Customer) (super.clone());
 		cl.overheadText = overheadText;
+		cl.name = name;
 		return cl;
 	}
 

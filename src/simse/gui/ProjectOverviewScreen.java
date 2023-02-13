@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import simse.adts.objects.Project;
 import simse.adts.objects.SEProject;
 import simse.adts.objects.SoftwareEngineer;
 import simse.adts.objects.Tool;
@@ -30,8 +31,8 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 	private Label titleLabel;
 	private Label toolsLabel;
 	
-	private TableModel<SEProject> tableModel;
-	private TableView<SEProject> table;
+	private TableModel<Project> tableModel;
+	private TableView<Project> table;
 	
 	private TableModel<Tool> tableModel2;
 	private TableView<Tool> table2;
@@ -106,7 +107,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 		projectTopPane.setAlignment(Pos.TOP_CENTER);
 		BorderPane.setAlignment(projectTopPane, Pos.TOP_CENTER);
 		
-		tableModel = new SEProjectTableModel(this.state);
+		tableModel = new ProjectTableModel(this.state);
 		table = tableModel.createTable();
 		table.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		table.setMaxHeight(50);
@@ -158,7 +159,7 @@ public class ProjectOverviewScreen extends Stage implements EventHandler<MouseEv
 	public void update() {
 		if (lastClickedProject) {
 			projectPane.getChildren().remove(table);
-			tableModel = new SEProjectTableModel(state);
+			tableModel = new ProjectTableModel(state);
 			table = tableModel.createTable();
 			projectPane.setCenter(table);
 			if (!mainPane.getChildren().contains(projectPane)) {

@@ -2,11 +2,83 @@
 package simse.adts.objects;
 
 public abstract class Project extends SSObject implements Cloneable {
-	public Project() {
+	private String description;
+	private double budget;
+	private double moneyspent;
+	private int allottedtime;
+	private int timeused;
+	
+	public Project(String description, double budget, double moneyspent, int allottedtime, int timeused) {
+		this.description = description;
+		this.budget = budget;
+		this.moneyspent = moneyspent;
+		this.allottedtime = allottedtime;
+		this.timeused = timeused;
 	}
 
 	public Object clone() {
 		Project cl = (Project) (super.clone());
+		cl.description = description;
+		cl.budget = budget;
+		cl.moneyspent = moneyspent;
+		cl.allottedtime = allottedtime;
+		cl.timeused = timeused;
 		return cl;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String a) {
+		description = a;
+	}
+	
+	public double getBudget() {
+		return budget;
+	}
+
+	public void setBudget(double a) {
+		if (a < 1.0) {
+			budget = 1.0;
+		} else {
+			budget = a;
+		}
+	}
+
+	public double getMoneySpent() {
+		return moneyspent;
+	}
+
+	public void setMoneySpent(double a) {
+		if (a < 0.0) {
+			moneyspent = 0.0;
+		} else {
+			moneyspent = a;
+		}
+	}
+
+	public int getAllottedTime() {
+		return allottedtime;
+	}
+
+	public void setAllottedTime(int a) {
+		if (a < 1) {
+			allottedtime = 1;
+		} else {
+			allottedtime = a;
+		}
+	}
+
+	public int getTimeUsed() {
+		return timeused;
+	}
+
+	public void setTimeUsed(int a) {
+		if (a < 0) {
+			timeused = 0;
+		} else {
+			timeused = a;
+		}
 	}
 }
