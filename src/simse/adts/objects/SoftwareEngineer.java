@@ -40,6 +40,10 @@ public class SoftwareEngineer extends Employee implements Cloneable {
 		setEnergy(e1);
 		setMood(m2);
 		setHealth(h3);
+		setRequirementsExperience(r4);
+		setDesignExperience(d5);
+		setCodingExperience(c6);
+		setTestingExperience(t7);
 		setProductivityInRequirementsUnadjusted(p8);
 		setProductivityInDesignUnadjusted(p9);
 		setProductivityInCodingUnadjusted(p10);

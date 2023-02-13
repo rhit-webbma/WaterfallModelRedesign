@@ -121,7 +121,7 @@ public class EmployeesOverviewScreen extends Stage implements EventHandler<Mouse
 	public void update(boolean isEmployee) {
 		mainPane.getChildren().remove(tablePane);
 		if (isEmployee) {
-			tableModel = new SoftwareEngineerTableModel(state);
+			tableModel = new EmployeeTableModel(state);
 			if (!mainPane.getChildren().contains(buttonPaneEmp)) {
 				mainPane.getChildren().add(buttonPaneEmp);
 			}

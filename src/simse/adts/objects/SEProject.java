@@ -21,6 +21,7 @@ public class SEProject extends Project implements Cloneable {
 	public SEProject(String d0, int r1, double b2, double m3, int a4, int t5,
 			double c6, double c7, double b8, double s9, int s10, boolean s11,
 			boolean s12, boolean s13, boolean s14) {
+		super(d0, b2, m3, a4, t5);
 		setDescription(d0);
 		setRequiredSizeOfCode(r1);
 		setBudget(b2);

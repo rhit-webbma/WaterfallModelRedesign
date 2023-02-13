@@ -17,11 +17,11 @@ public class EmployeeTableModel extends TableModel<Employee>{
 		columnNames.add("Name");
 		columnNames.add("Energy");
 		columnNames.add("Mood");
-		columnNames.add("Requirements Experience");
-		columnNames.add("Design Experience");
-		columnNames.add("Coding Experience");
-		columnNames.add("Testing Experience");
-		columnNames.add("Pay Rate");
+		columnNames.add("RequirementsExperience");
+		columnNames.add("DesignExperience");
+		columnNames.add("CodingExperience");
+		columnNames.add("TestingExperience");
+		columnNames.add("PayRate");
 	}
 
 	@Override
