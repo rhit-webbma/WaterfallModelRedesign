@@ -36,6 +36,9 @@ public class SoftwareEngineer extends Employee implements Cloneable {
 			double e20, double e21, double e22, double e23, boolean o24,
 			double p25) {
 		super(n0, e1, m2, r4, d5, c6, t7, p25);
+		setName(n0);
+		setEnergy(e1);
+		setMood(m2);
 		setHealth(h3);
 		setProductivityInRequirementsUnadjusted(p8);
 		setProductivityInDesignUnadjusted(p9);
