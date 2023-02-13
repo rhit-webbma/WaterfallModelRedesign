@@ -6,10 +6,12 @@ import simse.gui.TrackPanel;
 public abstract class Customer extends SSObject implements Cloneable {
 	private String overheadText;
 	private TrackPanel track;
+	private String name;
 
-	public Customer() {
+	public Customer(String name) {
 		overheadText = new String();
 		track = TrackPanel.getInstance();
+		this.name = name;
 	}
 
 	public Object clone() {
@@ -39,4 +41,13 @@ public abstract class Customer extends SSObject implements Cloneable {
 			return true;
 		}
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String a) {
+		name = a;
+	}
+	
 }

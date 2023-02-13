@@ -15,8 +15,13 @@ public class EmployeeTableModel extends TableModel<Employee>{
 	@Override
 	void initColNames() {
 		columnNames.add("Name");
-		columnNames.add("PercentComplete");
-		columnNames.add("NumKnownErrors");
+		columnNames.add("Energy");
+		columnNames.add("Mood");
+		columnNames.add("Requirements Experience");
+		columnNames.add("Design Experience");
+		columnNames.add("Coding Experience");
+		columnNames.add("Testing Experience");
+		columnNames.add("Pay Rate");
 	}
 
 	@Override

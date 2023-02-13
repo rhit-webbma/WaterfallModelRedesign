@@ -5,6 +5,7 @@ public class ACustomer extends Customer implements Cloneable {
 	private String name;
 
 	public ACustomer(String n0) {
+		super(n0);
 		setName(n0);
 	}
 
