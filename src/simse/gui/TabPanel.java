@@ -238,10 +238,6 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 					artifactFrame.setIconified(false);
 				}
 				artifactFrame.show();
-				Vector<String> emps = new Vector<>();
-				emps.add("chris");
-				emps.add("emily");
-				melloPane.addTaskInProgress("Code", emps);
 			}
 		});
 		buttons.getChildren().add(artifactsButton);
