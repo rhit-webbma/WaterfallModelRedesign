@@ -59,6 +59,16 @@ public abstract class DisplayableCharacter extends Group{
 		displayedCharacter.startAnim();	
 	}
 	
+	public Point2D getPointOfSprite() {
+		return displayedCharacter.localToParent(getTranslateX(), getTranslateY());
+	}
+	
+	public boolean withinRange(double x, double y) {
+		if(!(x <= previousX + (width / 2) && x >= previousX - (width / 2))) return false;
+		if(!(y <= previousY + (height / 2) && y >= previousY - (height / 2))) return false;
+		return true;
+	}
+	
 	public void updateAnimationListLocation(double x, double y) {
 		for(SimSESprite sprite : animationList) {
 			sprite.setX(x);
@@ -114,28 +124,6 @@ public abstract class DisplayableCharacter extends Group{
 			
 			transition.setPath(newPath);
 			transition.setDelay(Duration.seconds(randomNumber));
-			
-				
-//			Timeline delayTimer = new Timeline(
-//	                new KeyFrame(Duration.seconds(randomNumber), 
-//	                new EventHandler<ActionEvent>() {
-//
-//			   @Override
-//			   public void handle(ActionEvent event) {
-//				   System.out.println("Stopping");
-//				   displayedCharacter.stopAnim();
-//			   }
-//			   }));
-//			
-//			delayTimer.setCycleCount(1);
-//			
-//			delayTimer.setOnFinished(delayEvent -> {
-//			   displayedCharacter = animationList.get(0);
-//	 		   displayedCharacter.startAnim();
-//	 		   updateDisplayedCharacter();
-//			});
-//			
-//			delayTimer.play();
 			transition.play();
 		});
 		
@@ -153,10 +141,11 @@ public abstract class DisplayableCharacter extends Group{
 	   public void handle(ActionEvent event) {
 		   
            Point2D pointOfSprite = displayedCharacter.localToParent(getTranslateX(), getTranslateY());
-
 		   
 		   double currentX = pointOfSprite.getX();
 		   double currentY = pointOfSprite.getY();
+		   
+//		   System.out.println("x: " + currentX + "y: " + currentY);
 		   
 		   //Right Anim
 		   if(currentX > previousX && currentY == previousY) {

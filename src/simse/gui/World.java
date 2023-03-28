@@ -13,7 +13,9 @@ import animations.SimSECharacter;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -40,13 +42,15 @@ import simse.state.State;
 
 public class World extends SimSEMap implements EventHandler<Event> {
 	private int clickedHeightModifier = 5;
-	private int clickedX;
-	private int clickedY;
+	private double clickedX;
+	private double clickedY;
 	public final int xViewable = 9;
 	public final int yViewable = 9;
 	
 	private final double width = 1180;
 	private final double height = 720;
+	private final double MOUSE_SPACER_X = 23.6;
+	private final double MOUSE_SPACER_Y = 163.3;
 
 	private final SimSEGUI mainGUIFrame;
 
@@ -63,7 +67,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	private ContextMenu popup;
 	private PopupListener popupListener;
 
-	private DisplayedEmployee selectedUser;
+	private Employee selectedEmployee;
 
 	// how much to shift the map when a resize of the screen occurs:
 	private double xspacer;
@@ -119,26 +123,28 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		
 		this.getChildren().add(mapView);
 		
-		for (int i = 0; i < sopUsers.size(); i++) {
-			DisplayedEmployee tmp = sopUsers.get(i);
-			double[][] pathDirections = PathData.getStartingPath(i);
-			CreatablePath newPath = new CreatablePath(
-					MapData.getStartingMapLocation(i)[0] + 5, 
-					MapData.getStartingMapLocation(i)[1],
-					pathDirections,
-					PathData.getAnimationData(i)[0],
-					PathData.getAnimationData(i)[1]
-					);
-			DisplayableCharacter char1 = new SimSECharacter(newPath, i, 50, 75);
-			this.getChildren().add(char1);
-			char1.requestFocus();
+		Vector<Employee> allEmp = state.getEmployeeStateRepository().getAll();
+		
+		for (int i = 0; i < allEmp.size(); i++) {
+//			DisplayedEmployee tmp = sopUsers.get(i);
+//			double[][] pathDirections = PathData.getStartingPath(i);
+//			CreatablePath newPath = new CreatablePath(
+//					MapData.getStartingMapLocation(i)[0] + 5, 
+//					MapData.getStartingMapLocation(i)[1],
+//					pathDirections,
+//					PathData.getAnimationData(i)[0],
+//					PathData.getAnimationData(i)[1]
+//					);
+			DisplayableCharacter tmpChar = allEmp.get(i).getCharacterModel();
+			this.getChildren().add(tmpChar);
+			tmpChar.requestFocus();
 		}
+
 		
 		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
 		    @Override
 		    public void handle(MouseEvent event) {
-		        System.out.println("X: " + event.getSceneX());
-		        System.out.println("Y: " + event.getSceneY());
+		        
 		    }
 		});
 		
@@ -150,7 +156,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	}
 
 	private void loadDefaultSettings() {
-		selectedUser = null;
+		selectedEmployee = null;
 		setBackground(JavaFXHelpers.createBackgroundColor(Color.BLUE));
 		addEventHandler(KeyEvent.ANY, this);
 		addEventHandler(MouseEvent.ANY, this);
@@ -172,8 +178,8 @@ public class World extends SimSEMap implements EventHandler<Event> {
 	public void createPopupMenu() {
 		popup.getItems().removeAll();
 
-		if (selectedUser != null) {
-			Vector<String> menuItems = selectedUser.getEmployee().getMenu();
+		if (selectedEmployee != null) {
+			Vector<String> menuItems = selectedEmployee.getMenu();
 			for (int i = 0; i < menuItems.size(); i++) {
 				String item = menuItems.elementAt(i);
 				MenuItem tempItem = new MenuItem(item);
@@ -269,7 +275,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 
 	public void popupMenuActions(MenuItem source) {
 		MenuItem item = (MenuItem) source;
-		logic.getMenuInputManager().menuItemSelected(selectedUser.getEmployee(), item.getText(), mainGUIFrame);
+		logic.getMenuInputManager().menuItemSelected(selectedEmployee, item.getText(), mainGUIFrame);
 		update();
 	}
 
@@ -290,20 +296,38 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 			MouseEvent mEvent = (MouseEvent) event;
 			// -5 is the offset for the border around the GUI
-			clickedX = (int) ((mEvent.getX() - xspacer - 5) / MapData.TILE_SIZE);
-			clickedY = (int) ((mEvent.getY() - yspacer - clickedHeightModifier) / MapData.TILE_SIZE);
-
+//			clickedX = (int) ((mEvent.getX() - xspacer - 5) / MapData.TILE_SIZE);
+//			clickedY = (int) ((mEvent.getY() - yspacer - clickedHeightModifier) / MapData.TILE_SIZE);
+			
+			clickedX = mEvent.getSceneX() - MOUSE_SPACER_X;
+			clickedY = mEvent.getSceneY() - MOUSE_SPACER_Y;
+			
+//	        System.out.println("X: " + (event.getSceneX() - MOUSE_SPACER_X));
+//	        System.out.println("Y: " + (event.getSceneY() - MOUSE_SPACER_Y));
+			Vector<Employee> allEmp = state.getEmployeeStateRepository().getAll();
 			if (mEvent.isPrimaryButtonDown()) // left button clicked
 			{
-				for (int i = 0; i < sopUsers.size(); i++) {
-					DisplayedEmployee tmp = sopUsers.get(i);
-					if (tmp.checkXYLocations(clickedX, clickedY) && tmp.isActivated()) {
-						selectedUser = tmp;
-						i = sopUsers.size();
+//				for (int i = 0; i < sopUsers.size(); i++) {
+//					DisplayedEmployee tmp = sopUsers.get(i);
+//					if (tmp.checkXYLocations(clickedX, clickedY) && tmp.isActivated()) {
+//						selectedUser = tmp;
+//						i = sopUsers.size();
+//						mainGUIFrame.getTabPanel().setGUIChanged();
+//						mainGUIFrame.getTabPanel().setObjectInFocus(tmp.getEmployee());
+//						mainGUIFrame.getAttributePanel().setGUIChanged();
+//						mainGUIFrame.getAttributePanel().setObjectInFocus(tmp.getEmployee(), tmp.getUserIcon());
+//					}
+//				}
+				
+				for(int i = 0; i < allEmp.size(); i++) {
+					DisplayableCharacter empModel = allEmp.get(i).getCharacterModel();
+					if(empModel.withinRange(clickedX, clickedY)) {
+						selectedEmployee = allEmp.get(i);
 						mainGUIFrame.getTabPanel().setGUIChanged();
-						mainGUIFrame.getTabPanel().setObjectInFocus(tmp.getEmployee());
+						mainGUIFrame.getTabPanel().setObjectInFocus(allEmp.get(i));
 						mainGUIFrame.getAttributePanel().setGUIChanged();
-						mainGUIFrame.getAttributePanel().setObjectInFocus(tmp.getEmployee(), tmp.getUserIcon());
+						mainGUIFrame.getAttributePanel().setObjectInFocus(allEmp.get(i), 
+								empModel.getStaticImage().getImage());
 					}
 				}
 			}
@@ -313,17 +337,27 @@ public class World extends SimSEMap implements EventHandler<Event> {
 															// click
 			{
 				boolean found = false;
-				for (int i = 0; i < sopUsers.size(); i++) {
-					DisplayedEmployee tmp = sopUsers.get(i);
-					if (tmp.checkXYLocations(clickedX, clickedY) && tmp.isActivated()) {
-						selectedUser = tmp;
+//				for (int i = 0; i < sopUsers.size(); i++) {
+//					DisplayedEmployee tmp = sopUsers.get(i);
+//					if (tmp.checkXYLocations(clickedX, clickedY) && tmp.isActivated()) {
+//						selectedUser = tmp;
+//						popupListener.setEnabled(true);
+//						found = true;
+//						i = sopUsers.size();
+//
+//						createPopupMenu();
+//					}
+//				}
+				for(int i = 0; i < allEmp.size(); i++) {
+					DisplayableCharacter empModel = allEmp.get(i).getCharacterModel();
+					if(empModel.withinRange(clickedX, clickedY)) {
+						selectedEmployee = allEmp.get(i);
 						popupListener.setEnabled(true);
 						found = true;
-						i = sopUsers.size();
-
 						createPopupMenu();
 					}
 				}
+				
 
 				// did not click on a User object, disable right click
 				if (!found)
