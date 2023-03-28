@@ -319,7 +319,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 						mainGUIFrame.getTabPanel().setObjectInFocus(allEmp.get(i));
 						mainGUIFrame.getAttributePanel().setGUIChanged();
 						mainGUIFrame.getAttributePanel().setObjectInFocus(allEmp.get(i), 
-								empModel.getStaticImage(false).getImage());
+								empModel.getDisplayedCharacter(false).getImage());
 					}
 				}
 			}

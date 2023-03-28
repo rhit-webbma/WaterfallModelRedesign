@@ -217,7 +217,7 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, Si
 //			empPanel.setId("ActionPanelEmployee");
 //			picPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 			if (empsToPicLabels.get(emp) == null) {				
-				ImageView ico = allEmps.get(i).getCharacterModel().getStaticImage(false);
+				ImageView ico = allEmps.get(i).getCharacterModel().getDisplayedCharacter(false);
 
 				ico.setFitHeight(40);
 				ico.setFitWidth(40);

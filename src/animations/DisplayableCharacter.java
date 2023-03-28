@@ -82,11 +82,11 @@ public abstract class DisplayableCharacter extends Group{
 		this.getChildren().setAll(displayedCharacter);
 	}
 	
-	public ImageView getStaticImage(boolean motion) {
-		if(motion) {
-			return this.displayedCharacter;
+	public ImageView getDisplayedCharacter(boolean staticImage) {
+		if(staticImage) {
+			return new CharacterIdleFront(characterNum);
 		} else {
-			return animationList.get(0);
+			return this.displayedCharacter;
 		}
 		
 	}
