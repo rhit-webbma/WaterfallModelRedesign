@@ -160,7 +160,9 @@ public class EmployeeParticipantSelectionDialog extends Dialog<Action> implement
 				Vector<Employee> allEmp = state.getEmployeeStateRepository().getAll();
 				for(int k = 0; k < allEmp.size(); k++) {
 					if(allEmp.get(k).getName().equals(((SoftwareEngineer) tempObj).getName())) {
-						ImageView icon = allEmp.get(k).getCharacterModel().getStaticImage(false);
+						ImageView icon = allEmp.get(k).getCharacterModel().getDisplayedCharacter(true);
+						icon.setScaleX(1.5);
+						icon.setScaleY(1.5);
 						tempPane.setRight(new Label("", icon));
 						middlePane.getChildren().add(tempPane);
 					}

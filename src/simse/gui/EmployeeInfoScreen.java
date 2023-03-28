@@ -69,12 +69,12 @@ public class EmployeeInfoScreen extends Stage implements EventHandler<MouseEvent
 		
 		StackPane imagePane = new StackPane();
 		imagePane.setMinSize(110, 110);
-		ImageView img = employee.getCharacterModel().getDisplayedCharacter(false);
+		ImageView img = employee.getCharacterModel().getDisplayedCharacter(true);
 		if (img == null) {
 			img = JavaFXHelpers.createImageView("src/simse/gui/icons/alex.gif");
 		}
-		img.setScaleX(2);
-		img.setScaleY(2);
+		img.setScaleX(5);
+		img.setScaleY(5);
 		imagePane.getChildren().add(img);
 		
 		
