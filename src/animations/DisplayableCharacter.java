@@ -82,8 +82,13 @@ public abstract class DisplayableCharacter extends Group{
 		this.getChildren().setAll(displayedCharacter);
 	}
 	
-	public ImageView getStaticImage() {
-		return this.displayedCharacter;
+	public ImageView getStaticImage(boolean motion) {
+		if(motion) {
+			return this.displayedCharacter;
+		} else {
+			return animationList.get(0);
+		}
+		
 	}
 	
 	public void beginPathing() {

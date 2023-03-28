@@ -49,9 +49,6 @@ public class Engine extends TimerTask implements EventHandler<ActionEvent> {
 		timer.setDelay(Duration.millis(100));
 		timer.play();
 		
-		double[][] pathDirections = null;
-		CreatablePath newPath = null;
-		
 
 		this.generateNewPath(0);
 		SoftwareEngineer a0 = new SoftwareEngineer("Andre", 1.0, 0.9, 1.0,
@@ -62,13 +59,13 @@ public class Engine extends TimerTask implements EventHandler<ActionEvent> {
 		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
 				.add(a0);
 		
-//		this.generateNewPath(1);
-//		SoftwareEngineer a1 = new SoftwareEngineer("Anita", 0.7, 0.6, 1.0,
-//				"8 years", "5 years", "2 years, hates coding", "6 months", 0.8,
-//				0.5, 0.3, 0.1, 0.005, 0.1, 0.25, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0,
-//				0.0, 0.0, 0.0, false, 33.0, new SimSECharacter(characterPath, 1, 50, 75));
-//		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
-//				.add(a1);
+		this.generateNewPath(1);
+		SoftwareEngineer a1 = new SoftwareEngineer("Anita", 0.7, 0.6, 1.0,
+				"8 years", "5 years", "2 years, hates coding", "6 months", 0.8,
+				0.5, 0.3, 0.1, 0.005, 0.1, 0.25, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, false, 33.0, new SimSECharacter(characterPath, 1, 50, 75));
+		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
+				.add(a1);
 //		
 //		this.generateNewPath(2);
 //		SoftwareEngineer a2 = new SoftwareEngineer("Calvin", 0.3, 0.6, 1.0,

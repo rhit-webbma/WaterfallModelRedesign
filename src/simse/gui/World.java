@@ -139,14 +139,6 @@ public class World extends SimSEMap implements EventHandler<Event> {
 			this.getChildren().add(tmpChar);
 			tmpChar.requestFocus();
 		}
-
-		
-		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		        
-		    }
-		});
 		
 
 
@@ -327,7 +319,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 						mainGUIFrame.getTabPanel().setObjectInFocus(allEmp.get(i));
 						mainGUIFrame.getAttributePanel().setGUIChanged();
 						mainGUIFrame.getAttributePanel().setObjectInFocus(allEmp.get(i), 
-								empModel.getStaticImage().getImage());
+								empModel.getStaticImage(false).getImage());
 					}
 				}
 			}

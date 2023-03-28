@@ -119,6 +119,7 @@ public class EmployeeParticipantSelectionDialog extends Dialog<Action> implement
 			VBox middlePane = new VBox();
 			for (int i = 0; i < participants.size(); i++) {
 				SSObject tempObj = participants.elementAt(i);
+				
 				String label = new String();
 				if (tempObj instanceof SoftwareEngineer) {
 					label = ("SoftwareEngineer ("
@@ -155,9 +156,16 @@ public class EmployeeParticipantSelectionDialog extends Dialog<Action> implement
 				CheckBox tempCheckBox = new CheckBox(label);
 				tempPane.setLeft(tempCheckBox);
 				checkBoxes.add(tempCheckBox);
-				ImageView icon = ImageLoader.getImageFromURL(TabPanel.getImage(tempObj));
-				tempPane.setRight(new Label("", icon));
-				middlePane.getChildren().add(tempPane);
+//				ImageView icon = ImageLoader.getImageFromURL(TabPanel.getImage(tempObj));
+				Vector<Employee> allEmp = state.getEmployeeStateRepository().getAll();
+				for(int k = 0; k < allEmp.size(); k++) {
+					if(allEmp.get(k).getName().equals(((SoftwareEngineer) tempObj).getName())) {
+						ImageView icon = allEmp.get(k).getCharacterModel().getStaticImage(false);
+						tempPane.setRight(new Label("", icon));
+						middlePane.getChildren().add(tempPane);
+					}
+				}
+
 			}			
 			HBox checkPane = new HBox();
 			checkAllButton = new Button("Check All");
