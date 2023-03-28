@@ -3,6 +3,7 @@ package simse.adts.objects;
 
 import java.util.Vector;
 
+import animations.DisplayableCharacter;
 import simse.gui.TrackPanel;
 
 public abstract class Employee extends SSObject implements Cloneable {
@@ -18,6 +19,7 @@ public abstract class Employee extends SSObject implements Cloneable {
 	private String codingexperience;
 	private String testingexperience;
 	private double payrate;
+	private DisplayableCharacter characterModel;
 	
 	public Employee(String name,
 						double energy,
@@ -26,7 +28,8 @@ public abstract class Employee extends SSObject implements Cloneable {
 						String designexperience,
 						String codingexperience,
 						String testingexperience,
-						double payrate) {
+						double payrate,
+						DisplayableCharacter characterModel) {
 		menu = new Vector<String>();
 		clearMenu();
 		overheadText = new String();
@@ -39,6 +42,7 @@ public abstract class Employee extends SSObject implements Cloneable {
 		this.codingexperience = codingexperience;
 		this.testingexperience = testingexperience;
 		this.payrate = payrate;
+		this.characterModel = characterModel;
 	}
 
 	public Object clone() {
@@ -57,6 +61,7 @@ public abstract class Employee extends SSObject implements Cloneable {
 		cl.codingexperience = codingexperience;
 		cl.testingexperience = testingexperience;
 		cl.payrate = payrate;
+		cl.characterModel = characterModel;
 		return cl;
 	}
 
@@ -208,5 +213,13 @@ public abstract class Employee extends SSObject implements Cloneable {
 		} else {
 			payrate = a;
 		}
+	}
+	
+	public void setCharacterModel(DisplayableCharacter model) {
+		this.characterModel = model;
+	}
+	
+	public DisplayableCharacter getCharacterModel() {
+		return this.characterModel;
 	}
 }

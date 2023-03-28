@@ -76,7 +76,7 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, Si
 	private Hashtable<Employee, Label> empsToPicLabels;
 	private Hashtable<Employee, Label> empsToKeyLabels;
 	
-	ArrayList<DisplayableCharacter> characters;
+//	ArrayList<DisplayableCharacter> characters;
 
 	private VBox layout;
 
@@ -139,13 +139,14 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, Si
 //		layout.getChildren().add(actionPane);
 		layout.getChildren().add(titlePanel);
 		
-		Vector<Employee> allEmps = state.getEmployeeStateRepository().getAll();
-		characters = new ArrayList<DisplayableCharacter>();
+//		Vector<Employee> allEmps = state.getEmployeeStateRepository().getAll();
+//		characters = new ArrayList<DisplayableCharacter>();
 		
-		for (int i = 0; i < allEmps.size(); i++) {
-			DisplayableCharacter char1 = new SimSECharacter(i, 50, 75);
-			characters.add(char1);
-		}
+//		for (int i = 0; i < allEmps.size(); i++) {
+//			DisplayableCharacter char1 = new SimSECharacter(i, 50, 75);
+//			allEmps.get(i).setCharacterModel(char1);
+//			characters.add(char1);
+//		}
 		update();
 		this.getChildren().add(layout);		
 	}
@@ -216,7 +217,7 @@ public class EmployeesPanel extends Pane implements EventHandler<MouseEvent>, Si
 //			empPanel.setId("ActionPanelEmployee");
 //			picPanel.setBackground(JavaFXHelpers.createBackgroundColor(Color.rgb(102, 102, 102, 1)));
 			if (empsToPicLabels.get(emp) == null) {				
-				ImageView ico = characters.get(i).getStaticImage();
+				ImageView ico = allEmps.get(i).getCharacterModel().getStaticImage();
 
 				ico.setFitHeight(40);
 				ico.setFitWidth(40);
