@@ -293,7 +293,7 @@ public class ExplanatoryTool extends Stage implements EventHandler<MouseEvent>{
 		mainPane.add(spacerPane2, 0, 8, 3, 1);
 		
 		Scene scene = new Scene(mainPane, 900, 720);
-		scene.getStylesheets().add("style.css");
+		scene.getStylesheets().add("src\\simse\\style.css");
 		this.setScene(scene);
 		hide();
 	}

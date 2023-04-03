@@ -66,47 +66,47 @@ public class Engine extends TimerTask implements EventHandler<ActionEvent> {
 				0.0, 0.0, 0.0, false, 33.0, new SimSECharacter(characterPath, 1, 50, 75));
 		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
 				.add(a1);
-//		
-//		this.generateNewPath(2);
-//		SoftwareEngineer a2 = new SoftwareEngineer("Calvin", 0.3, 0.6, 1.0,
-//				"9 years, considers himself an expert", "8 months", "6 years",
-//				"2 weeks", 0.9, 0.1, 0.7, 0.1, 0.05, 0.4, 0.1, 0.6, 0.0, 0.0,
-//				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, 32.0, new SimSECharacter(characterPath, 2, 50, 75));
-//		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
-//				.add(a2);
-//		
-//		this.generateNewPath(3);
-//		SoftwareEngineer a3 = new SoftwareEngineer("Emily", 0.7, 0.8, 1.0,
-//				"3 years", "5 years", "6 years", "1.5 years", 0.3, 0.6, 0.7,
-//				0.3, 0.05, 0.1, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-//				0.0, false, 30.0, new SimSECharacter(characterPath, 3, 50, 75));
-//		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
-//				.add(a3);
-//		
-//		this.generateNewPath(4);
-//		SoftwareEngineer a4 = new SoftwareEngineer("Mimi", 1.0, 0.8, 1.0,
-//				"3 months, beginner", "5 months, beginner",
-//				"3 months, beginner", "8 years, testing is her life", 0.1, 0.2,
-//				0.3, 0.95, 0.15, 0.1, 0.15, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-//				0.0, 0.0, false, 20.0, new SimSECharacter(characterPath, 4, 50, 75));
-//		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
-//				.add(a4);
-//		
-//		this.generateNewPath(5);
-//		SoftwareEngineer a5 = new SoftwareEngineer("Pedro", 0.5, 0.4, 1.0,
-//				"7 years", "2 years, but hates design", "8 years", "15 years",
-//				0.7, 0.2, 0.8, 1.0, 0.1, 0.25, 0.2, 0.01, 0.0, 0.0, 0.0, 0.0,
-//				0.0, 0.0, 0.0, 0.0, false, 28.5, new SimSECharacter(characterPath, 5, 50, 75));
-//		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
-//				.add(a5);
-//		
-//		this.generateNewPath(6);
-//		SoftwareEngineer a6 = new SoftwareEngineer("Roger", 0.3, 0.8, 1.0,
-//				"Beginner", "Beginner", "Beginner", "Beginner", 0.1, 0.1, 0.1,
-//				0.1, 0.05, 0.1, 0.15, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-//				0.0, false, 10.0, new SimSECharacter(characterPath, 6, 50, 75));
-//		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
-//				.add(a6);
+		
+		this.generateNewPath(2);
+		SoftwareEngineer a2 = new SoftwareEngineer("Calvin", 0.3, 0.6, 1.0,
+				"9 years, considers himself an expert", "8 months", "6 years",
+				"2 weeks", 0.9, 0.1, 0.7, 0.1, 0.05, 0.4, 0.1, 0.6, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, 32.0, new SimSECharacter(characterPath, 2, 50, 75));
+		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
+				.add(a2);
+		
+		this.generateNewPath(3);
+		SoftwareEngineer a3 = new SoftwareEngineer("Emily", 0.7, 0.8, 1.0,
+				"3 years", "5 years", "6 years", "1.5 years", 0.3, 0.6, 0.7,
+				0.3, 0.05, 0.1, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, false, 30.0, new SimSECharacter(characterPath, 3, 50, 75));
+		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
+				.add(a3);
+		
+		this.generateNewPath(4);
+		SoftwareEngineer a4 = new SoftwareEngineer("Mimi", 1.0, 0.8, 1.0,
+				"3 months, beginner", "5 months, beginner",
+				"3 months, beginner", "8 years, testing is her life", 0.1, 0.2,
+				0.3, 0.95, 0.15, 0.1, 0.15, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, false, 20.0, new SimSECharacter(characterPath, 4, 50, 75));
+		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
+				.add(a4);
+		
+		this.generateNewPath(5);
+		SoftwareEngineer a5 = new SoftwareEngineer("Pedro", 0.5, 0.4, 1.0,
+				"7 years", "2 years, but hates design", "8 years", "15 years",
+				0.7, 0.2, 0.8, 1.0, 0.1, 0.25, 0.2, 0.01, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0, false, 28.5, new SimSECharacter(characterPath, 5, 50, 75));
+		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
+				.add(a5);
+		
+		this.generateNewPath(6);
+		SoftwareEngineer a6 = new SoftwareEngineer("Roger", 0.3, 0.8, 1.0,
+				"Beginner", "Beginner", "Beginner", "Beginner", 0.1, 0.1, 0.1,
+				0.1, 0.05, 0.1, 0.15, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, false, 10.0, new SimSECharacter(characterPath, 6, 50, 75));
+		state.getEmployeeStateRepository().getSoftwareEngineerStateRepository()
+				.add(a6);
 
 		RequirementsDocument a7 = new RequirementsDocument("Requirements", 0.0,
 				0.0, 0.0, 0.0, 0.0, 0.0);

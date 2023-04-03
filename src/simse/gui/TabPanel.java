@@ -567,9 +567,6 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		case CUSTOMER:
 			objs = state.getCustomerStateRepository().getAll();
 			break;
-		case EMPLOYEE:
-			objs = state.getEmployeeStateRepository().getAll();
-			break;
 		case PROJECT:
 			objs = state.getProjectStateRepository().getAll();
 			break;
@@ -584,13 +581,16 @@ public class TabPanel extends Pane implements EventHandler<Event> {
 		for (int i = 0; i < objs.size(); i++) {
 			String filename = getImage(objs.elementAt(i));
 
-			ImageView scaledImage = JavaFXHelpers.createImageView(filename);
-			scaledImage.setFitHeight(30);
-			scaledImage.setFitWidth(30);
-//			scaledImage.resize(10, 10);
-			scaledImage.setPreserveRatio(true);
+			if(!filename.isEmpty()) {
+				ImageView scaledImage = JavaFXHelpers.createImageView(filename);
+				scaledImage.setFitHeight(30);
+				scaledImage.setFitWidth(30);
+//				scaledImage.resize(10, 10);
+				scaledImage.setPreserveRatio(true);
 
-			objsToImages.put(objs.elementAt(i), scaledImage);
+				objsToImages.put(objs.elementAt(i), scaledImage);
+			}
+
 		}
 	}
 

@@ -113,7 +113,7 @@ public class World extends SimSEMap implements EventHandler<Event> {
 		
 		FileInputStream inputStream = null;
 		try {
-			inputStream = new FileInputStream("SimSEMap\\SimSESpriteSheet.png");
+			inputStream = new FileInputStream("src\\simse\\SimSEMap\\SimSESpriteSheet.png");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
